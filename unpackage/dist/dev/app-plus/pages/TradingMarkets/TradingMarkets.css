@@ -1,0 +1,110 @@
+.assetsBar1[data-v-618629f7] {
+  position: fixed;
+  flex-wrap: wrap;
+  right: 2vw;
+  top: 10vw;
+  display: flex;
+  justify-content: space-between;
+  width: 100vw;
+  z-index: 99;
+  color: #dcc5ab;
+  font-weight: bold;
+}
+.assetsBar1 .asset[data-v-618629f7] {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 18.67vw;
+  height: 8vw;
+  padding-left: 13.33vw;
+}
+.assetsBar1 .asset[data-v-618629f7]:first-of-type {
+  width: 16vw;
+  height: 8vw;
+  margin-left: 4vw;
+}
+.assetsBar1 .asset[data-v-618629f7]:last-of-type {
+  width: 16vw;
+  height: 8vw;
+}
+.assetsBar1 .asset span[data-v-618629f7] {
+  position: relative;
+  top: -0.53vw;
+}
+.assetsBar2[data-v-618629f7] {
+  position: fixed;
+  flex-wrap: wrap;
+  right: 2vw;
+  top: 3vw;
+  display: flex;
+  justify-content: space-between;
+  width: 68vw;
+  z-index: 99;
+  color: #dcc5ab;
+  font-weight: bold;
+}
+.assetsBar2 .asset[data-v-618629f7] {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 18.67vw;
+  height: 8vw;
+  padding-left: 13.33vw;
+}
+.assetsBar2 .asset[data-v-618629f7]:first-of-type {
+  width: 16vw;
+  height: 8vw;
+}
+.assetsBar2 .asset[data-v-618629f7]:last-of-type {
+  width: 16vw;
+  height: 8vw;
+  margin-top: 2vw;
+}
+.assetsBar2 .asset span[data-v-618629f7] {
+  position: relative;
+  top: -0.53vw;
+}
+
+.tradingMarketWrap {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  background-color: #8bcbf4;
+}
+.tradingMarketWrap .gemstones {
+  position: absolute;
+  width: 100%;
+}
+.tradingMarketWrap .gemstones .tabs {
+  position: absolute;
+  width: 100%;
+  top: 40vw;
+  display: flex;
+  justify-content: space-between;
+  background-color: rgba(70, 89, 106, 0.14);
+  padding: 4vw 0;
+  border-radius: 4vw;
+  color: aliceblue;
+}
+.tradingMarketWrap .gemstones .tabs .gemItem {
+  padding: 1vw 2vw;
+  border-radius: 2vw;
+}
+.tradingMarketWrap .gemstones .tabs .gemItem:first-of-type {
+  margin-left: 4vw;
+}
+.tradingMarketWrap .gemstones .tabs .gemItem:last-of-type {
+  margin-right: 4vw;
+}
+.tradingMarketWrap .gemstones .tabs .gemItem.active {
+  color: #8fcb46;
+  font-weight: bold;
+}
+.tradingMarketWrap .return {
+  position: absolute;
+  bottom: 5vw;
+  left: 5vw;
+  width: 13vw;
+  height: 13vw;
+  background: url("../../static/market/return.png") no-repeat center center / contain;
+}
