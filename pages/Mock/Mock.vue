@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<button type="primary" @click="() => {addAssets('672864e999c624e44f8ecb57', 'diamond', 10)}">加一</button>
+		<button type="primary" @click="() => {addAssets('672864e999c624e44f8ecb57', 'powerStone', 100)}">加一</button>
 		<button type="primary" @click="toGame">点击进入云城</button>
 	</view>
 </template>
@@ -28,7 +28,7 @@
 		const phone = 15182344075, avatar = 'https://jihuo.gzzzw0797.com/storage/2024/08/15/images/ebc6a29dbf4011e475db02e95ad332f7.jpg';
 		setCache(PHONE, phone)
 		setCache(AVATAR, avatar)
-		
+		gameInfo.isLoad = 0
 		
 		
 		

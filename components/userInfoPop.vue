@@ -32,6 +32,9 @@
 						placeholder="请输入新名称"
 						/>
 				</view>
+				<view class="tip" v-if="isShowTip">
+					<text>能量石余额不足</text>
+				</view>
 			</view>
 			
 		</view>
@@ -40,7 +43,7 @@
 
 <script setup>
 	import { defineProps, ref } from 'vue';
-	import { AVATAR, USERNAME, useGameInfoStore } from '../stores/gameInfo';
+	import { AVATAR, POWERSTONE, USERNAME, useGameInfoStore } from '../stores/gameInfo';
 	import Cache from '../utils/cache';
 	
 	const gameInfo = useGameInfoStore()
@@ -48,6 +51,7 @@
 	const avatar = Cache.getCache(AVATAR);
 	const userName = ref(Cache.getCache(USERNAME));
 	const isShowEditPop = ref(false);
+	const isShowTip = ref(false)
 	const newName = ref('')
 	const isFirstEdit = ref(gameInfo.isFirst === 0)
 	
@@ -65,6 +69,14 @@
 	
 	function confirm() {
 		if(newName.value === '')return
+		if(gameInfo.assets.powerStone < 100) {
+			isShowTip.value = true;
+			return;
+		}
+		gameInfo.assets.powerStone -= 100
+		const assetsDB = uniCloud.importObject('assets')
+		assetsDB.update(gameInfo.id, POWERSTONE, -100)
+		
 		const user = uniCloud.importObject('user');
 		const id = uni.getStorageSync('id');
 		user.changeName(id, newName.value)
@@ -109,6 +121,15 @@
 				height: 60vw;
 				background-color: #fff;
 				background: url('/static/home/changeName.png') no-repeat center center / contain;
+				
+				.tip {
+					position: absolute;
+					top:28vw;
+					left: 8.6vw;
+					width: 30vw;
+					text-align: center;
+					font-size: 3vw;
+				}
 				
 				.close {
 					position: absolute;
