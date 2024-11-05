@@ -12,7 +12,8 @@ export const useGameInfoStore = defineStore('gameInfo', {
 			avatar: getCache(AVATAR) | '', 
 			isFirst: getCache(ISFIRST),
 			bgm: uni.createInnerAudioContext(),
-			assets: {}
+			assets: {},
+			isLoad: false
 		};
 
 	}

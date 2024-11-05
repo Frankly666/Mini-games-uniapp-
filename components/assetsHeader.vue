@@ -5,7 +5,7 @@
             v-for="(item, index) in assets" 
             :key="index" 
             :style="`background: url(${getImageUrl(item)}) no-repeat center center / cover;`">		
-        <span>{{userAssets[item]}}</span>
+        <span>{{gameInfo.assets[item]}}</span>
       </view>
     </view>
 	
@@ -14,7 +14,7 @@
 	          v-for="(item, index) in assets" 
 	          :key="index" 
 	          :style="`background: url(${getImageUrl(item)}) no-repeat center center / cover;`">		
-	      <span>{{userAssets[item]}}</span>
+	      <span>{{gameInfo.assets[item]}}</span>
 	    </view>
 	</view>
   </view>
@@ -30,19 +30,21 @@ const assets = ['powerStone', 'diamond', 'resourceStone'];
 
 const assetsMap = ['能', '金', '源'];
 const gameInfo = useGameInfoStore()
-const userAssets = reactive({})
+// const userAssets = reactive({})
 const props = defineProps(['judge'])
 const getCache = Cache.getCache;
 const assetsDB = uniCloud.importObject('assets')
 const userDB  = uniCloud.importObject('user')
 
 onMounted(async () => {
+	if(gameInfo.isLoad) return;
 	const phone = getCache(PHONE);
 	const res1 = await userDB.select(phone)
 	const id = res1.res.data[0]._id;
 	const res2 = await assetsDB.select(id);
-	Object.assign(userAssets, res2.res.data[0]);
-	console.log('资源库',userAssets.value)
+	// Object.assign(userAssets, res2.res.data[0]);
+	gameInfo.assets = res2.res.data[0]
+	gameInfo.isLoad = true;
 })
 
 function getImageUrl(name) {
