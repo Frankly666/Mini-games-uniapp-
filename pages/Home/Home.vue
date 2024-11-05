@@ -8,6 +8,8 @@
 			<!-- 弹出组件 -->
 			<user-info-pop v-if="isShowInfo" :closeInfo='() => {handleInfo(false)}'></user-info-pop>
 			<setting-pop v-if="isShowSettingPop" :handleShow="handleShow"></setting-pop>
+			<rule-pop v-if="isShowRulePop" :handleShow="handleShow"></rule-pop>
+			<announcement-pop v-if="isShowAnnouncementPop" :handleShow="handleShow"></announcement-pop>
 			
 			<view class="map-container"
 				@touchstart="handleTouchStart"
@@ -36,6 +38,8 @@ import dynamicPeople from '../../components/dynamicPeople.vue';
 import clickMask from '../../components/clickMask.vue';
 import userInfoPop from '../../components/userInfoPop.vue';
 import settingPop from '../../components/settingPop.vue';
+import rulePop from '../../components/rulePop.vue';
+import announcementPop from '../../components/announcementPop.vue';
 import { ASSETS, AVATAR, ID, ISFIRST, PHONE, USERNAME, useGameInfoStore } from '../../stores/gameInfo';
 import Cache from '../../utils/cache';
 
@@ -50,6 +54,8 @@ const translateX = ref(-340);
 const translateY = ref(-320);
 const isShowInfo = ref(false);
 const isShowSettingPop = ref(false);
+const isShowRulePop = ref(false);
+const isShowAnnouncementPop = ref(false);
 const gameInfo = useGameInfoStore()
 const bgm = gameInfo.bgm;
 const setCache = Cache.setCache; // 这里使用的是实例化函数
@@ -118,6 +124,8 @@ function handleTouchEnd() {}
 // 控制展示工具栏中的按钮弹窗
 function handleShow(type, bool) {
 	if(type === 0) isShowSettingPop.value = bool;
+	if(type === 3) isShowAnnouncementPop.value = bool;
+	if(type === 4) isShowRulePop.value = bool;
 }
 
 // 控制用户信息弹窗展示
