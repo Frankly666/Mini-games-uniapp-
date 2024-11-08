@@ -18,7 +18,7 @@
 				<view 
 					ref="mapRef"
 					class="map-image"
-					:style="{ transform: `translate(${translateX}px, ${translateY}px)` }"
+					:style="{ transform: `translate(${translateX}px, ${translateY}px)`}"
 					>
 					<dynamic-people></dynamic-people>
 					<cloud-tip></cloud-tip>
@@ -67,15 +67,6 @@ const systemInfo = uni.getSystemInfoSync();
 screenWidth.value = systemInfo.screenWidth; 
 screenHeight.value = systemInfo.screenHeight;
 
-// bgm播放设置
-bgm.src ='/static/bgm/bgm.mp3'
-bgm.autoplay = true;
-bgm.loop = true;
-bgm.play()
-bgm.onError((err) => {
-	console.log(err)
-})
-
 function getVwVhInPx() {
 	const systemInfo = uni.getSystemInfoSync();
 	const screenWidthValue = systemInfo.screenWidth;
@@ -121,7 +112,7 @@ function handleTouchMove(event) {
 
 function handleTouchEnd() {}
 
-// 控制展示工具栏中的按钮弹窗
+// 控制展示工具栏中的弹窗
 function handleShow(type, bool) {
 	if(type === 0) isShowSettingPop.value = bool;
 	if(type === 3) isShowAnnouncementPop.value = bool;
@@ -133,9 +124,19 @@ function handleInfo(type){
 	isShowInfo.value = type;
 }
 
-
 onMounted(async () => {
 	if(gameInfo.isLoad) return;  // 只执行一次
+	
+	// bgm播放设置
+	bgm.src ='/static/bgm/bgm.mp3'
+	bgm.autoplay = true;
+	bgm.loop = true;
+	bgm.play()
+	bgm.onError((err) => {
+		console.log(err)
+	})
+	
+	
 	const phone = getCache(PHONE), avatar = getCache(AVATAR)
 	
 	// 在数据库中进行查询是否存在不存在进行增添数据

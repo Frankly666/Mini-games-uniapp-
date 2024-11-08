@@ -65,40 +65,457 @@
   top: -0.53vw;
 }
 
+.publishWrap[data-v-16940c0f] {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 99;
+  width: 100vw;
+  height: 100vh;
+  font-weight: bold;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+.publishWrap .board[data-v-16940c0f] {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 87vw;
+  height: 57vh;
+  background: url('../../static/market/table.png') no-repeat center center / contain;
+}
+.publishWrap .board .close[data-v-16940c0f] {
+  position: absolute;
+  top: 1vw;
+  right: 2vw;
+  width: 12vw;
+  height: 12vw;
+  background: url('../../static/market/lamb-close.png') no-repeat center center / contain;
+}
+.publishWrap .board .title[data-v-16940c0f] {
+  position: absolute;
+  top: 12vw;
+  width: 40vw;
+  font-size: 5vw;
+  text-align: center;
+}
+.publishWrap .board .gems[data-v-16940c0f] {
+  position: absolute;
+  top: 21vw;
+  left: 10vw;
+  display: flex;
+  width: 100%;
+}
+.publishWrap .board .gems .gemItem[data-v-16940c0f] {
+  margin-right: 3vw;
+  font-size: 3.5vw;
+  text-align: center;
+}
+.publishWrap .board .gems .gemItem .imgWrap[data-v-16940c0f] {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 3vw;
+  width: 12vw;
+  height: 12vw;
+  margin-right: 2vw;
+  box-sizing: border-box;
+}
+.publishWrap .board .gems .gemItem .imgWrap.active[data-v-16940c0f] {
+  background-color: rgba(0, 0, 0, 0.5);
+  border: greenyellow 1px solid;
+}
+.publishWrap .board .gems .gemItem .imgWrap .gemImg[data-v-16940c0f] {
+  width: 9vw;
+  height: 9vw;
+  background: no-repeat center center / contain;
+}
+.publishWrap .board .gems .gemItem .name[data-v-16940c0f] {
+  margin-top: 2vw;
+  padding-right: 1.4vw;
+}
+.publishWrap .board .publishNum[data-v-16940c0f] {
+  position: absolute;
+  top: 42vw;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 3vw;
+  width: 81%;
+  height: 12vw;
+  padding: 0 3vw;
+  box-sizing: border-box;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+.publishWrap .board .publishNum .add[data-v-16940c0f] {
+  width: 7vw;
+  height: 7vw;
+  background: url('../../static/market/add_btn.png') no-repeat center center / contain;
+}
+.publishWrap .board .publishNum .sub[data-v-16940c0f] {
+  width: 7vw;
+  height: 7vw;
+  background: url('../../static/market/sub_btn.png') no-repeat center center / contain;
+}
+.publishWrap .board .publishNum .max[data-v-16940c0f] {
+  margin-left: 2.7vw;
+  width: 9vw;
+  height: 7vw;
+  font-size: 3vw;
+  text-align: center;
+  line-height: 6vw;
+  color: #863f10;
+  background: url('../../static/market/btn_frame.png') no-repeat center center / contain;
+}
+.publishWrap .board .publishNum .inputWrap[data-v-16940c0f] {
+  flex: 1;
+  margin: 0 3vw;
+  height: 9vw;
+  line-height: 9vw;
+  text-align: center;
+  border-radius: 3vw;
+  background-color: #fff;
+  border: black 1px solid;
+}
+.publishWrap .board .publishNum .inputWrap uni-input[data-v-16940c0f] {
+  width: 100%;
+  height: 100%;
+}
+.publishWrap .board .price[data-v-16940c0f] {
+  position: absolute;
+  top: 55.3vw;
+  display: flex;
+  align-items: center;
+  border-radius: 3vw;
+  width: 81%;
+  height: 12vw;
+  padding: 0 1.6vw;
+  box-sizing: border-box;
+  background-color: rgba(0, 0, 0, 0.1);
+  font-size: 3.5vw;
+}
+.publishWrap .board .price .gemImg[data-v-16940c0f] {
+  margin: 0 2vw;
+  width: 6vw;
+  height: 6vw;
+  background: url('../../static/market/powerStone.png') no-repeat center center / contain;
+}
+.publishWrap .board .price .priceInputWrap[data-v-16940c0f] {
+  width: 16vw;
+  height: 8vw;
+  line-height: 8vw;
+  text-align: center;
+  border-radius: 3vw;
+  background-color: #fff;
+  border: black 1px solid;
+}
+.publishWrap .board .price .priceInputWrap uni-input[data-v-16940c0f] {
+  display: block;
+  text-align: center;
+  width: 100%;
+  height: 100%;
+}
+.publishWrap .board .wran[data-v-16940c0f] {
+  position: absolute;
+  bottom: 30vw;
+  color: red;
+  font-size: 3vw;
+  font-weight: normal;
+}
+.publishWrap .board .tip[data-v-16940c0f] {
+  position: absolute;
+  width: 90%;
+  height: 7vw;
+  bottom: 22vw;
+  display: flex;
+  justify-content: space-between;
+  font-size: 3.1vw;
+  padding: 0 3vw;
+  box-sizing: border-box;
+}
+.publishWrap .board .tip .item[data-v-16940c0f] {
+  display: flex;
+  align-items: center;
+}
+.publishWrap .board .tip .item .itemImg[data-v-16940c0f] {
+  width: 4vw;
+  height: 4vw;
+  background: no-repeat center center / contain;
+  margin: 0 1vw;
+}
+.publishWrap .board .confirmBtn[data-v-16940c0f] {
+  position: absolute;
+  bottom: 10vw;
+  width: 24vw;
+  height: 10vw;
+  text-align: center;
+  color: aliceblue;
+  line-height: 10vw;
+  font-size: 3.4vw;
+  background: url('../../static/market/btn_Purple.png') no-repeat center center / contain;
+}
+
+.buyCellPopWrap[data-v-f77da028] {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 99;
+  width: 100vw;
+  height: 100vh;
+  font-weight: bold;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+.buyCellPopWrap .board[data-v-f77da028] {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 73vw;
+  height: 50vh;
+  background: url('../../static/market/table.png') no-repeat center center / contain;
+}
+.buyCellPopWrap .board .close[data-v-f77da028] {
+  position: absolute;
+  top: 1vw;
+  right: 1vw;
+  width: 12vw;
+  height: 12vw;
+  background: url('../../static/market/lamb-close.png') no-repeat center center / contain;
+}
+.buyCellPopWrap .board .gemImg[data-v-f77da028] {
+  position: absolute;
+  top: 8vw;
+  width: 20vw;
+  height: 20vw;
+  background: no-repeat center center / contain;
+}
+.buyCellPopWrap .board .gemChName[data-v-f77da028] {
+  position: absolute;
+  top: 28vw;
+}
+.buyCellPopWrap .board .publishNum[data-v-f77da028] {
+  position: absolute;
+  top: 37.3vw;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 3vw;
+  width: 81%;
+  height: 12vw;
+  padding: 0 3vw;
+  box-sizing: border-box;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+.buyCellPopWrap .board .publishNum .add[data-v-f77da028] {
+  width: 7vw;
+  height: 7vw;
+  background: url('../../static/market/add_btn.png') no-repeat center center / contain;
+}
+.buyCellPopWrap .board .publishNum .sub[data-v-f77da028] {
+  width: 7vw;
+  height: 7vw;
+  background: url('../../static/market/sub_btn.png') no-repeat center center / contain;
+}
+.buyCellPopWrap .board .publishNum .max[data-v-f77da028] {
+  margin-left: 2.7vw;
+  width: 9vw;
+  height: 7vw;
+  font-size: 3vw;
+  text-align: center;
+  line-height: 6vw;
+  color: #863f10;
+  background: url('../../static/market/btn_frame.png') no-repeat center center / contain;
+}
+.buyCellPopWrap .board .publishNum .inputWrap[data-v-f77da028] {
+  flex: 1;
+  margin: 0 2vw;
+  height: 9vw;
+  line-height: 9vw;
+  text-align: center;
+  border-radius: 3vw;
+  background-color: #fff;
+  border: black 1px solid;
+}
+.buyCellPopWrap .board .publishNum .inputWrap uni-input[data-v-f77da028] {
+  width: 100%;
+  height: 100%;
+}
+.buyCellPopWrap .board .tip[data-v-f77da028] {
+  position: absolute;
+  width: 90%;
+  height: 7vw;
+  bottom: 28vw;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  font-size: 3.1vw;
+  padding: 0 5vw;
+  box-sizing: border-box;
+}
+.buyCellPopWrap .board .tip .item[data-v-f77da028] {
+  display: flex;
+  align-items: center;
+}
+.buyCellPopWrap .board .tip .item .itemImg[data-v-f77da028] {
+  width: 4vw;
+  height: 4vw;
+  background: no-repeat center center / contain;
+  margin: 0 1vw;
+}
+.buyCellPopWrap .board .tip .own[data-v-f77da028] {
+  width: 100%;
+  margin-bottom: 3vw;
+}
+.buyCellPopWrap .board .confirmBtn[data-v-f77da028] {
+  position: absolute;
+  bottom: 11vw;
+  width: 24vw;
+  height: 10vw;
+  text-align: center;
+  color: aliceblue;
+  line-height: 10vw;
+  font-size: 3.4vw;
+  background: url('../../static/market/btn_Purple.png') no-repeat center center / contain;
+}
+
 .tradingMarketWrap {
   position: relative;
   width: 100vw;
   height: 100vh;
   background-color: #8bcbf4;
 }
+.tradingMarketWrap .topWrap {
+  position: absolute;
+  top: 26vw;
+  color: aliceblue;
+  font-size: 4vw;
+  width: 100%;
+  font-weight: bold;
+}
+.tradingMarketWrap .topWrap .markets {
+  position: absolute;
+  width: 43vw;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1vw 4vw;
+  height: 10vw;
+  border-radius: 5vw;
+  background-color: rgba(70, 89, 106, 0.14);
+}
+.tradingMarketWrap .topWrap .markets .marketItem {
+  display: flex;
+  align-items: center;
+  border-radius: 4vw;
+  padding: 2vw;
+  box-sizing: border-box;
+}
+.tradingMarketWrap .topWrap .markets .marketItem.active {
+  color: #95e23d;
+  background: url('../../static/assetsHeader/marketBg.png') no-repeat center center / cover;
+}
+.tradingMarketWrap .topWrap .publish {
+  position: absolute;
+  top: 1.3vw;
+  right: 2vw;
+  border-radius: 4vw;
+  padding: 2vw;
+  font-size: 3.5vw;
+  color: #dcc5ab;
+  background: url('../../static/assetsHeader/marketBg.png') no-repeat center center / cover;
+}
 .tradingMarketWrap .gemstones {
   position: absolute;
+  top: 39vw;
   width: 100%;
 }
 .tradingMarketWrap .gemstones .tabs {
   position: absolute;
   width: 100%;
-  top: 40vw;
   display: flex;
   justify-content: space-between;
   background-color: rgba(70, 89, 106, 0.14);
-  padding: 4vw 0;
+  padding: 3vw 0vw;
   border-radius: 4vw;
   color: aliceblue;
+  font-weight: bold;
+}
+.tradingMarketWrap .gemstones .tabs .gemItem .gemImg {
+  display: inline;
+  width: 9vw;
+  height: 9vw;
+  background: no-repeat center center / contain;
+  margin-right: 1vw;
+}
+.tradingMarketWrap .gemstones .tabs .gemItem:first-child.gemImg {
+  width: 7vw;
+  height: 7vw;
 }
 .tradingMarketWrap .gemstones .tabs .gemItem {
-  padding: 1vw 2vw;
+  display: flex;
+  align-items: center;
+  padding: 2vw 2vw;
   border-radius: 2vw;
 }
 .tradingMarketWrap .gemstones .tabs .gemItem:first-of-type {
   margin-left: 4vw;
 }
 .tradingMarketWrap .gemstones .tabs .gemItem:last-of-type {
-  margin-right: 4vw;
+  margin-right: 5vw;
 }
 .tradingMarketWrap .gemstones .tabs .gemItem.active {
-  color: #8fcb46;
+  color: #95e23d;
+}
+.tradingMarketWrap .gemstones .contentWrap {
+  margin-top: 18vw;
+  padding: 3vw 5vw;
+  width: 100%;
+  height: 90vw;
   font-weight: bold;
+  font-size: 3.6vw;
+}
+.tradingMarketWrap .gemstones .contentWrap .content {
+  width: 100%;
+}
+.tradingMarketWrap .gemstones .contentWrap .content .item {
+  position: relative;
+  display: flex;
+  box-sizing: border-box;
+  width: 90%;
+  height: 13vw;
+  line-height: 6vw;
+  border-radius: 3vw;
+  margin-top: 3vw;
+  background-color: aliceblue;
+  padding: 3vw;
+  border: black 1px solid;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+.tradingMarketWrap .gemstones .contentWrap .content .item .gemImg {
+  width: 6vw;
+  height: 6vw;
+  margin-right: 2vw;
+  background: no-repeat center center / contain;
+}
+.tradingMarketWrap .gemstones .contentWrap .content .item .priceImg {
+  margin-left: 11vw;
+  margin-right: 2vw;
+  width: 6vw;
+  height: 6vw;
+  background: url('../../static/market/powerStone.png') no-repeat center center / contain;
+}
+.tradingMarketWrap .gemstones .contentWrap .content .item .button {
+  position: absolute;
+  right: 3vw;
+  bottom: 1vw;
+  width: 19vw;
+  height: 10vw;
+  background: url('../../static/market/btn_Blue1.png') no-repeat center center / contain;
+  line-height: 8.7vw;
+  text-align: center;
+  color: aliceblue;
 }
 .tradingMarketWrap .return {
   position: absolute;

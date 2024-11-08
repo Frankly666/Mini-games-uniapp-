@@ -9,14 +9,12 @@
 	import {ASSETS, AVATAR, ID, ISFIRST, PHONE, USERNAME, useGameInfoStore} from '../../stores/gameInfo.js'
 	import Cache from '../../utils/cache';
 	
-	
-	
 	const gameInfo = useGameInfoStore()
-	
 	const setCache = Cache.setCache; // 这里使用的是实例化函数
 	const getCache = Cache.getCache;  // 使用的是静态函数
 	gameInfo.bgm.stop()
 	
+	// 测试增添资源的接口
 	const assetsDB = uniCloud.importObject('assets')
 	async function addAssets(userId, type, number) {
 		const res = await assetsDB.update(userId, type, number)
@@ -29,8 +27,6 @@
 		setCache(PHONE, phone)
 		setCache(AVATAR, avatar)
 		gameInfo.isLoad = 0
-		
-		
 		
 		// 跳转游戏主页
 		uni.navigateTo({
