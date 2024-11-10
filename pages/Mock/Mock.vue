@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<button type="primary" @click="() => {addAssets('672864e999c624e44f8ecb57', 'powerStone', 100)}">加一</button>
+		<button type="primary" @click="() => {addAssets('672864e999c624e44f8ecb57', 'meteorite', 70)}">加一</button>
 		<button type="primary" @click="toGame">点击进入云城</button>
 	</view>
 </template>

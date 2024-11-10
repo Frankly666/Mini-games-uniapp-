@@ -8,8 +8,8 @@ module.exports = {
 	 */
 	async init(userId) {
 		const assets = uniCloud.database().collection('assets');
-		assets.add({userId, powerStone: 0, diamond: 0, resourceStone: 0}).then(res => {
-			return {res}
+		assets.add({userId, powerStone: 0, diamond: 0, resourceStone: 0, meteorite: 0}).then(res => {
+			return res
 		})
 		
 	},
@@ -54,7 +54,7 @@ module.exports = {
 				err: "资源不能为零"
 			}
 			const res2 = await res1.update({
-				[type]: realData[type] + number
+				[type]: realData[type] + parseFloat((number*1.0).toFixed(2))
 			})
 			
 			return res2

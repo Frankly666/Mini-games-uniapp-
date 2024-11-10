@@ -15,6 +15,7 @@
 			:gemName='gemImgName[itemCurrentIndex]'
 			:gemChName='gemItems[itemCurrentIndex]'
 			:marketName='marketItems[marketCurrentIndex]'
+			:certainItem='certainRequirement'
 			/>
 		
 		<!-- 出售求购 -->
@@ -49,16 +50,16 @@
 			
 			<view class="contentWrap">
 				<view class="content">
-					<view class="item" v-for="item in 5">
+					<view class="item" v-for="(item, index) in showListData">
 						<view class="gemImg" :style="`background-image: url(${getGemImg(gemImgName[itemCurrentIndex])});`"></view>
 						<view class="num">
-							<text>{{marketItems[marketCurrentIndex]}} : {{item}}个</text>
+							<text>{{marketItems[marketCurrentIndex]}} : {{item[numName]}}个</text>
 						</view>
 						<view class="priceImg"></view>
 						<view class="price">
-							<text>{{0.226}}/个</text>
+							<text>{{item[priceName]}}/个</text>
 						</view>
-						<view class="button" @click="controlShowPop(true)">
+						<view class="button" @click="() => {setCertainIndex(index);controlShowPop(true)}">
 							<text>{{buttonWord[marketCurrentIndex]}}</text>
 						</view>
 					</view>
@@ -69,19 +70,44 @@
 </template>
 
 <script setup>
-	import { ref } from 'vue';
+	import { computed, onMounted, ref } from 'vue';
 	import assetsHeader1 from '../../components/assetsHeader.vue';
 	import marketPublish from '../../components/marketPublish.vue';
 	import buyCellPop from '../../components/buyCellPop.vue';
 	
 	const marketCurrentIndex = ref(0)
 	const itemCurrentIndex = ref(0)
+	const itemCertainIndex = ref(0)
 	const isShowMarketPublish = ref(false)
 	const isShowBuySellPop = ref(false)
 	const gemItems = ['金刚石', '资源石', '无球粒陨石']
 	const gemImgName = ['diamond', 'resourceStone', 'meteorite']
 	const marketItems = ['出售', '求购']
 	const buttonWord = ['购买', '出售']
+	const marketDB = uniCloud.importObject('market')
+	const assetsDB = uniCloud.importObject('assets')
+	const sellRequirement = ref({})
+	const buyRequirement = ref({})
+	
+	// 动态得到展示的字段名
+	const showListData = computed(() => {
+		const itemName = gemImgName[itemCurrentIndex.value]
+		return marketCurrentIndex.value === 0 ? sellRequirement.value[itemName] : buyRequirement.value[itemName]
+	})
+	const numName = computed(() => {
+		return marketCurrentIndex.value === 0 ? "sellNum" : "buyNum" 
+	})
+	const priceName = computed(() => {
+		return marketCurrentIndex.value === 0 ? "sellPrice" : "buyPrice" 
+	})
+	
+	// 用户点击得到的某个具体的需求
+	const certainRequirement = computed(() => {
+		const itemName = gemImgName[itemCurrentIndex.value];
+		const list = marketCurrentIndex.value === 0 ? sellRequirement.value : buyRequirement.value;
+		
+		return list[itemName][itemCertainIndex.value]
+	})
 	
 	function setItemIndex(index) {
 		itemCurrentIndex.value = index
@@ -108,6 +134,20 @@
 	function controlShowPop (bool) {
 		isShowBuySellPop.value = bool;
 	}
+	function setCertainIndex(index) {
+		itemCertainIndex.value = index;
+	}
+	
+	onMounted(async () => {
+		gemImgName.forEach(async (item) => {
+			const res1 = await marketDB.selectSellRequirement(item);
+			const res2 = await marketDB.selectBuyRequirement(item);
+			sellRequirement.value[item] = res1.data
+			buyRequirement.value[item] = res2.data
+		})
+		console.log(sellRequirement.value)
+		console.log(buyRequirement.value)
+	})
 </script>
 
 <style lang="less">

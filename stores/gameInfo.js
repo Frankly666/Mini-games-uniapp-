@@ -13,7 +13,9 @@ export const useGameInfoStore = defineStore('gameInfo', {
 			isFirst: getCache(ISFIRST),
 			bgm: uni.createInnerAudioContext(),
 			assets: {},
-			isLoad: false
+			isLoad: false,
+			translateX: -340,
+			translateY: -320
 		};
 
 	}

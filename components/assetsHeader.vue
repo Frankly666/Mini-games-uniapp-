@@ -69,9 +69,11 @@ function getImageUrl(name) {
     position: relative;
     display: flex;
     align-items: center;
+	text-align: center;
     width: 18.67vw;
     height: 8vw;
     padding-left: 13.33vw;
+	
     &:first-of-type {
       width: 16vw;
       height: 8vw;

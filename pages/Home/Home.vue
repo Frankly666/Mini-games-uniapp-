@@ -61,6 +61,9 @@ const bgm = gameInfo.bgm;
 const setCache = Cache.setCache; // 这里使用的是实例化函数
 const getCache = Cache.getCache;  // 使用的是静态函数
 
+translateX.value = gameInfo.translateX
+translateY.value = gameInfo.translateY
+
 // 获取vw对应多少px
 getVwVhInPx();
 const systemInfo = uni.getSystemInfoSync();
@@ -104,6 +107,9 @@ function handleTouchMove(event) {
 	// 更新图片的偏移量
 	translateX.value = temX; // 向右为正，向左为负
 	translateY.value = temY; // 向下为正，向上为负
+	
+	gameInfo.translateX = temX;
+	gameInfo.translateY = temY;
 	
 	// 更新初始坐标为当前坐标，为下次移动做准备
 	startX.value = currentX;

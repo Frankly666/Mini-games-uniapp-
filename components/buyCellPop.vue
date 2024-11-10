@@ -33,7 +33,7 @@
 				<view class="obtain item">
 					<text>预获得</text>
 					<view class="itemImg" :style="`background-image: url(${getGemImg('powerStone')});`"></view>
-					<text>{{0}}</text>
+					<text>{{expected}}</text>
 				</view>
 			</view>
 			
@@ -42,13 +42,17 @@
 				<view class="premium item">
 					<text>购买单价</text>
 					<view class="itemImg" :style="`background-image: url(${getGemImg('powerStone')});`"></view>
-					<text>0.216</text>
+					<text>{{certainItem.sellPrice}}</text>
 				</view>
 				<view class="obtain item">
 					<text>购买总价</text>
 					<view class="itemImg" :style="`background-image: url(${getGemImg('powerStone')});`"></view>
-					<text>{{0}}</text>
+					<text>{{totalPrice}}</text>
 				</view>
+			</view>
+			
+			<view class="warn" v-if="isShowWarn">
+				<text>{{isSellMarket ? "(能量石不足)" : `${gemChName}不足`}}</text>
 			</view>
 			
 			<view class="confirmBtn" @click="confirmFun">
@@ -59,19 +63,24 @@
 </template>
 
 <script setup>
-	import { computed, ref } from 'vue';
-	const props = defineProps(['controlShowPop', 'gemName', 'gemChName','marketName'])
+	import { computed, onMounted, ref } from 'vue';
+	import { POWERSTONE, useGameInfoStore } from '../stores/gameInfo';
 	
+	const props = defineProps(['controlShowPop', 'gemName', 'gemChName','marketName','certainItem'])
 	const inputNumValue = ref(0)
+	const isShowWarn = ref(false)
+	const assetsDB = uniCloud.importObject('assets')
+	const marketDB = uniCloud.importObject('market')
+	const gameInfo = useGameInfoStore()
 	
 	const isSellMarket = computed(() => {
 		return props.marketName === '出售'
 	})
 	const totalPrice = computed(() => {
-		
+		return parseFloat((inputNumValue.value * props.certainItem.sellPrice * 1.0).toFixed(1))
 	})
 	const expected = computed(() => {
-		
+		return parseFloat((inputNumValue.value * props.certainItem.buyPrice * 0.95).toFixed(1))
 	})
 	const btnWord = computed(() => {
 		return props.marketName === '出售' ? '购买' : '出售'
@@ -86,9 +95,11 @@
 	function setNumValue(num) {
 		inputNumValue.value = num
 	}
+	function handleShowWran(type) {
+		isShowWarn.value = type
+	}
 	function handleSellNum(num){
-		// const max = gameInfo.assets[props.gemImgName[selectIndex.value]] | 0
-		const max = 10;
+		const max = props.certainItem.sellNum | props.certainItem.buyNum
 		if(num === true) {
 			inputNumValue.value = max
 			return
@@ -98,14 +109,63 @@
 		if(tem > max) return;
 		inputNumValue.value += num;
 	}
-	function confirmSellPublish() {
-		if(inputNumValue.value <= 0) return;
+	async function confirmSellPublish() {
+		if(inputNumValue.value <= 0) return
+		const sellNum = props.certainItem.sellNum  // 这条需求的最大值
+		const id = props.certainItem._id
+		const sellPrice = props.certainItem.sellPrice
+		const demType = props.certainItem.demType
+		// const needTakePrice = Math.ceil(sellPrice * inputNumValue.value)
+		if(totalPrice.value > gameInfo.assets[POWERSTONE]) {
+			handleShowWran(true)
+			return
+		}  // 如果超过自己的余额就直接跳出
+		
+		console.log("没买完:", sellNum, id, demType, sellPrice, totalPrice.value, props.certainItem)
+		
+		// 增加这一条购买记录, 如果用户刚好购买完就消除这条需求
+		const res1 = await marketDB.addTransactionRecord(gameInfo.id, props.certainItem.sellerId, 1, id, inputNumValue.value)
+		if(sellNum === inputNumValue.value) await marketDB.finishSellRequirement(id)
+		else {
+			await marketDB.subSellNum(id, sellNum - inputNumValue.value)
+		}
+		const res3 = await assetsDB.update(gameInfo.id, POWERSTONE, -totalPrice.value)  // 扣除能量石
+		const res4 = await assetsDB.update(gameInfo.id, demType, inputNumValue.value)  // 加上用户买的宝石
+		gameInfo.assets[demType] += inputNumValue.value
+		gameInfo.assets[POWERSTONE] -= totalPrice.value
 		console.log('这里是卖出')
+		props.controlShowPop(false)
 	}
-	function confirmNeedPublish() {
+	async function confirmNeedPublish() {
 		if(inputNumValue.value <= 0) return;
+		const buyNum = props.certainItem.buyNum  // 这条需求的最大值
+		const id = props.certainItem._id
+		const buyPrice = props.certainItem.buyPrice
+		const demType = props.certainItem.demType
+		const abtainPrice = Math.ceil(buyPrice * inputNumValue.value)
+		if(inputNumValue.value > gameInfo.assets[demType]) {
+			handleShowWran(true)
+			return
+		} // 如果自己没那么多的宝石也直接跳出
+		
+		// 增加这条卖出记录
+		const res1 = await marketDB.addTransactionRecord(props.certainItem.buyerId, gameInfo.id , 2, id, inputNumValue.value)
+		if(inputNumValue.value === buyNum) {
+			await marketDB.finishBuyRequirement(id)
+		}else {
+			await marketDB.subBuyNum(id, buyNum - inputNumValue.value)
+		}
+		const res3 = await assetsDB.update(gameInfo.id, demType, -inputNumValue.value)
+		const res4 = await assetsDB.update(gameInfo.id, POWERSTONE, abtainPrice)
+		gameInfo.assets[demType] -= inputNumValue.value
+		gameInfo.assets[POWERSTONE] += abtainPrice
 		console.log('这里是需求')
+		props.controlShowPop(false)
 	}
+	
+	// onMounted(() => {
+	// 	console.log(props.certainItem)
+	// })
 </script>
 
 <style lang="less">
@@ -233,6 +293,14 @@
 					width: 100%;
 					margin-bottom: 3vw;
 				}
+			}
+			
+			.warn {
+				position: absolute;
+				bottom: 35vw;
+				font-weight: normal;
+				font-size: 3vw;
+				color: red;
 			}
 			
 			.confirmBtn {

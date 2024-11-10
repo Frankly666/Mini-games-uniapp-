@@ -70,15 +70,16 @@
 </template>
 
 <script setup>
-	import { computed, ref } from 'vue';
-	import { useGameInfoStore } from '../stores/gameInfo';
+	import { computed, onMounted, ref } from 'vue';
+	import { POWERSTONE, useGameInfoStore } from '../stores/gameInfo';
 	
 	const gameInfo = useGameInfoStore()
 	const props = defineProps(['controlPublish', 'title', 'gemItems', 'gemImgName'])
 	const selectIndex = ref(0)
 	const inputNumValue = ref(0)
 	const inputPriceValue = ref(0)
-	
+	const marketDB = uniCloud.importObject('market')
+	const assetsDB = uniCloud.importObject('assets')
 	
 	const expectedNum = computed(() => {
 		if(inputPriceValue.value < 0.2 || inputPriceValue.value > 10)return 0
@@ -119,17 +120,36 @@
 		}
 		const tem = inputNumValue.value + num;
 		if(tem < 0) return;
-		if(tem > max) return;
+		if(tem > max && isSell.value) return;
 		inputNumValue.value += num;
 	}
-	function confirmSellPublish() {
+	async function confirmSellPublish() {
 		if(inputPriceValue.value < 0.2 || inputPriceValue.value > 10 || inputNumValue.value <= 0) return;
-		console.log('这里是卖出')
+		const gemType = props.gemImgName[selectIndex.value]
+		console.log(inputPriceValue.value)
+		
+		// 首先实时减少用户需要出售的宝石数量, 然后发送网络请求, 扣除用户需要出售的宝石
+		const res1 = await marketDB.publishSellRequirement(gameInfo.id, gemType, inputNumValue.value, inputPriceValue.value)
+		const res2 = await assetsDB.update(gameInfo.id, gemType, -inputNumValue.value)
+		gameInfo.assets[gemType] -= inputNumValue.value;
+		console.log('这里是卖出:',res1, res2)
+		props.controlPublish(false)
 	}
-	function confirmNeedPublish() {
+	async function confirmNeedPublish() {
 		if(inputPriceValue.value < 0.2 || inputPriceValue.value > 10 || inputNumValue.value <= 0) return;
-		console.log('这里是需求')
+		const gemType = props.gemImgName[selectIndex.value]
+		let totalPrice = inputNumValue.value * inputPriceValue.value
+		totalPrice = Math.ceil(totalPrice)
+		
+		// 实时扣除用户用来购买宝石的能量石, 然后发送网络请求, 扣除用户用来购买宝石的能量石
+		const res1 = await marketDB.publishBuyRequirement(gameInfo.id, gemType, inputNumValue.value, inputPriceValue.value)
+		const res2 = await assetsDB.update(gameInfo.id, POWERSTONE, -totalPrice)
+		gameInfo.assets[POWERSTONE] -= totalPrice;
+		console.log('这里是需求:', res1, res2)
+		props.controlPublish(false)
 	}
+	
+	
 	
 </script>
 
