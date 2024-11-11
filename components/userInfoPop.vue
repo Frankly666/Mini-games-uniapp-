@@ -29,7 +29,7 @@
 						maxlength="6" 
 						@input="updateName" 
 						:auto-focus="true" 
-						placeholder="请输入新名称"
+						placeholder="名字最大长度为6"
 						/>
 				</view>
 				<view class="tip" v-if="isShowTip">

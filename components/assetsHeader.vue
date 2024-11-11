@@ -4,7 +4,7 @@
       <view class="asset" 
             v-for="(item, index) in assets" 
             :key="index" 
-            :style="`background: url(${getImageUrl(item)}) no-repeat center center / cover;`">		
+            :style="`background: url(${getImageUrl(item)}) no-repeat center center / contain;`">		
         <span>{{gameInfo.assets[item]}}</span>
       </view>
     </view>
@@ -13,7 +13,7 @@
 	    <view class="asset" 
 	          v-for="(item, index) in assets" 
 	          :key="index" 
-	          :style="`background: url(${getImageUrl(item)}) no-repeat center center / cover;`">		
+	          :style="`background: url(${getImageUrl(item)}) no-repeat center center / contain;`">		
 	      <span>{{gameInfo.assets[item]}}</span>
 	    </view>
 	</view>
@@ -63,6 +63,7 @@ function getImageUrl(name) {
   width: 100vw;
   z-index: 99;
   color: #dcc5ab;
+  font-size: 3.6vw;
   font-weight: bold;
 
   .asset {
@@ -70,19 +71,18 @@ function getImageUrl(name) {
     display: flex;
     align-items: center;
 	text-align: center;
-    width: 18.67vw;
-    height: 8vw;
-    padding-left: 13.33vw;
+	justify-content: center;
+    width: 30.67vw;
+	
+    height: 10vw;
 	
     &:first-of-type {
-      width: 16vw;
-      height: 8vw;
 	  margin-left: 4vw;
     }
-    &:last-of-type {
-      width: 16vw;
-      height: 8vw;
-    }
+   //  &:last-of-type {
+   //    width: 16vw;
+   //    height: 8vw;
+   //  }
 
     span {
       position: relative;
@@ -98,31 +98,33 @@ function getImageUrl(name) {
   top: 3vw;
   display: flex;
   justify-content: space-between;
-  width: 68vw;
+  width: 70vw;
   z-index: 99;
   color: #dcc5ab;
+  font-size: 3.6vw;
   font-weight: bold;
 
   .asset {
     position: relative;
     display: flex;
     align-items: center;
-    width: 18.67vw;
-    height: 8vw;
-    padding-left: 13.33vw;
+	text-align: center;
+	justify-content: center;
+    width: 31.67vw;
+    height: 10vw;
+	line-height: 7vw;
     &:first-of-type {
-      width: 16vw;
-      height: 8vw;
+      // width: 26vw;
+      // height: 8vw;
     }
     &:last-of-type {
-      width: 16vw;
-      height: 8vw;
+      // width: 26vw;
+      // height: 8vw;
 	  margin-top: 2vw;
     }
 
     span {
       position: relative;
-      top: -0.53vw;
     }
   }
 }
