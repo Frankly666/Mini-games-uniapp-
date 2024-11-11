@@ -8,6 +8,7 @@
 			:title='marketItems[marketCurrentIndex]'
 			:gemItems='gemItems'
 			:gemImgName='gemImgName'
+			:updateData='updateData'
 		/>
 		<buy-cell-pop 
 			v-if="isShowBuySellPop" 
@@ -16,6 +17,7 @@
 			:gemChName='gemItems[itemCurrentIndex]'
 			:marketName='marketItems[marketCurrentIndex]'
 			:certainItem='certainRequirement'
+			:updateData='updateData'
 			/>
 		
 		<!-- 出售求购 -->
@@ -138,15 +140,17 @@
 		itemCertainIndex.value = index;
 	}
 	
-	onMounted(async () => {
+	async function updateData() {
 		gemImgName.forEach(async (item) => {
 			const res1 = await marketDB.selectSellRequirement(item);
 			const res2 = await marketDB.selectBuyRequirement(item);
 			sellRequirement.value[item] = res1.data
 			buyRequirement.value[item] = res2.data
 		})
-		console.log(sellRequirement.value)
-		console.log(buyRequirement.value)
+	}
+	
+	onMounted(async () => {
+		await updateData()
 	})
 </script>
 

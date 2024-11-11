@@ -40,8 +40,10 @@
 				</view>
 			</view>
 			
-			<view class="wran" v-show="isShowWran">
-				<text>(请输入限制范围内的单价)</text>
+			<view class="wran">
+				<text v-show="isShowWran">(请输入限制范围内的单价)</text>
+				<text v-show="isShowNotEnough&&isSell">({{gemItems[selectIndex]}}不足)</text>
+				<text v-show="isShowNotEnough&&!isSell">(金刚石余额不足)</text>
 			</view>
 			
 			<view class="tip" v-if="isSell">
@@ -74,10 +76,11 @@
 	import { POWERSTONE, useGameInfoStore } from '../stores/gameInfo';
 	
 	const gameInfo = useGameInfoStore()
-	const props = defineProps(['controlPublish', 'title', 'gemItems', 'gemImgName'])
+	const props = defineProps(['controlPublish', 'title', 'gemItems', 'gemImgName', 'updateData'])
 	const selectIndex = ref(0)
 	const inputNumValue = ref(0)
 	const inputPriceValue = ref(0)
+	const isShowNotEnough = ref(false)
 	const marketDB = uniCloud.importObject('market')
 	const assetsDB = uniCloud.importObject('assets')
 	
@@ -125,6 +128,10 @@
 	}
 	async function confirmSellPublish() {
 		if(inputPriceValue.value < 0.2 || inputPriceValue.value > 10 || inputNumValue.value <= 0) return;
+		if(inputNumValue.value > gameInfo.assets[props.gemImgName[selectIndex.value]]) {
+			isShowNotEnough.value = true
+			return;
+		}
 		const gemType = props.gemImgName[selectIndex.value]
 		console.log(inputPriceValue.value)
 		
@@ -134,12 +141,17 @@
 		gameInfo.assets[gemType] -= inputNumValue.value;
 		console.log('这里是卖出:',res1, res2)
 		props.controlPublish(false)
+		props.updateData()
 	}
 	async function confirmNeedPublish() {
 		if(inputPriceValue.value < 0.2 || inputPriceValue.value > 10 || inputNumValue.value <= 0) return;
 		const gemType = props.gemImgName[selectIndex.value]
 		let totalPrice = inputNumValue.value * inputPriceValue.value
-		totalPrice = Math.ceil(totalPrice)
+		totalPrice = parseFloat((totalPrice*1.0).toFixed(1))
+		if(totalPrice > gameInfo.assets[POWERSTONE]) {
+			isShowNotEnough.value = true;
+			return
+		}
 		
 		// 实时扣除用户用来购买宝石的能量石, 然后发送网络请求, 扣除用户用来购买宝石的能量石
 		const res1 = await marketDB.publishBuyRequirement(gameInfo.id, gemType, inputNumValue.value, inputPriceValue.value)
@@ -147,6 +159,7 @@
 		gameInfo.assets[POWERSTONE] -= totalPrice;
 		console.log('这里是需求:', res1, res2)
 		props.controlPublish(false)
+		props.updateData()
 	}
 	
 	

@@ -15,14 +15,14 @@ module.exports = {
 	 */
 	async publishSellRequirement(sellerId, demType, sellNum, sellPrice) {
 		const sellRequirement = uniCloud.database().collection('sellRequirement');
-		const res = await sellRequirement.add({sellerId, demType, sellNum, sellPrice: parseFloat(sellPrice), isFinished: false, publishTime: new Date()})
+		const res = await sellRequirement.add({sellerId, demType, sellNum: parseInt(sellNum), sellPrice: parseFloat(sellPrice), isFinished: false, publishTime: new Date()})
 		return res;
 	},
 	
 	//  发布求购需求
 	async publishBuyRequirement(buyerId, demType, buyNum, buyPrice) {
 		const buyRequirement = uniCloud.database().collection('buyRequirement');
-		const res = await buyRequirement.add({buyerId, demType, buyNum, buyPrice: parseFloat(buyPrice), isFinished: false, publishTime: new Date()})
+		const res = await buyRequirement.add({buyerId, demType, buyNum: parseInt(buyNum), buyPrice: parseFloat(buyPrice), isFinished: false, publishTime: new Date()})
 		return res;
 	},
 	

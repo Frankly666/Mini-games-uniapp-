@@ -66,7 +66,7 @@
 	import { computed, onMounted, ref } from 'vue';
 	import { POWERSTONE, useGameInfoStore } from '../stores/gameInfo';
 	
-	const props = defineProps(['controlShowPop', 'gemName', 'gemChName','marketName','certainItem'])
+	const props = defineProps(['controlShowPop', 'gemName', 'gemChName','marketName','certainItem', 'updateData'])
 	const inputNumValue = ref(0)
 	const isShowWarn = ref(false)
 	const assetsDB = uniCloud.importObject('assets')
@@ -135,6 +135,7 @@
 		gameInfo.assets[POWERSTONE] -= totalPrice.value
 		console.log('这里是卖出')
 		props.controlShowPop(false)
+		props.updateData()
 	}
 	async function confirmNeedPublish() {
 		if(inputNumValue.value <= 0) return;
@@ -142,7 +143,7 @@
 		const id = props.certainItem._id
 		const buyPrice = props.certainItem.buyPrice
 		const demType = props.certainItem.demType
-		const abtainPrice = Math.ceil(buyPrice * inputNumValue.value)
+		// const abtainPrice = Math.ceil(buyPrice * inputNumValue.value)
 		if(inputNumValue.value > gameInfo.assets[demType]) {
 			handleShowWran(true)
 			return
@@ -156,11 +157,12 @@
 			await marketDB.subBuyNum(id, buyNum - inputNumValue.value)
 		}
 		const res3 = await assetsDB.update(gameInfo.id, demType, -inputNumValue.value)
-		const res4 = await assetsDB.update(gameInfo.id, POWERSTONE, abtainPrice)
+		const res4 = await assetsDB.update(gameInfo.id, POWERSTONE, expected.value)
 		gameInfo.assets[demType] -= inputNumValue.value
-		gameInfo.assets[POWERSTONE] += abtainPrice
+		gameInfo.assets[POWERSTONE] +=  expected.value
 		console.log('这里是需求')
 		props.controlShowPop(false)
+		props.updateData()
 	}
 	
 	// onMounted(() => {
