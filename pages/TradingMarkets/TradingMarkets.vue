@@ -53,13 +53,17 @@
 			<view class="contentWrap">
 				<view class="content">
 					<view class="item" v-for="(item, index) in showListData">
-						<view class="gemImg" :style="`background-image: url(${getGemImg(gemImgName[itemCurrentIndex])});`"></view>
-						<view class="num">
-							<text>{{marketItems[marketCurrentIndex]}} : {{item[numName]}}个</text>
+						<view class="numWrap">
+							<view class="gemImg" :style="`background-image: url(${getGemImg(gemImgName[itemCurrentIndex])});`"></view>
+							<view class="num">
+								<text>{{marketItems[marketCurrentIndex]}} : {{item[numName]}}个</text>
+							</view>
 						</view>
-						<view class="priceImg"></view>
-						<view class="price">
-							<text>{{item[priceName]}}/个</text>
+						<view class="priceWrap">
+							<view class="priceImg"></view>
+							<view class="price">
+								<text>{{item[priceName]}}/个</text>
+							</view>
 						</view>
 						<view class="button" @click="() => {setCertainIndex(index);controlShowPop(true)}">
 							<text>{{buttonWord[marketCurrentIndex]}}</text>
@@ -288,20 +292,29 @@
 						border: black 1px solid;
 						box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 						
-						.gemImg {
-							width: 6vw;
-							height: 6vw;
-							margin-right: 2vw;
-							background: no-repeat center center / contain;
+						.numWrap {
+							display: flex;
+							width: 36vw;
+							.gemImg {
+								width: 6vw;
+								height: 6vw;
+								margin-right: 2vw;
+								background: no-repeat center center / contain;
+							}
 						}
 						
-						.priceImg {
-							margin-left: 11vw;
-							margin-right: 2vw;
-							width: 6vw;
-							height: 6vw;
-							background: url('../../static/market/powerStone.png') no-repeat center center / contain;
+						
+						.priceWrap {
+							display: flex;
+							.priceImg {
+								margin-right: 2vw;
+								width: 6vw;
+								height: 6vw;
+								background: url('../../static/market/powerStone.png') no-repeat center center / contain;
+							}
 						}
+						
+						
 						
 						.button {
 							position: absolute;

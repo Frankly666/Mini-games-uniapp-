@@ -161,9 +161,6 @@
 		props.controlPublish(false)
 		props.updateData()
 	}
-	
-	
-	
 </script>
 
 <style lang="less">

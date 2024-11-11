@@ -164,10 +164,6 @@
 		props.controlShowPop(false)
 		props.updateData()
 	}
-	
-	// onMounted(() => {
-	// 	console.log(props.certainItem)
-	// })
 </script>
 
 <style lang="less">
