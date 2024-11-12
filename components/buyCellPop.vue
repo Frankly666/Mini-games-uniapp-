@@ -1,319 +1,415 @@
 <template>
-	<view class="buyCellPopWrap">
-		<view class="board">
-			<view class="close" @click="() => {controlShowPop(false)}"></view>
-			<view class="gemImg" :style="`background-image: url(${getGemImg(gemName)});`"></view>
-			<view class="gemChName">
-				<text>{{gemChName}}</text>
-			</view>
-			
-			<view class="publishNum">
-				<view class="sub" @click="() => {handleSellNum(-1)}"></view>
-				<view class="inputWrap">
-					<input type="number" :value="inputNumValue" @input="res => {setNumValue(res.detail.value)}"/>
-				</view>
-				<view class="add" @click="() => {handleSellNum(1)}"></view>
-				<view class="max" @click="() => {handleSellNum(true)}">
-					<text>最大</text>
-				</view>
-			</view>
-			
-			<!-- 求购市场 -->
-			<view class="tip" v-if="!isSellMarket">
-				<view class="own item">
-					<text>可出售</text>
-					<view class="itemImg" :style="`background-image: url(${getGemImg(gemName)});`"></view>
-					<text>{{0}}</text>
-				</view>
-				<view class="premium item">
-					<text>手续费</text>
-					<view class="itemImg" :style="`background-image: url(${getGemImg('powerStone')});`"></view>
-					<text>5%</text>
-				</view>
-				<view class="obtain item">
-					<text>预获得</text>
-					<view class="itemImg" :style="`background-image: url(${getGemImg('powerStone')});`"></view>
-					<text>{{expected}}</text>
-				</view>
-			</view>
-			
-			<!-- 出售市场 -->
-			<view class="tip" v-else>
-				<view class="premium item">
-					<text>购买单价</text>
-					<view class="itemImg" :style="`background-image: url(${getGemImg('powerStone')});`"></view>
-					<text>{{certainItem.sellPrice}}</text>
-				</view>
-				<view class="obtain item">
-					<text>购买总价</text>
-					<view class="itemImg" :style="`background-image: url(${getGemImg('powerStone')});`"></view>
-					<text>{{totalPrice}}</text>
-				</view>
-			</view>
-			
-			<view class="warn" v-if="isShowWarn">
-				<text>{{isSellMarket ? "(能量石不足)" : `${gemChName}不足`}}</text>
-			</view>
-			
-			<view class="confirmBtn" @click="confirmFun">
-				<text>确认{{btnWord}}</text>
-			</view>
-		</view>
-	</view>
+  <view class="buyCellPopWrap">
+    <view class="board">
+      <view
+        class="close"
+        @click="
+          () => {
+            controlShowPop(false);
+          }
+        "
+      ></view>
+      <view
+        class="gemImg"
+        :style="`background-image: url(${getGemImg(gemName)});`"
+      ></view>
+      <view class="gemChName">
+        <text>{{ gemChName }}</text>
+      </view>
+
+      <view class="publishNum">
+        <view
+          class="sub"
+          @click="
+            () => {
+              handleSellNum(-1);
+            }
+          "
+        ></view>
+        <view class="inputWrap">
+          <input
+            type="number"
+            :value="inputNumValue"
+            @input="
+              (res) => {
+                setNumValue(res.detail.value);
+              }
+            "
+          />
+        </view>
+        <view
+          class="add"
+          @click="
+            () => {
+              handleSellNum(1);
+            }
+          "
+        ></view>
+        <view
+          class="max"
+          @click="
+            () => {
+              handleSellNum(true);
+            }
+          "
+        >
+          <text>最大</text>
+        </view>
+      </view>
+
+      <!-- 求购市场 -->
+      <view class="tip" v-if="!isSellMarket">
+        <view class="own item">
+          <text>可出售</text>
+          <view
+            class="itemImg"
+            :style="`background-image: url(${getGemImg(gemName)});`"
+          ></view>
+          <text>{{ 0 }}</text>
+        </view>
+        <view class="premium item">
+          <text>手续费</text>
+          <view
+            class="itemImg"
+            :style="`background-image: url(${getGemImg('powerStone')});`"
+          ></view>
+          <text>5%</text>
+        </view>
+        <view class="obtain item">
+          <text>预获得</text>
+          <view
+            class="itemImg"
+            :style="`background-image: url(${getGemImg('powerStone')});`"
+          ></view>
+          <text>{{ expected }}</text>
+        </view>
+      </view>
+
+      <!-- 出售市场 -->
+      <view class="tip" v-else>
+        <view class="premium item">
+          <text>购买单价</text>
+          <view
+            class="itemImg"
+            :style="`background-image: url(${getGemImg('powerStone')});`"
+          ></view>
+          <text>{{ certainItem.sellPrice }}</text>
+        </view>
+        <view class="obtain item">
+          <text>购买总价</text>
+          <view
+            class="itemImg"
+            :style="`background-image: url(${getGemImg('powerStone')});`"
+          ></view>
+          <text>{{ totalPrice }}</text>
+        </view>
+      </view>
+
+      <view class="warn" v-if="isShowWarn">
+        <text>{{ isSellMarket ? "(能量石不足)" : `${gemChName}不足` }}</text>
+      </view>
+
+      <view class="confirmBtn" @click="confirmFun">
+        <text>确认{{ btnWord }}</text>
+      </view>
+    </view>
+  </view>
 </template>
 
 <script setup>
-	import { computed, onMounted, ref } from 'vue';
-	import { POWERSTONE, useGameInfoStore } from '../stores/gameInfo';
-	
-	const props = defineProps(['controlShowPop', 'gemName', 'gemChName','marketName','certainItem', 'updateData'])
-	const inputNumValue = ref(0)
-	const isShowWarn = ref(false)
-	const assetsDB = uniCloud.importObject('assets')
-	const marketDB = uniCloud.importObject('market')
-	const gameInfo = useGameInfoStore()
-	
-	const isSellMarket = computed(() => {
-		return props.marketName === '出售'
-	})
-	const totalPrice = computed(() => {
-		return parseFloat((inputNumValue.value * props.certainItem.sellPrice * 1.0).toFixed(1))
-	})
-	const expected = computed(() => {
-		return parseFloat((inputNumValue.value * props.certainItem.buyPrice * 0.95).toFixed(1))
-	})
-	const btnWord = computed(() => {
-		return props.marketName === '出售' ? '购买' : '出售'
-	})
-	const confirmFun = computed(() => {
-		return props.marketName === '出售' ? confirmSellPublish :  confirmNeedPublish
-	})
-	
-	function getGemImg(item) {
-		return `../static/market/${item}.png`
-	}
-	function setNumValue(num) {
-		inputNumValue.value = num
-	}
-	function handleShowWran(type) {
-		isShowWarn.value = type
-	}
-	function handleSellNum(num){
-		const max = props.certainItem.sellNum | props.certainItem.buyNum
-		if(num === true) {
-			inputNumValue.value = max
-			return
-		}
-		const tem = inputNumValue.value + num;
-		if(tem < 0) return;
-		if(tem > max) return;
-		inputNumValue.value += num;
-	}
-	async function confirmSellPublish() {
-		if(inputNumValue.value <= 0) return
-		const sellNum = props.certainItem.sellNum  // 这条需求的最大值
-		const id = props.certainItem._id
-		const sellPrice = props.certainItem.sellPrice
-		const demType = props.certainItem.demType
-		// const needTakePrice = Math.ceil(sellPrice * inputNumValue.value)
-		if(totalPrice.value > gameInfo.assets[POWERSTONE]) {
-			handleShowWran(true)
-			return
-		}  // 如果超过自己的余额就直接跳出
-		
-		console.log("没买完:", sellNum, id, demType, sellPrice, totalPrice.value, props.certainItem)
-		
-		// 增加这一条购买记录, 如果用户刚好购买完就消除这条需求
-		const res1 = await marketDB.addTransactionRecord(gameInfo.id, props.certainItem.sellerId, 1, id, inputNumValue.value)
-		if(sellNum === inputNumValue.value) await marketDB.finishSellRequirement(id)
-		else {
-			await marketDB.subSellNum(id, sellNum - inputNumValue.value)
-		}
-		const res3 = await assetsDB.update(gameInfo.id, POWERSTONE, -totalPrice.value)  // 扣除能量石
-		const res4 = await assetsDB.update(gameInfo.id, demType, inputNumValue.value)  // 加上用户买的宝石
-		gameInfo.assets[demType] += inputNumValue.value
-		gameInfo.assets[POWERSTONE] -= totalPrice.value
-		console.log('这里是卖出')
-		props.controlShowPop(false)
-		props.updateData()
-	}
-	async function confirmNeedPublish() {
-		if(inputNumValue.value <= 0) return;
-		const buyNum = props.certainItem.buyNum  // 这条需求的最大值
-		const id = props.certainItem._id
-		const buyPrice = props.certainItem.buyPrice
-		const demType = props.certainItem.demType
-		// const abtainPrice = Math.ceil(buyPrice * inputNumValue.value)
-		if(inputNumValue.value > gameInfo.assets[demType]) {
-			handleShowWran(true)
-			return
-		} // 如果自己没那么多的宝石也直接跳出
-		
-		// 增加这条卖出记录
-		const res1 = await marketDB.addTransactionRecord(props.certainItem.buyerId, gameInfo.id , 2, id, inputNumValue.value)
-		if(inputNumValue.value === buyNum) {
-			await marketDB.finishBuyRequirement(id)
-		}else {
-			await marketDB.subBuyNum(id, buyNum - inputNumValue.value)
-		}
-		const res3 = await assetsDB.update(gameInfo.id, demType, -inputNumValue.value)
-		const res4 = await assetsDB.update(gameInfo.id, POWERSTONE, expected.value)
-		gameInfo.assets[demType] -= inputNumValue.value
-		gameInfo.assets[POWERSTONE] +=  expected.value
-		console.log('这里是需求')
-		props.controlShowPop(false)
-		props.updateData()
-	}
+import { computed, onMounted, ref } from "vue";
+import { POWERSTONE, useGameInfoStore } from "../stores/gameInfo";
+
+const props = defineProps([
+  "controlShowPop",
+  "gemName",
+  "gemChName",
+  "marketName",
+  "certainItem",
+  "updateData",
+]);
+const inputNumValue = ref(0);
+const isShowWarn = ref(false);
+const assetsDB = uniCloud.importObject("assets");
+const marketDB = uniCloud.importObject("market");
+const gameInfo = useGameInfoStore();
+
+const isSellMarket = computed(() => {
+  return props.marketName === "出售";
+});
+const totalPrice = computed(() => {
+  return parseFloat(
+    (inputNumValue.value * props.certainItem.sellPrice * 1.0).toFixed(1)
+  );
+});
+const expected = computed(() => {
+  return parseFloat(
+    (inputNumValue.value * props.certainItem.buyPrice * 0.95).toFixed(1)
+  );
+});
+const btnWord = computed(() => {
+  return props.marketName === "出售" ? "购买" : "出售";
+});
+const confirmFun = computed(() => {
+  return props.marketName === "出售" ? confirmSellPublish : confirmNeedPublish;
+});
+
+function getGemImg(item) {
+  return `../static/market/${item}.png`;
+}
+function setNumValue(num) {
+  inputNumValue.value = num;
+}
+function handleShowWran(type) {
+  isShowWarn.value = type;
+}
+function handleSellNum(num) {
+  const max = props.certainItem.sellNum | props.certainItem.buyNum;
+  if (num === true) {
+    inputNumValue.value = max;
+    return;
+  }
+  const tem = inputNumValue.value + num;
+  if (tem < 0) return;
+  if (tem > max) return;
+  inputNumValue.value += num;
+}
+async function confirmSellPublish() {
+  if (inputNumValue.value <= 0) return;
+  const sellNum = props.certainItem.sellNum; // 这条需求的最大值
+  const id = props.certainItem._id;
+  const sellPrice = props.certainItem.sellPrice;
+  const demType = props.certainItem.demType;
+  // const needTakePrice = Math.ceil(sellPrice * inputNumValue.value)
+  if (totalPrice.value > gameInfo.assets[POWERSTONE]) {
+    handleShowWran(true);
+    return;
+  } // 如果超过自己的余额就直接跳出
+
+  console.log(
+    "没买完:",
+    sellNum,
+    id,
+    demType,
+    sellPrice,
+    totalPrice.value,
+    props.certainItem
+  );
+
+  // 增加这一条购买记录, 如果用户刚好购买完就消除这条需求
+  const res1 = await marketDB.addTransactionRecord(
+    gameInfo.id,
+    props.certainItem.sellerId,
+    1,
+    id,
+    inputNumValue.value
+  );
+  if (sellNum === inputNumValue.value) await marketDB.finishSellRequirement(id);
+  else {
+    await marketDB.subSellNum(id, sellNum - inputNumValue.value);
+  }
+  const res3 = await assetsDB.update(
+    gameInfo.id,
+    POWERSTONE,
+    -totalPrice.value
+  ); // 扣除能量石
+  const res4 = await assetsDB.update(gameInfo.id, demType, inputNumValue.value); // 加上用户买的宝石
+  gameInfo.assets[demType] += inputNumValue.value;
+  gameInfo.assets[POWERSTONE] -= totalPrice.value;
+  console.log("这里是卖出");
+  props.controlShowPop(false);
+  props.updateData();
+}
+async function confirmNeedPublish() {
+  if (inputNumValue.value <= 0) return;
+  const buyNum = props.certainItem.buyNum; // 这条需求的最大值
+  const id = props.certainItem._id;
+  const buyPrice = props.certainItem.buyPrice;
+  const demType = props.certainItem.demType;
+  // const abtainPrice = Math.ceil(buyPrice * inputNumValue.value)
+  if (inputNumValue.value > gameInfo.assets[demType]) {
+    handleShowWran(true);
+    return;
+  } // 如果自己没那么多的宝石也直接跳出
+
+  // 增加这条卖出记录
+  const res1 = await marketDB.addTransactionRecord(
+    props.certainItem.buyerId,
+    gameInfo.id,
+    2,
+    id,
+    inputNumValue.value
+  );
+  if (inputNumValue.value === buyNum) {
+    await marketDB.finishBuyRequirement(id);
+  } else {
+    await marketDB.subBuyNum(id, buyNum - inputNumValue.value);
+  }
+  const res3 = await assetsDB.update(
+    gameInfo.id,
+    demType,
+    -inputNumValue.value
+  );
+  const res4 = await assetsDB.update(gameInfo.id, POWERSTONE, expected.value);
+  gameInfo.assets[demType] -= inputNumValue.value;
+  gameInfo.assets[POWERSTONE] += expected.value;
+  console.log("这里是需求");
+  props.controlShowPop(false);
+  props.updateData();
+}
 </script>
 
 <style lang="less">
-	.buyCellPopWrap {
-		position: absolute;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		z-index: 99;
-		width: 100vw;
-		height: 100vh;
-		font-weight: bold;
-		background-color: rgba(0, 0, 0, .7);
-		
-		.board {
-			position: relative;
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-			width: 73vw;
-			height: 50vh;
-			background: url('../static/market/table.png') no-repeat center center / contain;
-			
-			.close {
-				position: absolute;
-				top: 1vw;
-				right: 1vw;
-				width: 12vw;
-				height: 12vw;
-				background: url('../static/market/lamb-close.png') no-repeat center center / contain;
-			}
-			
-			.gemImg {
-				position: absolute;
-				top: 8vw;
-				width: 20vw;
-				height: 20vw;
-				background: no-repeat center center / contain;
-			}
-			
-			.gemChName {
-				position: absolute;
-				top: 28vw;
-			}
-			
-			.publishNum {
-				position: absolute;
-				top: 37.3vw;
-				display: flex;
-				justify-content: space-between;
-				align-items: center;
-				border-radius: 3vw;
-				width: 81%;
-				height: 12vw;
-				padding: 0 3vw;
-				box-sizing: border-box;
-				background-color: rgba(0, 0, 0, .1);
-				
-				.add {
-					width: 7vw;
-					height: 7vw;
-					background: url('../static/market/add_btn.png') no-repeat center center / contain;
-				}
-				
-				.sub {
-					width: 7vw;
-					height: 7vw;
-					background: url('../static/market/sub_btn.png') no-repeat center center / contain;
-				}
-				
-				.max {
-					margin-left: 2.7vw;
-					width: 9vw;
-					height: 7vw;
-					font-size: 3vw;
-					text-align: center;
-					line-height: 6vw;
-					color: #863f10;
-					background: url('../static/market/btn_frame.png') no-repeat center center / contain;
-				}
-				
-				.inputWrap {
-					flex: 1;
-					margin: 0 2vw;
-					height: 9vw;
-					line-height: 9vw;
-					text-align: center;
-					border-radius: 3vw;
-					background-color: #fff;
-					border: black 1px solid;
-					
-					input  {
-						width: 100%;
-						height: 100%;
-					}
-				}
-			}
-			
-			
-			.tip {
-				position: absolute;
-				width: 90%;
-				height: 7vw;
-				bottom: 28vw;
-				display: flex;
-				flex-wrap: wrap;
-				justify-content: space-between;
-				font-size: 3.1vw;
-				padding: 0 5vw;
-				box-sizing: border-box;
-				
-				.item {
-					display: flex;
-					align-items: center;
-										
-					.itemImg {
-						width: 4vw;
-						height: 4vw;
-						background: no-repeat center center / contain;
-						margin: 0 1vw;
-					}
-				}
-				
-				.own {
-					width: 100%;
-					margin-bottom: 3vw;
-				}
-			}
-			
-			.warn {
-				position: absolute;
-				bottom: 35vw;
-				font-weight: normal;
-				font-size: 3vw;
-				color: red;
-			}
-			
-			.confirmBtn {
-				position: absolute;
-				bottom: 11vw;
-				width: 24vw;
-				height: 10vw;
-				text-align: center;
-				color: aliceblue;
-				line-height: 10vw;
-				font-size: 3.4vw;
-				background: url('../static/market/btn_Purple.png') no-repeat center center / contain;
-			}
-		}
-		
-		
-	}
+.buyCellPopWrap {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 99;
+  width: 100vw;
+  height: 100vh;
+  font-weight: bold;
+  background-color: rgba(0, 0, 0, 0.7);
+
+  .board {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 73vw;
+    height: 50vh;
+    background: url("../static/market/table.png") no-repeat center center /
+      contain;
+
+    .close {
+      position: absolute;
+      top: 1vw;
+      right: 1vw;
+      width: 12vw;
+      height: 12vw;
+      background: url("../static/market/lamb-close.png") no-repeat center center /
+        contain;
+    }
+
+    .gemImg {
+      position: absolute;
+      top: 8vw;
+      width: 20vw;
+      height: 20vw;
+      background: no-repeat center center / contain;
+    }
+
+    .gemChName {
+      position: absolute;
+      top: 28vw;
+    }
+
+    .publishNum {
+      position: absolute;
+      top: 37.3vw;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-radius: 3vw;
+      width: 81%;
+      height: 12vw;
+      padding: 0 3vw;
+      box-sizing: border-box;
+      background-color: rgba(0, 0, 0, 0.1);
+
+      .add {
+        width: 7vw;
+        height: 7vw;
+        background: url("../static/market/add_btn.png") no-repeat center center /
+          contain;
+      }
+
+      .sub {
+        width: 7vw;
+        height: 7vw;
+        background: url("../static/market/sub_btn.png") no-repeat center center /
+          contain;
+      }
+
+      .max {
+        margin-left: 2.7vw;
+        width: 9vw;
+        height: 7vw;
+        font-size: 3vw;
+        text-align: center;
+        line-height: 6vw;
+        color: #863f10;
+        background: url("../static/market/btn_frame.png") no-repeat center
+          center / contain;
+      }
+
+      .inputWrap {
+        flex: 1;
+        margin: 0 2vw;
+        height: 9vw;
+        line-height: 9vw;
+        text-align: center;
+        border-radius: 3vw;
+        background-color: #fff;
+        border: black 1px solid;
+
+        input {
+          width: 100%;
+          height: 100%;
+        }
+      }
+    }
+
+    .tip {
+      position: absolute;
+      width: 90%;
+      height: 7vw;
+      bottom: 28vw;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      font-size: 3.1vw;
+      padding: 0 5vw;
+      box-sizing: border-box;
+
+      .item {
+        display: flex;
+        align-items: center;
+
+        .itemImg {
+          width: 4vw;
+          height: 4vw;
+          background: no-repeat center center / contain;
+          margin: 0 1vw;
+        }
+      }
+
+      .own {
+        width: 100%;
+        margin-bottom: 3vw;
+      }
+    }
+
+    .warn {
+      position: absolute;
+      bottom: 35vw;
+      font-weight: normal;
+      font-size: 3vw;
+      color: red;
+    }
+
+    .confirmBtn {
+      position: absolute;
+      bottom: 11vw;
+      width: 24vw;
+      height: 10vw;
+      text-align: center;
+      color: aliceblue;
+      line-height: 10vw;
+      font-size: 3.4vw;
+      background: url("../static/market/btn_Purple.png") no-repeat center center /
+        contain;
+    }
+  }
+}
 </style>

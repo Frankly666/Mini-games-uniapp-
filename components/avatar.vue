@@ -39,7 +39,6 @@
 			height: 15vw;
 			border-radius: 50%;
 			z-index: 100;
-			background: url('/static/assetsHeader/微信图片_20240816182202.jpg') no-repeat center center / contain;
 		}
 		
 		.userName {

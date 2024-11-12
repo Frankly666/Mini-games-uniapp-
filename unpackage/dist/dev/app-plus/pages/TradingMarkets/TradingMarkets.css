@@ -8,24 +8,20 @@
   width: 100vw;
   z-index: 99;
   color: #dcc5ab;
+  font-size: 3.6vw;
   font-weight: bold;
 }
 .assetsBar1 .asset[data-v-618629f7] {
   position: relative;
   display: flex;
   align-items: center;
-  width: 18.67vw;
-  height: 8vw;
-  padding-left: 13.33vw;
+  text-align: center;
+  justify-content: center;
+  width: 30.67vw;
+  height: 10vw;
 }
 .assetsBar1 .asset[data-v-618629f7]:first-of-type {
-  width: 16vw;
-  height: 8vw;
   margin-left: 4vw;
-}
-.assetsBar1 .asset[data-v-618629f7]:last-of-type {
-  width: 16vw;
-  height: 8vw;
 }
 .assetsBar1 .asset span[data-v-618629f7] {
   position: relative;
@@ -38,31 +34,27 @@
   top: 3vw;
   display: flex;
   justify-content: space-between;
-  width: 68vw;
+  width: 70vw;
   z-index: 99;
   color: #dcc5ab;
+  font-size: 3.6vw;
   font-weight: bold;
 }
 .assetsBar2 .asset[data-v-618629f7] {
   position: relative;
   display: flex;
   align-items: center;
-  width: 18.67vw;
-  height: 8vw;
-  padding-left: 13.33vw;
-}
-.assetsBar2 .asset[data-v-618629f7]:first-of-type {
-  width: 16vw;
-  height: 8vw;
+  text-align: center;
+  justify-content: center;
+  width: 31.67vw;
+  height: 10vw;
+  line-height: 7vw;
 }
 .assetsBar2 .asset[data-v-618629f7]:last-of-type {
-  width: 16vw;
-  height: 8vw;
   margin-top: 2vw;
 }
 .assetsBar2 .asset span[data-v-618629f7] {
   position: relative;
-  top: -0.53vw;
 }
 
 .publishWrap[data-v-16940c0f] {
@@ -274,7 +266,7 @@
   align-items: center;
   width: 73vw;
   height: 50vh;
-  background: url('../../static/market/table.png') no-repeat center center / contain;
+  background: url("../../static/market/table.png") no-repeat center center / contain;
 }
 .buyCellPopWrap .board .close[data-v-f77da028] {
   position: absolute;
@@ -282,7 +274,7 @@
   right: 1vw;
   width: 12vw;
   height: 12vw;
-  background: url('../../static/market/lamb-close.png') no-repeat center center / contain;
+  background: url("../../static/market/lamb-close.png") no-repeat center center / contain;
 }
 .buyCellPopWrap .board .gemImg[data-v-f77da028] {
   position: absolute;
@@ -311,12 +303,12 @@
 .buyCellPopWrap .board .publishNum .add[data-v-f77da028] {
   width: 7vw;
   height: 7vw;
-  background: url('../../static/market/add_btn.png') no-repeat center center / contain;
+  background: url("../../static/market/add_btn.png") no-repeat center center / contain;
 }
 .buyCellPopWrap .board .publishNum .sub[data-v-f77da028] {
   width: 7vw;
   height: 7vw;
-  background: url('../../static/market/sub_btn.png') no-repeat center center / contain;
+  background: url("../../static/market/sub_btn.png") no-repeat center center / contain;
 }
 .buyCellPopWrap .board .publishNum .max[data-v-f77da028] {
   margin-left: 2.7vw;
@@ -326,7 +318,7 @@
   text-align: center;
   line-height: 6vw;
   color: #863f10;
-  background: url('../../static/market/btn_frame.png') no-repeat center center / contain;
+  background: url("../../static/market/btn_frame.png") no-repeat center center / contain;
 }
 .buyCellPopWrap .board .publishNum .inputWrap[data-v-f77da028] {
   flex: 1;
@@ -368,6 +360,13 @@
   width: 100%;
   margin-bottom: 3vw;
 }
+.buyCellPopWrap .board .warn[data-v-f77da028] {
+  position: absolute;
+  bottom: 35vw;
+  font-weight: normal;
+  font-size: 3vw;
+  color: red;
+}
 .buyCellPopWrap .board .confirmBtn[data-v-f77da028] {
   position: absolute;
   bottom: 11vw;
@@ -377,7 +376,7 @@
   color: aliceblue;
   line-height: 10vw;
   font-size: 3.4vw;
-  background: url('../../static/market/btn_Purple.png') no-repeat center center / contain;
+  background: url("../../static/market/btn_Purple.png") no-repeat center center / contain;
 }
 
 .tradingMarketWrap {
@@ -493,14 +492,20 @@
   border: black 1px solid;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
-.tradingMarketWrap .gemstones .contentWrap .content .item .gemImg {
+.tradingMarketWrap .gemstones .contentWrap .content .item .numWrap {
+  display: flex;
+  width: 36vw;
+}
+.tradingMarketWrap .gemstones .contentWrap .content .item .numWrap .gemImg {
   width: 6vw;
   height: 6vw;
   margin-right: 2vw;
   background: no-repeat center center / contain;
 }
-.tradingMarketWrap .gemstones .contentWrap .content .item .priceImg {
-  margin-left: 11vw;
+.tradingMarketWrap .gemstones .contentWrap .content .item .priceWrap {
+  display: flex;
+}
+.tradingMarketWrap .gemstones .contentWrap .content .item .priceWrap .priceImg {
   margin-right: 2vw;
   width: 6vw;
   height: 6vw;
@@ -523,5 +528,5 @@
   left: 5vw;
   width: 13vw;
   height: 13vw;
-  background: url("../../static/market/return.png") no-repeat center center / contain;
+  background: url("../../static/ground/return.png") no-repeat center center / contain;
 }

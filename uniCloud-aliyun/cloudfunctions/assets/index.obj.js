@@ -11,7 +11,6 @@ module.exports = {
 		assets.add({userId, powerStone: 0, diamond: 0, resourceStone: 0, meteorite: 0}).then(res => {
 			return res
 		})
-		
 	},
 	
 	/**查询用户的资源
@@ -38,7 +37,7 @@ module.exports = {
 	/** 更新用户资源
 	 * @param {String} userId 用户的id
 	 * @param {String} type 资源类型
-	 * @param {Number}} number 增减数量可正可负
+	 * @param {Number} number 增减数量可正可负
 	 */
 	async update(userId, type, number) {
 		const assets = uniCloud.database().collection('assets');

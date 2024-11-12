@@ -80,7 +80,4 @@ module.exports = {
 		const res = await buyRequirement.where({demType, isFinished: false}).orderBy("sellPrice", 'desc').limit(5).get()
 		return res;
 	},
-
-	
-	
 }

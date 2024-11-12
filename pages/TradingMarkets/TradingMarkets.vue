@@ -124,8 +124,8 @@
 	}
 	
 	function back() {
-		uni.navigateTo({
-			url:'/pages/Home/Home'
+		uni.navigateBack({
+			delta: 1
 		})
 	}
 	
@@ -241,11 +241,7 @@
 						height:7vw;
 					}
 				}
-				
-				
-				
-				
-				
+							
 				.gemItem {
 					display: flex;
 					align-items: center;
@@ -303,7 +299,6 @@
 							}
 						}
 						
-						
 						.priceWrap {
 							display: flex;
 							.priceImg {
@@ -313,9 +308,7 @@
 								background: url('../../static/market/powerStone.png') no-repeat center center / contain;
 							}
 						}
-						
-						
-						
+										
 						.button {
 							position: absolute;
 							right: 3vw;

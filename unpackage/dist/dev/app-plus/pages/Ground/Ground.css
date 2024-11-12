@@ -1,6 +1,142 @@
+.assetsBar1[data-v-618629f7] {
+  position: fixed;
+  flex-wrap: wrap;
+  right: 2vw;
+  top: 10vw;
+  display: flex;
+  justify-content: space-between;
+  width: 100vw;
+  z-index: 99;
+  color: #dcc5ab;
+  font-size: 3.6vw;
+  font-weight: bold;
+}
+.assetsBar1 .asset[data-v-618629f7] {
+  position: relative;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  width: 30.67vw;
+  height: 10vw;
+}
+.assetsBar1 .asset[data-v-618629f7]:first-of-type {
+  margin-left: 4vw;
+}
+.assetsBar1 .asset span[data-v-618629f7] {
+  position: relative;
+  top: -0.53vw;
+}
+.assetsBar2[data-v-618629f7] {
+  position: fixed;
+  flex-wrap: wrap;
+  right: 2vw;
+  top: 3vw;
+  display: flex;
+  justify-content: space-between;
+  width: 70vw;
+  z-index: 99;
+  color: #dcc5ab;
+  font-size: 3.6vw;
+  font-weight: bold;
+}
+.assetsBar2 .asset[data-v-618629f7] {
+  position: relative;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  width: 31.67vw;
+  height: 10vw;
+  line-height: 7vw;
+}
+.assetsBar2 .asset[data-v-618629f7]:last-of-type {
+  margin-top: 2vw;
+}
+.assetsBar2 .asset span[data-v-618629f7] {
+  position: relative;
+}
+
 .groundWrap {
   position: relative;
   width: 100vw;
-  height: 100vh;
-  background-color: #fff;
+  height: 533vw;
+  background: url("../../static/ground/groundBgc.png") no-repeat top center / contain;
+}
+.groundWrap .return {
+  position: fixed;
+  bottom: 4vw;
+  left: 7vw;
+  width: 15vw;
+  height: 15vw;
+  background: url("../../static/ground/return.png") no-repeat center center / contain;
+}
+.groundWrap .treesWrap1 .item1 {
+  position: absolute;
+  width: 30vw;
+  height: 40vw;
+  background: url('../../static/ground/tree1.png') no-repeat center center / contain;
+  animation: swing 4s infinite linear;
+}
+.groundWrap .treesWrap1 .left {
+  position: absolute;
+  left: -16vw;
+}
+.groundWrap .treesWrap1 .left .lTree1 {
+  top: 50vw;
+}
+.groundWrap .treesWrap1 .left .lTree2 {
+  top: 130vw;
+  animation-duration: 2.7s;
+}
+.groundWrap .treesWrap1 .left .lTree3 {
+  top: 230vw;
+  animation-duration: 3.8s;
+}
+.groundWrap .treesWrap1 .left .lTree4 {
+  top: 330vw;
+  animation-duration: 4.5s;
+}
+.groundWrap .treesWrap1 .left .lTree5 {
+  top: 430vw;
+  animation-duration: 4.8s;
+}
+.groundWrap .treesWrap2 .item2 {
+  position: absolute;
+  width: 30vw;
+  height: 40vw;
+  background: url('../../static/ground/tree2.png') no-repeat center center / contain;
+  animation: swing 4s infinite linear;
+}
+.groundWrap .treesWrap2 .right {
+  position: absolute;
+  left: 90vw;
+}
+.groundWrap .treesWrap2 .right .rTree1 {
+  top: 50vw;
+}
+.groundWrap .treesWrap2 .right .rTree2 {
+  top: 130vw;
+  animation-duration: 2.7s;
+}
+.groundWrap .treesWrap2 .right .rTree3 {
+  top: 230vw;
+  animation-duration: 3.8s;
+}
+.groundWrap .treesWrap2 .right .rTree4 {
+  top: 330vw;
+  animation-duration: 4.5s;
+}
+.groundWrap .treesWrap2 .right .rTree5 {
+  top: 430vw;
+  animation-duration: 4.8s;
+}
+@keyframes swing {
+0%,
+  100% {
+    transform: rotate(0deg);
+}
+50% {
+    transform: rotate(25deg);
+}
 }
