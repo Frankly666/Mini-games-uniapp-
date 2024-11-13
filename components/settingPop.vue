@@ -5,7 +5,7 @@
 			<view 
 				class="switch" 
 				@click="() => {handleImg()}"
-				:style="`background-image: url(${isOpen ?  openImg : closeImg});`"
+				:style="`background-image: url(${gameInfo.bgmIsOpen ?  openImg : closeImg});`"
 				/>
 			<view class="exit" @click="exit">
 				<text>退出游戏</text>
@@ -18,16 +18,15 @@
 	import { ref } from 'vue';
 	import { useGameInfoStore } from '../stores/gameInfo';
 	
+	const gameInfo = useGameInfoStore()
 	const props = defineProps(['handleShow']);
-	const isOpen = ref(true)
 	const openImg = '../static/toolsBar/switchOn.png'
 	const closeImg = '../static/toolsBar/switchOff.png'
 	const bgm = useGameInfoStore().bgm
 	
-	
 	function handleImg() {
-		isOpen.value = !isOpen.value
-		if(isOpen.value) bgm.play();
+		gameInfo.bgmIsOpen = !gameInfo.bgmIsOpen
+		if(gameInfo.bgmIsOpen) bgm.play();
 		else bgm.pause()
 	}
 	

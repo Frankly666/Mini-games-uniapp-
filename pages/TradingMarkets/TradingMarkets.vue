@@ -70,18 +70,18 @@
 						</view>
 					</view>
 					
-					<view class="tip" v-if="showListData.length === 5">
+					<view class="tip" v-if="showListData?.length === 5">
 						<text>最多只展示前五条数据</text>
 					</view>
 				</view>
-				
 			</view>
 		</view>
 	</view>
 </template>
 
 <script setup>
-	import { computed, onMounted, ref } from 'vue';
+	import { computed, onMounted, ref } from 'vue'
+	
 	import assetsHeader1 from '../../components/assetsHeader.vue';
 	import marketPublish from '../../components/marketPublish.vue';
 	import buyCellPop from '../../components/buyCellPop.vue';

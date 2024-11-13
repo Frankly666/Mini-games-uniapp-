@@ -19,12 +19,6 @@
       }
     },
     {
-      "path": "pages/TanlentCenter/TanlentCenter",
-      "style": {
-        "navigationStyle": "custom"
-      }
-    },
-    {
       "path": "pages/Mine/Mine",
       "style": {
         "navigationStyle": "custom"

@@ -10,6 +10,7 @@
 			<setting-pop v-if="isShowSettingPop" :handleShow="handleShow"></setting-pop>
 			<rule-pop v-if="isShowRulePop" :handleShow="handleShow"></rule-pop>
 			<announcement-pop v-if="isShowAnnouncementPop" :handleShow="handleShow"></announcement-pop>
+			<talent-center-pop v-if="isShowTalentPop" :handleShowTanlentPop="handleShowTanlentPop"></talent-center-pop>
 			
 			<view class="map-container"
 				@touchstart="handleTouchStart"
@@ -22,7 +23,7 @@
 					>
 					<dynamic-people></dynamic-people>
 					<cloud-tip></cloud-tip>
-					<click-mask></click-mask>
+					<click-mask :handleShowTanlentPop="handleShowTanlentPop"></click-mask>
 				</view>
 			</view>
 	</view>
@@ -40,6 +41,7 @@ import userInfoPop from '../../components/userInfoPop.vue';
 import settingPop from '../../components/settingPop.vue';
 import rulePop from '../../components/rulePop.vue';
 import announcementPop from '../../components/announcementPop.vue';
+import talentCenterPop from '../../components/talentCenterPop.vue';
 import { ASSETS, AVATAR, ID, ISFIRST, PHONE, USERNAME, useGameInfoStore } from '../../stores/gameInfo';
 import Cache from '../../utils/cache';
 
@@ -56,6 +58,7 @@ const isShowInfo = ref(false);
 const isShowSettingPop = ref(false);
 const isShowRulePop = ref(false);
 const isShowAnnouncementPop = ref(false);
+const isShowTalentPop = ref(false);
 const gameInfo = useGameInfoStore()
 const bgm = gameInfo.bgm;
 const setCache = Cache.setCache; // 这里使用的是实例化函数
@@ -128,6 +131,10 @@ function handleShow(type, bool) {
 // 控制用户信息弹窗展示
 function handleInfo(type){
 	isShowInfo.value = type;
+}
+
+function handleShowTanlentPop(type) {
+	isShowTalentPop.value = type
 }
 
 onMounted(async () => {

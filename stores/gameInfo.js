@@ -15,7 +15,8 @@ export const useGameInfoStore = defineStore('gameInfo', {
 			assets: {},
 			isLoad: false,
 			translateX: -340,
-			translateY: -320
+			translateY: -320,
+			bgmIsOpen: true
 		};
 
 	}

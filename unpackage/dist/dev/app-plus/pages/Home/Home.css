@@ -586,6 +586,31 @@
   height: 10vw;
 }
 
+.talentWrap[data-v-52356c3d] {
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 99;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+.talentWrap .close[data-v-52356c3d] {
+  position: absolute;
+  bottom: 7vw;
+  width: 13vw;
+  height: 13vw;
+  background: url("../../static/talentCenter/close.png") no-repeat center center / contain;
+}
+.talentWrap .board[data-v-52356c3d] {
+  position: absolute;
+  top: 13vw;
+  width: 86vw;
+  height: 140vw;
+  background: url("../../static/talentCenter/talentCenter.png") no-repeat center center / contain;
+}
+
 .pages[data-v-7ffebbf4] {
   position: relative;
   width: 100vw;

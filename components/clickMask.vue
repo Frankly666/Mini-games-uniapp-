@@ -7,36 +7,26 @@
 	</view>
 </template>
 
-<script>
-	export default {
-		name:"clickMask",
-		data() {
-			return {
-				
-			};
-		},
-		methods: {
-			toMine() {
-				uni.navigateTo({
-					url: '/pages/Mine/Mine'
-				});
-			},
-			toGround() {
-				uni.navigateTo({
-					url: '/pages/Ground/Ground'
-				});
-			},
-			toTanlentCenter() {
-				uni.navigateTo({
-					url: '/pages/TanlentCenter/TanlentCenter'
-				});
-			},
-			toTradingMarket() {
-				uni.navigateTo({
-					url: '/pages/TradingMarkets/TradingMarkets'
-				});
-			}
-		}
+<script setup>
+	const props = defineProps(["handleShowTanlentPop"])
+	
+	function toMine() {
+			uni.navigateTo({
+				url: '/pages/Mine/Mine'
+			});
+	}
+	function toGround() {
+			uni.navigateTo({
+				url: '/pages/Ground/Ground'
+			});
+	}
+	function toTanlentCenter() {
+			props.handleShowTanlentPop(true)
+	}
+	function toTradingMarket() {
+			uni.navigateTo({
+				url: '/pages/TradingMarkets/TradingMarkets'
+			});
 	}
 </script>
 
