@@ -41,6 +41,9 @@ module.exports = {
 	 */
 	async update(userId, type, number) {
 		const assets = uniCloud.database().collection('assets');
+		function roundToOneDecimal(num) {
+		  return Math.round(num * 10) / 10;
+		}
 		try {
 			const res1 = await assets.where({
 				userId: userId
@@ -52,8 +55,9 @@ module.exports = {
 			if(realData[type] + number < 0) return {
 				err: "资源不能为零"
 			}
+			
 			const res2 = await res1.update({
-				[type]: realData[type] + parseFloat((number*1.0).toFixed(2))
+				[type]: roundToOneDecimal(realData[type] + number)
 			})
 			
 			return res2

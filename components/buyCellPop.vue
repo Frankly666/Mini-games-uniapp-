@@ -119,6 +119,7 @@
 <script setup>
 import { computed, onMounted, ref } from "vue";
 import { POWERSTONE, useGameInfoStore } from "../stores/gameInfo";
+import { roundToOneDecimal } from "../utils/roundToOneDecimal";
 
 const props = defineProps([
   "controlShowPop",
@@ -138,14 +139,11 @@ const isSellMarket = computed(() => {
   return props.marketName === "出售";
 });
 const totalPrice = computed(() => {
-  return parseFloat(
-    (inputNumValue.value * props.certainItem.sellPrice * 1.0).toFixed(1)
-  );
+	console.log(roundToOneDecimal(inputNumValue.value * props.certainItem.sellPrice))
+  return roundToOneDecimal(inputNumValue.value * props.certainItem.sellPrice)
 });
 const expected = computed(() => {
-  return parseFloat(
-    (inputNumValue.value * props.certainItem.buyPrice * 0.95).toFixed(1)
-  );
+  return roundToOneDecimal(inputNumValue.value * props.certainItem.buyPrice * 0.95)
 });
 const btnWord = computed(() => {
   return props.marketName === "出售" ? "购买" : "出售";
@@ -174,27 +172,17 @@ function handleSellNum(num) {
   if (tem > max) return;
   inputNumValue.value += num;
 }
+
 async function confirmSellPublish() {
   if (inputNumValue.value <= 0) return;
   const sellNum = props.certainItem.sellNum; // 这条需求的最大值
   const id = props.certainItem._id;
   const sellPrice = props.certainItem.sellPrice;
   const demType = props.certainItem.demType;
-  // const needTakePrice = Math.ceil(sellPrice * inputNumValue.value)
   if (totalPrice.value > gameInfo.assets[POWERSTONE]) {
     handleShowWran(true);
     return;
   } // 如果超过自己的余额就直接跳出
-
-  console.log(
-    "没买完:",
-    sellNum,
-    id,
-    demType,
-    sellPrice,
-    totalPrice.value,
-    props.certainItem
-  );
 
   // 增加这一条购买记录, 如果用户刚好购买完就消除这条需求
   const res1 = await marketDB.addTransactionRecord(
@@ -215,8 +203,8 @@ async function confirmSellPublish() {
   ); // 扣除能量石
   const res4 = await assetsDB.update(gameInfo.id, demType, inputNumValue.value); // 加上用户买的宝石
   gameInfo.assets[demType] += inputNumValue.value;
-  gameInfo.assets[POWERSTONE] -= totalPrice.value;
-  console.log("这里是卖出");
+  gameInfo.assets[POWERSTONE] = roundToOneDecimal(gameInfo.assets[POWERSTONE] - totalPrice.value);
+  console.log("这里是卖出", totalPrice.value, gameInfo.assets[POWERSTONE], gameInfo.assets[POWERSTONE] - totalPrice.value);
   props.controlShowPop(false);
   props.updateData();
 }
@@ -252,7 +240,7 @@ async function confirmNeedPublish() {
   );
   const res4 = await assetsDB.update(gameInfo.id, POWERSTONE, expected.value);
   gameInfo.assets[demType] -= inputNumValue.value;
-  gameInfo.assets[POWERSTONE] += expected.value;
+  gameInfo.assets[POWERSTONE] = roundToOneDecimal(gameInfo.assets[POWERSTONE] + expected.value) ;
   console.log("这里是需求");
   props.controlShowPop(false);
   props.updateData();

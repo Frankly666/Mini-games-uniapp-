@@ -5352,6 +5352,9 @@ This will fail in production if not fixed.`);
     ]);
   }
   const PagesHomeHome = /* @__PURE__ */ _export_sfc(_sfc_main$7, [["render", _sfc_render$6], ["__scopeId", "data-v-7ffebbf4"], ["__file", "D:/HBuilderProjects/Game/pages/Home/Home.vue"]]);
+  function roundToOneDecimal(num) {
+    return Math.round(num * 10) / 10;
+  }
   const _sfc_main$6 = {
     __name: "marketPublish",
     props: ["controlPublish", "title", "gemItems", "gemImgName", "updateData"],
@@ -5369,7 +5372,12 @@ This will fail in production if not fixed.`);
         if (inputPriceValue.value < 0.2 || inputPriceValue.value > 10)
           return 0;
         const product = inputNumValue.value * inputPriceValue.value * 0.95;
-        return parseFloat(product.toFixed(1));
+        return roundToOneDecimal(product);
+      });
+      const needPowerStoneNum = vue.computed(() => {
+        if (inputPriceValue.value < 0.2 || inputPriceValue.value > 10)
+          return 0;
+        return roundToOneDecimal(inputNumValue.value * inputPriceValue.value);
       });
       const isShowWran = vue.computed(() => {
         return inputPriceValue.value < 0.2 || inputPriceValue.value > 10;
@@ -5387,6 +5395,7 @@ This will fail in production if not fixed.`);
         selectIndex.value = index;
         inputNumValue.value = 0;
         inputPriceValue.value = 0;
+        isShowNotEnough.value = false;
       }
       function setPriceValue(price) {
         inputPriceValue.value = price;
@@ -5415,11 +5424,11 @@ This will fail in production if not fixed.`);
           return;
         }
         const gemType = props.gemImgName[selectIndex.value];
-        formatAppLog("log", "at components/marketPublish.vue:136", inputPriceValue.value);
-        const res1 = await marketDB.publishSellRequirement(gameInfo.id, gemType, inputNumValue.value, inputPriceValue.value);
-        const res2 = await assetsDB.update(gameInfo.id, gemType, -inputNumValue.value);
+        formatAppLog("log", "at components/marketPublish.vue:149", inputPriceValue.value);
+        await marketDB.publishSellRequirement(gameInfo.id, gemType, inputNumValue.value, inputPriceValue.value);
+        await assetsDB.update(gameInfo.id, gemType, -inputNumValue.value);
         gameInfo.assets[gemType] -= inputNumValue.value;
-        formatAppLog("log", "at components/marketPublish.vue:142", "这里是卖出:", res1, res2);
+        formatAppLog("log", "at components/marketPublish.vue:155", "这里是卖出:");
         props.controlPublish(false);
         props.updateData();
       }
@@ -5427,23 +5436,24 @@ This will fail in production if not fixed.`);
         if (inputPriceValue.value < 0.2 || inputPriceValue.value > 10 || inputNumValue.value <= 0)
           return;
         const gemType = props.gemImgName[selectIndex.value];
-        let totalPrice = inputNumValue.value * inputPriceValue.value;
-        totalPrice = parseFloat((totalPrice * 1).toFixed(1));
+        const totalPrice = roundToOneDecimal(inputNumValue.value * inputPriceValue.value);
         if (totalPrice > gameInfo.assets[POWERSTONE]) {
           isShowNotEnough.value = true;
           return;
         }
-        const res1 = await marketDB.publishBuyRequirement(gameInfo.id, gemType, inputNumValue.value, inputPriceValue.value);
-        const res2 = await assetsDB.update(gameInfo.id, POWERSTONE, -totalPrice);
-        gameInfo.assets[POWERSTONE] -= totalPrice;
-        formatAppLog("log", "at components/marketPublish.vue:160", "这里是需求:", res1, res2);
+        await marketDB.publishBuyRequirement(gameInfo.id, gemType, inputNumValue.value, inputPriceValue.value);
+        await assetsDB.update(gameInfo.id, POWERSTONE, -totalPrice);
+        gameInfo.assets[POWERSTONE] = roundToOneDecimal(gameInfo.assets[POWERSTONE] - totalPrice);
+        formatAppLog("log", "at components/marketPublish.vue:173", "这里是需求:");
         props.controlPublish(false);
         props.updateData();
       }
-      const __returned__ = { gameInfo, props, selectIndex, inputNumValue, inputPriceValue, isShowNotEnough, marketDB, assetsDB, expectedNum, isShowWran, isSell, confirmFun, getGemImg, handleIndex, setPriceValue, setNumValue, handleSellNum, confirmSellPublish, confirmNeedPublish, computed: vue.computed, onMounted: vue.onMounted, ref: vue.ref, get POWERSTONE() {
+      const __returned__ = { gameInfo, props, selectIndex, inputNumValue, inputPriceValue, isShowNotEnough, marketDB, assetsDB, expectedNum, needPowerStoneNum, isShowWran, isSell, confirmFun, getGemImg, handleIndex, setPriceValue, setNumValue, handleSellNum, confirmSellPublish, confirmNeedPublish, computed: vue.computed, onMounted: vue.onMounted, ref: vue.ref, get POWERSTONE() {
         return POWERSTONE;
       }, get useGameInfoStore() {
         return useGameInfoStore;
+      }, get roundToOneDecimal() {
+        return roundToOneDecimal;
       } };
       Object.defineProperty(__returned__, "__isScriptSetup", { enumerable: false, value: true });
       return __returned__;
@@ -5585,11 +5595,11 @@ This will fail in production if not fixed.`);
             [vue.vShow, $setup.isShowNotEnough && !$setup.isSell]
           ])
         ]),
-        $setup.isSell ? (vue.openBlock(), vue.createElementBlock("view", {
-          key: 0,
-          class: "tip"
-        }, [
-          vue.createElementVNode("view", { class: "own item" }, [
+        vue.createElementVNode("view", { class: "tip" }, [
+          $setup.isSell ? (vue.openBlock(), vue.createElementBlock("view", {
+            key: 0,
+            class: "own item"
+          }, [
             vue.createElementVNode("text", null, "可出售"),
             vue.createElementVNode(
               "view",
@@ -5608,8 +5618,11 @@ This will fail in production if not fixed.`);
               1
               /* TEXT */
             )
-          ]),
-          vue.createElementVNode("view", { class: "premium item" }, [
+          ])) : vue.createCommentVNode("v-if", true),
+          $setup.isSell ? (vue.openBlock(), vue.createElementBlock("view", {
+            key: 1,
+            class: "premium item"
+          }, [
             vue.createElementVNode("text", null, "手续费"),
             vue.createElementVNode(
               "view",
@@ -5622,8 +5635,11 @@ This will fail in production if not fixed.`);
               /* STYLE */
             ),
             vue.createElementVNode("text", null, "5%")
-          ]),
-          vue.createElementVNode("view", { class: "obtain item" }, [
+          ])) : vue.createCommentVNode("v-if", true),
+          $setup.isSell ? (vue.openBlock(), vue.createElementBlock("view", {
+            key: 2,
+            class: "obtain item"
+          }, [
             vue.createElementVNode("text", null, "预获得"),
             vue.createElementVNode(
               "view",
@@ -5642,8 +5658,31 @@ This will fail in production if not fixed.`);
               1
               /* TEXT */
             )
-          ])
-        ])) : vue.createCommentVNode("v-if", true),
+          ])) : vue.createCommentVNode("v-if", true),
+          !$setup.isSell ? (vue.openBlock(), vue.createElementBlock("view", {
+            key: 3,
+            class: "needPowerStone item"
+          }, [
+            vue.createElementVNode("text", null, "需要扣除"),
+            vue.createElementVNode(
+              "view",
+              {
+                class: "itemImg",
+                style: vue.normalizeStyle(`background-image: url(${$setup.getGemImg("powerStone")});`)
+              },
+              null,
+              4
+              /* STYLE */
+            ),
+            vue.createElementVNode(
+              "text",
+              null,
+              vue.toDisplayString($setup.needPowerStoneNum),
+              1
+              /* TEXT */
+            )
+          ])) : vue.createCommentVNode("v-if", true)
+        ]),
         vue.createElementVNode("view", {
           class: "confirmBtn",
           onClick: _cache[6] || (_cache[6] = (...args) => $setup.confirmFun && $setup.confirmFun(...args))
@@ -5676,14 +5715,11 @@ This will fail in production if not fixed.`);
         return props.marketName === "出售";
       });
       const totalPrice = vue.computed(() => {
-        return parseFloat(
-          (inputNumValue.value * props.certainItem.sellPrice * 1).toFixed(1)
-        );
+        formatAppLog("log", "at components/buyCellPop.vue:142", roundToOneDecimal(inputNumValue.value * props.certainItem.sellPrice));
+        return roundToOneDecimal(inputNumValue.value * props.certainItem.sellPrice);
       });
       const expected = vue.computed(() => {
-        return parseFloat(
-          (inputNumValue.value * props.certainItem.buyPrice * 0.95).toFixed(1)
-        );
+        return roundToOneDecimal(inputNumValue.value * props.certainItem.buyPrice * 0.95);
       });
       const btnWord = vue.computed(() => {
         return props.marketName === "出售" ? "购买" : "出售";
@@ -5718,23 +5754,12 @@ This will fail in production if not fixed.`);
           return;
         const sellNum = props.certainItem.sellNum;
         const id = props.certainItem._id;
-        const sellPrice = props.certainItem.sellPrice;
+        props.certainItem.sellPrice;
         const demType = props.certainItem.demType;
         if (totalPrice.value > gameInfo.assets[POWERSTONE]) {
           handleShowWran(true);
           return;
         }
-        formatAppLog(
-          "log",
-          "at components/buyCellPop.vue:189",
-          "没买完:",
-          sellNum,
-          id,
-          demType,
-          sellPrice,
-          totalPrice.value,
-          props.certainItem
-        );
         await marketDB.addTransactionRecord(
           gameInfo.id,
           props.certainItem.sellerId,
@@ -5754,8 +5779,8 @@ This will fail in production if not fixed.`);
         );
         await assetsDB.update(gameInfo.id, demType, inputNumValue.value);
         gameInfo.assets[demType] += inputNumValue.value;
-        gameInfo.assets[POWERSTONE] -= totalPrice.value;
-        formatAppLog("log", "at components/buyCellPop.vue:219", "这里是卖出");
+        gameInfo.assets[POWERSTONE] = roundToOneDecimal(gameInfo.assets[POWERSTONE] - totalPrice.value);
+        formatAppLog("log", "at components/buyCellPop.vue:207", "这里是卖出", totalPrice.value, gameInfo.assets[POWERSTONE], gameInfo.assets[POWERSTONE] - totalPrice.value);
         props.controlShowPop(false);
         props.updateData();
       }
@@ -5789,8 +5814,8 @@ This will fail in production if not fixed.`);
         );
         await assetsDB.update(gameInfo.id, POWERSTONE, expected.value);
         gameInfo.assets[demType] -= inputNumValue.value;
-        gameInfo.assets[POWERSTONE] += expected.value;
-        formatAppLog("log", "at components/buyCellPop.vue:256", "这里是需求");
+        gameInfo.assets[POWERSTONE] = roundToOneDecimal(gameInfo.assets[POWERSTONE] + expected.value);
+        formatAppLog("log", "at components/buyCellPop.vue:244", "这里是需求");
         props.controlShowPop(false);
         props.updateData();
       }
@@ -5798,6 +5823,8 @@ This will fail in production if not fixed.`);
         return POWERSTONE;
       }, get useGameInfoStore() {
         return useGameInfoStore;
+      }, get roundToOneDecimal() {
+        return roundToOneDecimal;
       } };
       Object.defineProperty(__returned__, "__isScriptSetup", { enumerable: false, value: true });
       return __returned__;

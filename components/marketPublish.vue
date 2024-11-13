@@ -46,21 +46,26 @@
 				<text v-show="isShowNotEnough&&!isSell">(金刚石余额不足)</text>
 			</view>
 			
-			<view class="tip" v-if="isSell">
-				<view class="own item">
+			<view class="tip" >
+				<view class="own item" v-if="isSell">
 					<text>可出售</text>
 					<view class="itemImg" :style="`background-image: url(${getGemImg(gemImgName[selectIndex])});`"></view>
 					<text>{{gameInfo.assets[gemImgName[selectIndex]] | 0}}</text>
 				</view>
-				<view class="premium item">
+				<view class="premium item" v-if="isSell">
 					<text>手续费</text>
 					<view class="itemImg" :style="`background-image: url(${getGemImg('powerStone')});`"></view>
 					<text>5%</text>
 				</view>
-				<view class="obtain item">
+				<view class="obtain item" v-if="isSell">
 					<text>预获得</text>
 					<view class="itemImg" :style="`background-image: url(${getGemImg('powerStone')});`"></view>
 					<text>{{expectedNum}}</text>
+				</view>
+				<view class="needPowerStone item" v-if="!isSell">
+					<text>需要扣除</text>
+					<view class="itemImg" :style="`background-image: url(${getGemImg('powerStone')});`"></view>
+					<text>{{needPowerStoneNum}}</text>
 				</view>
 			</view>
 			
@@ -74,6 +79,7 @@
 <script setup>
 	import { computed, onMounted, ref } from 'vue';
 	import { POWERSTONE, useGameInfoStore } from '../stores/gameInfo';
+	import { roundToOneDecimal } from '../utils/roundToOneDecimal';
 	
 	const gameInfo = useGameInfoStore()
 	const props = defineProps(['controlPublish', 'title', 'gemItems', 'gemImgName', 'updateData'])
@@ -85,10 +91,14 @@
 	const assetsDB = uniCloud.importObject('assets')
 	
 	const expectedNum = computed(() => {
-		if(inputPriceValue.value < 0.2 || inputPriceValue.value > 10)return 0
+		if(inputPriceValue.value < 0.2 || inputPriceValue.value > 10) return 0
 		 const product = inputNumValue.value * inputPriceValue.value * 0.95;
-		  // 使用 toFixed 保留一位小数，然后使用 parseFloat 转换回数字
-		  return parseFloat((product).toFixed(1));
+		 return roundToOneDecimal(product)
+	})
+	
+	const needPowerStoneNum = computed(() => {
+		if(inputPriceValue.value < 0.2 || inputPriceValue.value > 10) return 0
+		return roundToOneDecimal(inputNumValue.value * inputPriceValue.value)
 	})
 	const isShowWran = computed(() => {
 		return (inputPriceValue.value < 0.2 || inputPriceValue.value > 10)
@@ -105,8 +115,11 @@
 	}
 	function handleIndex(index) {
 		selectIndex.value = index
+		
+		// 切换矿石时需要重置提示信息
 		inputNumValue.value = 0
 		inputPriceValue.value = 0
+		isShowNotEnough.value = false
 	}
 	function setPriceValue(price) {
 		inputPriceValue.value = price
@@ -139,15 +152,15 @@
 		const res1 = await marketDB.publishSellRequirement(gameInfo.id, gemType, inputNumValue.value, inputPriceValue.value)
 		const res2 = await assetsDB.update(gameInfo.id, gemType, -inputNumValue.value)
 		gameInfo.assets[gemType] -= inputNumValue.value;
-		console.log('这里是卖出:',res1, res2)
+		console.log('这里是卖出:')
 		props.controlPublish(false)
 		props.updateData()
 	}
 	async function confirmNeedPublish() {
 		if(inputPriceValue.value < 0.2 || inputPriceValue.value > 10 || inputNumValue.value <= 0) return;
 		const gemType = props.gemImgName[selectIndex.value]
-		let totalPrice = inputNumValue.value * inputPriceValue.value
-		totalPrice = parseFloat((totalPrice*1.0).toFixed(1))
+		const totalPrice = roundToOneDecimal(inputNumValue.value * inputPriceValue.value)
+		
 		if(totalPrice > gameInfo.assets[POWERSTONE]) {
 			isShowNotEnough.value = true;
 			return
@@ -156,8 +169,8 @@
 		// 实时扣除用户用来购买宝石的能量石, 然后发送网络请求, 扣除用户用来购买宝石的能量石
 		const res1 = await marketDB.publishBuyRequirement(gameInfo.id, gemType, inputNumValue.value, inputPriceValue.value)
 		const res2 = await assetsDB.update(gameInfo.id, POWERSTONE, -totalPrice)
-		gameInfo.assets[POWERSTONE] -= totalPrice;
-		console.log('这里是需求:', res1, res2)
+		gameInfo.assets[POWERSTONE] =  roundToOneDecimal(gameInfo.assets[POWERSTONE] - totalPrice ) ;
+		console.log('这里是需求:')
 		props.controlPublish(false)
 		props.updateData()
 	}
