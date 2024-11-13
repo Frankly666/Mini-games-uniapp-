@@ -69,7 +69,12 @@
 							<text>{{buttonWord[marketCurrentIndex]}}</text>
 						</view>
 					</view>
+					
+					<view class="tip" v-if="showListData.length === 5">
+						<text>最多只展示前五条数据</text>
+					</view>
 				</view>
+				
 			</view>
 		</view>
 	</view>
@@ -273,6 +278,13 @@
 				
 				.content {
 					width: 100%;
+					
+					.tip {
+						margin-top: 5vw;
+						width: 88%;
+						text-align: center;
+						color: aliceblue;
+					}
 					
 					.item {
 						position: relative;

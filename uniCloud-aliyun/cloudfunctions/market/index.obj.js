@@ -77,7 +77,7 @@ module.exports = {
 	// 检索所有的求购需求
 	async selectBuyRequirement(demType) {
 		const buyRequirement = uniCloud.database().collection('buyRequirement');
-		const res = await buyRequirement.where({demType, isFinished: false}).orderBy("sellPrice", 'desc').limit(5).get()
+		const res = await buyRequirement.where({demType, isFinished: false}).orderBy("buyPrice", 'desc').limit(5).get()
 		return res;
 	},
 }

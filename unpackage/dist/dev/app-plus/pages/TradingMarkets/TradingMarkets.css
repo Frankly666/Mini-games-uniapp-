@@ -478,6 +478,12 @@
 .tradingMarketWrap .gemstones .contentWrap .content {
   width: 100%;
 }
+.tradingMarketWrap .gemstones .contentWrap .content .tip {
+  margin-top: 5vw;
+  width: 88%;
+  text-align: center;
+  color: aliceblue;
+}
 .tradingMarketWrap .gemstones .contentWrap .content .item {
   position: relative;
   display: flex;

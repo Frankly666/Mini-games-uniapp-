@@ -6252,7 +6252,13 @@ This will fail in production if not fixed.`);
               }),
               256
               /* UNKEYED_FRAGMENT */
-            ))
+            )),
+            $setup.showListData.length === 5 ? (vue.openBlock(), vue.createElementBlock("view", {
+              key: 0,
+              class: "tip"
+            }, [
+              vue.createElementVNode("text", null, "最多只展示前五条数据")
+            ])) : vue.createCommentVNode("v-if", true)
           ])
         ])
       ])
