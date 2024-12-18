@@ -11,11 +11,11 @@
 		
 		<view class="talentCenter">
 			<view class="p1 person"></view>
-			<view class="p2 person"></view>
-			<view class="p3 person"></view>
-			<view class="p4 person"></view>
-			<view class="p5 person"></view>
-			<view class="p6 person"></view>
+			<!-- <view class="p2 person"></view> -->
+			<!-- <view class="p3 person"></view> -->
+			<!-- <view class="p4 person"></view> -->
+			<!-- <view class="p5 person"></view> -->
+			<!-- <view class="p6 person"></view> -->
 		</view>
 		
 		<view class="ground">
@@ -27,7 +27,7 @@
 		
 		<view class="mineArea">
 			<view class="mine m1"></view>
-			<!-- <view class="mine m2"></view> -->
+			<view class="mine m2"></view>
 			<!-- <view class="mine m3"></view> -->
 		</view>
 	</view>
@@ -188,8 +188,29 @@
 				background-image: url('../static/characters/blacksmith.gif')
 			}
 			
+			.m2 {
+				top: -60vw;
+				left: 24vw;
+				animation: moveUpDown 6s infinite linear;
+			}
+			
 		}
 		
-		
+		@keyframes moveUpDown {
+		  0%, 100% {
+		    top: -60vw; /* 初始位置 */
+		    background-image: url('../static/characters/miner1up.gif');
+		  }
+			49% {
+				 background-image: url('../static/characters/miner1up.gif');
+			}
+		  50% {
+		    top: -28vw; /* 向下移动到顶部 */
+				left: 27vw;
+		    background-image: url('../static/characters/miner1upopp.gif'); /* 改变图片 */
+		  }
+			99% {
+				background-image: url('../static/characters/miner1upopp.gif');
+			}		}
 	}
 </style>

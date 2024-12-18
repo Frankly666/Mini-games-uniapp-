@@ -25,7 +25,8 @@
               handleSellNum(-1);
             }
           "
-        ></view>
+        >
+        </view>
         <view class="inputWrap">
           <input
             type="number"
@@ -65,7 +66,7 @@
             class="itemImg"
             :style="`background-image: url(${getGemImg(gemName)});`"
           ></view>
-          <text>{{ 0 }}</text>
+          <text>{{ gameInfo.assets[gemName] }}</text>
         </view>
         <view class="premium item">
           <text>手续费</text>
@@ -139,11 +140,15 @@ const isSellMarket = computed(() => {
   return props.marketName === "出售";
 });
 const totalPrice = computed(() => {
-	console.log(roundToOneDecimal(inputNumValue.value * props.certainItem.sellPrice))
-  return roundToOneDecimal(inputNumValue.value * props.certainItem.sellPrice)
+  console.log(
+    roundToOneDecimal(inputNumValue.value * props.certainItem.sellPrice)
+  );
+  return roundToOneDecimal(inputNumValue.value * props.certainItem.sellPrice);
 });
 const expected = computed(() => {
-  return roundToOneDecimal(inputNumValue.value * props.certainItem.buyPrice * 0.95)
+  return roundToOneDecimal(
+    inputNumValue.value * props.certainItem.buyPrice * 0.95
+  );
 });
 const btnWord = computed(() => {
   return props.marketName === "出售" ? "购买" : "出售";
@@ -203,8 +208,15 @@ async function confirmSellPublish() {
   ); // 扣除能量石
   const res4 = await assetsDB.update(gameInfo.id, demType, inputNumValue.value); // 加上用户买的宝石
   gameInfo.assets[demType] += inputNumValue.value;
-  gameInfo.assets[POWERSTONE] = roundToOneDecimal(gameInfo.assets[POWERSTONE] - totalPrice.value);
-  console.log("这里是卖出", totalPrice.value, gameInfo.assets[POWERSTONE], gameInfo.assets[POWERSTONE] - totalPrice.value);
+  gameInfo.assets[POWERSTONE] = roundToOneDecimal(
+    gameInfo.assets[POWERSTONE] - totalPrice.value
+  );
+  console.log(
+    "这里是卖出",
+    totalPrice.value,
+    gameInfo.assets[POWERSTONE],
+    gameInfo.assets[POWERSTONE] - totalPrice.value
+  );
   props.controlShowPop(false);
   props.updateData();
 }
@@ -240,7 +252,9 @@ async function confirmNeedPublish() {
   );
   const res4 = await assetsDB.update(gameInfo.id, POWERSTONE, expected.value);
   gameInfo.assets[demType] -= inputNumValue.value;
-  gameInfo.assets[POWERSTONE] = roundToOneDecimal(gameInfo.assets[POWERSTONE] + expected.value) ;
+  gameInfo.assets[POWERSTONE] = roundToOneDecimal(
+    gameInfo.assets[POWERSTONE] + expected.value
+  );
   console.log("这里是需求");
   props.controlShowPop(false);
   props.updateData();

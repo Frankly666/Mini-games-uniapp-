@@ -39,14 +39,15 @@
 			height: 15vw;
 			border-radius: 50%;
 			z-index: 100;
+			background: no-repeat center center / contain;
 		}
 		
 		.userName {
 			position: absolute;
-			width: 20vw;
+			width: 28vw;
 			text-align: center;
-			top: 19vw; 
-			left: 0vw; 
+			top: 20vw; 
+			left: -3vw; 
 			font-weight: bold;
 			color: #fff;
 		}

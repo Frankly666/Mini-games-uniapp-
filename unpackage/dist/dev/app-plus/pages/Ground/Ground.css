@@ -69,7 +69,7 @@
   left: 7vw;
   width: 15vw;
   height: 15vw;
-  background: url("../../static/ground/return.png") no-repeat center center / contain;
+  background: url("../../static/market/return.png") no-repeat center center / contain;
 }
 .groundWrap .treesWrap1 .item1 {
   position: absolute;
@@ -130,6 +130,19 @@
 .groundWrap .treesWrap2 .right .rTree5 {
   top: 430vw;
   animation-duration: 4.8s;
+}
+.groundWrap .grounds {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 30vw 10vw 20vw 10vw;
+  box-sizing: border-box;
+  justify-content: space-between;
+  width: 100%;
+  height: 100%;
+}
+.groundWrap .grounds .item {
+  width: 35vw;
+  height: 32vw;
 }
 @keyframes swing {
 0%,

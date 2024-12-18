@@ -366,7 +366,7 @@ if (uni.restoreGlobal) {
   function I(e2) {
     return e2 && "string" == typeof e2 ? JSON.parse(e2) : e2;
   }
-  const S = true, b = "app", A = I(define_process_env_UNI_SECURE_NETWORK_CONFIG_default), C = b, P = I('{\n    "address": [\n        "127.0.0.1",\n        "2.0.0.1",\n        "169.254.37.199",\n        "192.168.137.1",\n        "192.168.65.1",\n        "172.16.40.220"\n    ],\n    "debugPort": 9001,\n    "initialLaunchType": "local",\n    "servePort": 7001,\n    "skipFiles": [\n        "<node_internals>/**",\n        "D:/HBuilderX/HBuilderX/plugins/unicloud/**/*.js"\n    ]\n}\n'), T = I('[{"provider":"aliyun","spaceName":"game-demo","spaceId":"mp-03d35b51-5e6a-4ec1-9a7d-180cb14b6fec","clientSecret":"HqxzGrCZVw54fU9Zh3AVEQ==","endpoint":"https://api.next.bspapp.com"}]') || [];
+  const S = true, b = "app", A = I(define_process_env_UNI_SECURE_NETWORK_CONFIG_default), C = b, P = I('{\n    "address": [\n        "127.0.0.1",\n        "2.0.0.1",\n        "169.254.37.199",\n        "192.168.137.1",\n        "192.168.65.1",\n        "192.168.1.31"\n    ],\n    "debugPort": 9000,\n    "initialLaunchType": "local",\n    "servePort": 7000,\n    "skipFiles": [\n        "<node_internals>/**",\n        "D:/HBuilderX/HBuilderX/plugins/unicloud/**/*.js"\n    ]\n}\n'), T = I('[{"provider":"aliyun","spaceName":"fun-cloud-city-game","spaceId":"mp-4de62d5a-2380-467f-b109-457713276d05","clientSecret":"ZD2WgXn3K1WSmV78nmjvUQ==","endpoint":"https://api.next.bspapp.com"}]') || [];
   let O = "";
   try {
     O = "__UNI__1B67F5F";
@@ -4515,7 +4515,7 @@ This will fail in production if not fixed.`);
         gameInfo.assets[type] += number;
       }
       async function toGame() {
-        const phone = 15182344075, avatar2 = "https://jihuo.gzzzw0797.com/storage/2024/08/15/images/ebc6a29dbf4011e475db02e95ad332f7.jpg";
+        const phone = 15182344075, avatar2 = "https://ts1.cn.mm.bing.net/th?id=OIP-C.1PjYL0WYwiZAYSWtOQryjwHaHa&w=250&h=250&c=8&rs=1&qlt=90&o=6&dpr=1.1&pid=3.1&rm=2";
         setCache(PHONE, phone);
         setCache(AVATAR, avatar2);
         gameInfo.isLoad = 0;
@@ -4832,11 +4832,11 @@ This will fail in production if not fixed.`);
       ]),
       vue.createElementVNode("view", { class: "talentCenter" }, [
         vue.createElementVNode("view", { class: "p1 person" }),
-        vue.createElementVNode("view", { class: "p2 person" }),
-        vue.createElementVNode("view", { class: "p3 person" }),
-        vue.createElementVNode("view", { class: "p4 person" }),
-        vue.createElementVNode("view", { class: "p5 person" }),
-        vue.createElementVNode("view", { class: "p6 person" })
+        vue.createCommentVNode(' <view class="p2 person"></view> '),
+        vue.createCommentVNode(' <view class="p3 person"></view> '),
+        vue.createCommentVNode(' <view class="p4 person"></view> '),
+        vue.createCommentVNode(' <view class="p5 person"></view> '),
+        vue.createCommentVNode(' <view class="p6 person"></view> ')
       ]),
       vue.createElementVNode("view", { class: "ground" }, [
         vue.createElementVNode("view", { class: "person p7" }),
@@ -4846,7 +4846,7 @@ This will fail in production if not fixed.`);
       ]),
       vue.createElementVNode("view", { class: "mineArea" }, [
         vue.createElementVNode("view", { class: "mine m1" }),
-        vue.createCommentVNode(' <view class="mine m2"></view> '),
+        vue.createElementVNode("view", { class: "mine m2" }),
         vue.createCommentVNode(' <view class="mine m3"></view> ')
       ])
     ]);
@@ -4927,13 +4927,15 @@ This will fail in production if not fixed.`);
       function confirm() {
         if (newName.value === "")
           return;
-        if (gameInfo.assets.powerStone < 100) {
+        if (!isFirstEdit.value && gameInfo.assets.powerStone < 100) {
           isShowTip.value = true;
           return;
         }
-        gameInfo.assets.powerStone -= 100;
-        const assetsDB = Ys.importObject("assets");
-        assetsDB.update(gameInfo.id, POWERSTONE, -100);
+        if (!isFirstEdit.value) {
+          gameInfo.assets.powerStone -= 100;
+          const assetsDB = Ys.importObject("assets");
+          assetsDB.update(gameInfo.id, POWERSTONE, -100);
+        }
         const user = Ys.importObject("user");
         const id = uni.getStorageSync("id");
         user.changeName(id, newName.value);
@@ -5168,7 +5170,13 @@ This will fail in production if not fixed.`);
         class: "close",
         onClick: _cache[0] || (_cache[0] = ($event) => $props.handleShowTanlentPop(false))
       }),
-      vue.createElementVNode("view", { class: "board" })
+      vue.createElementVNode("view", { class: "board" }, [
+        vue.createElementVNode("view", { class: "listArea" }, [
+          vue.createElementVNode("view", { class: "itemWrap" }, [
+            vue.createElementVNode("view", { class: "avatarwrap" })
+          ])
+        ])
+      ])
     ]);
   }
   const talentCenterPop = /* @__PURE__ */ _export_sfc(_sfc_main$7, [["render", _sfc_render$6], ["__scopeId", "data-v-52356c3d"], ["__file", "D:/HBuilderProjects/Game/components/talentCenterPop.vue"]]);
@@ -5740,11 +5748,17 @@ This will fail in production if not fixed.`);
         return props.marketName === "出售";
       });
       const totalPrice = vue.computed(() => {
-        formatAppLog("log", "at components/buyCellPop.vue:142", roundToOneDecimal(inputNumValue.value * props.certainItem.sellPrice));
+        formatAppLog(
+          "log",
+          "at components/buyCellPop.vue:143",
+          roundToOneDecimal(inputNumValue.value * props.certainItem.sellPrice)
+        );
         return roundToOneDecimal(inputNumValue.value * props.certainItem.sellPrice);
       });
       const expected = vue.computed(() => {
-        return roundToOneDecimal(inputNumValue.value * props.certainItem.buyPrice * 0.95);
+        return roundToOneDecimal(
+          inputNumValue.value * props.certainItem.buyPrice * 0.95
+        );
       });
       const btnWord = vue.computed(() => {
         return props.marketName === "出售" ? "购买" : "出售";
@@ -5804,8 +5818,17 @@ This will fail in production if not fixed.`);
         );
         await assetsDB.update(gameInfo.id, demType, inputNumValue.value);
         gameInfo.assets[demType] += inputNumValue.value;
-        gameInfo.assets[POWERSTONE] = roundToOneDecimal(gameInfo.assets[POWERSTONE] - totalPrice.value);
-        formatAppLog("log", "at components/buyCellPop.vue:207", "这里是卖出", totalPrice.value, gameInfo.assets[POWERSTONE], gameInfo.assets[POWERSTONE] - totalPrice.value);
+        gameInfo.assets[POWERSTONE] = roundToOneDecimal(
+          gameInfo.assets[POWERSTONE] - totalPrice.value
+        );
+        formatAppLog(
+          "log",
+          "at components/buyCellPop.vue:214",
+          "这里是卖出",
+          totalPrice.value,
+          gameInfo.assets[POWERSTONE],
+          gameInfo.assets[POWERSTONE] - totalPrice.value
+        );
         props.controlShowPop(false);
         props.updateData();
       }
@@ -5839,8 +5862,10 @@ This will fail in production if not fixed.`);
         );
         await assetsDB.update(gameInfo.id, POWERSTONE, expected.value);
         gameInfo.assets[demType] -= inputNumValue.value;
-        gameInfo.assets[POWERSTONE] = roundToOneDecimal(gameInfo.assets[POWERSTONE] + expected.value);
-        formatAppLog("log", "at components/buyCellPop.vue:244", "这里是需求");
+        gameInfo.assets[POWERSTONE] = roundToOneDecimal(
+          gameInfo.assets[POWERSTONE] + expected.value
+        );
+        formatAppLog("log", "at components/buyCellPop.vue:258", "这里是需求");
         props.controlShowPop(false);
         props.updateData();
       }
@@ -5931,7 +5956,13 @@ This will fail in production if not fixed.`);
               4
               /* STYLE */
             ),
-            vue.createElementVNode("text", null, vue.toDisplayString(0))
+            vue.createElementVNode(
+              "text",
+              null,
+              vue.toDisplayString($setup.gameInfo.assets[$props.gemName]),
+              1
+              /* TEXT */
+            )
           ]),
           vue.createElementVNode("view", { class: "premium item" }, [
             vue.createElementVNode("text", null, "手续费"),
@@ -6323,7 +6354,7 @@ This will fail in production if not fixed.`);
         class: "return",
         onClick: $setup.back
       }),
-      vue.createCommentVNode(" 跟随图片一起移动 "),
+      vue.createCommentVNode(" 树木动图 "),
       vue.createElementVNode("view", { class: "treesWrap1" }, [
         vue.createElementVNode("view", { class: "left" }, [
           vue.createElementVNode("view", { class: "lTree1 item1" }),
@@ -6341,6 +6372,55 @@ This will fail in production if not fixed.`);
           vue.createElementVNode("view", { class: "rTree4 item2" }),
           vue.createElementVNode("view", { class: "rTree5 item2" })
         ])
+      ]),
+      vue.createCommentVNode(" 地皮 "),
+      vue.createElementVNode("view", { class: "grounds" }, [
+        vue.createElementVNode("view", { class: "item small" }),
+        (vue.openBlock(), vue.createElementBlock(
+          vue.Fragment,
+          null,
+          vue.renderList(3, (item) => {
+            return vue.createElementVNode("view", { class: "item scarce" });
+          }),
+          64
+          /* STABLE_FRAGMENT */
+        )),
+        (vue.openBlock(), vue.createElementBlock(
+          vue.Fragment,
+          null,
+          vue.renderList(5, (item) => {
+            return vue.createElementVNode("view", { class: "item big" });
+          }),
+          64
+          /* STABLE_FRAGMENT */
+        )),
+        (vue.openBlock(), vue.createElementBlock(
+          vue.Fragment,
+          null,
+          vue.renderList(6, (item) => {
+            return vue.createElementVNode("view", { class: "item resource" });
+          }),
+          64
+          /* STABLE_FRAGMENT */
+        )),
+        (vue.openBlock(), vue.createElementBlock(
+          vue.Fragment,
+          null,
+          vue.renderList(10, (item) => {
+            return vue.createElementVNode("view", { class: "item black" });
+          }),
+          64
+          /* STABLE_FRAGMENT */
+        )),
+        (vue.openBlock(), vue.createElementBlock(
+          vue.Fragment,
+          null,
+          vue.renderList(3, (item) => {
+            return vue.createElementVNode("view", { class: "item diamond" });
+          }),
+          64
+          /* STABLE_FRAGMENT */
+        ))
       ])
     ]);
   }

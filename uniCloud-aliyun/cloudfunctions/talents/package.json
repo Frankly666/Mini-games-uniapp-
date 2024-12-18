@@ -1,0 +1,7 @@
+{
+  "name": "talents",
+  "dependencies": {},
+  "extensions": {
+    "uni-cloud-jql": {}
+  }
+}

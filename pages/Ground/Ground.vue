@@ -4,7 +4,7 @@
 		<assets-header :judge='2'></assets-header>
 		<view class="return" @click="back"></view>
 		
-		<!-- 跟随图片一起移动 -->
+		<!-- 树木动图 -->
 		<view class="treesWrap1">
 			<view class="left">
 				<view class="lTree1 item1"></view>
@@ -24,6 +24,22 @@
 			</view>
 		</view>
 		
+		<!-- 地皮 -->
+		<view class="grounds">
+			<view class="item small"></view>
+									  
+			<view class="item scarce" v-for="item in 3"></view>
+									    
+			<view class="item big" v-for="item in 5"></view>
+			
+			<view class="item resource" v-for="item in 6"></view>
+									   
+			<view class="item black" v-for="item in 10"></view>
+									   
+			<view class="item diamond" v-for="item in 3"></view>
+									   
+			
+		</view>
 	</view>
 </template>
 
@@ -138,6 +154,21 @@
 			
 		}
 		
+			
+		.grounds {
+			display: flex;
+			flex-wrap: wrap;
+			padding: 30vw 10vw 20vw 10vw;
+			box-sizing: border-box;
+			justify-content: space-between;
+			width: 100%;
+			height: 100%;
+			
+			.item {
+				width: 35vw;
+				height: 32vw;
+			}
+		}
 		
 		@keyframes swing {
 		  0%, 100% {
@@ -147,6 +178,5 @@
 		    transform: rotate(25deg);
 		  }
 		}
-		
 	}
 </style>

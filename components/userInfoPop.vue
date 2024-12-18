@@ -69,14 +69,20 @@
 	
 	function confirm() {
 		if(newName.value === '')return
-		if(gameInfo.assets.powerStone < 100) {
+		
+		// 判断能量石余额
+		if(!isFirstEdit.value && gameInfo.assets.powerStone < 100) {
 			isShowTip.value = true;
 			return;
 		}
-		gameInfo.assets.powerStone -= 100
-		const assetsDB = uniCloud.importObject('assets')
-		assetsDB.update(gameInfo.id, POWERSTONE, -100)
 		
+		if(!isFirstEdit.value) {
+			gameInfo.assets.powerStone -= 100
+			const assetsDB = uniCloud.importObject('assets')
+			assetsDB.update(gameInfo.id, POWERSTONE, -100)
+		}
+		
+		// 改名
 		const user = uniCloud.importObject('user');
 		const id = uni.getStorageSync('id');
 		user.changeName(id, newName.value)
@@ -88,6 +94,8 @@
 		gameInfo.isFirst = 1
 		isShowEditPop.value = false;
 		isFirstEdit.value = false;
+		
+		
 	}
 	
 </script>
@@ -191,12 +199,12 @@
 			
 			.userName {
 				position: absolute;
-				width: 24vw;
+				width: 32vw;
 				text-align: center;
-				top:35vw;
-				left: 19vw;
+				top:35.4vw;
+				left: 15vw;
 				font-weight: bold;
-				font-size: 6vw;
+				font-size: 5vw;
 				
 			}
 			

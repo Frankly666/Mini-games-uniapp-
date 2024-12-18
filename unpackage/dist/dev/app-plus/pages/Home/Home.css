@@ -77,13 +77,14 @@
   height: 15vw;
   border-radius: 50%;
   z-index: 100;
+  background: no-repeat center center / contain;
 }
 .avatar .userName[data-v-32a3f906] {
   position: absolute;
-  width: 20vw;
+  width: 28vw;
   text-align: center;
-  top: 19vw;
-  left: 0vw;
+  top: 20vw;
+  left: -3vw;
   font-weight: bold;
   color: #fff;
 }
@@ -330,6 +331,32 @@
   left: 44vw;
   background-image: url('../../static/characters/blacksmith.gif');
 }
+.peopleWrap .mineArea .m2[data-v-2a3805e5] {
+  top: -60vw;
+  left: 24vw;
+  animation: moveUpDown-2a3805e5 6s infinite linear;
+}
+@keyframes moveUpDown-2a3805e5 {
+0%,
+  100% {
+    top: -60vw;
+    /* 初始位置 */
+    background-image: url('../../static/characters/miner1up.gif');
+}
+49% {
+    background-image: url('../../static/characters/miner1up.gif');
+}
+50% {
+    top: -28vw;
+    /* 向下移动到顶部 */
+    left: 27vw;
+    background-image: url('../../static/characters/miner1upopp.gif');
+    /* 改变图片 */
+}
+99% {
+    background-image: url('../../static/characters/miner1upopp.gif');
+}
+}
 
 .clickMaskWrap[data-v-37646fb3] {
   position: absolute;
@@ -435,7 +462,7 @@
   top: 9vw;
   width: 15vw;
   height: 15vw;
-  background: url('../../static/home/button_close.png') no-repeat center center / contain;
+  background: url('../../static/toolsBar/button_close.png') no-repeat center center / contain;
 }
 .userInfoWrap .infoBgc .avatar[data-v-13ced562] {
   position: absolute;
@@ -448,12 +475,12 @@
 }
 .userInfoWrap .infoBgc .userName[data-v-13ced562] {
   position: absolute;
-  width: 24vw;
+  width: 32vw;
   text-align: center;
-  top: 35vw;
-  left: 19vw;
+  top: 35.4vw;
+  left: 15vw;
   font-weight: bold;
-  font-size: 6vw;
+  font-size: 5vw;
 }
 .userInfoWrap .infoBgc .desc[data-v-13ced562] {
   position: absolute;
@@ -496,7 +523,7 @@
   top: 2vw;
   width: 8vw;
   height: 8vw;
-  background: url('../../static/home/button_close.png') no-repeat center center / contain;
+  background: url('../../static/toolsBar/button_close.png') no-repeat center center / contain;
 }
 .settingWrap .bgc .switch[data-v-9e95edd8] {
   position: absolute;
@@ -604,11 +631,38 @@
   background: url("../../static/talentCenter/close.png") no-repeat center center / contain;
 }
 .talentWrap .board[data-v-52356c3d] {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: absolute;
   top: 13vw;
   width: 86vw;
   height: 140vw;
   background: url("../../static/talentCenter/talentCenter.png") no-repeat center center / contain;
+}
+.talentWrap .board .listArea[data-v-52356c3d] {
+  position: absolute;
+  top: 27vw;
+  width: 68vw;
+  height: 100vw;
+  box-sizing: border-box;
+}
+.talentWrap .board .listArea .itemWrap[data-v-52356c3d] {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 18vw;
+  box-sizing: border-box;
+  padding: 0 3vw;
+  border-radius: 4vw;
+  background-image: linear-gradient(to right, rgba(207, 179, 115, 0.7) 0%, rgba(207, 179, 115, 0.1) 50%, rgba(207, 179, 115, 0.7) 100%);
+}
+.talentWrap .board .listArea .itemWrap .avatarwrap[data-v-52356c3d] {
+  width: 13vw;
+  height: 13vw;
+  border-radius: 50%;
+  background-image: radial-gradient(circle at center, rgba(207, 179, 115, 0.2) 0%, #cfb373 100%);
 }
 
 .pages[data-v-7ffebbf4] {

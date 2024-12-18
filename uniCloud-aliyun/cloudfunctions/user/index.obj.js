@@ -8,11 +8,11 @@ module.exports = {
 	 * @param {Number} phone
 	 * @param {String} avatar
 	 */
-	async init(phone, avatar) {
+	async init(phone, avatar, pusherId) {
 		const cloudInfo = this.getCloudInfo()
 		const db = uniCloud.database()
 		const collection = db.collection('user')
-		const res = await collection.add({phone, avatar, userName: '趣选云城', createTime: new Date(), isFirst: 0})
+		const res = await collection.add({phone, avatar, userName: '趣选云城', createTime: new Date(), isFirst: 0, pusherId: pusherId | null})
 		
 		// 返回结果
 		return {
