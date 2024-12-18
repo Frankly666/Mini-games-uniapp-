@@ -636,15 +636,16 @@
   align-items: center;
   position: absolute;
   top: 13vw;
-  width: 86vw;
+  width: 90vw;
   height: 140vw;
   background: url("../../static/talentCenter/talentCenter.png") no-repeat center center / contain;
 }
 .talentWrap .board .listArea[data-v-52356c3d] {
   position: absolute;
-  top: 27vw;
-  width: 68vw;
+  top: 25vw;
+  width: 74vw;
   height: 100vw;
+  overflow-y: auto;
   box-sizing: border-box;
 }
 .talentWrap .board .listArea .itemWrap[data-v-52356c3d] {
@@ -663,6 +664,38 @@
   height: 13vw;
   border-radius: 50%;
   background-image: radial-gradient(circle at center, rgba(207, 179, 115, 0.2) 0%, #cfb373 100%);
+}
+.talentWrap .board .listArea .itemWrap .nameAndDesc[data-v-52356c3d] {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  text-align: center;
+  margin-left: 2vw;
+  margin-top: -5vw;
+}
+.talentWrap .board .listArea .itemWrap .nameAndDesc .name[data-v-52356c3d] {
+  margin-bottom: 1vw;
+  font-weight: bold;
+  font-size: 3.8vw;
+  box-sizing: border-box;
+  padding: 0.3vw 0;
+  border-radius: 5vw;
+  background-color: #cfb373;
+  color: #733a09;
+}
+.talentWrap .board .listArea .itemWrap .nameAndDesc .desc[data-v-52356c3d] {
+  font-size: 3vw;
+  font-weight: bold;
+  color: #9f6c38;
+}
+.talentWrap .board .listArea .itemWrap .btn[data-v-52356c3d] {
+  width: 19vw;
+  height: 10vw;
+  text-align: center;
+  line-height: 8.7vw;
+  color: aliceblue;
+  font-weight: bold;
+  background: url("../../static/talentCenter/btn2.png") no-repeat center center / contain;
 }
 
 .pages[data-v-7ffebbf4] {

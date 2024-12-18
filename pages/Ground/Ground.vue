@@ -26,7 +26,9 @@
 		
 		<!-- 地皮 -->
 		<view class="grounds">
-			<view class="item small"></view>
+			<view class="item small">
+				<worker-vue :type="1"></worker-vue>
+			</view>
 									  
 			<view class="item scarce" v-for="item in 3"></view>
 									    
@@ -40,12 +42,16 @@
 									   
 			
 		</view>
+	
+		
+		
 	</view>
 </template>
 
 <script setup>
 	import { onMounted, onUnmounted, ref } from 'vue';
 	import assetsHeader from '../../components/assetsHeader.vue';
+	import workerVue from '../../components/worker.vue';
 	
 	function back() {
 		uni.navigateBack({
