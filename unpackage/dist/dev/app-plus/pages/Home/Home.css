@@ -462,7 +462,7 @@
   top: 9vw;
   width: 15vw;
   height: 15vw;
-  background: url('../../static/toolsBar/button_close.png') no-repeat center center / contain;
+  background: url('../../static/home/button_close.png') no-repeat center center / contain;
 }
 .userInfoWrap .infoBgc .avatar[data-v-13ced562] {
   position: absolute;
@@ -523,7 +523,7 @@
   top: 2vw;
   width: 8vw;
   height: 8vw;
-  background: url('../../static/toolsBar/button_close.png') no-repeat center center / contain;
+  background: url('../../static/home/button_close.png') no-repeat center center / contain;
 }
 .settingWrap .bgc .switch[data-v-9e95edd8] {
   position: absolute;
@@ -657,15 +657,28 @@
   box-sizing: border-box;
   padding: 0 3vw;
   border-radius: 4vw;
+  margin-bottom: 3vw;
   background-image: linear-gradient(to right, rgba(207, 179, 115, 0.7) 0%, rgba(207, 179, 115, 0.1) 50%, rgba(207, 179, 115, 0.7) 100%);
 }
 .talentWrap .board .listArea .itemWrap .avatarwrap[data-v-52356c3d] {
+  position: relative;
   width: 13vw;
   height: 13vw;
   border-radius: 50%;
+  overflow: hidden;
   background-image: radial-gradient(circle at center, rgba(207, 179, 115, 0.2) 0%, #cfb373 100%);
 }
+.talentWrap .board .listArea .itemWrap .avatarwrap .avatar[data-v-52356c3d] {
+  position: absolute;
+  top: 40%;
+  left: 10%;
+  width: 90%;
+  height: 90%;
+  transform: scale(2);
+  background: no-repeat center center / contain;
+}
 .talentWrap .board .listArea .itemWrap .nameAndDesc[data-v-52356c3d] {
+  position: relative;
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -684,6 +697,15 @@
   color: #733a09;
 }
 .talentWrap .board .listArea .itemWrap .nameAndDesc .desc[data-v-52356c3d] {
+  font-size: 3vw;
+  font-weight: bold;
+  color: #9f6c38;
+}
+.talentWrap .board .listArea .itemWrap .nameAndDesc .price[data-v-52356c3d] {
+  position: absolute;
+  top: 110%;
+  width: 100%;
+  text-align: center;
   font-size: 3vw;
   font-weight: bold;
   color: #9f6c38;

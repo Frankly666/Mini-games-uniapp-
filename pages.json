@@ -29,20 +29,6 @@
       "style": {
         "navigationStyle": "custom"
       }
-    },
-    {
-    	"path" : "components/persons/person1/person1",
-    	"style" : 
-    	{
-    		"navigationBarTitleText" : ""
-    	}
-    },
-    {
-    	"path" : "components/persons/person2/person2",
-    	"style" : 
-    	{
-    		"navigationBarTitleText" : ""
-    	}
     }
   ],
   "globalStyle": {},

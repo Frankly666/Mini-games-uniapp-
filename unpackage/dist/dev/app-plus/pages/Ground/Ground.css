@@ -59,57 +59,57 @@
 
 .wholewrap[data-v-9daf811a] {
   position: relative;
-  width: 48vw;
-  height: 22vw;
+  width: 44vw;
+  height: 19vw;
 }
 .wholewrap .whole[data-v-9daf811a] {
   position: absolute;
   width: 30%;
   height: 100%;
-  animation: move-9daf811a 2.5s linear infinite;
 }
 .wholewrap .whole .workerWrap[data-v-9daf811a] {
   position: relative;
   width: 70%;
   height: 90%;
+  animation: move-9daf811a 3s linear infinite;
 }
 .wholewrap .whole .workerWrap .body[data-v-9daf811a] {
   position: absolute;
   width: 100%;
   height: 70%;
-  background: url("../../static/worker1/body.png") no-repeat center center / contain;
+  background: no-repeat center center / contain;
 }
 .wholewrap .whole .workerWrap .hand-front[data-v-9daf811a] {
   position: absolute;
-  top: 36%;
-  left: 18%;
+  top: 37%;
+  left: 22%;
   width: 60%;
   height: 35%;
-  background: url("../../static/worker1/hand-front.png") no-repeat center center / contain;
+  background: no-repeat center center / contain;
   transform-origin: 10% 20%;
   animation: rotateHand-9daf811a 1.6s linear infinite;
-  animation-delay: 0.8s;
+  animation-delay: -0.8s;
 }
 .wholewrap .whole .workerWrap .hand-back[data-v-9daf811a] {
   position: absolute;
-  top: 31%;
+  top: 32%;
   left: 54%;
   width: 60%;
   height: 35%;
-  background: url("../../static/worker1/hand-back.png") no-repeat center center / contain;
+  background: no-repeat center center / contain;
   transform-origin: 10% 20%;
   animation: rotateHand-9daf811a 1.6s linear infinite;
 }
 .wholewrap .whole .workerWrap .leg-front[data-v-9daf811a] {
   position: absolute;
-  top: 57%;
+  top: 58%;
   left: 7%;
   width: 67%;
   height: 35%;
   transform-origin: 50% 0%;
   animation: rotateLeg-9daf811a 1.6s linear infinite;
-  background: url("../../static/worker1/leg-front.png") no-repeat center center / contain;
-  animation-delay: 1.6s;
+  background: no-repeat center center / contain;
+  animation-delay: -1.6s;
 }
 .wholewrap .whole .workerWrap .leg-back[data-v-9daf811a] {
   position: absolute;
@@ -119,8 +119,25 @@
   height: 35%;
   transform-origin: 50% 0%;
   animation: rotateLeg-9daf811a 1.6s linear infinite;
-  background: url("../../static/worker1/leg-back.png") no-repeat center center / contain;
-  animation-delay: 0.8s;
+  background: no-repeat center center / contain;
+  animation-delay: -0.8s;
+}
+.wholewrap .whole .workerWrap .black[data-v-9daf811a] {
+  position: absolute;
+  top: 46%;
+  left: -10%;
+  width: 100%;
+  height: 100%;
+  background: url("../../static/workerPublic/black.png") no-repeat center center / contain;
+}
+.wholewrap .whole .workerWrap .cloud[data-v-9daf811a] {
+  position: absolute;
+  top: 60%;
+  left: -70%;
+  width: 50%;
+  height: 50%;
+  background: url("../../static/workerPublic/cloud.png") no-repeat center center / contain;
+  animation: cloudMovement 3s infinite ease-in-out;
 }
 @keyframes rotateHand-9daf811a {
 0% {
@@ -148,14 +165,14 @@
 0% {
     left: 0;
 }
-49% {
+49.9% {
     transform: scaleX(1);
 }
 50% {
     left: 18vw;
     transform: scaleX(-1);
 }
-99% {
+99.9% {
     transform: scaleX(-1);
 }
 100% {
@@ -167,10 +184,12 @@
   position: relative;
   width: 100vw;
   height: 533vw;
+  overflow: hidden;
   background: url("../../static/ground/groundBgc.png") no-repeat top center / contain;
 }
 .groundWrap .return {
   position: fixed;
+  z-index: 99;
   bottom: 4vw;
   left: 7vw;
   width: 15vw;
@@ -249,6 +268,132 @@
 .groundWrap .grounds .item {
   width: 35vw;
   height: 32vw;
+}
+.groundWrap .grounds .item .realGround {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: no-repeat center center / contain;
+}
+.groundWrap .grounds .item .realGround.type1 {
+  background-image: url("../../static/ground/ground1.png");
+}
+.groundWrap .grounds .item .realGround.type2 {
+  background-image: url("../../static/ground/ground2.png");
+}
+.groundWrap .grounds .item .realGround.type3 {
+  background-image: url("../../static/ground/ground3.png");
+}
+.groundWrap .grounds .item .realGround.type4 {
+  background-image: url("../../static/ground/ground4.png");
+}
+.groundWrap .grounds .item .realGround.type5 {
+  background-image: url("../../static/ground/ground5.png");
+}
+.groundWrap .grounds .item .realGround.type6 {
+  background-image: url("../../static/ground/ground4.png");
+}
+.groundWrap .grounds .item .realGround .personWrap {
+  position: absolute;
+  left: 3vw;
+  top: 5vw;
+}
+.groundWrap .grounds .item .realGround .diamonds {
+  position: absolute;
+  left: 25%;
+  top: 1%;
+}
+.groundWrap .grounds .item .realGround .diamonds .item {
+  position: absolute;
+  width: 10vw;
+  height: 10vw;
+  background: no-repeat center center / contain;
+}
+.groundWrap .grounds .item .realGround .diamonds .item.d1 {
+  background-image: url('../../static/ground/diamond1.png');
+}
+.groundWrap .grounds .item .realGround .diamonds .item.d2 {
+  top: 4vw;
+  left: 10vw;
+  background-image: url('../../static/ground/diamond2.png');
+}
+.groundWrap .grounds .item .realGround .diamonds .item.d3 {
+  top: 10vw;
+  left: 3vw;
+  background-image: url('../../static/ground/diamond2.png');
+}
+.groundWrap .grounds .item .realGround .lockGround {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  color: #6b5c25;
+  font-size: 3.5vw;
+  font-weight: bold;
+  background: url("../../static/ground/lockGround.png") no-repeat center center / contain;
+}
+.groundWrap .grounds .item .realGround .lockGround .title {
+  width: 100%;
+  text-align: center;
+  position: absolute;
+  top: 15%;
+}
+.groundWrap .clouds {
+  position: absolute;
+  top: 10%;
+  width: 50%;
+}
+.groundWrap .clouds.cloudsLeft {
+  left: 0;
+  top: 10vw;
+  animation: moveLeft 2s linear;
+  animation-fill-mode: forwards;
+  animation-delay: 0.4s;
+}
+.groundWrap .clouds.cloudsLeft .leftItem {
+  width: 110%;
+  height: 20vw;
+  margin-bottom: 4vw;
+  background: no-repeat top center / contain;
+}
+.groundWrap .clouds.cloudsLeft .leftItem.leftItem1 {
+  background-image: url('../../static/ground/cloud1.png');
+}
+.groundWrap .clouds.cloudsLeft .leftItem.leftItem2 {
+  background-image: url('../../static/ground/cloud2.png');
+}
+.groundWrap .clouds.cloudsRight {
+  right: 0;
+  top: 14vw;
+  animation: moveRight 2s linear;
+  animation-fill-mode: forwards;
+  animation-delay: 0.4s;
+}
+.groundWrap .clouds.cloudsRight .rightItem {
+  width: 110%;
+  height: 20vw;
+  background: no-repeat top center / contain;
+}
+.groundWrap .clouds.cloudsRight .rightItem.rightItem1 {
+  background-image: url('../../static/ground/cloud1.png');
+}
+.groundWrap .clouds.cloudsRight .rightItem.rightItem2 {
+  background-image: url('../../static/ground/cloud2.png');
+}
+@keyframes moveLeft {
+0% {
+    left: 0;
+}
+100% {
+    left: -100%;
+}
+}
+@keyframes moveRight {
+0% {
+    right: 0;
+}
+100% {
+    right: -100%;
+}
 }
 @keyframes swing {
 0%,

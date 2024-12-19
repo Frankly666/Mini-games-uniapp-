@@ -68,18 +68,6 @@ if (uni.restoreGlobal) {
       style: {
         navigationStyle: "custom"
       }
-    },
-    {
-      path: "components/persons/person1/person1",
-      style: {
-        navigationBarTitleText: ""
-      }
-    },
-    {
-      path: "components/persons/person2/person2",
-      style: {
-        navigationBarTitleText: ""
-      }
     }
   ];
   const globalStyle = {};
@@ -378,7 +366,7 @@ if (uni.restoreGlobal) {
   function I(e2) {
     return e2 && "string" == typeof e2 ? JSON.parse(e2) : e2;
   }
-  const S = true, b = "app", A = I(define_process_env_UNI_SECURE_NETWORK_CONFIG_default), C = b, P = I('{\n    "address": [\n        "127.0.0.1",\n        "2.0.0.1",\n        "169.254.37.199",\n        "192.168.137.1",\n        "192.168.65.1",\n        "192.168.1.31"\n    ],\n    "debugPort": 9000,\n    "initialLaunchType": "local",\n    "servePort": 7000,\n    "skipFiles": [\n        "<node_internals>/**",\n        "D:/HBuilderX/HBuilderX/plugins/unicloud/**/*.js"\n    ]\n}\n'), T = I('[{"provider":"aliyun","spaceName":"fun-cloud-city-game","spaceId":"mp-4de62d5a-2380-467f-b109-457713276d05","clientSecret":"ZD2WgXn3K1WSmV78nmjvUQ==","endpoint":"https://api.next.bspapp.com"}]') || [];
+  const S = true, b = "app", A = I(define_process_env_UNI_SECURE_NETWORK_CONFIG_default), C = b, P = I('{\n    "address": [\n        "127.0.0.1",\n        "2.0.0.1",\n        "169.254.37.199",\n        "192.168.137.1",\n        "192.168.65.1",\n        "192.168.1.31"\n    ],\n    "debugPort": 9001,\n    "initialLaunchType": "local",\n    "servePort": 7001,\n    "skipFiles": [\n        "<node_internals>/**",\n        "D:/HBuilderX/HBuilderX/plugins/unicloud/**/*.js"\n    ]\n}\n'), T = I('[{"provider":"aliyun","spaceName":"fun-cloud-city-game","spaceId":"mp-4de62d5a-2380-467f-b109-457713276d05","clientSecret":"ZD2WgXn3K1WSmV78nmjvUQ==","endpoint":"https://api.next.bspapp.com"}]') || [];
   let O = "";
   try {
     O = "__UNI__1B67F5F";
@@ -5171,7 +5159,10 @@ This will fail in production if not fixed.`);
     setup(__props, { expose: __expose }) {
       __expose();
       const props = __props;
-      const __returned__ = { props };
+      const names = ["艾伦", "索菲亚", "杰克"];
+      const desc = ["每日自动签到", "加成效率30%", "加成效率50%"];
+      const price = [38, 288, 588, 988];
+      const __returned__ = { props, names, desc, price };
       Object.defineProperty(__returned__, "__isScriptSetup", { enumerable: false, value: true });
       return __returned__;
     }
@@ -5184,16 +5175,54 @@ This will fail in production if not fixed.`);
       }),
       vue.createElementVNode("view", { class: "board" }, [
         vue.createElementVNode("view", { class: "listArea" }, [
-          vue.createElementVNode("view", { class: "itemWrap" }, [
-            vue.createElementVNode("view", { class: "avatarwrap" }),
-            vue.createElementVNode("view", { class: "nameAndDesc" }, [
-              vue.createElementVNode("view", { class: "name" }, vue.toDisplayString("艾伦")),
-              vue.createElementVNode("view", { class: "desc" }, vue.toDisplayString("每日自动签到"))
-            ]),
-            vue.createElementVNode("view", { class: "btn" }, [
-              vue.createElementVNode("text", { class: "text" }, "招募")
-            ])
-          ])
+          (vue.openBlock(), vue.createElementBlock(
+            vue.Fragment,
+            null,
+            vue.renderList($setup.names, (item, index) => {
+              return vue.createElementVNode("view", { class: "itemWrap" }, [
+                vue.createElementVNode("view", { class: "avatarwrap" }, [
+                  vue.createElementVNode(
+                    "view",
+                    {
+                      class: "avatar",
+                      style: vue.normalizeStyle(`background-image: url(../static/workersAvatar/worker${index + 1 + ""}.png);`)
+                    },
+                    null,
+                    4
+                    /* STYLE */
+                  )
+                ]),
+                vue.createElementVNode("view", { class: "nameAndDesc" }, [
+                  vue.createElementVNode(
+                    "view",
+                    { class: "name" },
+                    vue.toDisplayString(item),
+                    1
+                    /* TEXT */
+                  ),
+                  vue.createElementVNode(
+                    "view",
+                    { class: "desc" },
+                    vue.toDisplayString($setup.desc[index]),
+                    1
+                    /* TEXT */
+                  ),
+                  vue.createElementVNode(
+                    "view",
+                    { class: "price" },
+                    " 招募价格: " + vue.toDisplayString($setup.price[index]) + " 能量石 ",
+                    1
+                    /* TEXT */
+                  )
+                ]),
+                vue.createElementVNode("view", { class: "btn" }, [
+                  vue.createElementVNode("text", { class: "text" }, "招募")
+                ])
+              ]);
+            }),
+            64
+            /* STABLE_FRAGMENT */
+          ))
         ])
       ])
     ]);
@@ -6353,7 +6382,7 @@ This will fail in production if not fixed.`);
   const PagesMineMine = /* @__PURE__ */ _export_sfc(_sfc_main$3, [["render", _sfc_render$2], ["__file", "D:/HBuilderProjects/Game/pages/Mine/Mine.vue"]]);
   const _sfc_main$2 = {
     __name: "worker",
-    props: ["type"],
+    props: ["type", "delay"],
     setup(__props, { expose: __expose }) {
       __expose();
       const props = __props;
@@ -6365,13 +6394,69 @@ This will fail in production if not fixed.`);
   function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
     return vue.openBlock(), vue.createElementBlock("view", { class: "wholewrap" }, [
       vue.createElementVNode("view", { class: "whole" }, [
-        vue.createElementVNode("view", { class: "workerWrap" }, [
-          vue.createElementVNode("view", { class: "leg-back" }),
-          vue.createElementVNode("view", { class: "hand-back" }),
-          vue.createElementVNode("view", { class: "body" }),
-          vue.createElementVNode("view", { class: "leg-front" }),
-          vue.createElementVNode("view", { class: "hand-front" })
-        ])
+        vue.createElementVNode(
+          "view",
+          {
+            class: "workerWrap",
+            style: vue.normalizeStyle(`animation-delay: ${$props.delay + ""}s;`)
+          },
+          [
+            vue.createElementVNode("view", { class: "black" }),
+            vue.createCommentVNode(' <view class="cloud"></view> '),
+            vue.createElementVNode(
+              "view",
+              {
+                class: "leg-back",
+                style: vue.normalizeStyle(`background-image: url(/static/worker${$props.type}/leg-back.png);`)
+              },
+              null,
+              4
+              /* STYLE */
+            ),
+            vue.createElementVNode(
+              "view",
+              {
+                class: "hand-back",
+                style: vue.normalizeStyle(`background-image: url(/static/worker${$props.type}/hand-back.png);`)
+              },
+              null,
+              4
+              /* STYLE */
+            ),
+            vue.createElementVNode(
+              "view",
+              {
+                class: "body",
+                style: vue.normalizeStyle(`background-image: url(/static/worker${$props.type}/body.png);`)
+              },
+              null,
+              4
+              /* STYLE */
+            ),
+            vue.createElementVNode(
+              "view",
+              {
+                class: "leg-front",
+                style: vue.normalizeStyle(`background-image: url(/static/worker${$props.type}/leg-front.png);`)
+              },
+              null,
+              4
+              /* STYLE */
+            ),
+            vue.createElementVNode(
+              "view",
+              {
+                class: "hand-front",
+                style: vue.normalizeStyle(`background-image: url(/static/worker${$props.type}/hand-front.png);`)
+              },
+              null,
+              4
+              /* STYLE */
+            )
+          ],
+          4
+          /* STYLE */
+        )
       ])
     ]);
   }
@@ -6420,13 +6505,42 @@ This will fail in production if not fixed.`);
       vue.createCommentVNode(" 地皮 "),
       vue.createElementVNode("view", { class: "grounds" }, [
         vue.createElementVNode("view", { class: "item small" }, [
-          vue.createVNode($setup["workerVue"], { type: 1 })
+          vue.createElementVNode("view", { class: "realGround type1" }, [
+            vue.createElementVNode("view", { class: "personWrap" }, [
+              vue.createVNode($setup["workerVue"], {
+                type: "2",
+                delay: 0
+              })
+            ])
+          ])
         ]),
         (vue.openBlock(), vue.createElementBlock(
           vue.Fragment,
           null,
           vue.renderList(3, (item) => {
-            return vue.createElementVNode("view", { class: "item scarce" });
+            return vue.createElementVNode("view", { class: "item scarce" }, [
+              vue.createElementVNode("view", { class: "realGround type2" }, [
+                vue.createElementVNode("view", { class: "personWrap" }, [
+                  vue.createVNode($setup["workerVue"], {
+                    type: "1",
+                    delay: -item
+                  }, null, 8, ["delay"])
+                ]),
+                vue.withDirectives(vue.createElementVNode(
+                  "view",
+                  { class: "lockGround" },
+                  [
+                    vue.createElementVNode("view", { class: "title" }, [
+                      vue.createElementVNode("text", null, "稀缺地皮")
+                    ])
+                  ],
+                  512
+                  /* NEED_PATCH */
+                ), [
+                  [vue.vShow, false]
+                ])
+              ])
+            ]);
           }),
           64
           /* STABLE_FRAGMENT */
@@ -6435,7 +6549,37 @@ This will fail in production if not fixed.`);
           vue.Fragment,
           null,
           vue.renderList(5, (item) => {
-            return vue.createElementVNode("view", { class: "item big" });
+            return vue.createElementVNode("view", { class: "item big" }, [
+              vue.createElementVNode("view", { class: "realGround type3" }, [
+                vue.withDirectives(vue.createElementVNode(
+                  "view",
+                  { class: "personWrap" },
+                  [
+                    vue.createVNode($setup["workerVue"], {
+                      type: "3",
+                      delay: -item
+                    }, null, 8, ["delay"])
+                  ],
+                  512
+                  /* NEED_PATCH */
+                ), [
+                  [vue.vShow, false]
+                ]),
+                vue.withDirectives(vue.createElementVNode(
+                  "view",
+                  { class: "lockGround" },
+                  [
+                    vue.createElementVNode("view", { class: "title" }, [
+                      vue.createElementVNode("text", null, "大地皮")
+                    ])
+                  ],
+                  512
+                  /* NEED_PATCH */
+                ), [
+                  [vue.vShow, true]
+                ])
+              ])
+            ]);
           }),
           64
           /* STABLE_FRAGMENT */
@@ -6444,7 +6588,37 @@ This will fail in production if not fixed.`);
           vue.Fragment,
           null,
           vue.renderList(6, (item) => {
-            return vue.createElementVNode("view", { class: "item resource" });
+            return vue.createElementVNode("view", { class: "item resource" }, [
+              vue.createElementVNode("view", { class: "realGround type4" }, [
+                vue.withDirectives(vue.createElementVNode(
+                  "view",
+                  { class: "personWrap" },
+                  [
+                    vue.createVNode($setup["workerVue"], {
+                      type: "3",
+                      delay: -item
+                    }, null, 8, ["delay"])
+                  ],
+                  512
+                  /* NEED_PATCH */
+                ), [
+                  [vue.vShow, false]
+                ]),
+                vue.withDirectives(vue.createElementVNode(
+                  "view",
+                  { class: "lockGround" },
+                  [
+                    vue.createElementVNode("view", { class: "title" }, [
+                      vue.createElementVNode("text", null, "资源地皮")
+                    ])
+                  ],
+                  512
+                  /* NEED_PATCH */
+                ), [
+                  [vue.vShow, true]
+                ])
+              ])
+            ]);
           }),
           64
           /* STABLE_FRAGMENT */
@@ -6452,8 +6626,38 @@ This will fail in production if not fixed.`);
         (vue.openBlock(), vue.createElementBlock(
           vue.Fragment,
           null,
-          vue.renderList(10, (item) => {
-            return vue.createElementVNode("view", { class: "item black" });
+          vue.renderList(8, (item) => {
+            return vue.createElementVNode("view", { class: "item black" }, [
+              vue.createElementVNode("view", { class: "realGround type5" }, [
+                vue.withDirectives(vue.createElementVNode(
+                  "view",
+                  { class: "personWrap" },
+                  [
+                    vue.createVNode($setup["workerVue"], {
+                      type: "3",
+                      delay: -item
+                    }, null, 8, ["delay"])
+                  ],
+                  512
+                  /* NEED_PATCH */
+                ), [
+                  [vue.vShow, false]
+                ]),
+                vue.withDirectives(vue.createElementVNode(
+                  "view",
+                  { class: "lockGround" },
+                  [
+                    vue.createElementVNode("view", { class: "title" }, [
+                      vue.createElementVNode("text", null, "黑土地皮")
+                    ])
+                  ],
+                  512
+                  /* NEED_PATCH */
+                ), [
+                  [vue.vShow, true]
+                ])
+              ])
+            ]);
           }),
           64
           /* STABLE_FRAGMENT */
@@ -6462,7 +6666,71 @@ This will fail in production if not fixed.`);
           vue.Fragment,
           null,
           vue.renderList(3, (item) => {
-            return vue.createElementVNode("view", { class: "item diamond" });
+            return vue.createElementVNode("view", { class: "item diamond" }, [
+              vue.createElementVNode("view", { class: "realGround type6" }, [
+                vue.createElementVNode("view", { class: "diamonds" }, [
+                  vue.createElementVNode("view", { class: "d1 item" }),
+                  vue.createElementVNode("view", { class: "d2 item" }),
+                  vue.createElementVNode("view", { class: "d3 item" })
+                ]),
+                vue.withDirectives(vue.createElementVNode(
+                  "view",
+                  { class: "personWrap" },
+                  [
+                    vue.createVNode($setup["workerVue"], {
+                      type: "3",
+                      delay: -item
+                    }, null, 8, ["delay"])
+                  ],
+                  512
+                  /* NEED_PATCH */
+                ), [
+                  [vue.vShow, false]
+                ]),
+                vue.withDirectives(vue.createElementVNode(
+                  "view",
+                  { class: "lockGround" },
+                  [
+                    vue.createElementVNode("view", { class: "title" }, [
+                      vue.createElementVNode("text", null, "钻石地皮")
+                    ])
+                  ],
+                  512
+                  /* NEED_PATCH */
+                ), [
+                  [vue.vShow, true]
+                ])
+              ])
+            ]);
+          }),
+          64
+          /* STABLE_FRAGMENT */
+        ))
+      ]),
+      vue.createCommentVNode(" 云朵 "),
+      vue.createElementVNode("view", { class: "cloudsLeft clouds" }, [
+        (vue.openBlock(), vue.createElementBlock(
+          vue.Fragment,
+          null,
+          vue.renderList(12, (item) => {
+            return vue.createElementVNode("view", { class: "" }, [
+              vue.createElementVNode("view", { class: "leftItem1 leftItem" }),
+              vue.createElementVNode("view", { class: "leftItem2 leftItem" })
+            ]);
+          }),
+          64
+          /* STABLE_FRAGMENT */
+        ))
+      ]),
+      vue.createElementVNode("view", { class: "cloudsRight clouds" }, [
+        (vue.openBlock(), vue.createElementBlock(
+          vue.Fragment,
+          null,
+          vue.renderList(12, (item) => {
+            return vue.createElementVNode("view", { class: "" }, [
+              vue.createElementVNode("view", { class: "rightItem1 rightItem" }),
+              vue.createElementVNode("view", { class: "rightItem2 rightItem" })
+            ]);
           }),
           64
           /* STABLE_FRAGMENT */

@@ -3,14 +3,19 @@
 		<view class="close" @click="handleShowTanlentPop(false)"></view>
 		<view class="board">
 			<view class="listArea">
-				<view class="itemWrap">
-					<view class="avatarwrap"></view>
+				<view class="itemWrap" v-for="(item, index) in names">
+					<view class="avatarwrap">
+						<view class="avatar" :style=" `background-image: url(../static/workersAvatar/worker${index + 1 + ''}.png);`"></view>
+					</view>
 					<view class="nameAndDesc">
 						<view class="name">
-							{{"艾伦"}}
+							{{item}}
 						</view>
 						<view class="desc">
-							{{"每日自动签到"}}
+							{{desc[index]}}
+						</view>
+						<view class="price">
+							招募价格: {{price[index]}} 能量石
 						</view>
 					</view>
 					<view class="btn">
@@ -24,6 +29,9 @@
 
 <script setup>
 	const props = defineProps(["handleShowTanlentPop"])
+	const names = ["艾伦", "索菲亚", "杰克"]
+	const desc = ["每日自动签到", "加成效率30%", "加成效率50%"]
+	const price = [38, 288, 588, 988]
 </script>
 
 <style lang="less">
@@ -72,16 +80,30 @@
 					box-sizing: border-box;
 					padding: 0 3vw;
 					border-radius: 4vw;
+					margin-bottom: 3vw;
 					background-image: linear-gradient(to right, rgba(207, 179, 115, 0.7) 0%, rgba(207,179,115,0.1) 50%, rgba(207,179,115,.7) 100%);
 					
 					.avatarwrap {
+						position: relative;
 						width: 13vw;
 						height: 13vw;
 						border-radius: 50%;
+						overflow: hidden;
 						background-image: radial-gradient(circle at center, rgba(207, 179, 115, 0.2) 0%, rgba(207, 179, 115, 1) 100%);
+						
+						.avatar {
+							position: absolute;
+							top: 40%;
+							left: 10%;
+							width: 90%;
+							height: 90%;
+							transform: scale(2);
+							background:  no-repeat center center / contain;
+						}
 					}
 					
 					.nameAndDesc {
+						position: relative;
 						display: flex;
 						flex-direction: column;
 						flex: 1;
@@ -101,6 +123,16 @@
 						}
 							
 						.desc {
+							font-size: 3vw;
+							font-weight: bold;
+							color: rgba(159, 108, 56, 1);
+						}
+						
+						.price {
+							position: absolute;
+							top: 110%;
+							width: 100%;
+							text-align: center;
 							font-size: 3vw;
 							font-weight: bold;
 							color: rgba(159, 108, 56, 1);

@@ -24,27 +24,106 @@
 			</view>
 		</view>
 		
+		
+		
 		<!-- 地皮 -->
 		<view class="grounds">
 			<view class="item small">
-				<worker-vue :type="1"></worker-vue>
+				<view class="realGround type1">
+					<view class="personWrap">
+						<worker-vue :type="'2'" :delay='0'></worker-vue>
+					</view>
+				</view>
 			</view>
 									  
-			<view class="item scarce" v-for="item in 3"></view>
+			<view class="item scarce" v-for="item in 3">
+				<view class="realGround type2">
+					<view class="personWrap">
+						<worker-vue :type="'1'" :delay="-item"></worker-vue>
+					</view>
+					<view class="lockGround" v-show="false">
+						<view class="title">
+							<text>稀缺地皮</text>
+						</view>
+					</view>
+				</view>
+			</view>
 									    
-			<view class="item big" v-for="item in 5"></view>
+			<view class="item big" v-for="item in 5">
+				<view class="realGround type3">
+					<view class="personWrap" v-show="false">
+						<worker-vue :type="'3'" :delay="-item"></worker-vue>
+					</view>
+					<view class="lockGround" v-show="true">
+						<view class="title">
+							<text>大地皮</text>
+						</view>
+					</view>
+				</view>
+			</view>
 			
-			<view class="item resource" v-for="item in 6"></view>
+			<view class="item resource" v-for="item in 6">
+				<view class="realGround type4">
+					<view class="personWrap" v-show="false">
+						<worker-vue :type="'3'" :delay="-item"></worker-vue>
+					</view>
+					<view class="lockGround" v-show="true">
+						<view class="title">
+							<text>资源地皮</text>
+						</view>
+					</view>
+				</view>
+			</view>
 									   
-			<view class="item black" v-for="item in 10"></view>
+			<view class="item black" v-for="item in 8">
+				<view class="realGround type5">
+					<view class="personWrap" v-show="false">
+						<worker-vue :type="'3'" :delay="-item"></worker-vue>
+					</view>
+					<view class="lockGround" v-show="true">
+						<view class="title">
+							<text>黑土地皮</text>
+						</view>
+					</view>
+				</view>
+			</view>
 									   
-			<view class="item diamond" v-for="item in 3"></view>
+			<view class="item diamond" v-for="item in 3">
+				<view class="realGround type6">
+					<view class="diamonds">
+						<view class="d1 item"></view>
+						<view class="d2 item"></view>
+						<view class="d3 item"></view>
+					</view>
+					<view class="personWrap" v-show="false">
+						<worker-vue :type="'3'" :delay="-item"></worker-vue>
+					</view>
+					<view class="lockGround" v-show="true">
+						<view class="title">
+							<text>钻石地皮</text>
+						</view>
+					</view>
+				</view>
+			</view>
 									   
 			
 		</view>
 	
+		<!-- 云朵 -->
+		<view class="cloudsLeft clouds">
+			<view class="" v-for="item in 12">
+				<view class="leftItem1 leftItem" />
+				<view class="leftItem2 leftItem" />
+			</view>
+		</view>
 		
-		
+		<view class="cloudsRight clouds">
+			<view class="" v-for="item in 12">
+				<view class="rightItem1 rightItem" />
+				<view class="rightItem2 rightItem" />
+			</view>
+		</view>
+
 	</view>
 </template>
 
@@ -65,10 +144,12 @@
 		position: relative;
 		width: 100vw;
 		height: 533vw;
+		overflow: hidden;
 		background: url("../../static/ground/groundBgc.png")  no-repeat top center / contain;
 		
 		.return {
 			position: fixed;
+			z-index: 99;
 			bottom: 4vw;
 			left: 7vw;
 			width: 15vw;
@@ -173,8 +254,170 @@
 			.item {
 				width: 35vw;
 				height: 32vw;
+				
+				.realGround {
+					position: relative;
+					width: 100%;
+					height: 100%;
+					background: no-repeat center center /contain;
+					
+					&.type1 {
+						background-image: url("../../static/ground/ground1.png");
+					}
+					
+					&.type2 {
+						background-image: url("../../static/ground/ground2.png");
+					}
+					
+					&.type3 {
+						background-image: url("../../static/ground/ground3.png");
+					}
+					
+					&.type4 {
+						background-image: url("../../static/ground/ground4.png");
+					}
+					
+					&.type5 {
+						background-image: url("../../static/ground/ground5.png");
+					}
+					
+					&.type6 {
+						background-image: url("../../static/ground/ground4.png");
+					}
+					
+					.personWrap {
+						position: absolute;
+						left: 3vw;
+						top: 5vw;
+					}
+					
+					.diamonds {
+						position: absolute;
+						left: 25%;
+						top: 1%;
+						
+						.item {
+							position: absolute;
+							width: 10vw;
+							height: 10vw;
+							background: no-repeat center center /contain;
+							
+							&.d1 {
+								background-image: url('../../static/ground/diamond1.png');
+							}
+							
+							&.d2 {
+								top: 4vw;
+								left: 10vw;
+								background-image: url('../../static/ground/diamond2.png');
+							}
+							
+							&.d3 {
+								top: 10vw;
+								left: 3vw;
+								background-image: url('../../static/ground/diamond2.png');
+							}
+						}
+						
+					}
+					
+					.lockGround {
+						position: absolute;
+						width: 100%;
+						height: 100%;
+						color: rgb(107, 92, 37);
+						font-size: 3.5vw;
+						font-weight: bold;
+						background: url("/static/ground/lockGround.png") no-repeat center center /contain;
+						
+						.title {
+							width: 100%;
+							text-align: center;
+							position: absolute;
+							top: 15%;
+						}
+					}
+				}
+			}
+			
+			
+			
+			
+		}
+				
+		.clouds {
+			position: absolute;
+			top: 10%;
+			width: 50%;
+			
+			&.cloudsLeft {
+				left: 0;
+				top: 10vw;
+				animation: moveLeft 2s linear;
+				animation-fill-mode: forwards;
+				animation-delay: .4s;
+				
+				.leftItem {
+					width: 110%;
+					height: 20vw;
+					margin-bottom: 4vw;
+					background: no-repeat top center / contain;
+					
+					&.leftItem1 {
+						background-image: url('../../static/ground/cloud1.png');
+					}
+					
+					&.leftItem2 {
+						background-image: url('../../static/ground/cloud2.png');
+					}
+				}
+			}
+			
+			&.cloudsRight {
+				right: 0;
+				top: 14vw;
+				animation: moveRight 2s linear;
+				animation-fill-mode: forwards;
+				animation-delay: .4s;
+				
+				.rightItem {
+					width: 110%;
+					height: 20vw;
+					background: no-repeat top center / contain;
+					
+					&.rightItem1 {
+						background-image: url('../../static/ground/cloud1.png');
+					}
+					
+					&.rightItem2 {
+						background-image: url('../../static/ground/cloud2.png');
+					}
+				}
 			}
 		}
+		
+		
+		
+		@keyframes moveLeft {
+			0% {
+				left: 0;
+			}
+			
+			100% {
+				left: -100%;
+			}
+		}
+		
+		@keyframes moveRight {
+			0% {
+				right: 0;
+			}
+			
+			100% {
+				right: -100%;
+			}
+		}
+		
 		
 		@keyframes swing {
 		  0%, 100% {
