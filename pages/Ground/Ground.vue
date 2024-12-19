@@ -1,5 +1,15 @@
 <template>
 	<view class="groundWrap">
+		<!-- 地皮购买弹窗 -->
+		<buy-ground-pop-vue 
+					v-if="isShowGroundPop" 
+					:groundType="clickGroundType" 
+					:closePop="() => {handleIsShowGroundPop(false)}"
+					:offset="scorllOffset"
+					>
+					
+		</buy-ground-pop-vue>
+		
 		<!-- 绝对定位 -->
 		<assets-header :judge='2'></assets-header>
 		<view class="return" @click="back"></view>
@@ -24,8 +34,6 @@
 			</view>
 		</view>
 		
-		
-		
 		<!-- 地皮 -->
 		<view class="grounds">
 			<view class="item small">
@@ -41,9 +49,9 @@
 					<view class="personWrap">
 						<worker-vue :type="'1'" :delay="-item"></worker-vue>
 					</view>
-					<view class="lockGround" v-show="false">
+					<view class="lockGround" v-show="false" @click="() => { handleClickGround(2); handleIsShowGroundPop(true)}">
 						<view class="title">
-							<text>稀缺地皮</text>
+							<text >稀缺地皮</text>
 						</view>
 					</view>
 				</view>
@@ -54,9 +62,9 @@
 					<view class="personWrap" v-show="false">
 						<worker-vue :type="'3'" :delay="-item"></worker-vue>
 					</view>
-					<view class="lockGround" v-show="true">
+					<view class="lockGround" v-show="true" @click="() => {handleClickGround(3); handleIsShowGroundPop(true)}">
 						<view class="title">
-							<text>大地皮</text>
+							<text style="color: brown;">大地皮</text>
 						</view>
 					</view>
 				</view>
@@ -67,7 +75,7 @@
 					<view class="personWrap" v-show="false">
 						<worker-vue :type="'3'" :delay="-item"></worker-vue>
 					</view>
-					<view class="lockGround" v-show="true">
+					<view class="lockGround" v-show="true" @click="() => {handleClickGround(4); handleIsShowGroundPop(true)}">
 						<view class="title">
 							<text>资源地皮</text>
 						</view>
@@ -80,9 +88,9 @@
 					<view class="personWrap" v-show="false">
 						<worker-vue :type="'3'" :delay="-item"></worker-vue>
 					</view>
-					<view class="lockGround" v-show="true">
+					<view class="lockGround" v-show="true" @click="() => {handleClickGround(5); handleIsShowGroundPop(true)}"> 
 						<view class="title">
-							<text>黑土地皮</text>
+							<text style="color: black;">黑土地皮</text>
 						</view>
 					</view>
 				</view>
@@ -98,9 +106,9 @@
 					<view class="personWrap" v-show="false">
 						<worker-vue :type="'3'" :delay="-item"></worker-vue>
 					</view>
-					<view class="lockGround" v-show="true">
+					<view class="lockGround" v-show="true" @click="() => {handleClickGround(6); handleIsShowGroundPop(true)}">
 						<view class="title">
-							<text>钻石地皮</text>
+							<text style="colo">钻石地皮</text>
 						</view>
 					</view>
 				</view>
@@ -116,7 +124,6 @@
 				<view class="leftItem2 leftItem" />
 			</view>
 		</view>
-		
 		<view class="cloudsRight clouds">
 			<view class="" v-for="item in 12">
 				<view class="rightItem1 rightItem" />
@@ -131,12 +138,25 @@
 	import { onMounted, onUnmounted, ref } from 'vue';
 	import assetsHeader from '../../components/assetsHeader.vue';
 	import workerVue from '../../components/worker.vue';
+	import buyGroundPopVue from '../../components/buyGroundPop.vue';
+	
+	const clickGroundType = ref("1")
+	const isShowGroundPop = ref(false);
 	
 	function back() {
 		uni.navigateBack({
 			delta:1
 		})
 	}
+	
+	// 处理弹窗的函数
+	function handleClickGround(type) {
+		clickGroundType.value = type;
+	}
+	function handleIsShowGroundPop(flag) {
+		isShowGroundPop.value = flag;
+	}
+	
 </script>
  
 <style lang="less">

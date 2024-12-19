@@ -165,19 +165,72 @@
 0% {
     left: 0;
 }
-49.9% {
+49.99% {
     transform: scaleX(1);
 }
 50% {
     left: 18vw;
     transform: scaleX(-1);
 }
-99.9% {
+99.99% {
     transform: scaleX(-1);
 }
 100% {
     left: 0;
 }
+}
+
+.groundPopWrap[data-v-002acaef] {
+  position: fixed;
+  top: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+.groundPopWrap .board[data-v-002acaef] {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 80vw;
+  height: 70vw;
+  background: url('../../static/ground/board.png') no-repeat center center / contain;
+}
+.groundPopWrap .board .close[data-v-002acaef] {
+  position: absolute;
+  right: 0;
+  width: 15vw;
+  height: 15vw;
+  background: url('../../static/talentCenter/close.png') no-repeat center center / contain;
+}
+.groundPopWrap .board .title[data-v-002acaef] {
+  position: relative;
+  top: -2vw;
+  width: 50%;
+  height: 20vw;
+  text-align: center;
+  line-height: 19vw;
+  color: white;
+  font-weight: bold;
+  background: url('../../static/ground/title.png') no-repeat center center / contain;
+}
+.groundPopWrap .board .btn[data-v-002acaef] {
+  position: absolute;
+  bottom: 8vw;
+  display: flex;
+  justify-content: center;
+  width: 26vw;
+  height: 15vw;
+  color: white;
+  text-align: center;
+  line-height: 13.4vw;
+  font-size: 5vw;
+  font-weight: bold;
+  background: url('../../static/talentCenter/btn2.png') no-repeat center center / contain;
 }
 
 .groundWrap {

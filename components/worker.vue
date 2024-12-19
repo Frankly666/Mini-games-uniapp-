@@ -16,8 +16,6 @@
 
 <script setup>
 	const props = defineProps(['type','delay'])
-	
-	
 </script>
 
 <style lang="less">
@@ -158,14 +156,14 @@
 		  0% {
 		    left: 0;
 		  }
-			49.9% {
+			49.99% {
 				transform: scaleX(1);
 			}
 		  50% {
 		    left: 18vw;
 				transform: scaleX(-1);
 		  }
-			99.9% {
+			99.99% {
 				transform: scaleX(-1);
 			}
 		  100% {
