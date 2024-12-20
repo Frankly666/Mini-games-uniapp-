@@ -211,15 +211,10 @@ async function confirmSellPublish() {
   gameInfo.assets[POWERSTONE] = roundToOneDecimal(
     gameInfo.assets[POWERSTONE] - totalPrice.value
   );
-  console.log(
-    "这里是卖出",
-    totalPrice.value,
-    gameInfo.assets[POWERSTONE],
-    gameInfo.assets[POWERSTONE] - totalPrice.value
-  );
   props.controlShowPop(false);
   props.updateData();
 }
+
 async function confirmNeedPublish() {
   if (inputNumValue.value <= 0) return;
   const buyNum = props.certainItem.buyNum; // 这条需求的最大值

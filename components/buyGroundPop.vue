@@ -3,29 +3,39 @@
 		<view class="board" :style="`transform: translateY(${offset});`">
 			<view class="close" @click="closePop"></view>
 			<view class="title">
-				{{groundMap[groundType]}}
+				{{groundMeta.groundName}}
 			</view>
-			<view class="desc">
-				
+			<view class="contentWrap">
+				<view class="price">
+					解锁价格: {{groundMeta.unlockFunds}}金刚石
+				</view>
+				<view class="duration">
+					解锁时限: {{groundMeta.duration}}天
+				</view>
+				<view class="desc">
+					描述: 每天收获{{groundMeta.dailyEarnings}}块能量石,享受直推收益 {{groundMeta.directPushEarnings*100}}% ,
+					间推收益 {{parseFloat((groundMeta.inDepthReturns*100).toFixed(2))}}%
+				</view>
 			</view>
 			
-			<view class="btn">
-				<text>租用</text>
+			<view class="btn" @click="confirmUnclock">
+				<text>解锁</text>
 			</view>
 		</view>
 	</view>
 </template>
 
 <script setup>
+	import { useGameInfoStore } from '../stores/gameInfo';
+	
 	const props = defineProps(['groundType', 'closePop', 'offset'])
-	const groundMap = {
-		1: "小地皮",
-		2: "稀缺地皮",
-		3: "大地皮",
-		4: "资源地皮",
-		5: "黑土地皮",
-		6: "钻石地皮"
+	const gameInfo = useGameInfoStore()
+	const groundMeta = gameInfo.groundsMeta[props.groundType]
+	
+	function confirmUnclock() {
+		console.log("hhh")
 	}
+	
 </script>
 
 <style lang="less">
@@ -45,8 +55,10 @@
 			display: flex;
 			flex-direction: column;
 			align-items: center;
+			font-weight: bold;
 			width: 80vw;
 			height: 70vw;
+			text-align: left;
 			background: url('../static/ground/board.png') no-repeat center center /contain;
 			
 			
@@ -71,9 +83,28 @@
 				background: url('../static/ground/title.png') no-repeat center center /contain;
 			}
 			
-			.desc {
+			.contentWrap {
+				position: absolute;
+				top: 27%;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				width: 100%;
+				height: 100%;
+				
+				.price, .duration,.desc {
+					width: 80%;
+					font-size: 4vw;
+					color: rgb(133, 84, 32);
+				}
+				
+				.duration {
+					margin: 1.5vw 0;
+				}
 				
 			}
+			
+			
 			
 			.btn {
 				position: absolute;

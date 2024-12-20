@@ -1,5 +1,11 @@
 <template>
 	<view class="talentWrap">
+		<!-- 为工人选择应用的地皮 -->
+		<choose-worker-place-pop-vue 
+				v-if="isShowChoosePop"
+				:closePop="() => {handleShowChoosePop(false)}"
+				/>
+		
 		<view class="close" @click="handleShowTanlentPop(false)"></view>
 		<view class="board">
 			<view class="listArea">
@@ -18,7 +24,7 @@
 							招募价格: {{price[index]}} 能量石
 						</view>
 					</view>
-					<view class="btn">
+					<view class="btn" @click="() => {handleShowChoosePop(true); setChosenWorker(index)}">
 						<text class="text">招募</text>
 					</view>
 				</view>
@@ -28,10 +34,23 @@
 </template>
 
 <script setup>
+	import { ref } from 'vue';
+	import chooseWorkerPlacePopVue from './chooseWorkerPlacePop.vue';
+	
+	const isShowChoosePop = ref(false)
+	const chosenWorkerType = ref(null)
 	const props = defineProps(["handleShowTanlentPop"])
 	const names = ["艾伦", "索菲亚", "杰克"]
 	const desc = ["每日自动签到", "加成效率30%", "加成效率50%"]
 	const price = [38, 288, 588, 988]
+	
+	function handleShowChoosePop(type) {
+		isShowChoosePop.value = type;
+	}
+	
+	function setChosenWorker(type) {
+		chosenWorkerType.value = type;
+	}
 </script>
 
 <style lang="less">

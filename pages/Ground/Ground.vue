@@ -3,9 +3,8 @@
 		<!-- 地皮购买弹窗 -->
 		<buy-ground-pop-vue 
 					v-if="isShowGroundPop" 
-					:groundType="clickGroundType" 
+					:groundType="groundType" 
 					:closePop="() => {handleIsShowGroundPop(false)}"
-					:offset="scorllOffset"
 					>
 					
 		</buy-ground-pop-vue>
@@ -108,7 +107,7 @@
 					</view>
 					<view class="lockGround" v-show="true" @click="() => {handleClickGround(6); handleIsShowGroundPop(true)}">
 						<view class="title">
-							<text style="colo">钻石地皮</text>
+							<text style="color: chocolate;">钻石地皮</text>
 						</view>
 					</view>
 				</view>
@@ -139,8 +138,8 @@
 	import assetsHeader from '../../components/assetsHeader.vue';
 	import workerVue from '../../components/worker.vue';
 	import buyGroundPopVue from '../../components/buyGroundPop.vue';
-	
-	const clickGroundType = ref("1")
+
+	const groundType = ref("1")
 	const isShowGroundPop = ref(false);
 	
 	function back() {
@@ -151,7 +150,7 @@
 	
 	// 处理弹窗的函数
 	function handleClickGround(type) {
-		clickGroundType.value = type;
+		groundType.value = type;
 	}
 	function handleIsShowGroundPop(flag) {
 		isShowGroundPop.value = flag;
@@ -375,12 +374,12 @@
 				top: 10vw;
 				animation: moveLeft 2s linear;
 				animation-fill-mode: forwards;
-				animation-delay: .4s;
+				animation-delay: .2s;
 				
 				.leftItem {
 					width: 110%;
 					height: 20vw;
-					margin-bottom: 4vw;
+					margin-bottom: 10vw;
 					background: no-repeat top center / contain;
 					
 					&.leftItem1 {
@@ -398,11 +397,12 @@
 				top: 14vw;
 				animation: moveRight 2s linear;
 				animation-fill-mode: forwards;
-				animation-delay: .4s;
+				animation-delay: .2s;
 				
 				.rightItem {
 					width: 110%;
 					height: 20vw;
+					margin-bottom: 10vw;
 					background: no-repeat top center / contain;
 					
 					&.rightItem1 {

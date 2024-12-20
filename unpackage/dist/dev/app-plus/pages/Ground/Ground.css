@@ -405,7 +405,7 @@
 .groundWrap .clouds.cloudsLeft .leftItem {
   width: 110%;
   height: 20vw;
-  margin-bottom: 4vw;
+  margin-bottom: 10vw;
   background: no-repeat top center / contain;
 }
 .groundWrap .clouds.cloudsLeft .leftItem.leftItem1 {
@@ -424,6 +424,7 @@
 .groundWrap .clouds.cloudsRight .rightItem {
   width: 110%;
   height: 20vw;
+  margin-bottom: 10vw;
   background: no-repeat top center / contain;
 }
 .groundWrap .clouds.cloudsRight .rightItem.rightItem1 {

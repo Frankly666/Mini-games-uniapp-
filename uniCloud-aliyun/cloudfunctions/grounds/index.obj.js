@@ -2,48 +2,54 @@
 // jsdoc语法提示教程：https://ask.dcloud.net.cn/docs/#//ask.dcloud.net.cn/article/129
 module.exports = {
 	// 地皮类型及其信息
-	groundMeta: {
-		"samll": {
+	groundsMeta: {
+		"1": {
+			"groundName": "小地皮",
 			"unlockFunds": 30,  // 解锁租金 
 			"duration": 30,  // 租用时限
 			"dailyEarnings": 5,  // 每日收益
 			"directPushEarnings": 0.1,  // 直推收益
-			"in_depthReturns": 0.01  // 间推收益
+			"inDepthReturns": 0.01  // 间推收益
 		},
-		"scarce": {
+		"2": {
+			"groundName": "稀缺地皮",
 			"unlockFunds": 698,
 			"duration": 118,
 			"dailyEarnings": 9,
 			"directPushEarnings": 0.15,
-			"in_depthReturns": 0.03
+			"inDepthReturns": 0.03
 		},
-		"big": {
+		"3": {
+			"groundName": "大地皮",
 			"unlockFunds": 1698,
 			"duration": 240,
 			"dailyEarnings": 12.5,
 			"directPushEarnings": 0.2,
-			"in_depthReturns": 0.04
+			"inDepthReturns": 0.04
 		},
-		"resource": {
+		"4": {
+			"groundNmae": "资源地皮",
 			"unlockFunds": 698,
 			"duration": 48,
 			"dailyEarnings": 5,
 			"directPushEarnings": 0.12,
-			"in_depthReturns": 0.02
+			"inDepthReturns": 0.02
 		},
-		"black": {
+		"5": {
+			"groundName": "黑土地皮",
 			"unlockFunds": 5980,
 			"duration": 450,
 			"dailyEarnings": 24,
 			"directPushEarnings": 0.25,
-			"in_depthReturns": 0.05
+			"inDepthReturns": 0.05
 		},
-		"diamond": {
+		"6": {
+			"groundName":"钻石地皮",
 			"unlockFunds": 16980,
 			"duration": 900,
 			"dailyEarnings": 50,
 			"directPushEarnings": 0.3,
-			"in_depthReturns": 0.07
+			"inDepthReturns": 0.07
 		}
 	},
 	
