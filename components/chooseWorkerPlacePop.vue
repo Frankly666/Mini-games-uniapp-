@@ -7,7 +7,7 @@
 				请选择所工作土地类型
 			</view>
 			<view class="wrap1">
-				<view class="itemWrap" v-for="item in 6">
+				<view class="itemWrap" v-for="item in 5">
 					<view class="groundImg" :style=" `background-image: url(../static/ground/ground${item}.png);`"></view>
 					<view class="groundDesc">
 						<view class="groundName">
@@ -20,8 +20,8 @@
 					<view 
 						@click="selectIndex=item"
 						class="select" 
-						:style=" `background-image: url(${selectIndex === item ? selectImg:unselectImg});`" 
-						/>
+						:style=" `background-image: url(${selectIndex === item ? selectImg : unselectImg});`" 
+					/>
 				</view>
 			</view>
 			<view class="retireBtn">

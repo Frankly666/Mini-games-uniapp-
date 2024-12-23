@@ -40,9 +40,9 @@
 	const isShowChoosePop = ref(false)
 	const chosenWorkerType = ref(null)
 	const props = defineProps(["handleShowTanlentPop"])
-	const names = ["艾伦", "索菲亚", "杰克"]
-	const desc = ["每日自动签到", "加成效率30%", "加成效率50%"]
-	const price = [38, 288, 588, 988]
+	const names = ["艾伦", "索菲亚", "杰克", "莱塔", "亚历山大"]
+	const desc = ["每日自动签到", "加成效率30%", "加成效率50%", "加成效率70%", "加成效率90%"]
+	const price = [38, 288, 588, 988, 1998]
 	
 	function handleShowChoosePop(type) {
 		isShowChoosePop.value = type;
@@ -86,7 +86,7 @@
 				position: absolute;
 				top: 25vw;
 				width: 74vw;
-				height: 100vw;
+				height: 103vw;
 				overflow-y: auto;
 				box-sizing: border-box;
 				

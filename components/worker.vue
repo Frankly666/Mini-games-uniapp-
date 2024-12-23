@@ -48,8 +48,8 @@
 					position: absolute;
 					top: 37%;
 					left: 22%;
-					width: 60%;
-					height: 35%;
+					width: 57%;
+					height: 32%;
 					background:  no-repeat center center / contain;
 					transform-origin: 10% 20%;
 					animation: rotateHand 1.6s linear infinite;

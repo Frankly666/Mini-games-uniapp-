@@ -19,7 +19,7 @@
 		</view>
 		
 		<view class="ground">
-			<view class="person p7"></view>
+			<!-- <view class="person p7"></view> -->
 			<view class="person p8"></view>
 			<view class="person p9"></view>
 			<view class="person p10"></view>

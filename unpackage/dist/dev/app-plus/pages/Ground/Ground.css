@@ -196,8 +196,10 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  font-weight: bold;
   width: 80vw;
   height: 70vw;
+  text-align: left;
   background: url('../../static/ground/board.png') no-repeat center center / contain;
 }
 .groundPopWrap .board .close[data-v-002acaef] {
@@ -217,6 +219,25 @@
   color: white;
   font-weight: bold;
   background: url('../../static/ground/title.png') no-repeat center center / contain;
+}
+.groundPopWrap .board .contentWrap[data-v-002acaef] {
+  position: absolute;
+  top: 27%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+.groundPopWrap .board .contentWrap .price[data-v-002acaef],
+.groundPopWrap .board .contentWrap .duration[data-v-002acaef],
+.groundPopWrap .board .contentWrap .desc[data-v-002acaef] {
+  width: 80%;
+  font-size: 4vw;
+  color: #855420;
+}
+.groundPopWrap .board .contentWrap .duration[data-v-002acaef] {
+  margin: 1.5vw 0;
 }
 .groundPopWrap .board .btn[data-v-002acaef] {
   position: absolute;
@@ -400,7 +421,7 @@
   top: 10vw;
   animation: moveLeft 2s linear;
   animation-fill-mode: forwards;
-  animation-delay: 0.4s;
+  animation-delay: 0.2s;
 }
 .groundWrap .clouds.cloudsLeft .leftItem {
   width: 110%;
@@ -419,7 +440,7 @@
   top: 14vw;
   animation: moveRight 2s linear;
   animation-fill-mode: forwards;
-  animation-delay: 0.4s;
+  animation-delay: 0.2s;
 }
 .groundWrap .clouds.cloudsRight .rightItem {
   width: 110%;
