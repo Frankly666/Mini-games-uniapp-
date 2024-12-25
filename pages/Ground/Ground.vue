@@ -38,7 +38,7 @@
 			<view class="item small">
 				<view class="realGround type1">
 					<view class="personWrap">
-						<worker-vue :type="'5'" :delay='0'></worker-vue>
+						<worker-vue :type="'2'" :delay='0'></worker-vue>
 					</view>
 				</view>
 			</view>
