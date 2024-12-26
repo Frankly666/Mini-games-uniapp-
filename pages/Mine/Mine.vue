@@ -20,7 +20,62 @@
 			<view class="return" @click="back"></view>
 		</view>
 		<view class="scrollArea">
-			<view class="mineContent"></view>
+			<view class="mineContent">
+				<view class="normalArea">
+					<view class="header2">
+						<view class="left">
+							<text>已添加:</text>
+							<view class="gemImg1"></view>
+							<text>{{0}}</text>
+						</view>
+						<view class="right">
+							<text>产出:</text>
+							<view class="gemImg1"></view>
+							<text>{{0}}</text>
+						</view>
+					</view>
+					<!-- 可收获数量 -->
+					<view class="nowHarvest">
+						<text>当前可收获:</text>
+						<view class="wrap">
+							<view class="gemImg2"></view>
+							<text>{{0}}</text>
+						</view>
+					</view>
+					<!-- 按钮 -->
+					<!-- <view class="transfer"></view> -->
+					<view class="btn harvest">收获</view>
+					<view class="btn add">添加</view>
+				</view>
+				
+				<view class="bigArea">
+					<view class="header2">
+						<view class="left">
+							<text>已添加:</text>
+							<view class="gemImg1"></view>
+							<text>{{0}}</text>
+						</view>
+						<view class="right">
+							<text>产出:</text>
+							<view class="gemImg1"></view>
+							<text>{{0}}</text>
+						</view>
+					</view>
+					<!-- 可收获数量 -->
+					<view class="nowHarvest">
+						<text>当前可收获:</text>
+						<view class="wrap">
+							<view class="gemImg2"></view>
+							<text>{{0}}</text>
+						</view>
+					</view>
+					<!-- 按钮 -->
+					<!-- <view class="transfer"></view> -->
+					<view class="btn harvest">收获</view>
+					<view class="btn add">添加</view>
+				</view>
+			</view>
+			
 			<view class="intro"></view>
 		</view>
 		
@@ -136,23 +191,149 @@
 			z-index: 99;
 			top: 30vh;
 			width: 100%;
-			height: 33vw;
+			height: 20vw;
 			background: url("../../static/mine/mineHeader.png") no-repeat center center / contain;
 		}
 		
 		.scrollArea {
 			position: absolute;
-			top: 46vh;
+			top: 40vh;
 			width: 100%;
-			height: 57vh;
+			height: 61vh;
 			overflow: auto;
 			
 			.mineContent {
 				position: relative;
 				bottom: -1vw;
 				width: 100%;
-				height: 79vh;
+				height: 85vh;
 				background: url("../../static/mine/mineContent.png") no-repeat center center / contain;
+				
+				// 按钮的公共样式
+				.btn {
+					position: absolute;
+					width: 30vw;
+					height: 14vw;
+					line-height: 12vw;
+					font-size: 5vw;
+					font-weight: bold;
+					color: #fff;
+					text-align: center;
+					background:  no-repeat center center / contain;
+				}
+				
+				// 已添加的资源header公共样式
+				.header2 {
+					position: absolute;
+					top: -44vw;
+					display: flex;
+					justify-content: space-between;
+					width: 97%;
+					height: 10vw;
+					background-color: #fff;
+					border-radius: 4vw;
+					box-sizing: border-box;
+					padding: 0 3vw;
+					line-height: 9vw;
+					font-weight: bold;
+					
+					
+					.gemImg1 {
+						width: 7vw;
+						height: 7vw;
+						margin: 0 2vw;
+						background:no-repeat center center / contain;
+					}
+					
+					.gemImg2 {
+						width: 20vw;
+						height: 20vw;
+						background: url('../../static/market/resourceStone.png') no-repeat center center / contain;
+					}
+					
+					.left {
+						display: flex;
+						align-items: center;
+						.gemImg1 {
+							background-image: url('../../static/market/diamond.png');
+						}
+					}
+					
+					.right {
+						display: flex;
+						align-items: center;
+						.gemImg1 {
+							width: 10vw;
+							height: 10vw;
+							background-image: url('../../static/market/resourceStone.png');
+						}
+					}
+				}
+				
+				// 可收获数量的公共样式
+				.nowHarvest {
+					position: absolute;
+					top: -29vw;
+					display: flex;
+					flex-direction: column;
+					justify-content: center;
+			
+					color: #fff;
+					font-weight: bold;
+					
+					
+					.wrap {
+						display: flex;
+						justify-content: space-between;
+						align-items: center;
+						width: 100%;
+						margin-top: 4vw;
+						margin-left: -3.5vw;
+						
+						.gemImg2 {
+							width: 16vw;
+							height: 16vw;
+							background: url('../../static/market/resourceStone.png') no-repeat center center / contain;
+						}
+					}
+				}
+				
+				.normalArea {
+					position: absolute;
+					top: 58vw;
+					display: flex;
+					justify-content: center;
+					width: 100%;
+
+					.harvest {
+						left: 15vw;
+						background-image: url("../../static/mine/btn_Purple.png");
+					}
+					
+					.add {
+						right: 15vw;
+						background-image: url("../../static/mine/btn_Green.png");
+					}
+				}
+				
+				.bigArea {
+					position: absolute;
+					top: 135vw;
+					display: flex;
+					justify-content: center;
+					width: 100%;
+					
+					
+					.harvest {
+						left: 15vw;
+						background-image: url("../../static/mine/btn_Purple.png");
+					}
+					
+					.add {
+						right: 15vw;
+						background-image: url("../../static/mine/btn_Green.png");
+					}
+				}
 			}
 			
 			.intro {
@@ -164,12 +345,12 @@
 		
 		.return {
 			position: absolute;
-			top: 3.5vw;
+			top: 6vw;
 			z-index: 999;
 			left: 3vw;
-			width: 7vw;
-			height: 7vw;
-			background: url("../../static/ground/return.png") no-repeat center center /contain;
+			width: 10vw;
+			height: 10vw;
+			background: url("../../static/mine/return.png") no-repeat center center /contain;
 		}
 	}
 	
@@ -193,21 +374,17 @@
 			transform: scaleX(1);
 		}
 		49.9%{
-			left: 68vw;
 			background-image: url('../../static/mine/spr_run.gif');
-			transform: scaleX(1);
 		}
 		50% {
 			left: 68vw;
 			background-image: url('../../static/mine/spr_axe.gif');
-			transform: scaleX(1);
 		}
 		
 		// 又开始进行挖矿, 方向进行转换
 		50.1% {
 			left: 68vw;
 			background-image: url('../../static/mine/spr_axe.gif');
-			transform: scaleX(1);
 		}
 		69.99% {
 			left: 68vw;
@@ -217,7 +394,6 @@
 		
 		// 开始往回跑
 		70% {
-			left: 68vw;
 			background-image: url('../../static/mine/spr_run.gif');
 			transform: scaleX(-1);
 		}

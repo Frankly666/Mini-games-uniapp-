@@ -69,7 +69,7 @@
           <text>{{ gameInfo.assets[gemName] }}</text>
         </view>
         <view class="premium item">
-          <text>手续费</text>
+          <text>手续费</text> 
           <view
             class="itemImg"
             :style="`background-image: url(${getGemImg('powerStone')});`"

@@ -238,13 +238,12 @@
 						height: 9vw;
 						background: no-repeat center center / contain;
 						margin-right: 1vw;
-						
 					}
 					
-					&:first-child.gemImg{
-						width: 7vw;
-						height:7vw;
-					}
+					&:first-of-type>.gemImg {
+						width: 7.5vw;
+						height: 7.5vw;
+					}					
 				}
 							
 				.gemItem {
