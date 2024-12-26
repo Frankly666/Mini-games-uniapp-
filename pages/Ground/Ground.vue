@@ -61,7 +61,7 @@
 					<view class="personWrap" v-show="false">
 						<worker-vue :type="'3'" :delay="-item"></worker-vue>
 					</view>
-					<view class="lockGround" v-show="true" @click="() => {handleClickGround(3); handleIsShowGroundPop(true)}">
+					<view class="lockGround" v-show="false" @click="() => {handleClickGround(3); handleIsShowGroundPop(true)}">
 						<view class="title">
 							<text style="color: brown;">大地皮</text>
 						</view>

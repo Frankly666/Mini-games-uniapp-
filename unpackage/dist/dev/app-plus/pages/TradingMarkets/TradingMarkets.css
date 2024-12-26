@@ -245,7 +245,7 @@
   color: aliceblue;
   line-height: 10vw;
   font-size: 3.4vw;
-  background: url('../../static/market/btn_Purple.png') no-repeat center center / contain;
+  background: url('../../static/mine/btn_Purple.png') no-repeat center center / contain;
 }
 
 .buyCellPopWrap[data-v-f77da028] {
@@ -376,7 +376,7 @@
   color: aliceblue;
   line-height: 10vw;
   font-size: 3.4vw;
-  background: url("../../static/market/btn_Purple.png") no-repeat center center / contain;
+  background: url("../../static/mine/btn_Purple.png") no-repeat center center / contain;
 }
 
 .tradingMarketWrap {
@@ -448,9 +448,9 @@
   background: no-repeat center center / contain;
   margin-right: 1vw;
 }
-.tradingMarketWrap .gemstones .tabs .gemItem:first-child.gemImg {
-  width: 7vw;
-  height: 7vw;
+.tradingMarketWrap .gemstones .tabs .gemItem:first-of-type > .gemImg {
+  width: 7.5vw;
+  height: 7.5vw;
 }
 .tradingMarketWrap .gemstones .tabs .gemItem {
   display: flex;

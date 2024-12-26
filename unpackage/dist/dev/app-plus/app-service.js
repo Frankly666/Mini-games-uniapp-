@@ -366,7 +366,7 @@ if (uni.restoreGlobal) {
   function I(e2) {
     return e2 && "string" == typeof e2 ? JSON.parse(e2) : e2;
   }
-  const S = true, b = "app", A = I(define_process_env_UNI_SECURE_NETWORK_CONFIG_default), C = b, P = I('{\n    "address": [\n        "127.0.0.1",\n        "2.0.0.1",\n        "169.254.37.199",\n        "192.168.137.1",\n        "192.168.65.1",\n        "192.168.1.34"\n    ],\n    "debugPort": 9001,\n    "initialLaunchType": "local",\n    "servePort": 7001,\n    "skipFiles": [\n        "<node_internals>/**",\n        "D:/HBuilderX/HBuilderX/plugins/unicloud/**/*.js"\n    ]\n}\n'), T = I('[{"provider":"aliyun","spaceName":"fun-cloud-city-game","spaceId":"mp-4de62d5a-2380-467f-b109-457713276d05","clientSecret":"ZD2WgXn3K1WSmV78nmjvUQ==","endpoint":"https://api.next.bspapp.com"}]') || [];
+  const S = true, b = "app", A = I(define_process_env_UNI_SECURE_NETWORK_CONFIG_default), C = b, P = I('{\n    "address": [\n        "127.0.0.1",\n        "2.0.0.1",\n        "169.254.37.199",\n        "192.168.137.1",\n        "192.168.65.1",\n        "192.168.1.25"\n    ],\n    "debugPort": 9001,\n    "initialLaunchType": "local",\n    "servePort": 7001,\n    "skipFiles": [\n        "<node_internals>/**",\n        "D:/HBuilderX/HBuilderX/plugins/unicloud/**/*.js"\n    ]\n}\n'), T = I('[{"provider":"aliyun","spaceName":"fun-cloud-city-game","spaceId":"mp-4de62d5a-2380-467f-b109-457713276d05","clientSecret":"ZD2WgXn3K1WSmV78nmjvUQ==","endpoint":"https://api.next.bspapp.com"}]') || [];
   let O = "";
   try {
     O = "__UNI__1B67F5F";
@@ -4579,7 +4579,7 @@ This will fail in production if not fixed.`);
     }
     return target;
   };
-  const _sfc_main$l = {
+  const _sfc_main$m = {
     __name: "Mock",
     setup(__props, { expose: __expose }) {
       __expose();
@@ -4624,7 +4624,7 @@ This will fail in production if not fixed.`);
       return __returned__;
     }
   };
-  function _sfc_render$k(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$l(_ctx, _cache, $props, $setup, $data, $options) {
     return vue.openBlock(), vue.createElementBlock("view", null, [
       vue.createElementVNode("button", {
         type: "primary",
@@ -4638,8 +4638,8 @@ This will fail in production if not fixed.`);
       }, "点击进入云城")
     ]);
   }
-  const PagesMockMock = /* @__PURE__ */ _export_sfc(_sfc_main$l, [["render", _sfc_render$k], ["__file", "D:/HBuilderProjects/Game/pages/Mock/Mock.vue"]]);
-  const _sfc_main$k = {
+  const PagesMockMock = /* @__PURE__ */ _export_sfc(_sfc_main$m, [["render", _sfc_render$l], ["__file", "D:/HBuilderProjects/Game/pages/Mock/Mock.vue"]]);
+  const _sfc_main$l = {
     __name: "assetsHeader",
     props: ["judge"],
     setup(__props, { expose: __expose }) {
@@ -4675,7 +4675,7 @@ This will fail in production if not fixed.`);
       return __returned__;
     }
   };
-  function _sfc_render$j(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$k(_ctx, _cache, $props, $setup, $data, $options) {
     return vue.openBlock(), vue.createElementBlock("view", null, [
       $setup.props.judge === 2 ? (vue.openBlock(), vue.createElementBlock("view", {
         key: 0,
@@ -4743,8 +4743,8 @@ This will fail in production if not fixed.`);
       ])) : vue.createCommentVNode("v-if", true)
     ]);
   }
-  const assetsHeader = /* @__PURE__ */ _export_sfc(_sfc_main$k, [["render", _sfc_render$j], ["__scopeId", "data-v-618629f7"], ["__file", "D:/HBuilderProjects/Game/components/assetsHeader.vue"]]);
-  const _sfc_main$j = {
+  const assetsHeader = /* @__PURE__ */ _export_sfc(_sfc_main$l, [["render", _sfc_render$k], ["__scopeId", "data-v-618629f7"], ["__file", "D:/HBuilderProjects/Game/components/assetsHeader.vue"]]);
+  const _sfc_main$k = {
     __name: "avatar",
     setup(__props, { expose: __expose }) {
       __expose();
@@ -4757,7 +4757,7 @@ This will fail in production if not fixed.`);
       return __returned__;
     }
   };
-  function _sfc_render$i(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$j(_ctx, _cache, $props, $setup, $data, $options) {
     return vue.openBlock(), vue.createElementBlock("view", { class: "avatar" }, [
       $setup.avatar ? (vue.openBlock(), vue.createElementBlock(
         "view",
@@ -4781,10 +4781,10 @@ This will fail in production if not fixed.`);
       ])
     ]);
   }
-  const avatar = /* @__PURE__ */ _export_sfc(_sfc_main$j, [["render", _sfc_render$i], ["__scopeId", "data-v-32a3f906"], ["__file", "D:/HBuilderProjects/Game/components/avatar.vue"]]);
+  const avatar = /* @__PURE__ */ _export_sfc(_sfc_main$k, [["render", _sfc_render$j], ["__scopeId", "data-v-32a3f906"], ["__file", "D:/HBuilderProjects/Game/components/avatar.vue"]]);
   const _imports_0 = "/static/toolsBar/arrowRight.png";
   const _imports_1 = "/static/toolsBar/arrowLeft.png";
-  const _sfc_main$i = {
+  const _sfc_main$j = {
     __name: "toolsBar",
     props: ["handleShow"],
     setup(__props, { expose: __expose }) {
@@ -4801,7 +4801,7 @@ This will fail in production if not fixed.`);
       return __returned__;
     }
   };
-  function _sfc_render$h(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$i(_ctx, _cache, $props, $setup, $data, $options) {
     return vue.openBlock(), vue.createElementBlock("view", { class: "toolsBar" }, [
       vue.createElementVNode("view", {
         class: "controll",
@@ -4858,8 +4858,8 @@ This will fail in production if not fixed.`);
       )
     ]);
   }
-  const toolsBar = /* @__PURE__ */ _export_sfc(_sfc_main$i, [["render", _sfc_render$h], ["__scopeId", "data-v-aed0e88d"], ["__file", "D:/HBuilderProjects/Game/components/toolsBar.vue"]]);
-  const _sfc_main$h = {
+  const toolsBar = /* @__PURE__ */ _export_sfc(_sfc_main$j, [["render", _sfc_render$i], ["__scopeId", "data-v-aed0e88d"], ["__file", "D:/HBuilderProjects/Game/components/toolsBar.vue"]]);
+  const _sfc_main$i = {
     name: "cloudTip",
     data() {
       return {};
@@ -4873,7 +4873,7 @@ This will fail in production if not fixed.`);
       }
     }
   };
-  function _sfc_render$g(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$h(_ctx, _cache, $props, $setup, $data, $options) {
     return vue.openBlock(), vue.createElementBlock("view", { class: "cloudWrap" }, [
       vue.createElementVNode("view", {
         class: "mine item",
@@ -4892,8 +4892,8 @@ This will fail in production if not fixed.`);
       ])
     ]);
   }
-  const cloudTip = /* @__PURE__ */ _export_sfc(_sfc_main$h, [["render", _sfc_render$g], ["__scopeId", "data-v-04c56f99"], ["__file", "D:/HBuilderProjects/Game/components/cloudTip.vue"]]);
-  const _sfc_main$g = {
+  const cloudTip = /* @__PURE__ */ _export_sfc(_sfc_main$i, [["render", _sfc_render$h], ["__scopeId", "data-v-04c56f99"], ["__file", "D:/HBuilderProjects/Game/components/cloudTip.vue"]]);
+  const _sfc_main$h = {
     name: "dynamicPeople",
     data() {
       return {};
@@ -4902,7 +4902,7 @@ This will fail in production if not fixed.`);
     },
     methods: {}
   };
-  function _sfc_render$f(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$g(_ctx, _cache, $props, $setup, $data, $options) {
     return vue.openBlock(), vue.createElementBlock("view", { class: "peopleWrap" }, [
       vue.createElementVNode("view", { class: "flowers" }, [
         vue.createElementVNode("view", { class: "flower f1" }),
@@ -4919,7 +4919,7 @@ This will fail in production if not fixed.`);
         vue.createCommentVNode(' <view class="p6 person"></view> ')
       ]),
       vue.createElementVNode("view", { class: "ground" }, [
-        vue.createElementVNode("view", { class: "person p7" }),
+        vue.createCommentVNode(' <view class="person p7"></view> '),
         vue.createElementVNode("view", { class: "person p8" }),
         vue.createElementVNode("view", { class: "person p9" }),
         vue.createElementVNode("view", { class: "person p10" })
@@ -4931,8 +4931,8 @@ This will fail in production if not fixed.`);
       ])
     ]);
   }
-  const dynamicPeople = /* @__PURE__ */ _export_sfc(_sfc_main$g, [["render", _sfc_render$f], ["__scopeId", "data-v-2a3805e5"], ["__file", "D:/HBuilderProjects/Game/components/dynamicPeople.vue"]]);
-  const _sfc_main$f = {
+  const dynamicPeople = /* @__PURE__ */ _export_sfc(_sfc_main$h, [["render", _sfc_render$g], ["__scopeId", "data-v-2a3805e5"], ["__file", "D:/HBuilderProjects/Game/components/dynamicPeople.vue"]]);
+  const _sfc_main$g = {
     __name: "clickMask",
     props: ["handleShowTanlentPop"],
     setup(__props, { expose: __expose }) {
@@ -4961,7 +4961,7 @@ This will fail in production if not fixed.`);
       return __returned__;
     }
   };
-  function _sfc_render$e(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$f(_ctx, _cache, $props, $setup, $data, $options) {
     return vue.openBlock(), vue.createElementBlock("view", { class: "clickMaskWrap" }, [
       vue.createElementVNode("view", {
         class: "item tradingMarket",
@@ -4981,8 +4981,8 @@ This will fail in production if not fixed.`);
       })
     ]);
   }
-  const clickMask = /* @__PURE__ */ _export_sfc(_sfc_main$f, [["render", _sfc_render$e], ["__scopeId", "data-v-37646fb3"], ["__file", "D:/HBuilderProjects/Game/components/clickMask.vue"]]);
-  const _sfc_main$e = {
+  const clickMask = /* @__PURE__ */ _export_sfc(_sfc_main$g, [["render", _sfc_render$f], ["__scopeId", "data-v-37646fb3"], ["__file", "D:/HBuilderProjects/Game/components/clickMask.vue"]]);
+  const _sfc_main$f = {
     __name: "userInfoPop",
     props: ["closeInfo"],
     setup(__props, { expose: __expose }) {
@@ -5041,7 +5041,7 @@ This will fail in production if not fixed.`);
       return __returned__;
     }
   };
-  function _sfc_render$d(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$e(_ctx, _cache, $props, $setup, $data, $options) {
     return vue.openBlock(), vue.createElementBlock("view", { class: "userInfoWrap" }, [
       vue.createElementVNode("view", { class: "infoBgc" }, [
         vue.createElementVNode("view", {
@@ -5113,10 +5113,10 @@ This will fail in production if not fixed.`);
       ])) : vue.createCommentVNode("v-if", true)
     ]);
   }
-  const userInfoPop = /* @__PURE__ */ _export_sfc(_sfc_main$e, [["render", _sfc_render$d], ["__scopeId", "data-v-13ced562"], ["__file", "D:/HBuilderProjects/Game/components/userInfoPop.vue"]]);
+  const userInfoPop = /* @__PURE__ */ _export_sfc(_sfc_main$f, [["render", _sfc_render$e], ["__scopeId", "data-v-13ced562"], ["__file", "D:/HBuilderProjects/Game/components/userInfoPop.vue"]]);
   const openImg = "../static/toolsBar/switchOn.png";
   const closeImg = "../static/toolsBar/switchOff.png";
-  const _sfc_main$d = {
+  const _sfc_main$e = {
     __name: "settingPop",
     props: ["handleShow"],
     setup(__props, { expose: __expose }) {
@@ -5147,7 +5147,7 @@ This will fail in production if not fixed.`);
       return __returned__;
     }
   };
-  function _sfc_render$c(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$d(_ctx, _cache, $props, $setup, $data, $options) {
     return vue.openBlock(), vue.createElementBlock("view", { class: "settingWrap" }, [
       vue.createElementVNode("view", { class: "bgc" }, [
         vue.createElementVNode("view", {
@@ -5178,8 +5178,8 @@ This will fail in production if not fixed.`);
       ])
     ]);
   }
-  const settingPop = /* @__PURE__ */ _export_sfc(_sfc_main$d, [["render", _sfc_render$c], ["__scopeId", "data-v-9e95edd8"], ["__file", "D:/HBuilderProjects/Game/components/settingPop.vue"]]);
-  const _sfc_main$c = {
+  const settingPop = /* @__PURE__ */ _export_sfc(_sfc_main$e, [["render", _sfc_render$d], ["__scopeId", "data-v-9e95edd8"], ["__file", "D:/HBuilderProjects/Game/components/settingPop.vue"]]);
+  const _sfc_main$d = {
     __name: "rulePop",
     props: ["handleShow"],
     setup(__props, { expose: __expose }) {
@@ -5190,7 +5190,7 @@ This will fail in production if not fixed.`);
       return __returned__;
     }
   };
-  function _sfc_render$b(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$c(_ctx, _cache, $props, $setup, $data, $options) {
     return vue.openBlock(), vue.createElementBlock("view", { class: "ruleWrap" }, [
       vue.createElementVNode("view", { class: "pop" }, [
         vue.createElementVNode("view", { class: "title" }, [
@@ -5205,8 +5205,8 @@ This will fail in production if not fixed.`);
       ])
     ]);
   }
-  const rulePop = /* @__PURE__ */ _export_sfc(_sfc_main$c, [["render", _sfc_render$b], ["__scopeId", "data-v-961e39f0"], ["__file", "D:/HBuilderProjects/Game/components/rulePop.vue"]]);
-  const _sfc_main$b = {
+  const rulePop = /* @__PURE__ */ _export_sfc(_sfc_main$d, [["render", _sfc_render$c], ["__scopeId", "data-v-961e39f0"], ["__file", "D:/HBuilderProjects/Game/components/rulePop.vue"]]);
+  const _sfc_main$c = {
     __name: "announcementPop",
     props: ["handleShow"],
     setup(__props, { expose: __expose }) {
@@ -5217,7 +5217,7 @@ This will fail in production if not fixed.`);
       return __returned__;
     }
   };
-  function _sfc_render$a(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$b(_ctx, _cache, $props, $setup, $data, $options) {
     return vue.openBlock(), vue.createElementBlock("view", { class: "announcementWrap" }, [
       vue.createElementVNode("view", { class: "pop" }, [
         vue.createElementVNode("view", { class: "title" }, [
@@ -5232,10 +5232,10 @@ This will fail in production if not fixed.`);
       ])
     ]);
   }
-  const announcementPop = /* @__PURE__ */ _export_sfc(_sfc_main$b, [["render", _sfc_render$a], ["__scopeId", "data-v-c26e9d23"], ["__file", "D:/HBuilderProjects/Game/components/announcementPop.vue"]]);
+  const announcementPop = /* @__PURE__ */ _export_sfc(_sfc_main$c, [["render", _sfc_render$b], ["__scopeId", "data-v-c26e9d23"], ["__file", "D:/HBuilderProjects/Game/components/announcementPop.vue"]]);
   const selectImg = "../static/ground/select.png";
   const unselectImg = "../static/ground/unselect.png";
-  const _sfc_main$a = {
+  const _sfc_main$b = {
     __name: "chooseWorkerPlacePop",
     props: ["closePop"],
     setup(__props, { expose: __expose }) {
@@ -5253,7 +5253,7 @@ This will fail in production if not fixed.`);
       return __returned__;
     }
   };
-  function _sfc_render$9(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$a(_ctx, _cache, $props, $setup, $data, $options) {
     return vue.openBlock(), vue.createElementBlock("view", { class: "chooseWorkerPlaceWrap" }, [
       vue.createElementVNode("view", { class: "chooseboard" }, [
         vue.createElementVNode("view", {
@@ -5308,8 +5308,8 @@ This will fail in production if not fixed.`);
       ])
     ]);
   }
-  const chooseWorkerPlacePopVue = /* @__PURE__ */ _export_sfc(_sfc_main$a, [["render", _sfc_render$9], ["__scopeId", "data-v-8fc36c4d"], ["__file", "D:/HBuilderProjects/Game/components/chooseWorkerPlacePop.vue"]]);
-  const _sfc_main$9 = {
+  const chooseWorkerPlacePopVue = /* @__PURE__ */ _export_sfc(_sfc_main$b, [["render", _sfc_render$a], ["__scopeId", "data-v-8fc36c4d"], ["__file", "D:/HBuilderProjects/Game/components/chooseWorkerPlacePop.vue"]]);
+  const _sfc_main$a = {
     __name: "talentCenterPop",
     props: ["handleShowTanlentPop"],
     setup(__props, { expose: __expose }) {
@@ -5317,9 +5317,9 @@ This will fail in production if not fixed.`);
       const isShowChoosePop = vue.ref(false);
       const chosenWorkerType = vue.ref(null);
       const props = __props;
-      const names = ["艾伦", "索菲亚", "杰克"];
-      const desc = ["每日自动签到", "加成效率30%", "加成效率50%"];
-      const price = [38, 288, 588, 988];
+      const names = ["艾伦", "索菲亚", "杰克", "莱塔", "亚历山大"];
+      const desc = ["每日自动签到", "加成效率30%", "加成效率50%", "加成效率70%", "加成效率90%"];
+      const price = [38, 288, 588, 988, 1998];
       function handleShowChoosePop(type) {
         isShowChoosePop.value = type;
       }
@@ -5331,7 +5331,7 @@ This will fail in production if not fixed.`);
       return __returned__;
     }
   };
-  function _sfc_render$8(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$9(_ctx, _cache, $props, $setup, $data, $options) {
     return vue.openBlock(), vue.createElementBlock("view", { class: "talentWrap" }, [
       vue.createCommentVNode(" 为工人选择应用的地皮 "),
       $setup.isShowChoosePop ? (vue.openBlock(), vue.createBlock($setup["chooseWorkerPlacePopVue"], {
@@ -5404,8 +5404,8 @@ This will fail in production if not fixed.`);
       ])
     ]);
   }
-  const talentCenterPop = /* @__PURE__ */ _export_sfc(_sfc_main$9, [["render", _sfc_render$8], ["__scopeId", "data-v-52356c3d"], ["__file", "D:/HBuilderProjects/Game/components/talentCenterPop.vue"]]);
-  const _sfc_main$8 = {
+  const talentCenterPop = /* @__PURE__ */ _export_sfc(_sfc_main$a, [["render", _sfc_render$9], ["__scopeId", "data-v-52356c3d"], ["__file", "D:/HBuilderProjects/Game/components/talentCenterPop.vue"]]);
+  const _sfc_main$9 = {
     __name: "Home",
     setup(__props, { expose: __expose }) {
       __expose();
@@ -5546,7 +5546,7 @@ This will fail in production if not fixed.`);
       return __returned__;
     }
   };
-  function _sfc_render$7(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$8(_ctx, _cache, $props, $setup, $data, $options) {
     return vue.openBlock(), vue.createElementBlock("view", { class: "pages" }, [
       vue.createCommentVNode(" 头像, 资源, 工具栏 "),
       vue.createVNode($setup["avatar"], {
@@ -5609,11 +5609,11 @@ This will fail in production if not fixed.`);
       )
     ]);
   }
-  const PagesHomeHome = /* @__PURE__ */ _export_sfc(_sfc_main$8, [["render", _sfc_render$7], ["__scopeId", "data-v-7ffebbf4"], ["__file", "D:/HBuilderProjects/Game/pages/Home/Home.vue"]]);
+  const PagesHomeHome = /* @__PURE__ */ _export_sfc(_sfc_main$9, [["render", _sfc_render$8], ["__scopeId", "data-v-7ffebbf4"], ["__file", "D:/HBuilderProjects/Game/pages/Home/Home.vue"]]);
   function roundToOneDecimal(num) {
     return Math.round(num * 10) / 10;
   }
-  const _sfc_main$7 = {
+  const _sfc_main$8 = {
     __name: "marketPublish",
     props: ["controlPublish", "title", "gemItems", "gemImgName", "updateData"],
     setup(__props, { expose: __expose }) {
@@ -5640,7 +5640,7 @@ This will fail in production if not fixed.`);
       const isShowWran = vue.computed(() => {
         return inputPriceValue.value < 0.2 || inputPriceValue.value > 10;
       });
-      const isSell = vue.computed(() => {
+      const isSell2 = vue.computed(() => {
         return props.title === "出售";
       });
       const confirmFun = vue.computed(() => {
@@ -5670,7 +5670,7 @@ This will fail in production if not fixed.`);
         const tem = inputNumValue.value + num;
         if (tem < 0)
           return;
-        if (tem > max && isSell.value)
+        if (tem > max && isSell2.value)
           return;
         inputNumValue.value += num;
       }
@@ -5706,7 +5706,7 @@ This will fail in production if not fixed.`);
         props.controlPublish(false);
         props.updateData();
       }
-      const __returned__ = { gameInfo, props, selectIndex, inputNumValue, inputPriceValue, isShowNotEnough, marketDB, assetsDB, expectedNum, needPowerStoneNum, isShowWran, isSell, confirmFun, getGemImg, handleIndex, setPriceValue, setNumValue, handleSellNum, confirmSellPublish, confirmNeedPublish, computed: vue.computed, onMounted: vue.onMounted, ref: vue.ref, get POWERSTONE() {
+      const __returned__ = { gameInfo, props, selectIndex, inputNumValue, inputPriceValue, isShowNotEnough, marketDB, assetsDB, expectedNum, needPowerStoneNum, isShowWran, isSell: isSell2, confirmFun, getGemImg, handleIndex, setPriceValue, setNumValue, handleSellNum, confirmSellPublish, confirmNeedPublish, computed: vue.computed, onMounted: vue.onMounted, ref: vue.ref, get POWERSTONE() {
         return POWERSTONE;
       }, get useGameInfoStore() {
         return useGameInfoStore;
@@ -5717,7 +5717,7 @@ This will fail in production if not fixed.`);
       return __returned__;
     }
   };
-  function _sfc_render$6(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$7(_ctx, _cache, $props, $setup, $data, $options) {
     return vue.openBlock(), vue.createElementBlock("view", { class: "publishWrap" }, [
       vue.createElementVNode("view", { class: "board" }, [
         vue.createElementVNode("view", {
@@ -5950,8 +5950,8 @@ This will fail in production if not fixed.`);
       ])
     ]);
   }
-  const marketPublish = /* @__PURE__ */ _export_sfc(_sfc_main$7, [["render", _sfc_render$6], ["__scopeId", "data-v-16940c0f"], ["__file", "D:/HBuilderProjects/Game/components/marketPublish.vue"]]);
-  const _sfc_main$6 = {
+  const marketPublish = /* @__PURE__ */ _export_sfc(_sfc_main$8, [["render", _sfc_render$7], ["__scopeId", "data-v-16940c0f"], ["__file", "D:/HBuilderProjects/Game/components/marketPublish.vue"]]);
+  const _sfc_main$7 = {
     __name: "buyCellPop",
     props: [
       "controlShowPop",
@@ -6097,7 +6097,7 @@ This will fail in production if not fixed.`);
       return __returned__;
     }
   };
-  function _sfc_render$5(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$6(_ctx, _cache, $props, $setup, $data, $options) {
     return vue.openBlock(), vue.createElementBlock("view", { class: "buyCellPopWrap" }, [
       vue.createElementVNode("view", { class: "board" }, [
         vue.createElementVNode("view", {
@@ -6293,8 +6293,8 @@ This will fail in production if not fixed.`);
       ])
     ]);
   }
-  const buyCellPop = /* @__PURE__ */ _export_sfc(_sfc_main$6, [["render", _sfc_render$5], ["__scopeId", "data-v-f77da028"], ["__file", "D:/HBuilderProjects/Game/components/buyCellPop.vue"]]);
-  const _sfc_main$5 = {
+  const buyCellPop = /* @__PURE__ */ _export_sfc(_sfc_main$7, [["render", _sfc_render$6], ["__scopeId", "data-v-f77da028"], ["__file", "D:/HBuilderProjects/Game/components/buyCellPop.vue"]]);
+  const _sfc_main$6 = {
     __name: "TradingMarkets",
     setup(__props, { expose: __expose }) {
       __expose();
@@ -6365,7 +6365,7 @@ This will fail in production if not fixed.`);
       return __returned__;
     }
   };
-  function _sfc_render$4(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$5(_ctx, _cache, $props, $setup, $data, $options) {
     var _a;
     return vue.openBlock(), vue.createElementBlock("view", { class: "tradingMarketWrap" }, [
       vue.createElementVNode("view", {
@@ -6538,15 +6538,285 @@ This will fail in production if not fixed.`);
       ])
     ]);
   }
-  const PagesTradingMarketsTradingMarkets = /* @__PURE__ */ _export_sfc(_sfc_main$5, [["render", _sfc_render$4], ["__file", "D:/HBuilderProjects/Game/pages/TradingMarkets/TradingMarkets.vue"]]);
+  const PagesTradingMarketsTradingMarkets = /* @__PURE__ */ _export_sfc(_sfc_main$6, [["render", _sfc_render$5], ["__file", "D:/HBuilderProjects/Game/pages/TradingMarkets/TradingMarkets.vue"]]);
+  const _sfc_main$5 = {
+    __name: "activateMinePop",
+    props: ["closePop"],
+    setup(__props, { expose: __expose }) {
+      __expose();
+      const props = __props;
+      const selectIndex = vue.ref(0);
+      const gemItems = ["金刚石"];
+      const gemImgName = ["diamond", "meteorite"];
+      const inputNumValue = vue.ref(0);
+      const gameInfo = useGameInfoStore();
+      function handleSellNum(num) {
+        const max = gameInfo.assets[gemImgName[selectIndex.value]] | 0;
+        if (num === true) {
+          inputNumValue.value = max;
+          return;
+        }
+        const tem = inputNumValue.value + num;
+        if (tem < 0)
+          return;
+        if (tem > max && isSell.value)
+          return;
+        inputNumValue.value += num;
+      }
+      function handleIndex(index) {
+        selectIndex.value = index;
+      }
+      function getGemImg(item) {
+        return `../../static/market/${item}.png`;
+      }
+      const __returned__ = { props, selectIndex, gemItems, gemImgName, inputNumValue, gameInfo, handleSellNum, handleIndex, getGemImg, ref: vue.ref, get useGameInfoStore() {
+        return useGameInfoStore;
+      } };
+      Object.defineProperty(__returned__, "__isScriptSetup", { enumerable: false, value: true });
+      return __returned__;
+    }
+  };
+  function _sfc_render$4(_ctx, _cache, $props, $setup, $data, $options) {
+    return vue.openBlock(), vue.createElementBlock("view", { class: "activateWrap" }, [
+      vue.createElementVNode("view", { class: "board" }, [
+        vue.createElementVNode("view", {
+          class: "close",
+          onClick: _cache[0] || (_cache[0] = (...args) => $props.closePop && $props.closePop(...args))
+        }),
+        vue.createElementVNode("view", { class: "title" }, [
+          vue.createElementVNode("text", null, "添加")
+        ]),
+        vue.createElementVNode("view", { class: "gems" }, [
+          (vue.openBlock(), vue.createElementBlock(
+            vue.Fragment,
+            null,
+            vue.renderList($setup.gemItems, (item, index) => {
+              return vue.createElementVNode("view", { class: "gemItem" }, [
+                vue.createElementVNode("view", {
+                  class: vue.normalizeClass({ "imgWrap": true, "active": index === $setup.selectIndex }),
+                  onClick: () => {
+                    $setup.handleIndex(index);
+                  }
+                }, [
+                  vue.createElementVNode(
+                    "view",
+                    {
+                      class: "gemImg",
+                      style: vue.normalizeStyle(`background-image: url(${$setup.getGemImg($setup.gemImgName[index])});`)
+                    },
+                    null,
+                    4
+                    /* STYLE */
+                  )
+                ], 10, ["onClick"]),
+                vue.createElementVNode("view", { class: "name" }, [
+                  vue.createElementVNode(
+                    "text",
+                    null,
+                    vue.toDisplayString(item),
+                    1
+                    /* TEXT */
+                  )
+                ])
+              ]);
+            }),
+            64
+            /* STABLE_FRAGMENT */
+          ))
+        ]),
+        vue.createElementVNode("view", { class: "publishNum" }, [
+          vue.createElementVNode("view", {
+            class: "sub",
+            onClick: _cache[1] || (_cache[1] = () => {
+              $setup.handleSellNum(-1);
+            })
+          }),
+          vue.createElementVNode("view", { class: "inputWrap" }, [
+            vue.createElementVNode("input", {
+              type: "number",
+              value: $setup.inputNumValue,
+              onInput: _cache[2] || (_cache[2] = (res) => {
+                _ctx.setNumValue(res.detail.value);
+              })
+            }, null, 40, ["value"])
+          ]),
+          vue.createElementVNode("view", {
+            class: "add",
+            onClick: _cache[3] || (_cache[3] = () => {
+              $setup.handleSellNum(1);
+            })
+          }),
+          vue.createElementVNode("view", {
+            class: "max",
+            onClick: _cache[4] || (_cache[4] = () => {
+              $setup.handleSellNum(true);
+            })
+          }, [
+            vue.createElementVNode("text", null, "最大")
+          ])
+        ]),
+        vue.createElementVNode("view", { class: "tip" }, [
+          vue.createElementVNode("view", { class: "own item" }, [
+            vue.createElementVNode(
+              "text",
+              null,
+              "我的" + vue.toDisplayString($setup.gemItems[$setup.selectIndex]),
+              1
+              /* TEXT */
+            ),
+            vue.createElementVNode(
+              "view",
+              {
+                class: "itemImg",
+                style: vue.normalizeStyle(`background-image: url(${$setup.getGemImg($setup.gemImgName[$setup.selectIndex])});`)
+              },
+              null,
+              4
+              /* STYLE */
+            ),
+            vue.createElementVNode(
+              "text",
+              null,
+              vue.toDisplayString($setup.gameInfo.assets[$setup.gemImgName[$setup.selectIndex]] | 0),
+              1
+              /* TEXT */
+            )
+          ]),
+          vue.createElementVNode("view", { class: "obtain item" }, [
+            vue.createElementVNode("text", null, "预计日产出"),
+            vue.createElementVNode(
+              "view",
+              {
+                class: "itemImg",
+                style: vue.normalizeStyle(`background-image: url(${$setup.getGemImg("resourceStone")});`)
+              },
+              null,
+              4
+              /* STYLE */
+            ),
+            vue.createElementVNode("text", null, vue.toDisplayString(0))
+          ])
+        ]),
+        vue.createElementVNode("view", { class: "confirmBtn" }, [
+          vue.createElementVNode("text", null, "确认添加")
+        ])
+      ])
+    ]);
+  }
+  const activateMinePopVue = /* @__PURE__ */ _export_sfc(_sfc_main$5, [["render", _sfc_render$4], ["__scopeId", "data-v-bf0f1432"], ["__file", "D:/HBuilderProjects/Game/components/activateMinePop.vue"]]);
   const _sfc_main$4 = {
-    data() {
-      return {};
-    },
-    methods: {}
+    __name: "Mine",
+    setup(__props, { expose: __expose }) {
+      __expose();
+      const isShowActivatePop = vue.ref(false);
+      function handlePop(flag) {
+        isShowActivatePop.value = flag;
+      }
+      function back() {
+        uni.navigateBack({
+          delta: 1
+        });
+      }
+      const __returned__ = { isShowActivatePop, handlePop, back, ref: vue.ref, activateMinePopVue };
+      Object.defineProperty(__returned__, "__isScriptSetup", { enumerable: false, value: true });
+      return __returned__;
+    }
   };
   function _sfc_render$3(_ctx, _cache, $props, $setup, $data, $options) {
-    return vue.openBlock(), vue.createElementBlock("view", { class: "mineWrap" }, " 这是矿洞 ");
+    return vue.openBlock(), vue.createElementBlock("view", { class: "mineWrap" }, [
+      $setup.isShowActivatePop ? (vue.openBlock(), vue.createBlock($setup["activateMinePopVue"], {
+        key: 0,
+        closePop: () => {
+          $setup.handlePop(false);
+        }
+      }, null, 8, ["closePop"])) : vue.createCommentVNode("v-if", true),
+      vue.createElementVNode("view", { class: "mineBg" }, [
+        vue.createElementVNode("view", { class: "stonesWrap" }, [
+          vue.createElementVNode("view", { class: "stone item1" }),
+          vue.createElementVNode("view", { class: "stone item2" }),
+          vue.createElementVNode("view", { class: "stone item3" }),
+          vue.createElementVNode("view", { class: "stone item4" }),
+          vue.createElementVNode("view", { class: "stone item5" }),
+          vue.createElementVNode("view", { class: "stone item6" }),
+          vue.createElementVNode("view", { class: "stone item7" }),
+          vue.createElementVNode("view", { class: "stone item8" }),
+          vue.createElementVNode("view", { class: "stone item9" }),
+          vue.createElementVNode("view", { class: "stone item10" })
+        ]),
+        vue.createElementVNode("view", { class: "miner" })
+      ]),
+      vue.createElementVNode("view", { class: "header1" }, [
+        vue.createElementVNode("view", {
+          class: "return",
+          onClick: $setup.back
+        })
+      ]),
+      vue.createElementVNode("view", { class: "scrollArea" }, [
+        vue.createElementVNode("view", { class: "mineContent" }, [
+          vue.createElementVNode("view", { class: "normalArea" }, [
+            vue.createElementVNode("view", { class: "header2" }, [
+              vue.createElementVNode("view", { class: "left" }, [
+                vue.createElementVNode("text", null, "已添加:"),
+                vue.createElementVNode("view", { class: "gemImg1" }),
+                vue.createElementVNode("text", null, vue.toDisplayString(0))
+              ]),
+              vue.createElementVNode("view", { class: "right" }, [
+                vue.createElementVNode("text", null, "产出:"),
+                vue.createElementVNode("view", { class: "gemImg1" }),
+                vue.createElementVNode("text", null, vue.toDisplayString(0))
+              ])
+            ]),
+            vue.createCommentVNode(" 可收获数量 "),
+            vue.createElementVNode("view", { class: "nowHarvest" }, [
+              vue.createElementVNode("text", null, "当前可收获:"),
+              vue.createElementVNode("view", { class: "wrap" }, [
+                vue.createElementVNode("view", { class: "gemImg2" }),
+                vue.createElementVNode("text", null, vue.toDisplayString(0))
+              ])
+            ]),
+            vue.createCommentVNode(" 按钮 "),
+            vue.createCommentVNode(' <view class="transfer"></view> '),
+            vue.createElementVNode("view", { class: "btn harvest" }, "收获"),
+            vue.createElementVNode("view", {
+              class: "btn add",
+              onClick: _cache[0] || (_cache[0] = () => $setup.handlePop(true))
+            }, "添加")
+          ]),
+          vue.createElementVNode("view", { class: "bigArea" }, [
+            vue.createElementVNode("view", { class: "header2" }, [
+              vue.createElementVNode("view", { class: "left" }, [
+                vue.createElementVNode("text", null, "已添加:"),
+                vue.createElementVNode("view", { class: "gemImg1" }),
+                vue.createElementVNode("text", null, vue.toDisplayString(0))
+              ]),
+              vue.createElementVNode("view", { class: "right" }, [
+                vue.createElementVNode("text", null, "产出:"),
+                vue.createElementVNode("view", { class: "gemImg1" }),
+                vue.createElementVNode("text", null, vue.toDisplayString(0))
+              ])
+            ]),
+            vue.createCommentVNode(" 可收获数量 "),
+            vue.createElementVNode("view", { class: "nowHarvest" }, [
+              vue.createElementVNode("text", null, "当前可收获:"),
+              vue.createElementVNode("view", { class: "wrap" }, [
+                vue.createElementVNode("view", { class: "gemImg2" }),
+                vue.createElementVNode("text", null, vue.toDisplayString(0))
+              ])
+            ]),
+            vue.createCommentVNode(" 按钮 "),
+            vue.createCommentVNode(' <view class="transfer"></view> '),
+            vue.createElementVNode("view", { class: "btn harvest" }, "收获"),
+            vue.createElementVNode("view", {
+              class: "btn add",
+              onClick: _cache[1] || (_cache[1] = () => {
+                $setup.handlePop(true);
+              })
+            }, "添加")
+          ])
+        ]),
+        vue.createElementVNode("view", { class: "intro" })
+      ])
+    ]);
   }
   const PagesMineMine = /* @__PURE__ */ _export_sfc(_sfc_main$4, [["render", _sfc_render$3], ["__file", "D:/HBuilderProjects/Game/pages/Mine/Mine.vue"]]);
   const _sfc_main$3 = {
@@ -6847,7 +7117,7 @@ This will fail in production if not fixed.`);
                   512
                   /* NEED_PATCH */
                 ), [
-                  [vue.vShow, true]
+                  [vue.vShow, false]
                 ])
               ])
             ]);
@@ -7035,12 +7305,12 @@ This will fail in production if not fixed.`);
   __definePage("pages/Ground/Ground", PagesGroundGround);
   const _sfc_main = {
     onLaunch: function() {
-      formatAppLog("log", "at App.vue:5", "App Launch");
+      formatAppLog("log", "at App.vue:4", "App Launch");
     },
     onShow: function() {
     },
     onHide: function() {
-      formatAppLog("log", "at App.vue:11", "App Hide");
+      formatAppLog("log", "at App.vue:10", "App Hide");
     }
   };
   const App = /* @__PURE__ */ _export_sfc(_sfc_main, [["__file", "D:/HBuilderProjects/Game/App.vue"]]);

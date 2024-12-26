@@ -1,5 +1,10 @@
 <template>
 	<view class="mineWrap">
+		<activate-mine-pop-vue 
+				v-if="isShowActivatePop" 
+				:closePop="() => {handlePop(false)}"
+				/>
+		
 		<view class="mineBg">
 			<view class="stonesWrap">
 				<view class="stone item1"></view>
@@ -45,7 +50,7 @@
 					<!-- 按钮 -->
 					<!-- <view class="transfer"></view> -->
 					<view class="btn harvest">收获</view>
-					<view class="btn add">添加</view>
+					<view class="btn add" @click="() => handlePop(true)">添加</view>
 				</view>
 				
 				<view class="bigArea">
@@ -72,7 +77,7 @@
 					<!-- 按钮 -->
 					<!-- <view class="transfer"></view> -->
 					<view class="btn harvest">收获</view>
-					<view class="btn add">添加</view>
+					<view class="btn add" @click="() => {handlePop(true)}">添加</view>
 				</view>
 			</view>
 			
@@ -83,6 +88,16 @@
 </template>
 
 <script setup>
+	import { ref } from 'vue';
+	import activateMinePopVue from '../../components/activateMinePop.vue';
+	
+	const isShowActivatePop = ref(false);
+	
+	
+	function handlePop(flag) {
+		isShowActivatePop.value = flag;
+	}
+	
 	function back() {
 		uni.navigateBack({
 			delta:1

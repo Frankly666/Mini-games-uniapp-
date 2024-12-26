@@ -225,7 +225,7 @@
 				width: 100%;
 				display: flex;
 				justify-content: space-between;
-				background-color: rgba(70, 89,106, .14);
+				background-color: rgba(70, 89,106,.14);
 				padding: 3vw 0vw;
 				border-radius: 4vw;
 				color: aliceblue;
