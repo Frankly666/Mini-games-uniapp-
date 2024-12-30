@@ -87,8 +87,7 @@
 	const inputNumValue = ref(0)
 	const inputPriceValue = ref(0)
 	const isShowNotEnough = ref(false)
-	const marketDB = uniCloud.importObject('market')
-	const assetsDB = uniCloud.importObject('assets')
+	
 	
 	const expectedNum = computed(() => {
 		if(inputPriceValue.value < 0.2 || inputPriceValue.value > 10) return 0
@@ -128,6 +127,7 @@
 	function setNumValue(num) {
 		inputNumValue.value = num
 	}
+	// 处理加减数量以及设置最大值
 	function handleSellNum(num){
 		const max = gameInfo.assets[props.gemImgName[selectIndex.value]] | 0
 		if(num === true) {
@@ -139,6 +139,8 @@
 		if(tem > max && isSell.value) return;
 		inputNumValue.value += num;
 	}
+	
+	// 发布出售逻辑操作
 	async function confirmSellPublish() {
 		if(inputPriceValue.value < 0.2 || inputPriceValue.value > 10 || inputNumValue.value <= 0) return;
 		if(inputNumValue.value > gameInfo.assets[props.gemImgName[selectIndex.value]]) {
@@ -146,16 +148,29 @@
 			return;
 		}
 		const gemType = props.gemImgName[selectIndex.value]
-		console.log(inputPriceValue.value)
 		
-		// 首先实时减少用户需要出售的宝石数量, 然后发送网络请求, 扣除用户需要出售的宝石
-		const res1 = await marketDB.publishSellRequirement(gameInfo.id, gemType, inputNumValue.value, inputPriceValue.value)
-		const res2 = await assetsDB.update(gameInfo.id, gemType, -inputNumValue.value)
-		gameInfo.assets[gemType] -= inputNumValue.value;
-		console.log('这里是卖出:')
-		props.controlPublish(false)
-		props.updateData()
+		uniCloud.callFunction({
+			name:"sellPublish",
+			data:{
+				addData: {
+					sellerId: gameInfo.id,
+					demType: gemType,
+					sellNum: parseInt(inputNumValue.value),
+					sellPrice: parseFloat(inputPriceValue.value),
+					isFinished: false,
+					publishTime: new Date()
+				},
+				inputNumValue: inputNumValue.value,
+				gameInfo: gameInfo
+			}
+		}).then(res => {
+			gameInfo.assets[gemType] -= inputNumValue.value;
+			props.controlPublish(false)
+			props.updateData()
+		})
 	}
+	
+	// 发布求购的逻辑操作
 	async function confirmNeedPublish() {
 		if(inputPriceValue.value < 0.2 || inputPriceValue.value > 10 || inputNumValue.value <= 0) return;
 		const gemType = props.gemImgName[selectIndex.value]
@@ -166,13 +181,25 @@
 			return
 		}
 		
-		// 实时扣除用户用来购买宝石的能量石, 然后发送网络请求, 扣除用户用来购买宝石的能量石
-		const res1 = await marketDB.publishBuyRequirement(gameInfo.id, gemType, inputNumValue.value, inputPriceValue.value)
-		const res2 = await assetsDB.update(gameInfo.id, POWERSTONE, -totalPrice)
-		gameInfo.assets[POWERSTONE] =  roundToOneDecimal(gameInfo.assets[POWERSTONE] - totalPrice ) ;
-		console.log('这里是需求:')
-		props.controlPublish(false)
-		props.updateData()
+		uniCloud.callFunction({
+			name:"needPublish",
+			data:{
+				addData: {
+					buyerId: gameInfo.id,
+					demType: gemType,
+					buyNum: parseInt(inputNumValue.value),
+					buyPrice: parseFloat(inputPriceValue.value),
+					isFinished: false,
+					publishTime: new Date()
+				},
+				totalPrice: totalPrice,
+				gameInfo: gameInfo
+			}
+		}).then(res => {
+			gameInfo.assets[POWERSTONE] =  roundToOneDecimal(gameInfo.assets[POWERSTONE] - totalPrice ) ;
+			props.controlPublish(false)
+			props.updateData()
+		})
 	}
 </script>
 

@@ -140,9 +140,6 @@ const isSellMarket = computed(() => {
   return props.marketName === "出售";
 });
 const totalPrice = computed(() => {
-  // console.log(
-  //   roundToOneDecimal(inputNumValue.value * props.certainItem.sellPrice)
-  // );
   return roundToOneDecimal(inputNumValue.value * props.certainItem.sellPrice);
 });
 const expected = computed(() => {
@@ -194,34 +191,30 @@ async function confirmSellPublish() {
   } 
 	
 	// 进行数据库操作
-	try{
-		uniCloud.callFunction({
-			name:"sellPublish",
-			data:{
-				sellNum: sellNum,
-				id: id,
-				sellPrice: sellPrice,
-				sellerId: props.certainItem.sellerId,
-				demType: demType,
-				gameInfo: gameInfo,
-				totalPrice: totalPrice.value,
-				inputNumValue: inputNumValue.value
-			}
-		}).then(res => {
-			console.log(res)
-			// 关闭弹窗
-			props.controlShowPop(false);
-			props.updateData();
-		
-			// 实时更新资源数量
-			gameInfo.assets[demType] += inputNumValue.value;
-			gameInfo.assets[POWERSTONE] = roundToOneDecimal(
-			  gameInfo.assets[POWERSTONE] - totalPrice.value
-			);
-		})
-	}catch(e) {
-		console.log(e.message)
-	}
+	uniCloud.callFunction({
+		name:"sellTrade",
+		data:{
+			sellNum: sellNum,
+			id: id,
+			sellPrice: sellPrice,
+			sellerId: props.certainItem.sellerId,
+			demType: demType,
+			gameInfo: gameInfo,
+			totalPrice: totalPrice.value,
+			inputNumValue: inputNumValue.value
+		}
+	}).then(res => {
+		console.log(res)
+		// 关闭弹窗
+		props.controlShowPop(false);
+		props.updateData();
+	
+		// 实时更新资源数量
+		gameInfo.assets[demType] += inputNumValue.value;
+		gameInfo.assets[POWERSTONE] = roundToOneDecimal(
+			gameInfo.assets[POWERSTONE] - totalPrice.value
+		);
+	})
 }
 
 // 出售操作逻辑
@@ -242,7 +235,7 @@ async function confirmNeedPublish() {
 	// 进行数据库操作
 	try{
 		uniCloud.callFunction({
-			name:"needPublish",
+			name:"needTrade",
 			data:{
 				buyNum: buyNum,
 				id: id,
