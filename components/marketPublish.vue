@@ -398,5 +398,6 @@
 				background: url('../static/market/btn_Purple.png') no-repeat center center / contain;
 			}
 		}
+	
 	}
 </style>

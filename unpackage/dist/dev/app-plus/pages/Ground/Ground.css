@@ -207,7 +207,7 @@
   right: 0;
   width: 15vw;
   height: 15vw;
-  background: url('../../static/ground/close.png') no-repeat center center / contain;
+  background: url('../../static/talentCenter/close.png') no-repeat center center / contain;
 }
 .groundPopWrap .board .title[data-v-002acaef] {
   position: relative;
@@ -251,7 +251,7 @@
   line-height: 13.4vw;
   font-size: 5vw;
   font-weight: bold;
-  background: url('../../static/ground/btn2.png') no-repeat center center / contain;
+  background: url('../../static/talentCenter/btn2.png') no-repeat center center / contain;
 }
 
 .groundWrap {

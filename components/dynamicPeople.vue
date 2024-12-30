@@ -112,7 +112,7 @@
 		
 			
 			.p1 {
-				background-image: url('../static/characters/待机.gif')
+				background-image: url('../static/characters/standby.gif')
 			}
 			
 			.p2 {
@@ -151,12 +151,12 @@
 			.p7 {
 				left: 55vw;
 				top: 50vw;
-				background-image: url('../static/characters/耕地.gif')
+				background-image: url('../static/characters/dig.gif')
 			}
 			
 			.p8 {
 				left: 30vw;
-				background-image: url('../static/characters/铲土.gif')
+				background-image: url('../static/characters/shovelSoil.gif')
 			}
 			
 			.p9 {

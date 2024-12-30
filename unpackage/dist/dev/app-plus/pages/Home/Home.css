@@ -641,7 +641,7 @@
   top: -2vw;
   width: 10vw;
   height: 10vw;
-  background: url(../../static/ground/close.png) no-repeat center center / contain;
+  background: url(../../static/talentCenter/close.png) no-repeat center center / contain;
 }
 .chooseWorkerPlaceWrap .chooseboard .chooseTitle[data-v-8fc36c4d] {
   position: relative;
@@ -692,7 +692,7 @@
 .chooseWorkerPlaceWrap .chooseboard .wrap1 .itemWrap .select[data-v-8fc36c4d] {
   width: 10%;
   height: 100%;
-  background: url('../../static/ground/btn2.png') no-repeat center center / contain;
+  background: url('../../static/talentCenter/btn2.png') no-repeat center center / contain;
 }
 .chooseWorkerPlaceWrap .chooseboard .retireBtn[data-v-8fc36c4d] {
   position: absolute;
@@ -702,7 +702,7 @@
   width: 30vw;
   height: 17vw;
   color: aliceblue;
-  background: url('../../static/ground/btn2.png') no-repeat center center / contain;
+  background: url('../../static/talentCenter/btn2.png') no-repeat center center / contain;
 }
 
 .talentWrap[data-v-52356c3d] {
@@ -720,7 +720,7 @@
   bottom: 7vw;
   width: 13vw;
   height: 13vw;
-  background: url("../../static/ground/close.png") no-repeat center center / contain;
+  background: url("../../static/talentCenter/close.png") no-repeat center center / contain;
 }
 .talentWrap .board[data-v-52356c3d] {
   display: flex;
@@ -809,7 +809,7 @@
   line-height: 8.7vw;
   color: aliceblue;
   font-weight: bold;
-  background: url("../../static/ground/btn2.png") no-repeat center center / contain;
+  background: url("../../static/talentCenter/btn2.png") no-repeat center center / contain;
 }
 
 .pages[data-v-7ffebbf4] {

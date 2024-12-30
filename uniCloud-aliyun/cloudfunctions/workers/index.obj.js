@@ -43,8 +43,8 @@ module.exports = {
 	 * @param {String} groundType  // 该人才工作的地皮类型
 	 */
 	async hireTalent(userId, talentType, groundType) {
-		const talent = uniCloud.database().collection("talent");
-		const res = await talent.add({
+		const workers = uniCloud.database().collection("workers");
+		const res = await workers.add({
 			userId,
 			talentType,
 			hireStartTime: new Date(),
@@ -58,8 +58,8 @@ module.exports = {
 	 * @param {String} userId
 	 */
 	async selectOwnTalent(userId) {
-		const talent = uniCloud.database().collection("talent");
-		const res = await talent.where({userId}).get();
+		const workers = uniCloud.database().collection("workers");
+		const res = await workers.where({userId}).get();
 		return res;
 	}
 	

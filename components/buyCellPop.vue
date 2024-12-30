@@ -140,9 +140,9 @@ const isSellMarket = computed(() => {
   return props.marketName === "出售";
 });
 const totalPrice = computed(() => {
-  console.log(
-    roundToOneDecimal(inputNumValue.value * props.certainItem.sellPrice)
-  );
+  // console.log(
+  //   roundToOneDecimal(inputNumValue.value * props.certainItem.sellPrice)
+  // );
   return roundToOneDecimal(inputNumValue.value * props.certainItem.sellPrice);
 });
 const expected = computed(() => {
@@ -178,81 +178,95 @@ function handleSellNum(num) {
   inputNumValue.value += num;
 }
 
-async function confirmSellPublish() {
-  if (inputNumValue.value <= 0) return;
-  const sellNum = props.certainItem.sellNum; // 这条需求的最大值
+// 购买操作逻辑
+async function confirmSellPublish() {  
+  const sellNum = props.certainItem.sellNum;
   const id = props.certainItem._id;
   const sellPrice = props.certainItem.sellPrice;
   const demType = props.certainItem.demType;
+	
+  // 如果输入的数值不合理直接跳出
+	if (inputNumValue.value <= 0 || inputNumValue.value > sellNum) return;
+  // 如果超过自己的余额就直接跳出
   if (totalPrice.value > gameInfo.assets[POWERSTONE]) {
     handleShowWran(true);
     return;
-  } // 如果超过自己的余额就直接跳出
-
-  // 增加这一条购买记录, 如果用户刚好购买完就消除这条需求
-  const res1 = await marketDB.addTransactionRecord(
-    gameInfo.id,
-    props.certainItem.sellerId,
-    1,
-    id,
-    inputNumValue.value
-  );
-  if (sellNum === inputNumValue.value) await marketDB.finishSellRequirement(id);
-  else {
-    await marketDB.subSellNum(id, sellNum - inputNumValue.value);
-  }
-  const res3 = await assetsDB.update(
-    gameInfo.id,
-    POWERSTONE,
-    -totalPrice.value
-  ); // 扣除能量石
-  const res4 = await assetsDB.update(gameInfo.id, demType, inputNumValue.value); // 加上用户买的宝石
-  gameInfo.assets[demType] += inputNumValue.value;
-  gameInfo.assets[POWERSTONE] = roundToOneDecimal(
-    gameInfo.assets[POWERSTONE] - totalPrice.value
-  );
-  props.controlShowPop(false);
-  props.updateData();
+  } 
+	
+	// 进行数据库操作
+	try{
+		uniCloud.callFunction({
+			name:"sellPublish",
+			data:{
+				sellNum: sellNum,
+				id: id,
+				sellPrice: sellPrice,
+				sellerId: props.certainItem.sellerId,
+				demType: demType,
+				gameInfo: gameInfo,
+				totalPrice: totalPrice.value,
+				inputNumValue: inputNumValue.value
+			}
+		}).then(res => {
+			console.log(res)
+			// 关闭弹窗
+			props.controlShowPop(false);
+			props.updateData();
+		
+			// 实时更新资源数量
+			gameInfo.assets[demType] += inputNumValue.value;
+			gameInfo.assets[POWERSTONE] = roundToOneDecimal(
+			  gameInfo.assets[POWERSTONE] - totalPrice.value
+			);
+		})
+	}catch(e) {
+		console.log(e.message)
+	}
 }
 
+// 出售操作逻辑
 async function confirmNeedPublish() {
-  if (inputNumValue.value <= 0) return;
   const buyNum = props.certainItem.buyNum; // 这条需求的最大值
   const id = props.certainItem._id;
   const buyPrice = props.certainItem.buyPrice;
   const demType = props.certainItem.demType;
-  // const abtainPrice = Math.ceil(buyPrice * inputNumValue.value)
+	
+	// 确保输入值为正确范围
+	if (inputNumValue.value <= 0 || inputNumValue.value > buyNum) return;
+	// 如果自己没那么多的宝石也直接跳出
   if (inputNumValue.value > gameInfo.assets[demType]) {
     handleShowWran(true);
     return;
-  } // 如果自己没那么多的宝石也直接跳出
-
-  // 增加这条卖出记录
-  const res1 = await marketDB.addTransactionRecord(
-    props.certainItem.buyerId,
-    gameInfo.id,
-    2,
-    id,
-    inputNumValue.value
-  );
-  if (inputNumValue.value === buyNum) {
-    await marketDB.finishBuyRequirement(id);
-  } else {
-    await marketDB.subBuyNum(id, buyNum - inputNumValue.value);
-  }
-  const res3 = await assetsDB.update(
-    gameInfo.id,
-    demType,
-    -inputNumValue.value
-  );
-  const res4 = await assetsDB.update(gameInfo.id, POWERSTONE, expected.value);
-  gameInfo.assets[demType] -= inputNumValue.value;
-  gameInfo.assets[POWERSTONE] = roundToOneDecimal(
-    gameInfo.assets[POWERSTONE] + expected.value
-  );
-  console.log("这里是需求");
-  props.controlShowPop(false);
-  props.updateData();
+  } 
+	
+	// 进行数据库操作
+	try{
+		uniCloud.callFunction({
+			name:"needPublish",
+			data:{
+				buyNum: buyNum,
+				id: id,
+				buyPrice: buyPrice,
+				buyerId: props.certainItem.buyerId,
+				demType: demType,
+				gameInfo: gameInfo,
+				expected: expected.value,
+				inputNumValue: inputNumValue.value
+			}
+		}).then(res => {
+			// 关闭弹窗
+			props.controlShowPop(false);
+			props.updateData();
+	
+			// 实时更新资源数量
+			gameInfo.assets[demType] -= inputNumValue.value;
+			gameInfo.assets[POWERSTONE] = roundToOneDecimal(
+			  gameInfo.assets[POWERSTONE] + expected.value
+			);
+		})
+	}catch(e) {
+		console.log(e.message)
+	}
 }
 </script>
 

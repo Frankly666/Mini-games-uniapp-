@@ -21,7 +21,7 @@ export const useGameInfoStore = defineStore('gameInfo', {
 				"1": {
 					"ability": "产能提高",  // 人才的能力描述
 					"retainerPrice": 38,  // 人才的聘用价格
-					"retainerDuration": 10,  // 人才的雇佣时间
+					"retainerDuration": 10,  // 人才的雇佣时间    
 				},
 				"2": {
 					"ability": "自动签到",

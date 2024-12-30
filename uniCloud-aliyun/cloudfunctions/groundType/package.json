@@ -1,0 +1,7 @@
+{
+  "name": "groundType",
+  "dependencies": {},
+  "extensions": {
+    "uni-cloud-jql": {}
+  }
+}

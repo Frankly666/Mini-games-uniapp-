@@ -45,6 +45,7 @@ module.exports = {
 		  return Math.round(num * 10) / 10;
 		}
 		try {
+			// toFixed
 			const res1 = await assets.where({
 				userId: userId
 			})
