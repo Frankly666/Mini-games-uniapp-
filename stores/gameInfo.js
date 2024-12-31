@@ -17,6 +17,7 @@ export const useGameInfoStore = defineStore('gameInfo', {
 			translateX: -340,
 			translateY: -320,
 			bgmIsOpen: true,
+			ownGrounds: null,
 			workersMeta: {
 				"1": {
 					"ability": "产能提高",  // 人才的能力描述

@@ -143,10 +143,9 @@
 	const groundType = ref(null)
 	const groundIndex = ref(null);
 	const isShowGroundPop = ref(false);
-	const userGrounds = ref(null);
 	const groundsDB = uniCloud.importObject('grounds');
 	const gameInfo = useGameInfoStore();
-	
+	const userGrounds = ref(gameInfo.ownGrounds);
 	function back() {
 		uni.navigateBack({
 			delta:1
@@ -169,7 +168,7 @@
 	// 用来判断用户是否拥有这个地皮
 	function judgeOwnThisGround(type, index) {
 		let flag = false
-		const thisGrounds = userGrounds.value[type];
+		const thisGrounds = userGrounds.value?.[type];
 		if(thisGrounds) {
 			for(let i = 0; i < thisGrounds.length; i ++ ) {
 				const item = thisGrounds[i];
@@ -184,11 +183,12 @@
 	
 	// 获取后端用户地皮数据
 	async function updateData() {
-		const allGrounds = await groundsDB.selectAllGrounds(gameInfo.id)
-		userGrounds.value = allGrounds;
+		const classifyGrounds = await groundsDB.selectAllGrounds(gameInfo.id)
+		userGrounds.value = classifyGrounds;
+		gameInfo.ownGrounds = classifyGrounds
 	}
 	onMounted(async () => {
-		await updateData()
+		if(!gameInfo.ownGrounds) await updateData()
 	})
 </script>
  
@@ -409,7 +409,7 @@
 				top: 10vw;
 				animation: moveLeft 2s linear;
 				animation-fill-mode: forwards;
-				animation-delay: .2s;
+				animation-delay: .3s;
 				
 				.leftItem {
 					width: 110%;
@@ -432,7 +432,7 @@
 				top: 14vw;
 				animation: moveRight 2s linear;
 				animation-fill-mode: forwards;
-				animation-delay: .2s;
+				animation-delay: .3s;
 				
 				.rightItem {
 					width: 110%;
