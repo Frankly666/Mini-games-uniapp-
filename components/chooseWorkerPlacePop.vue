@@ -7,21 +7,23 @@
 				请选择所工作土地类型
 			</view>
 			<view class="wrap1">
-				<view class="itemWrap" v-for="item in 5">
-					<view class="groundImg" :style=" `background-image: url(../static/ground/ground${item}.png);`"></view>
-					<view class="groundDesc">
-						<view class="groundName">
-							{{gameInfo.groundsMeta[item].groundName}}
+				<view class="innerWrap" v-for="item in 5">
+					<view class="itemWrap" v-if="judgeHaveThisGround(item)">
+						<view class="groundImg" :style=" `background-image: url(../static/ground/ground${item}.png);`"></view>
+						<view class="groundDesc">
+							<view class="groundName">
+								{{gameInfo.groundsMeta[item].groundName}}
+							</view>
+							<view class="groundPrice">
+								每日产出{{gameInfo.groundsMeta[item].dailyEarnings}}金刚石
+							</view>
 						</view>
-						<view class="groundPrice">
-							{{gameInfo.groundsMeta[item].unlockFunds}}金刚石/{{gameInfo.groundsMeta[item].duration}}天
-						</view>
+						<view 
+							@click="selectIndex=item"
+							class="select" 
+							:style=" `background-image: url(${selectIndex === item ? selectImg : unselectImg});`" 
+						/>
 					</view>
-					<view 
-						@click="selectIndex=item"
-						class="select" 
-						:style=" `background-image: url(${selectIndex === item ? selectImg : unselectImg});`" 
-					/>
 				</view>
 			</view>
 			<view class="retireBtn">
@@ -32,20 +34,38 @@
 </template>
 
 <script setup>
-	import { ref } from 'vue';
-	import { useGameInfoStore } from '../stores/gameInfo';
+	import { computed, ref } from 'vue';
+	import { POWERSTONE, useGameInfoStore } from '../stores/gameInfo';
 	
-	const props = defineProps(["closePop"])
+	const props = defineProps(["closePop", "workerType"])
 	const gameInfo = useGameInfoStore()
 	const selectImg = "../static/ground/select.png"
 	const unselectImg = "../static/ground/unselect.png"
-	const mockData = {
-		
-	}
 	const selectIndex = ref(1)
+	
+	
+	const userHadGroundTypes = computed(() => {
+		const list = Object.keys(gameInfo.ownGrounds)
+		return list;
+	}) 
+	
+	// 用户当前拥有的地皮种类判断
+	function judgeHaveThisGround(type) {
+		let flag = false;
+		for(let item of userHadGroundTypes.value) {
+			if(item == type) {
+				flag = true; 
+				break;
+			}
+		}
+		// 小地皮是本来就有的
+		if(type === 1) flag = true;
+		return flag;
+	}
 	
 	// 确认招募的逻辑函数
 	function confirmRetire() {
+		const nowNum = gameInfo.assets[POWERSTONE];
 		
 	}
 	

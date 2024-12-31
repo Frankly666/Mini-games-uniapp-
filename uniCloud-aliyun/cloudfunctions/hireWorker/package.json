@@ -1,0 +1,7 @@
+{
+  "name": "hireWorker",
+  "dependencies": {},
+  "extensions": {
+    "uni-cloud-jql": {}
+  }
+}

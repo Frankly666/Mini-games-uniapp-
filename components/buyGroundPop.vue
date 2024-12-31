@@ -36,7 +36,6 @@
 	
 	// 确认购买
 	function confirmUnclock() {
-		console.log("hhhh")
 		const unlockFunds = gameInfo.groundsMeta[props.groundType].unlockFunds;
 		const nowNum = gameInfo.assets[POWERSTONE];
 		

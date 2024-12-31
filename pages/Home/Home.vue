@@ -63,6 +63,7 @@ const gameInfo = useGameInfoStore()
 const bgm = gameInfo.bgm;
 const setCache = Cache.setCache; // 这里使用的是实例化函数
 const getCache = Cache.getCache;  // 使用的是静态函数
+const groundsDB = uniCloud.importObject("grounds");
 
 translateX.value = gameInfo.translateX
 translateY.value = gameInfo.translateY
@@ -149,7 +150,6 @@ onMounted(async () => {
 		console.log(err)
 	})
 	
-	
 	const phone = getCache(PHONE), avatar = getCache(AVATAR)
 	
 	// 在数据库中进行查询是否存在不存在进行增添数据
@@ -163,7 +163,6 @@ onMounted(async () => {
 		console.log('该用户没有激活过云城', res1)
 		const res2 = await user.init(phone, avatar)
 		await assets.init(res2.res.id)
-		
 		setCache(USERNAME, '趣选云城')
 		setCache(ISFIRST, 0)
 		gameInfo.userName = '趣选云城'
@@ -171,7 +170,6 @@ onMounted(async () => {
 	}else {
 		console.log("该用户已经激活过云城(在mock页面中)", res1)
 		const data = res1.res.data[0]
-	
 		gameInfo.userName = data.userName;
 		gameInfo.isFirst = data.isFirst;
 		gameInfo.id = data._id;
@@ -179,6 +177,11 @@ onMounted(async () => {
 		setCache(ID, data._id)
 		setCache(ISFIRST, data.isFirst)
 	}
+	
+	// 用户地皮信息提前加载
+	groundsDB.selectAllGrounds(gameInfo.id).then(res => {
+		gameInfo.ownGrounds = res;
+	})
 })
 </script>
 
@@ -204,8 +207,6 @@ onMounted(async () => {
 				pointer-events: none;
 				background: url('@/static/home/bgc1.png') no-repeat  left top / contain;
 			}
-			
 		}
-		
 	}
 </style>

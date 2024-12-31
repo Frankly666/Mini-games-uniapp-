@@ -20,23 +20,38 @@ export const useGameInfoStore = defineStore('gameInfo', {
 			ownGrounds: null,
 			workersMeta: {
 				"1": {
-					"ability": "产能提高",  // 人才的能力描述
+					"workerType": 1,
+					"name": "艾伦",
+					"ability": "每日自动签到",  // 人才的能力描述
 					"retainerPrice": 38,  // 人才的聘用价格
 					"retainerDuration": 10,  // 人才的雇佣时间    
 				},
 				"2": {
-					"ability": "自动签到",
+					"workerType": 2,
+					"name": "索菲亚",
+					"ability": "加成效率30%",
 					"retainerPrice": 288,
 					"retainerDuration": 10,
 				},
 				"3": {
-					"ability": "自动领取产能",
+					"workerType": 3,
+					"name": "杰克",
+					"ability": "加成效率50%",
 					"retainerPrice": 588,
 					"retainerDuration": 10,
 				},
 				"4": {
-					"ability": "",
+					"workerType": 4,
+					"name": "莱塔",
+					"ability": "加成效率70%",
 					"retainerPrice": 988,
+					"retainerDuration": 10,
+				},
+				"5": {
+					"workerType": 5,
+					"name": "亚历山大",
+					"ability": "加成效率90%",
+					"retainerPrice": 1988,
 					"retainerDuration": 10,
 				}
 			},

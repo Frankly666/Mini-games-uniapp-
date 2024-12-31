@@ -4,27 +4,28 @@
 		<choose-worker-place-pop-vue 
 				v-if="isShowChoosePop"
 				:closePop="() => {handleShowChoosePop(false)}"
+				:workerType="chosenWorkerType"
 				/>
 		
 		<view class="close" @click="handleShowTanlentPop(false)"></view>
 		<view class="board">
 			<view class="listArea">
-				<view class="itemWrap" v-for="(item, index) in names">
+				<view class="itemWrap" v-for="(item, index) in workersMeta">
 					<view class="avatarwrap">
 						<view class="avatar" :style=" `background-image: url(../static/workersAvatar/worker${index + 1 + ''}.png);`"></view>
 					</view>
 					<view class="nameAndDesc">
 						<view class="name">
-							{{item}}
+							{{item.name}}
 						</view>
 						<view class="desc">
-							{{desc[index]}}
+							{{item.ability}}
 						</view>
 						<view class="price">
-							招募价格: {{price[index]}} 能量石
+							招募价格: {{item.retainerPrice}} 能量石
 						</view>
 					</view>
-					<view class="btn" @click="() => {handleShowChoosePop(true); setChosenWorker(index)}">
+					<view class="btn" @click="() => {hireWorker(index + 1)}">
 						<text class="text">招募</text>
 					</view>
 				</view>
@@ -34,8 +35,9 @@
 </template>
 
 <script setup>
-	import { ref } from 'vue';
+	import { computed, ref } from 'vue';
 	import chooseWorkerPlacePopVue from './chooseWorkerPlacePop.vue';
+	import { useGameInfoStore } from '../stores/gameInfo';
 	
 	const isShowChoosePop = ref(false)
 	const chosenWorkerType = ref(null)
@@ -43,13 +45,28 @@
 	const names = ["艾伦", "索菲亚", "杰克", "莱塔", "亚历山大"]
 	const desc = ["每日自动签到", "加成效率30%", "加成效率50%", "加成效率70%", "加成效率90%"]
 	const price = [38, 288, 588, 988, 1998]
+	const gameInfo = useGameInfoStore()
 	
+	const workersMeta = computed(() => {
+		const keys = Object.keys(gameInfo.workersMeta)
+		const res = [];
+		for(let key of keys) {
+			res.push(gameInfo.workersMeta[key])
+		}
+		return res;
+	})
+	
+	
+	
+	// 控制弹窗
 	function handleShowChoosePop(type) {
 		isShowChoosePop.value = type;
 	}
 	
-	function setChosenWorker(type) {
-		chosenWorkerType.value = type;
+	// 点击招募的逻辑函数
+	function hireWorker(workerType) {
+		handleShowChoosePop(true)
+		chosenWorkerType.value = workerType;
 	}
 </script>
 
