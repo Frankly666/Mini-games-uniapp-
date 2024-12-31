@@ -4,26 +4,37 @@ module.exports = {
 	_before: function () { // 通用预处理器
 
 	},
+	
 	/**
-	 * method1方法描述
-	 * @param {string} param1 参数1描述
-	 * @returns {object} 返回值描述
+	 * 工人类型初始化
 	 */
-	/* 
-	method1(param1) {
-		// 参数校验，如无参数则不需要
-		if (!param1) {
-			return {
-				errCode: 'PARAM_IS_NULL',
-				errMsg: '参数不能为空'
+	async init () {
+		const workerType = uniCloud.database().collection('workerType');
+		const res1 = await workerType.add([
+			{
+				"type": 1,
+				"ability": "产能提高",  // 人才的能力描述
+				"retainerPrice": 38,  // 人才的聘用价格
+				"retainerDuration": 10,  // 人才的雇佣时间    
+			},
+			{
+				"type": 2,
+				"ability": "自动签到",
+				"retainerPrice": 288,
+				"retainerDuration": 10,
+			},
+			{
+				"type": 3,
+				"ability": "自动领取产能",
+				"retainerPrice": 588,
+				"retainerDuration": 10,
+			},
+			{
+				"type": 4,
+				"ability": "",
+				"retainerPrice": 988,
+				"retainerDuration": 10,
 			}
-		}
-		// 业务逻辑
-		
-		// 返回结果
-		return {
-			param1 //请根据实际需要返回值
-		}
+		])
 	}
-	*/
 }

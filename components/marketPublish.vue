@@ -123,10 +123,10 @@
 	function setPriceValue(price) {
 		inputPriceValue.value = price
 	}
-	
 	function setNumValue(num) {
 		inputNumValue.value = num
 	}
+	
 	// 处理加减数量以及设置最大值
 	function handleSellNum(num){
 		const max = gameInfo.assets[props.gemImgName[selectIndex.value]] | 0
@@ -149,6 +149,7 @@
 		}
 		const gemType = props.gemImgName[selectIndex.value]
 		
+		// 后端数据操作逻辑
 		uniCloud.callFunction({
 			name:"sellPublish",
 			data:{
@@ -181,6 +182,7 @@
 			return
 		}
 		
+		// 求购后端逻辑操作
 		uniCloud.callFunction({
 			name:"needPublish",
 			data:{

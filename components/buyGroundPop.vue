@@ -26,14 +26,48 @@
 </template>
 
 <script setup>
-	import { useGameInfoStore } from '../stores/gameInfo';
+	import { POWERSTONE, useGameInfoStore } from '../stores/gameInfo';
+	import { getGroundEndTime } from '../utils/getGroundEndTime';
+	import { roundToOneDecimal } from '../utils/roundToOneDecimal';
 	
-	const props = defineProps(['groundType', 'closePop', 'offset'])
+	const props = defineProps(['groundType', 'groundIndex', 'closePop', 'offset', "updateData"])
 	const gameInfo = useGameInfoStore()
 	const groundMeta = gameInfo.groundsMeta[props.groundType]
 	
+	// 确认购买
 	function confirmUnclock() {
-		console.log("hhh")
+		console.log("hhhh")
+		const unlockFunds = gameInfo.groundsMeta[props.groundType].unlockFunds;
+		const nowNum = gameInfo.assets[POWERSTONE];
+		
+		// 钱不够就直接跳出
+		if(nowNum < unlockFunds) {
+			return;
+		};
+		
+		// 数据库操作逻辑
+		uniCloud.callFunction({
+			name:"buyGround",
+			data: {
+				addUserGroundData: {
+					userId: gameInfo.id,
+					groundType: props.groundType,
+					groundIndex: props.groundIndex,
+					rentTime: new Date(),
+					endTime: getGroundEndTime(props.groundType)
+				},
+				gameInfo: gameInfo,
+				unlockFunds: unlockFunds
+			}
+		}).then(res => {
+			if(res){
+				gameInfo.assets[POWERSTONE] = roundToOneDecimal(nowNum - unlockFunds); 
+				props.closePop();
+				props.updateData()
+			}else {
+				console.log("出问题了")
+			}
+		})
 	}
 	
 </script>

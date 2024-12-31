@@ -1,0 +1,7 @@
+{
+  "name": "buyGround",
+  "dependencies": {},
+  "extensions": {
+    "uni-cloud-jql": {}
+  }
+}

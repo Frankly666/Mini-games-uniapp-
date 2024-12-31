@@ -4,8 +4,6 @@ exports.main = async (event, context) => {
 	//event为客户端上传的参数
 	console.log('event : ', event)
 	const {sellNum, id, sellPrice, demType, gameInfo, totalPrice, inputNumValue, sellerId} = event
-	
-	
 	const db = uniCloud.database();
 	const dbCmd = db.command
 	const transaction = await db.startTransaction();
@@ -22,9 +20,9 @@ exports.main = async (event, context) => {
 	try {
 		// 扣除能量石
 		const res3 = await transaction.collection('assets').doc(assetsId).update({
-			powerStone: roundToOneDecimal(nowNum-totalPrice)
+			powerStone: roundToOneDecimal(nowNum-totalP0rice)
 		})
-		
+		  
 		// 加上用户买的宝石
 		const res4 = await transaction.collection('assets').doc(assetsId).update({
 		  [demType]: db.command.inc(inputNumValue),
@@ -51,7 +49,7 @@ exports.main = async (event, context) => {
 	      sellNum: sellNum - inputNumValue
 	    });
 	  }
-	  
+	
 	  await transaction.commit();
 		return res3;
 	} catch (e) {

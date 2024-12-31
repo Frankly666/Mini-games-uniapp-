@@ -4,11 +4,11 @@
 		<buy-ground-pop-vue 
 					v-if="isShowGroundPop" 
 					:groundType="groundType" 
+					:groundIndex="groundIndex"
 					:closePop="() => {handleIsShowGroundPop(false)}"
-					>
-					
-		</buy-ground-pop-vue>
-		
+					:updateData="updateData"
+					/>
+						
 		<!-- 绝对定位 -->
 		<assets-header :judge='2'></assets-header>
 		<view class="return" @click="back"></view>
@@ -37,7 +37,7 @@
 		<view class="grounds">
 			<view class="item small">
 				<view class="realGround type1">
-					<view class="personWrap">
+					<view class="personWrap" v-show="false">
 						<worker-vue :type="'2'" :delay='0'></worker-vue>
 					</view>
 				</view>
@@ -45,10 +45,10 @@
 									  
 			<view class="item scarce" v-for="item in 3">
 				<view class="realGround type2">
-					<view class="personWrap">
+					<view class="personWrap" v-show="false">
 						<worker-vue :type="'1'" :delay="-item"></worker-vue>
 					</view>
-					<view class="lockGround" v-show="false" @click="() => { handleClickGround(2); handleIsShowGroundPop(true)}">
+					<view class="lockGround" v-show="!judgeOwnThisGround(2, item)" @click="() => { clickLockGround(2, item)}">
 						<view class="title">
 							<text >稀缺地皮</text>
 						</view>
@@ -61,7 +61,7 @@
 					<view class="personWrap" v-show="false">
 						<worker-vue :type="'3'" :delay="-item"></worker-vue>
 					</view>
-					<view class="lockGround" v-show="false" @click="() => {handleClickGround(3); handleIsShowGroundPop(true)}">
+					<view class="lockGround" v-show="!judgeOwnThisGround(3, item)" @click="() => {clickLockGround(3, item)}">
 						<view class="title">
 							<text style="color: brown;">大地皮</text>
 						</view>
@@ -74,7 +74,7 @@
 					<view class="personWrap" v-show="false">
 						<worker-vue :type="'3'" :delay="-item"></worker-vue>
 					</view>
-					<view class="lockGround" v-show="true" @click="() => {handleClickGround(4); handleIsShowGroundPop(true)}">
+					<view class="lockGround" v-show="!judgeOwnThisGround(4, item)" @click="() => {clickLockGround(4, item)}">
 						<view class="title">
 							<text>资源地皮</text>
 						</view>
@@ -87,7 +87,7 @@
 					<view class="personWrap" v-show="false">
 						<worker-vue :type="'3'" :delay="-item"></worker-vue>
 					</view>
-					<view class="lockGround" v-show="true" @click="() => {handleClickGround(5); handleIsShowGroundPop(true)}"> 
+					<view class="lockGround" v-show="!judgeOwnThisGround(5, item)" @click="() => {clickLockGround(5, item)}"> 
 						<view class="title">
 							<text style="color: black;">黑土地皮</text>
 						</view>
@@ -105,7 +105,7 @@
 					<view class="personWrap" v-show="false">
 						<worker-vue :type="'3'" :delay="-item"></worker-vue>
 					</view>
-					<view class="lockGround" v-show="true" @click="() => {handleClickGround(6); handleIsShowGroundPop(true)}">
+					<view class="lockGround" v-show="!judgeOwnThisGround(6, item)" @click="() => {clickLockGround(6, item)}">
 						<view class="title">
 							<text style="color: chocolate;">钻石地皮</text>
 						</view>
@@ -138,9 +138,14 @@
 	import assetsHeader from '../../components/assetsHeader.vue';
 	import workerVue from '../../components/worker.vue';
 	import buyGroundPopVue from '../../components/buyGroundPop.vue';
+	import { useGameInfoStore } from '../../stores/gameInfo';
 
-	const groundType = ref("1")
+	const groundType = ref(null)
+	const groundIndex = ref(null);
 	const isShowGroundPop = ref(false);
+	const userGrounds = ref(null);
+	const groundsDB = uniCloud.importObject('grounds');
+	const gameInfo = useGameInfoStore();
 	
 	function back() {
 		uni.navigateBack({
@@ -149,13 +154,42 @@
 	}
 	
 	// 处理弹窗的函数
-	function handleClickGround(type) {
-		groundType.value = type;
-	}
 	function handleIsShowGroundPop(flag) {
 		isShowGroundPop.value = flag;
 	}
 	
+	// 点击地皮以及解锁逻辑
+	async function clickLockGround(type, index) {
+		// 弹窗然后给弹窗的组件确定传入的参数
+		groundType.value = type
+		groundIndex.value = index	
+		handleIsShowGroundPop(true);
+	} 
+	
+	// 用来判断用户是否拥有这个地皮
+	function judgeOwnThisGround(type, index) {
+		let flag = false
+		const thisGrounds = userGrounds.value[type];
+		if(thisGrounds) {
+			for(let i = 0; i < thisGrounds.length; i ++ ) {
+				const item = thisGrounds[i];
+				if(item.groundIndex === index) {
+					flag = true;
+					break;
+				}
+			}
+		}
+		return flag;
+	}
+	
+	// 获取后端用户地皮数据
+	async function updateData() {
+		const allGrounds = await groundsDB.selectAllGrounds(gameInfo.id)
+		userGrounds.value = allGrounds;
+	}
+	onMounted(async () => {
+		await updateData()
+	})
 </script>
  
 <style lang="less">
@@ -342,8 +376,9 @@
 					
 					.lockGround {
 						position: absolute;
-						width: 100%;
-						height: 100%;
+						top: -3vw;
+						width: 110%;
+						height: 110%;
 						color: rgb(107, 92, 37);
 						font-size: 3.5vw;
 						font-weight: bold;
