@@ -20,7 +20,7 @@ exports.main = async (event, context) => {
 	try {
 		// 扣除能量石
 		const res3 = await transaction.collection('assets').doc(assetsId).update({
-			powerStone: roundToOneDecimal(nowNum-totalP0rice)
+			powerStone: roundToOneDecimal(nowNum-totalPrice)
 		})
 		  
 		// 加上用户买的宝石

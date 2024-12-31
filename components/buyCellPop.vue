@@ -69,7 +69,7 @@
           <text>{{ gameInfo.assets[gemName] }}</text>
         </view>
         <view class="premium item">
-          <text>手续费</text> 
+          <text>手续费</text>
           <view
             class="itemImg"
             :style="`background-image: url(${getGemImg('powerStone')});`"
@@ -176,45 +176,47 @@ function handleSellNum(num) {
 }
 
 // 购买操作逻辑
-async function confirmSellPublish() {  
+async function confirmSellPublish() {
   const sellNum = props.certainItem.sellNum;
   const id = props.certainItem._id;
   const sellPrice = props.certainItem.sellPrice;
   const demType = props.certainItem.demType;
-	
+
   // 如果输入的数值不合理直接跳出
-	if (inputNumValue.value <= 0 || inputNumValue.value > sellNum) return;
+  if (inputNumValue.value <= 0 || inputNumValue.value > sellNum) return;
   // 如果超过自己的余额就直接跳出
   if (totalPrice.value > gameInfo.assets[POWERSTONE]) {
     handleShowWran(true);
     return;
-  } 
-	
-	// 进行数据库操作
-	uniCloud.callFunction({
-		name:"sellTrade",
-		data:{
-			sellNum: sellNum,
-			id: id,
-			sellPrice: sellPrice,
-			sellerId: props.certainItem.sellerId,
-			demType: demType,
-			gameInfo: gameInfo,
-			totalPrice: totalPrice.value,
-			inputNumValue: inputNumValue.value
-		}
-	}).then(res => {
-		console.log(res)
-		// 关闭弹窗
-		props.controlShowPop(false);
-		props.updateData();
-	
-		// 实时更新资源数量
-		gameInfo.assets[demType] += inputNumValue.value;
-		gameInfo.assets[POWERSTONE] = roundToOneDecimal(
-			gameInfo.assets[POWERSTONE] - totalPrice.value
-		);
-	})
+  }
+
+  // 进行数据库操作
+  uniCloud
+    .callFunction({
+      name: "sellTrade",
+      data: {
+        sellNum: sellNum,
+        id: id,
+        sellPrice: sellPrice,
+        sellerId: props.certainItem.sellerId,
+        demType: demType,
+        gameInfo: gameInfo,
+        totalPrice: totalPrice.value,
+        inputNumValue: inputNumValue.value,
+      },
+    })
+    .then((res) => {
+      console.log(res);
+      // 关闭弹窗
+      props.controlShowPop(false);
+      props.updateData();
+
+      // 实时更新资源数量
+      gameInfo.assets[demType] += inputNumValue.value;
+      gameInfo.assets[POWERSTONE] = roundToOneDecimal(
+        gameInfo.assets[POWERSTONE] - totalPrice.value
+      );
+    });
 }
 
 // 出售操作逻辑
@@ -223,43 +225,45 @@ async function confirmNeedPublish() {
   const id = props.certainItem._id;
   const buyPrice = props.certainItem.buyPrice;
   const demType = props.certainItem.demType;
-	
-	// 确保输入值为正确范围
-	if (inputNumValue.value <= 0 || inputNumValue.value > buyNum) return;
-	// 如果自己没那么多的宝石也直接跳出
+
+  // 确保输入值为正确范围
+  if (inputNumValue.value <= 0 || inputNumValue.value > buyNum) return;
+  // 如果自己没那么多的宝石也直接跳出
   if (inputNumValue.value > gameInfo.assets[demType]) {
     handleShowWran(true);
     return;
-  } 
-	
-	// 进行数据库操作
-	try{
-		uniCloud.callFunction({
-			name:"needTrade",
-			data:{
-				buyNum: buyNum,
-				id: id,
-				buyPrice: buyPrice,
-				buyerId: props.certainItem.buyerId,
-				demType: demType,
-				gameInfo: gameInfo,
-				expected: expected.value,
-				inputNumValue: inputNumValue.value
-			}
-		}).then(res => {
-			// 关闭弹窗
-			props.controlShowPop(false);
-			props.updateData();
-	
-			// 实时更新资源数量
-			gameInfo.assets[demType] -= inputNumValue.value;
-			gameInfo.assets[POWERSTONE] = roundToOneDecimal(
-			  gameInfo.assets[POWERSTONE] + expected.value
-			);
-		})
-	}catch(e) {
-		console.log(e.message)
-	}
+  }
+
+  // 进行数据库操作
+  try {
+    uniCloud
+      .callFunction({
+        name: "needTrade",
+        data: {
+          buyNum: buyNum,
+          id: id,
+          buyPrice: buyPrice,
+          buyerId: props.certainItem.buyerId,
+          demType: demType,
+          gameInfo: gameInfo,
+          expected: expected.value,
+          inputNumValue: inputNumValue.value,
+        },
+      })
+      .then((res) => {
+        // 关闭弹窗
+        props.controlShowPop(false);
+        props.updateData();
+
+        // 实时更新资源数量
+        gameInfo.assets[demType] -= inputNumValue.value;
+        gameInfo.assets[POWERSTONE] = roundToOneDecimal(
+          gameInfo.assets[POWERSTONE] + expected.value
+        );
+      });
+  } catch (e) {
+    console.log(e.message);
+  }
 }
 </script>
 
