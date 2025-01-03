@@ -3,13 +3,12 @@
 exports.main = async (event, context) => {
 	//event为客户端上传的参数
 	console.log('event : ', event)
-	const {sellNum, id, sellPrice, demType, gameInfo, totalPrice, inputNumValue, sellerId} = event
+	const {sellNum, id, sellPrice, demType, userId, totalPrice, inputNumValue, sellerId} = event
 	const db = uniCloud.database();
-	const dbCmd = db.command
 	const transaction = await db.startTransaction();
 	
 	// 寻找assets的索引id
-	const userAssets = await db.collection('assets').where({userId: gameInfo.id}).get()
+	const userAssets = await db.collection('assets').where({userId}).get()
 	const assetsId = userAssets.data[0]._id
 	const nowNum = userAssets.data[0].powerStone
 	
@@ -32,7 +31,7 @@ exports.main = async (event, context) => {
 	  const res1 = await transaction
 											.collection('transactionRecord')
 											.add({
-														buyerId: gameInfo.id,
+														buyerId: userId,
 														sellerId, 
 														transactionType:  1,
 														transactionId: id,

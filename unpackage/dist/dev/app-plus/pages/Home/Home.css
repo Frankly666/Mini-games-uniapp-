@@ -462,7 +462,7 @@
   top: 9vw;
   width: 15vw;
   height: 15vw;
-  background: url('../../static/toolsBar/button_close.png') no-repeat center center / contain;
+  background: url('../../static/home/button_close.png') no-repeat center center / contain;
 }
 .userInfoWrap .infoBgc .avatar[data-v-13ced562] {
   position: absolute;
@@ -523,7 +523,7 @@
   top: 2vw;
   width: 8vw;
   height: 8vw;
-  background: url('../../static/toolsBar/button_close.png') no-repeat center center / contain;
+  background: url('../../static/home/button_close.png') no-repeat center center / contain;
 }
 .settingWrap .bgc .switch[data-v-9e95edd8] {
   position: absolute;

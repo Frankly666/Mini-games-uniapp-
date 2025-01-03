@@ -2,11 +2,11 @@
 exports.main = async (event, context) => {
 	//event为客户端上传的参数
 	console.log('event : ', event)
-	const {addData, totalPrice, gameInfo} = event;
+	const {addData, totalPrice, userId} = event;
 	const db = uniCloud.database();
 	const transaction = await db.startTransaction();
 	
-	const userAssets = await db.collection('assets').where({userId: gameInfo.id}).get()
+	const userAssets = await db.collection('assets').where({userId}).get()
 	const assetsId = userAssets.data[0]._id
 	const nowNum = userAssets.data[0].powerStone
 	

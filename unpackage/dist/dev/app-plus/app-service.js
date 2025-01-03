@@ -5861,7 +5861,7 @@ This will fail in production if not fixed.`);
               publishTime: /* @__PURE__ */ new Date()
             },
             inputNumValue: inputNumValue.value,
-            gameInfo
+            userId: gameInfo.id
           }
         }).then((res) => {
           if (res) {
@@ -5902,7 +5902,7 @@ This will fail in production if not fixed.`);
               publishTime: /* @__PURE__ */ new Date()
             },
             totalPrice,
-            gameInfo
+            userId: gameInfo.id
           }
         }).then((res) => {
           if (res) {
@@ -6240,6 +6240,21 @@ This will fail in production if not fixed.`);
           mask: true
         });
         Ys.callFunction({
+          name: "test111",
+          data: {
+            sellNum,
+            id,
+            sellPrice,
+            sellerId: props.certainItem.sellerId,
+            demType,
+            userId: gameInfo.id,
+            totalPrice: totalPrice.value,
+            inputNumValue: inputNumValue.value
+          }
+        }).then((res) => {
+          formatAppLog("log", "at components/buyCellPop.vue:216", res);
+        });
+        Ys.callFunction({
           name: "sellTrade",
           data: {
             sellNum,
@@ -6247,7 +6262,7 @@ This will fail in production if not fixed.`);
             sellPrice,
             sellerId: props.certainItem.sellerId,
             demType,
-            gameInfo,
+            userId: gameInfo.id,
             totalPrice: totalPrice.value,
             inputNumValue: inputNumValue.value
           }
@@ -6283,35 +6298,31 @@ This will fail in production if not fixed.`);
           title: "出售中...",
           mask: true
         });
-        try {
-          Ys.callFunction({
-            name: "needTrade",
-            data: {
-              buyNum,
-              id,
-              buyPrice,
-              buyerId: props.certainItem.buyerId,
-              demType,
-              gameInfo,
-              expected: expected.value,
-              inputNumValue: inputNumValue.value
-            }
-          }).then((res) => {
-            if (res) {
-              props.controlShowPop(false);
-              props.updateData();
-              gameInfo.assets[demType] -= inputNumValue.value;
-              gameInfo.assets[POWERSTONE] = roundToOneDecimal(
-                gameInfo.assets[POWERSTONE] + expected.value
-              );
-              uni.hideLoading();
-            } else {
-              netWorkError();
-            }
-          });
-        } catch (e2) {
-          formatAppLog("log", "at components/buyCellPop.vue:294", e2.message);
-        }
+        Ys.callFunction({
+          name: "needTrade",
+          data: {
+            buyNum,
+            id,
+            buyPrice,
+            buyerId: props.certainItem.buyerId,
+            demType,
+            userId: gameInfo.id,
+            expected: expected.value,
+            inputNumValue: inputNumValue.value
+          }
+        }).then((res) => {
+          if (res) {
+            props.controlShowPop(false);
+            props.updateData();
+            gameInfo.assets[demType] -= inputNumValue.value;
+            gameInfo.assets[POWERSTONE] = roundToOneDecimal(
+              gameInfo.assets[POWERSTONE] + expected.value
+            );
+            uni.hideLoading();
+          } else {
+            netWorkError();
+          }
+        });
       }
       const __returned__ = { props, inputNumValue, isShowWarn, assetsDB, marketDB, gameInfo, isSellMarket, totalPrice, expected, btnWord, confirmFun, getGemImg, setNumValue, handleShowWran, handleSellNum, confirmSellPublish, confirmNeedPublish, computed: vue.computed, onMounted: vue.onMounted, ref: vue.ref, get POWERSTONE() {
         return POWERSTONE;
@@ -7155,6 +7166,10 @@ This will fail in production if not fixed.`);
           showTips("余额不足");
           return;
         }
+        uni.showLoading({
+          mask: true,
+          title: "解锁中"
+        });
         Ys.callFunction({
           name: "buyGround",
           data: {
@@ -7168,7 +7183,7 @@ This will fail in production if not fixed.`);
               workerType: null,
               workerEndTime: null
             },
-            gameInfo,
+            userId: gameInfo.id,
             unlockFunds
           }
         }).then((res) => {
@@ -7176,8 +7191,9 @@ This will fail in production if not fixed.`);
             gameInfo.assets[POWERSTONE] = roundToOneDecimal(nowNum - unlockFunds);
             props.closePop();
             props.updateData();
+            uni.hideLoading();
           } else {
-            formatAppLog("log", "at components/buyGroundPop.vue:72", "出问题了");
+            netWorkError();
           }
         });
       }
@@ -7185,6 +7201,8 @@ This will fail in production if not fixed.`);
         return POWERSTONE;
       }, get useGameInfoStore() {
         return useGameInfoStore;
+      }, get netWorkError() {
+        return netWorkError;
       }, get showTips() {
         return showTips;
       }, get getGroundEndTime() {
@@ -7292,7 +7310,6 @@ This will fail in production if not fixed.`);
       }
       function selectWorker(type, index) {
         var _a;
-        formatAppLog("log", "at pages/Ground/Ground.vue:186", "测试:", gameInfo.ownGrounds[type]);
         const thisGrounds = (_a = gameInfo.ownGrounds) == null ? void 0 : _a[type];
         if (thisGrounds) {
           for (let i2 = 0; i2 < thisGrounds.length; i2++) {

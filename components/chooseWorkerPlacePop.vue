@@ -40,7 +40,7 @@
 	import {findEmptyGround} from '../utils/findEmptyGround.js'
 	import {getWorkerEndTime} from "../utils/getWorkerEndTime.js"
 	import {updateOwnGrounds} from "../utils/updateOwnGrounds.js"
-import { netWorkError, showTips } from '../utils/error';
+	import { netWorkError, showTips } from '../utils/error';
 	
 	const props = defineProps(["closePop", "workerType"])
 	const gameInfo = useGameInfoStore()

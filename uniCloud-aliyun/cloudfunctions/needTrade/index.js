@@ -2,13 +2,14 @@
 // 这个云函数是求购市场中用户进行出售资源对用户资源进行操作的事务云函数
 exports.main = async (event, context) => {
 	//event为客户端上传的参数
-	const {buyNum, id, buyPrice, demType, gameInfo, expected, inputNumValue, buyerId} = event
+	console.log(event)
+	const {buyNum, id, buyPrice, demType, userId, expected, inputNumValue, buyerId} = event
 	const db = uniCloud.database();
 	const dbCmd = db.command
 	const transaction = await db.startTransaction();
 	
 	// 寻找assets的索引id
-	const userAssets = await db.collection('assets').where({userId: gameInfo.id}).get()
+	const userAssets = await db.collection('assets').where({userId}).get()
 	const assetsId = userAssets.data[0]._id
 	const nowNum = userAssets.data[0].powerStone
 	console.log("userAssets", userAssets)
@@ -33,7 +34,7 @@ exports.main = async (event, context) => {
 											.collection('transactionRecord')
 											.add({
 														buyerId,
-														sellerId: gameInfo.id, 
+														sellerId: userId, 
 														transactionType:  2,
 														transactionId: id,
 														transactionNum: inputNumValue,

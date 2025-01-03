@@ -27,7 +27,7 @@
 
 <script setup>
 	import { POWERSTONE, useGameInfoStore } from '../stores/gameInfo';
-import { showTips } from '../utils/error';
+	import { netWorkError, showTips } from '../utils/error';
 	import { getGroundEndTime } from '../utils/getGroundEndTime';
 	import { roundToOneDecimal } from '../utils/roundToOneDecimal';
 	
@@ -46,6 +46,11 @@ import { showTips } from '../utils/error';
 			return;
 		};
 		
+		uni.showLoading({
+			mask: true,
+			title: "解锁中"
+		})
+		
 		// 数据库操作逻辑
 		uniCloud.callFunction({
 			name:"buyGround",
@@ -60,7 +65,7 @@ import { showTips } from '../utils/error';
 					workerType: null,
 					workerEndTime: null,
 				},
-				gameInfo: gameInfo,
+				userId: gameInfo.id,
 				unlockFunds: unlockFunds
 			}
 		}).then(res => {
@@ -68,8 +73,9 @@ import { showTips } from '../utils/error';
 				gameInfo.assets[POWERSTONE] = roundToOneDecimal(nowNum - unlockFunds); 
 				props.closePop();
 				props.updateData()
+				uni.hideLoading()
 			}else {
-				console.log("出问题了")
+				netWorkError()
 			}
 		})
 	}

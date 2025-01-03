@@ -183,7 +183,6 @@
 	
 	// 用来判断该地皮是否有工人工作, 应该展现哪个工人进行工作
 	function selectWorker(type, index) {
-		console.log("测试:", gameInfo.ownGrounds[type])
 		const thisGrounds = gameInfo.ownGrounds?.[type];
 		if(thisGrounds) {
 			for(let i = 0; i < thisGrounds.length; i ++ ) {

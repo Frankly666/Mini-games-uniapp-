@@ -172,7 +172,7 @@
 					publishTime: new Date()
 				},
 				inputNumValue: inputNumValue.value,
-				gameInfo: gameInfo
+				userId: gameInfo.id
 			}
 		}).then(res => {
 			if(res) {
@@ -218,7 +218,7 @@
 					publishTime: new Date()
 				},
 				totalPrice: totalPrice,
-				gameInfo: gameInfo
+				userId: gameInfo.id
 			}
 		}).then(res => {
 			if(res) {
