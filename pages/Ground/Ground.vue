@@ -45,8 +45,8 @@
 									  
 			<view class="item scarce" v-for="item in 3">
 				<view class="realGround type2">
-					<view class="personWrap" v-show="false">
-						<worker-vue :type="'1'" :delay="-item"></worker-vue>
+					<view class="personWrap"  v-show="selectWorker(2, item)">
+						<worker-vue :type="selectWorker(2, item)" :delay="-item"></worker-vue>
 					</view>
 					<view class="lockGround" v-show="!judgeOwnThisGround(2, item)" @click="() => { clickLockGround(2, item)}">
 						<view class="title">
@@ -58,8 +58,8 @@
 									    
 			<view class="item big" v-for="item in 5">
 				<view class="realGround type3">
-					<view class="personWrap" v-show="false">
-						<worker-vue :type="'3'" :delay="-item"></worker-vue>
+					<view class="personWrap" v-show="selectWorker(3, item)">
+						<worker-vue :type="selectWorker(3, item)" :delay="-item"></worker-vue>
 					</view>
 					<view class="lockGround" v-show="!judgeOwnThisGround(3, item)" @click="() => {clickLockGround(3, item)}">
 						<view class="title">
@@ -71,8 +71,8 @@
 			
 			<view class="item resource" v-for="item in 6">
 				<view class="realGround type4">
-					<view class="personWrap" v-show="false">
-						<worker-vue :type="'3'" :delay="-item"></worker-vue>
+					<view class="personWrap" v-show="selectWorker(4, item)">
+						<worker-vue :type="selectWorker(4, item)" :delay="-item"></worker-vue>
 					</view>
 					<view class="lockGround" v-show="!judgeOwnThisGround(4, item)" @click="() => {clickLockGround(4, item)}">
 						<view class="title">
@@ -84,8 +84,8 @@
 									   
 			<view class="item black" v-for="item in 8">
 				<view class="realGround type5">
-					<view class="personWrap" v-show="false">
-						<worker-vue :type="'3'" :delay="-item"></worker-vue>
+					<view class="personWrap" v-show="!!selectWorker(5, item)">
+						<worker-vue :type="selectWorker(5, item)" :delay="-item"></worker-vue>
 					</view>
 					<view class="lockGround" v-show="!judgeOwnThisGround(5, item)" @click="() => {clickLockGround(5, item)}"> 
 						<view class="title">
@@ -102,8 +102,8 @@
 						<view class="d2 item"></view>
 						<view class="d3 item"></view>
 					</view>
-					<view class="personWrap" v-show="false">
-						<worker-vue :type="'3'" :delay="-item"></worker-vue>
+					<view class="personWrap" v-show="selectWorker(6, item)">
+						<worker-vue :type="selectWorker(6, item)" :delay="-item"></worker-vue>
 					</view>
 					<view class="lockGround" v-show="!judgeOwnThisGround(6, item)" @click="() => {clickLockGround(6, item)}">
 						<view class="title">
@@ -179,6 +179,21 @@
 			}
 		}
 		return flag;
+	}
+	
+	// 用来判断该地皮是否有工人工作, 应该展现哪个工人进行工作
+	function selectWorker(type, index) {
+		console.log("测试:", gameInfo.ownGrounds[type])
+		const thisGrounds = gameInfo.ownGrounds?.[type];
+		if(thisGrounds) {
+			for(let i = 0; i < thisGrounds.length; i ++ ) {
+				const item = thisGrounds[i];
+				if(item.groundIndex === index) {
+					return item.workerType
+				}
+			}
+		}
+		return false;
 	}
 	
 	// 获取后端用户地皮数据

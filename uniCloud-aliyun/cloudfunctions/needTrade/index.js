@@ -52,12 +52,12 @@ exports.main = async (event, context) => {
 	  }
 	  
 	  await transaction.commit();
-		return res3;
+		return true;
 	} catch (e) {
 		console.error('transaction error', e.message);
 	  await transaction.rollback();
 	  
 	  // 这里可以处理错误，比如显示错误消息等
-		return e.message
+		return false;
 	}	
 };

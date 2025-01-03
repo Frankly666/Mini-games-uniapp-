@@ -121,6 +121,7 @@
 import { computed, onMounted, ref } from "vue";
 import { POWERSTONE, useGameInfoStore } from "../stores/gameInfo";
 import { roundToOneDecimal } from "../utils/roundToOneDecimal";
+import { netWorkError, showTips } from "../utils/error";
 
 const props = defineProps([
   "controlShowPop",
@@ -183,13 +184,21 @@ async function confirmSellPublish() {
   const demType = props.certainItem.demType;
 
   // 如果输入的数值不合理直接跳出
-  if (inputNumValue.value <= 0 || inputNumValue.value > sellNum) return;
+  if (inputNumValue.value <= 0 || inputNumValue.value > sellNum) {
+		showTips("数量有误")
+		return
+	};
   // 如果超过自己的余额就直接跳出
   if (totalPrice.value > gameInfo.assets[POWERSTONE]) {
     handleShowWran(true);
+		showTips("余额不足")
     return;
   }
 
+	uni.showLoading({
+		title: '购买中...',
+		mask: true
+	})
   // 进行数据库操作
   uniCloud
     .callFunction({
@@ -206,16 +215,21 @@ async function confirmSellPublish() {
       },
     })
     .then((res) => {
-      console.log(res);
-      // 关闭弹窗
-      props.controlShowPop(false);
-      props.updateData();
-
-      // 实时更新资源数量
-      gameInfo.assets[demType] += inputNumValue.value;
-      gameInfo.assets[POWERSTONE] = roundToOneDecimal(
-        gameInfo.assets[POWERSTONE] - totalPrice.value
-      );
+			if(res) {
+				// 关闭弹窗
+				props.controlShowPop(false);
+				props.updateData();
+				
+				// 实时更新资源数量
+				gameInfo.assets[demType] += inputNumValue.value;
+				gameInfo.assets[POWERSTONE] = roundToOneDecimal(
+				  gameInfo.assets[POWERSTONE] - totalPrice.value
+				);
+				uni.hideLoading();
+			}else {
+				netWorkError()
+			}
+      
     });
 }
 
@@ -227,12 +241,21 @@ async function confirmNeedPublish() {
   const demType = props.certainItem.demType;
 
   // 确保输入值为正确范围
-  if (inputNumValue.value <= 0 || inputNumValue.value > buyNum) return;
+  if (inputNumValue.value <= 0 || inputNumValue.value > buyNum) {
+		showTips("数量有误")
+		return
+	};
   // 如果自己没那么多的宝石也直接跳出
   if (inputNumValue.value > gameInfo.assets[demType]) {
     handleShowWran(true);
+		showTips("余额不足")
     return;
   }
+	
+	uni.showLoading({
+		title: '出售中...',
+		mask: true
+	})
 
   // 进行数据库操作
   try {
@@ -251,15 +274,21 @@ async function confirmNeedPublish() {
         },
       })
       .then((res) => {
-        // 关闭弹窗
-        props.controlShowPop(false);
-        props.updateData();
-
-        // 实时更新资源数量
-        gameInfo.assets[demType] -= inputNumValue.value;
-        gameInfo.assets[POWERSTONE] = roundToOneDecimal(
-          gameInfo.assets[POWERSTONE] + expected.value
-        );
+				if(res) {
+					// 关闭弹窗
+					props.controlShowPop(false);
+					props.updateData();
+					
+					// 实时更新资源数量
+					gameInfo.assets[demType] -= inputNumValue.value;
+					gameInfo.assets[POWERSTONE] = roundToOneDecimal(
+					  gameInfo.assets[POWERSTONE] + expected.value
+					);
+					uni.hideLoading()
+				}else {
+					netWorkError()
+				}
+        
       });
   } catch (e) {
     console.log(e.message);

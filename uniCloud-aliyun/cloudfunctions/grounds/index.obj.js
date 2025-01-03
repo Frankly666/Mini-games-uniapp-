@@ -25,6 +25,13 @@ module.exports = {
 	// 	return res;
 	// },
 	
+	async init() {
+		const ground = uniCloud.database().collection("userGrounds");
+		const res = await ground.add({
+			
+		})
+	},
+	
 	
 	/**  查询用户所拥有的所有地皮
 	 * @param {String} userId

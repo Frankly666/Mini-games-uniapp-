@@ -23,10 +23,10 @@
 							class="select" 
 							:style=" `background-image: url(${selectIndex === item ? selectImg : unselectImg});`" 
 						/>
-					</view>
+					</view> 
 				</view>
 			</view>
-			<view class="retireBtn">
+			<view class="retireBtn" @click="confirmRetire">
 				确认招募
 			</view>
 		</view>
@@ -36,39 +36,81 @@
 <script setup>
 	import { computed, ref } from 'vue';
 	import { POWERSTONE, useGameInfoStore } from '../stores/gameInfo';
+	import {roundToOneDecimal} from '../utils/roundToOneDecimal';
+	import {findEmptyGround} from '../utils/findEmptyGround.js'
+	import {getWorkerEndTime} from "../utils/getWorkerEndTime.js"
+	import {updateOwnGrounds} from "../utils/updateOwnGrounds.js"
+import { netWorkError, showTips } from '../utils/error';
 	
 	const props = defineProps(["closePop", "workerType"])
 	const gameInfo = useGameInfoStore()
-	const selectImg = "../static/ground/select.png"
+	const selectImg = "../static/ground/select.png" 
 	const unselectImg = "../static/ground/unselect.png"
 	const selectIndex = ref(1)
-	
-	
-	const userHadGroundTypes = computed(() => {
-		const list = Object.keys(gameInfo.ownGrounds)
-		return list;
-	}) 
+	const workerPrice = gameInfo.workersMeta[props.workerType].retainerPrice;
 	
 	// 用户当前拥有的地皮种类判断
 	function judgeHaveThisGround(type) {
+		const list = Object.keys(gameInfo.ownGrounds)
 		let flag = false;
-		for(let item of userHadGroundTypes.value) {
+		
+		// 遍历判断当前类型的地皮中是否存在无工人工作的地皮
+		for(let item of list) {
 			if(item == type) {
-				flag = true; 
-				break;
+				const temList = gameInfo.ownGrounds[item];
+				for(let ground of temList) {
+					if(!ground.isHaveWorker){
+						flag = true;
+						break;
+					}
+				}
+				if(flag === true) break;
 			}
 		}
+		
 		// 小地皮是本来就有的
 		if(type === 1) flag = true;
 		return flag;
 	}
 	
+	
 	// 确认招募的逻辑函数
 	function confirmRetire() {
 		const nowNum = gameInfo.assets[POWERSTONE];
+		// 余额不足
+		if(nowNum < workerPrice) {
+			showTips("余额不足")
+			return;
+		}
 		
+		uni.showLoading({
+			mask: true,
+			title: "招聘中..."
+		})
+		
+		// 数据库操作逻辑
+		uniCloud.callFunction({
+			name:"hireWorker",
+			data: {
+				userId: gameInfo.id,
+				hirePrice: workerPrice,
+				workerType: props.workerType,
+				groundType: selectIndex.value,
+				groundIndex: findEmptyGround(selectIndex.value),
+				workerEndTime: getWorkerEndTime(props.workerType)
+			}
+		}).then(res => {
+			if(res){
+				props.closePop()
+				updateOwnGrounds()
+				const nowNum = gameInfo.assets[POWERSTONE];
+				gameInfo.assets[POWERSTONE] = roundToOneDecimal(nowNum - workerPrice)
+				uni.hideLoading()
+			}else {
+				netWorkError()
+			}
+		})
 	}
-	
 </script>
 
 <style lang="less">

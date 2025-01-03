@@ -43,7 +43,7 @@
 			<view class="wran">
 				<text v-show="isShowWran">(请输入限制范围内的单价)</text>
 				<text v-show="isShowNotEnough&&isSell">({{gemItems[selectIndex]}}不足)</text>
-				<text v-show="isShowNotEnough&&!isSell">(金刚石余额不足)</text>
+				<text v-show="isShowNotEnough&&!isSell">(宝石余额不足)</text>
 			</view>
 			
 			<view class="tip" >
@@ -80,6 +80,7 @@
 	import { computed, onMounted, ref } from 'vue';
 	import { POWERSTONE, useGameInfoStore } from '../stores/gameInfo';
 	import { roundToOneDecimal } from '../utils/roundToOneDecimal';
+	import { netWorkError, showTips } from '../utils/error';
 	
 	const gameInfo = useGameInfoStore()
 	const props = defineProps(['controlPublish', 'title', 'gemItems', 'gemImgName', 'updateData'])
@@ -142,12 +143,21 @@
 	
 	// 发布出售逻辑操作
 	async function confirmSellPublish() {
-		if(inputPriceValue.value < 0.2 || inputPriceValue.value > 10 || inputNumValue.value <= 0) return;
+		
+		if(inputPriceValue.value < 0.2 || inputPriceValue.value > 10 || inputNumValue.value <= 0) {
+			showTips("单价不满足要求")
+			return
+		};
 		if(inputNumValue.value > gameInfo.assets[props.gemImgName[selectIndex.value]]) {
 			isShowNotEnough.value = true
+			showTips("余额不足")
 			return;
 		}
 		const gemType = props.gemImgName[selectIndex.value]
+		uni.showLoading({
+			title: '发布中',
+			mask:true
+		})
 		
 		// 后端数据操作逻辑
 		uniCloud.callFunction({
@@ -165,22 +175,35 @@
 				gameInfo: gameInfo
 			}
 		}).then(res => {
-			gameInfo.assets[gemType] -= inputNumValue.value;
-			props.controlPublish(false)
-			props.updateData()
+			if(res) {
+				gameInfo.assets[gemType] -= inputNumValue.value;
+				props.controlPublish(false)
+				props.updateData()
+				uni.hideLoading()
+			}else {
+				netWorkError()
+			}
 		})
 	}
 	
 	// 发布求购的逻辑操作
 	async function confirmNeedPublish() {
-		if(inputPriceValue.value < 0.2 || inputPriceValue.value > 10 || inputNumValue.value <= 0) return;
+		if(inputPriceValue.value < 0.2 || inputPriceValue.value > 10 || inputNumValue.value <= 0) {
+			showTips("单价不符合要求")
+			return
+		};
 		const gemType = props.gemImgName[selectIndex.value]
 		const totalPrice = roundToOneDecimal(inputNumValue.value * inputPriceValue.value)
 		
 		if(totalPrice > gameInfo.assets[POWERSTONE]) {
 			isShowNotEnough.value = true;
+			showTips("余额不足")
 			return
 		}
+		uni.showLoading({
+			title: '发布中',
+			mask: true
+		})
 		
 		// 求购后端逻辑操作
 		uniCloud.callFunction({
@@ -198,9 +221,15 @@
 				gameInfo: gameInfo
 			}
 		}).then(res => {
-			gameInfo.assets[POWERSTONE] =  roundToOneDecimal(gameInfo.assets[POWERSTONE] - totalPrice ) ;
-			props.controlPublish(false)
-			props.updateData()
+			if(res) {
+				gameInfo.assets[POWERSTONE] =  roundToOneDecimal(gameInfo.assets[POWERSTONE] - totalPrice ) ;
+				props.controlPublish(false)
+				props.updateData()
+				uni.hideLoading()
+			}else {
+				netWorkError()
+			}
+			
 		})
 	}
 </script>

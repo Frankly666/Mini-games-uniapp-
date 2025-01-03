@@ -1,5 +1,5 @@
 <template>
-	<view class="tradingMarketWrap">
+	<view class="tradingMarketWrap">		
 		<view class="return" @click="back"></view>
 		<assets-header1 :judge='2'/>
 		<market-publish 
@@ -81,7 +81,6 @@
 
 <script setup>
 	import { computed, onMounted, ref } from 'vue'
-	
 	import assetsHeader1 from '../../components/assetsHeader.vue';
 	import marketPublish from '../../components/marketPublish.vue';
 	import buyCellPop from '../../components/buyCellPop.vue';

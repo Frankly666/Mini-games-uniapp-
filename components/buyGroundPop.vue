@@ -27,6 +27,7 @@
 
 <script setup>
 	import { POWERSTONE, useGameInfoStore } from '../stores/gameInfo';
+import { showTips } from '../utils/error';
 	import { getGroundEndTime } from '../utils/getGroundEndTime';
 	import { roundToOneDecimal } from '../utils/roundToOneDecimal';
 	
@@ -41,6 +42,7 @@
 		
 		// 钱不够就直接跳出
 		if(nowNum < unlockFunds) {
+			showTips("余额不足")
 			return;
 		};
 		
@@ -53,7 +55,10 @@
 					groundType: props.groundType,
 					groundIndex: props.groundIndex,
 					rentTime: new Date(),
-					endTime: getGroundEndTime(props.groundType)
+					endTime: getGroundEndTime(props.groundType),
+					isHaveWorker: false,
+					workerType: null,
+					workerEndTime: null,
 				},
 				gameInfo: gameInfo,
 				unlockFunds: unlockFunds

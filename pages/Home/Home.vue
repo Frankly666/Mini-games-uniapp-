@@ -1,5 +1,7 @@
 <template>
 	<view class="pages">
+			<loading-vue v-if="isShowLoading"/>
+			
 			<!-- 头像, 资源, 工具栏 -->
 			<avatar @click="() => {handleInfo(true)}"></avatar>
 			<assets-header :judge='1'></assets-header>
@@ -44,6 +46,8 @@ import announcementPop from '../../components/announcementPop.vue';
 import talentCenterPop from '../../components/talentCenterPop.vue';
 import { ASSETS, AVATAR, ID, ISFIRST, PHONE, USERNAME, useGameInfoStore } from '../../stores/gameInfo';
 import Cache from '../../utils/cache';
+import { updateOwnGrounds } from '../../utils/updateOwnGrounds';
+import loadingVue from '../../components/loading.vue';
 
 const keyword = ref('');
 const screenWidth = ref(0);
@@ -64,6 +68,7 @@ const bgm = gameInfo.bgm;
 const setCache = Cache.setCache; // 这里使用的是实例化函数
 const getCache = Cache.getCache;  // 使用的是静态函数
 const groundsDB = uniCloud.importObject("grounds");
+const isShowLoading = ref(true);
 
 translateX.value = gameInfo.translateX
 translateY.value = gameInfo.translateY
@@ -178,10 +183,14 @@ onMounted(async () => {
 		setCache(ISFIRST, data.isFirst)
 	}
 	
+	// 给用户添加送的地皮
+	
 	// 用户地皮信息提前加载
-	groundsDB.selectAllGrounds(gameInfo.id).then(res => {
-		gameInfo.ownGrounds = res;
-	})
+	updateOwnGrounds()
+	setTimeout(function() {
+		isShowLoading.value = false;
+	}, 600);
+	
 })
 </script>
 

@@ -20,10 +20,10 @@ exports.main = async (event, context) => {
 			powerStone: roundToOneDecimal(nowNum - totalPrice)
 		})
 		await transaction.commit();
-		return "成功发布!";
+		return true;
 	}catch (e) {
 		console.error('transaction error', e.message);
 	  await transaction.rollback();
-		return e.message
+		return false;
 	}	
 };
