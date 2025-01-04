@@ -415,42 +415,57 @@
   top: 10%;
   width: 50%;
 }
-.groundWrap .clouds.cloudsLeft {
+.groundWrap .clouds.cloudsLeft.unlock {
   left: 0;
   top: 10vw;
   animation: moveLeft 2s linear;
   animation-fill-mode: forwards;
   animation-delay: 0.3s;
 }
-.groundWrap .clouds.cloudsLeft .leftItem {
+.groundWrap .clouds.cloudsLeft.lock {
+  top: 140vw;
+}
+.groundWrap .clouds.cloudsLeft.lock .leftItem {
+  margin-bottom: 3vw;
+}
+.groundWrap .clouds .leftItem {
   width: 110%;
   height: 20vw;
   margin-bottom: 10vw;
   background: no-repeat top center / contain;
 }
-.groundWrap .clouds.cloudsLeft .leftItem.leftItem1 {
+.groundWrap .clouds .leftItem.leftItem1 {
   background-image: url('../../static/ground/cloud1.png');
 }
-.groundWrap .clouds.cloudsLeft .leftItem.leftItem2 {
+.groundWrap .clouds .leftItem.leftItem2 {
   background-image: url('../../static/ground/cloud2.png');
 }
-.groundWrap .clouds.cloudsRight {
+.groundWrap .clouds.cloudsRight.unlock {
   right: 0;
   top: 14vw;
   animation: moveRight 2s linear;
   animation-fill-mode: forwards;
   animation-delay: 0.3s;
 }
-.groundWrap .clouds.cloudsRight .rightItem {
+.groundWrap .clouds.cloudsRight.lock {
+  right: 0;
+  top: 140vw;
+}
+.groundWrap .clouds.cloudsRight.lock .rightItem {
+  width: 110%;
+  height: 20vw;
+  margin-bottom: 3vw;
+}
+.groundWrap .clouds .rightItem {
   width: 110%;
   height: 20vw;
   margin-bottom: 10vw;
   background: no-repeat top center / contain;
 }
-.groundWrap .clouds.cloudsRight .rightItem.rightItem1 {
+.groundWrap .clouds .rightItem.rightItem1 {
   background-image: url('../../static/ground/cloud1.png');
 }
-.groundWrap .clouds.cloudsRight .rightItem.rightItem2 {
+.groundWrap .clouds .rightItem.rightItem2 {
   background-image: url('../../static/ground/cloud2.png');
 }
 @keyframes moveLeft {

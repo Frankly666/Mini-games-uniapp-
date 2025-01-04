@@ -4612,7 +4612,7 @@ This will fail in production if not fixed.`);
         gameInfo.assets[type] += number;
       }
       async function toGame() {
-        const phone = 12345678902, avatar2 = "https://ts1.cn.mm.bing.net/th?id=OIP-C.1PjYL0WYwiZAYSWtOQryjwHaHa&w=250&h=250&c=8&rs=1&qlt=90&o=6&dpr=1.1&pid=3.1&rm=2";
+        const phone = 15182344075, avatar2 = "https://ts1.cn.mm.bing.net/th?id=OIP-C.1PjYL0WYwiZAYSWtOQryjwHaHa&w=250&h=250&c=8&rs=1&qlt=90&o=6&dpr=1.1&pid=3.1&rm=2";
         setCache(PHONE, phone);
         setCache(AVATAR, avatar2);
         gameInfo.isLoad = 0;
@@ -5306,7 +5306,7 @@ This will fail in production if not fixed.`);
       __expose();
       const props = __props;
       const gameInfo = useGameInfoStore();
-      const selectIndex = vue.ref(1);
+      const selectIndex = vue.ref(0);
       const workerPrice = gameInfo.workersMeta[props.workerType].retainerPrice;
       function judgeHaveThisGround(type) {
         const list = Object.keys(gameInfo.ownGrounds);
@@ -5330,6 +5330,10 @@ This will fail in production if not fixed.`);
         const nowNum = gameInfo.assets[POWERSTONE];
         if (nowNum < workerPrice) {
           showTips("余额不足");
+          return;
+        }
+        if (selectIndex.value < 1) {
+          showTips("请选择地皮");
           return;
         }
         uni.showLoading({
@@ -7652,11 +7656,11 @@ This will fail in production if not fixed.`);
         ))
       ]),
       vue.createCommentVNode(" 云朵 "),
-      vue.createElementVNode("view", { class: "cloudsLeft clouds" }, [
+      vue.createElementVNode("view", { class: "cloudsLeft clouds unlock" }, [
         (vue.openBlock(), vue.createElementBlock(
           vue.Fragment,
           null,
-          vue.renderList(12, (item) => {
+          vue.renderList(2, (item) => {
             return vue.createElementVNode("view", { class: "" }, [
               vue.createElementVNode("view", { class: "leftItem1 leftItem" }),
               vue.createElementVNode("view", { class: "leftItem2 leftItem" })
@@ -7666,11 +7670,39 @@ This will fail in production if not fixed.`);
           /* STABLE_FRAGMENT */
         ))
       ]),
-      vue.createElementVNode("view", { class: "cloudsRight clouds" }, [
+      vue.createElementVNode("view", { class: "cloudsLeft clouds lock" }, [
         (vue.openBlock(), vue.createElementBlock(
           vue.Fragment,
           null,
-          vue.renderList(12, (item) => {
+          vue.renderList(10, (item) => {
+            return vue.createElementVNode("view", { class: "" }, [
+              vue.createElementVNode("view", { class: "leftItem1 leftItem" }),
+              vue.createElementVNode("view", { class: "leftItem2 leftItem" })
+            ]);
+          }),
+          64
+          /* STABLE_FRAGMENT */
+        ))
+      ]),
+      vue.createElementVNode("view", { class: "cloudsRight clouds unlock" }, [
+        (vue.openBlock(), vue.createElementBlock(
+          vue.Fragment,
+          null,
+          vue.renderList(2, (item) => {
+            return vue.createElementVNode("view", { class: "" }, [
+              vue.createElementVNode("view", { class: "rightItem1 rightItem" }),
+              vue.createElementVNode("view", { class: "rightItem2 rightItem" })
+            ]);
+          }),
+          64
+          /* STABLE_FRAGMENT */
+        ))
+      ]),
+      vue.createElementVNode("view", { class: "cloudsRight clouds lock" }, [
+        (vue.openBlock(), vue.createElementBlock(
+          vue.Fragment,
+          null,
+          vue.renderList(10, (item) => {
             return vue.createElementVNode("view", { class: "" }, [
               vue.createElementVNode("view", { class: "rightItem1 rightItem" }),
               vue.createElementVNode("view", { class: "rightItem2 rightItem" })

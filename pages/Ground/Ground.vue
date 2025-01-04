@@ -124,14 +124,26 @@
 		</view>
 	
 		<!-- 云朵 -->
-		<view class="cloudsLeft clouds">
-			<view class="" v-for="item in 12">
+		<view class="cloudsLeft clouds unlock">
+			<view class="" v-for="item in 2">
 				<view class="leftItem1 leftItem" />
 				<view class="leftItem2 leftItem" />
 			</view>
 		</view>
-		<view class="cloudsRight clouds">
-			<view class="" v-for="item in 12">
+		<view class="cloudsLeft clouds lock">
+			<view class="" v-for="item in 10">
+				<view class="leftItem1 leftItem" />
+				<view class="leftItem2 leftItem" />
+			</view>
+		</view>
+		<view class="cloudsRight clouds unlock">
+			<view class="" v-for="item in 2">
+				<view class="rightItem1 rightItem" />
+				<view class="rightItem2 rightItem" />
+			</view>
+		</view>
+		<view class="cloudsRight clouds lock">
+			<view class="" v-for="item in 10">
 				<view class="rightItem1 rightItem" />
 				<view class="rightItem2 rightItem" />
 			</view>
@@ -425,49 +437,73 @@
 			top: 10%;
 			width: 50%;
 			
-			&.cloudsLeft {
+			&.cloudsLeft.unlock {
 				left: 0;
 				top: 10vw;
 				animation: moveLeft 2s linear;
 				animation-fill-mode: forwards;
 				animation-delay: .3s;
+			}
+			
+			&.cloudsLeft.lock {
+				top: 140vw;
 				
 				.leftItem {
-					width: 110%;
-					height: 20vw;
-					margin-bottom: 10vw;
-					background: no-repeat top center / contain;
-					
-					&.leftItem1 {
-						background-image: url('../../static/ground/cloud1.png');
-					}
-					
-					&.leftItem2 {
-						background-image: url('../../static/ground/cloud2.png');
-					}
+					margin-bottom: 3vw;
 				}
 			}
 			
-			&.cloudsRight {
+			.leftItem {
+				width: 110%;
+				height: 20vw;
+				margin-bottom: 10vw;
+				background: no-repeat top center / contain;
+				
+				&.leftItem1 {
+					background-image: url('../../static/ground/cloud1.png');
+				}
+				
+				&.leftItem2 {
+					background-image: url('../../static/ground/cloud2.png');
+				}
+			}
+			
+			
+			
+			
+			
+			
+			
+			&.cloudsRight.unlock {
 				right: 0;
 				top: 14vw;
 				animation: moveRight 2s linear;
 				animation-fill-mode: forwards;
 				animation-delay: .3s;
-				
+			}
+			
+			&.cloudsRight.lock {
+				right: 0;
+				top: 140vw;
 				.rightItem {
 					width: 110%;
 					height: 20vw;
-					margin-bottom: 10vw;
-					background: no-repeat top center / contain;
-					
-					&.rightItem1 {
-						background-image: url('../../static/ground/cloud1.png');
-					}
-					
-					&.rightItem2 {
-						background-image: url('../../static/ground/cloud2.png');
-					}
+					margin-bottom: 3vw;
+				}
+			}
+			
+			.rightItem {
+				width: 110%;
+				height: 20vw;
+				margin-bottom: 10vw;
+				background: no-repeat top center / contain;
+				
+				&.rightItem1 {
+					background-image: url('../../static/ground/cloud1.png');
+				}
+				
+				&.rightItem2 {
+					background-image: url('../../static/ground/cloud2.png');
 				}
 			}
 		}

@@ -46,7 +46,7 @@
 	const gameInfo = useGameInfoStore()
 	const selectImg = "../static/ground/select.png" 
 	const unselectImg = "../static/ground/unselect.png"
-	const selectIndex = ref(1)
+	const selectIndex = ref(0)
 	const workerPrice = gameInfo.workersMeta[props.workerType].retainerPrice;
 	
 	// 用户当前拥有的地皮种类判断
@@ -79,6 +79,11 @@
 		// 余额不足
 		if(nowNum < workerPrice) {
 			showTips("余额不足")
+			return;
+		}
+		
+		if(selectIndex.value < 1) {
+			showTips("请选择地皮")
 			return;
 		}
 		
