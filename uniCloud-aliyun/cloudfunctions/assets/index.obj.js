@@ -8,7 +8,7 @@ module.exports = {
 	 */
 	async init(userId) {
 		const assets = uniCloud.database().collection('assets');
-		assets.add({userId, powerStone: 0, diamond: 0, resourceStone: 0, meteorite: 0}).then(res => {
+		assets.add({userId, powerStone: 0, diamond: 0, resourceStone: 0, jewel: 0, meteorite: 0}).then(res => {
 			return res
 		})
 	},

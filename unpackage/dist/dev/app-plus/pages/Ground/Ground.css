@@ -2,12 +2,14 @@
   position: fixed;
   flex-wrap: wrap;
   right: 2vw;
-  top: 10vw;
+  top: 3vw;
   display: flex;
   justify-content: space-between;
   width: 100vw;
   z-index: 99;
   color: #dcc5ab;
+  box-sizing: border-box;
+  padding: 0 10vw 0 10vw;
   font-size: 3.6vw;
   font-weight: bold;
 }
@@ -17,11 +19,9 @@
   align-items: center;
   text-align: center;
   justify-content: center;
-  width: 30.67vw;
+  box-sizing: border-box;
+  width: 33.67vw;
   height: 10vw;
-}
-.assetsBar1 .asset[data-v-618629f7]:first-of-type {
-  margin-left: 4vw;
 }
 .assetsBar1 .asset span[data-v-618629f7] {
   position: relative;
@@ -49,9 +49,7 @@
   width: 31.67vw;
   height: 10vw;
   line-height: 7vw;
-}
-.assetsBar2 .asset[data-v-618629f7]:last-of-type {
-  margin-top: 2vw;
+  margin-bottom: 1vw;
 }
 .assetsBar2 .asset span[data-v-618629f7] {
   position: relative;
@@ -207,7 +205,7 @@
   right: 0;
   width: 15vw;
   height: 15vw;
-  background: url('../../static/talentCenter/close.png') no-repeat center center / contain;
+  background: url('../../static/ground/close.png') no-repeat center center / contain;
 }
 .groundPopWrap .board .title[data-v-002acaef] {
   position: relative;
@@ -251,7 +249,7 @@
   line-height: 13.4vw;
   font-size: 5vw;
   font-weight: bold;
-  background: url('../../static/talentCenter/btn2.png') no-repeat center center / contain;
+  background: url('../../static/ground/btn2.png') no-repeat center center / contain;
 }
 
 .groundWrap {

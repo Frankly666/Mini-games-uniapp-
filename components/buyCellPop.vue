@@ -7,12 +7,12 @@
           () => {
             controlShowPop(false);
           }
-        "
-      ></view>
+        ">
+			</view>
       <view
         class="gemImg"
-        :style="`background-image: url(${getGemImg(gemName)});`"
-      ></view>
+        :style="`background-image: url(${getGemImg(gemName)});`" >
+			</view>
       <view class="gemChName">
         <text>{{ gemChName }}</text>
       </view>
@@ -72,7 +72,7 @@
           <text>手续费</text>
           <view
             class="itemImg"
-            :style="`background-image: url(${getGemImg('powerStone')});`"
+            :style="`background-image: url(${getGemImg('jewel')});`"
           ></view>
           <text>5%</text>
         </view>
@@ -80,7 +80,7 @@
           <text>预获得</text>
           <view
             class="itemImg"
-            :style="`background-image: url(${getGemImg('powerStone')});`"
+            :style="`background-image: url(${getGemImg('jewel')});`"
           ></view>
           <text>{{ expected }}</text>
         </view>
@@ -92,7 +92,7 @@
           <text>购买单价</text>
           <view
             class="itemImg"
-            :style="`background-image: url(${getGemImg('powerStone')});`"
+            :style="`background-image: url(${getGemImg('jewel')});`"
           ></view>
           <text>{{ certainItem.sellPrice }}</text>
         </view>
@@ -100,7 +100,7 @@
           <text>购买总价</text>
           <view
             class="itemImg"
-            :style="`background-image: url(${getGemImg('powerStone')});`"
+            :style="`background-image: url(${getGemImg('jewel')});`"
           ></view>
           <text>{{ totalPrice }}</text>
         </view>
@@ -119,7 +119,7 @@
 
 <script setup>
 import { computed, onMounted, ref } from "vue";
-import { POWERSTONE, useGameInfoStore } from "../stores/gameInfo";
+import { JEWEL, POWERSTONE, useGameInfoStore } from "../stores/gameInfo";
 import { roundToOneDecimal } from "../utils/roundToOneDecimal";
 import { netWorkError, showTips } from "../utils/error";
 
@@ -189,7 +189,7 @@ async function confirmSellPublish() {
 		return
 	};
   // 如果超过自己的余额就直接跳出
-  if (totalPrice.value > gameInfo.assets[POWERSTONE]) {
+  if (totalPrice.value > gameInfo.assets[JEWEL]) {
     handleShowWran(true);
 		showTips("余额不足")
     return;
@@ -199,23 +199,6 @@ async function confirmSellPublish() {
 		title: '购买中...',
 		mask: true
 	})
-	
-	uniCloud.callFunction({
-		name: "test111",
-		data: {
-			sellNum: sellNum,
-			id: id,
-			sellPrice: sellPrice,
-			sellerId: props.certainItem.sellerId,
-			demType: demType,
-			userId: gameInfo.id,
-			totalPrice: totalPrice.value,
-			inputNumValue: inputNumValue.value
-		}	
-	}).then(res => {
-		console.log(res)
-	})
-	
 	
   // 进行数据库操作
 	uniCloud.callFunction({
@@ -231,23 +214,31 @@ async function confirmSellPublish() {
 				inputNumValue: inputNumValue.value,
 			}
 		}).then(res => {
-			if(res) {
+			// console.log("code:",res.result)
+			if(res.result) {
 				// 关闭弹窗
 				props.controlShowPop(false);
 				props.updateData();
 				
 				// 实时更新资源数量
 				gameInfo.assets[demType] += inputNumValue.value;
-				gameInfo.assets[POWERSTONE] = roundToOneDecimal(
-					gameInfo.assets[POWERSTONE] - totalPrice.value
-				);
+				
+				// 表示购买者和发布者不是同一个人
+				if(res.result === 1) {
+					gameInfo.assets[JEWEL] = roundToOneDecimal(
+						gameInfo.assets[JEWEL] - totalPrice.value
+					);
+				}else {
+					gameInfo.assets[JEWEL] = roundToOneDecimal(
+						gameInfo.assets[JEWEL] - (totalPrice.value * 0.05)
+					);
+				}
+				
 				uni.hideLoading();
 			}else {
 				netWorkError()
 			}
 		});
-	
-  
 }
 
 // 出售操作逻辑
@@ -289,22 +280,21 @@ async function confirmNeedPublish() {
 			},
 		})
 		.then((res) => {
-			if(res) {
+			if(res.result) {
 				// 关闭弹窗
 				props.controlShowPop(false);
 				props.updateData();
 				
 				// 实时更新资源数量
-				gameInfo.assets[demType] -= inputNumValue.value;
-				gameInfo.assets[POWERSTONE] = roundToOneDecimal(
-					gameInfo.assets[POWERSTONE] + expected.value
+				if(res.result === 1) gameInfo.assets[demType] -= inputNumValue.value;
+				gameInfo.assets[JEWEL] = roundToOneDecimal(
+					gameInfo.assets[JEWEL] + expected.value
 				);
 				uni.hideLoading()
 			}else {
 				netWorkError()
 			}
 		});
-
 }
 </script>
 

@@ -11,22 +11,31 @@ exports.main = async (event, context) => {
 	// 寻找assets的索引id
 	const userAssets = await db.collection('assets').where({userId}).get()
 	const assetsId = userAssets.data[0]._id
-	const nowNum = userAssets.data[0].powerStone
-	console.log("userAssets", userAssets)
+	const nowNum = userAssets.data[0].jewel
+	
+	// 寻找发布者的assets的索引id
+	const publishAssets = await db.collection('assets').where({userId: buyerId}).get()
+	const publishAssetsId = publishAssets.data[0]._id
+	const publlishNowNum = publishAssets.data[0].jewel
+	
+	// 1表示购买者和发布者不同, 2表示两者相同
+	let code = userId === buyerId ? 2 : 1;
 	
 	function roundToOneDecimal(num) {
 	  return Math.round(num * 10) / 10;
 	}
 	
 	try {
-		// 扣除宝石
-		const res3 = await transaction.collection('assets').doc(assetsId).update({
-			[demType]: db.command.inc(-inputNumValue)
-		})
+		// 扣除所出售的资源, 只有出售者和发布者id不同时才会进行扣除出售的资源, 要不就是自需自售, 支付出0.05的宝石手续费
+		if(code === 1) {
+			const res3 = await transaction.collection('assets').doc(assetsId).update({
+				[demType]: db.command.inc(-inputNumValue)
+			})
+		}
 		
 		// 加上用户出售所得到的能量石
 		const res4 = await transaction.collection('assets').doc(assetsId).update({
-		  powerStone: roundToOneDecimal(nowNum+expected),
+		  jewel: roundToOneDecimal(nowNum+expected),
 		});
 		
 	  // 增加这一条购买记录, 如果用户刚好购买完就消除这条需求
@@ -53,12 +62,12 @@ exports.main = async (event, context) => {
 	  }
 	  
 	  await transaction.commit();
-		return true;
+		return code;
 	} catch (e) {
 		console.error('transaction error', e.message);
 	  await transaction.rollback();
 	  
 	  // 这里可以处理错误，比如显示错误消息等
-		return false;
+		return -1;
 	}	
 };

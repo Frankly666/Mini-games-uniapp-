@@ -2,12 +2,14 @@
   position: fixed;
   flex-wrap: wrap;
   right: 2vw;
-  top: 10vw;
+  top: 3vw;
   display: flex;
   justify-content: space-between;
   width: 100vw;
   z-index: 99;
   color: #dcc5ab;
+  box-sizing: border-box;
+  padding: 0 10vw 0 10vw;
   font-size: 3.6vw;
   font-weight: bold;
 }
@@ -17,11 +19,9 @@
   align-items: center;
   text-align: center;
   justify-content: center;
-  width: 30.67vw;
+  box-sizing: border-box;
+  width: 33.67vw;
   height: 10vw;
-}
-.assetsBar1 .asset[data-v-618629f7]:first-of-type {
-  margin-left: 4vw;
 }
 .assetsBar1 .asset span[data-v-618629f7] {
   position: relative;
@@ -49,9 +49,7 @@
   width: 31.67vw;
   height: 10vw;
   line-height: 7vw;
-}
-.assetsBar2 .asset[data-v-618629f7]:last-of-type {
-  margin-top: 2vw;
+  margin-bottom: 1vw;
 }
 .assetsBar2 .asset span[data-v-618629f7] {
   position: relative;
@@ -462,7 +460,7 @@
   top: 9vw;
   width: 15vw;
   height: 15vw;
-  background: url('../../static/home/button_close.png') no-repeat center center / contain;
+  background: url('../../static/toolsBar/button_close.png') no-repeat center center / contain;
 }
 .userInfoWrap .infoBgc .avatar[data-v-13ced562] {
   position: absolute;
@@ -523,7 +521,7 @@
   top: 2vw;
   width: 8vw;
   height: 8vw;
-  background: url('../../static/home/button_close.png') no-repeat center center / contain;
+  background: url('../../static/toolsBar/button_close.png') no-repeat center center / contain;
 }
 .settingWrap .bgc .switch[data-v-9e95edd8] {
   position: absolute;
@@ -641,7 +639,7 @@
   top: -2vw;
   width: 10vw;
   height: 10vw;
-  background: url(../../static/talentCenter/close.png) no-repeat center center / contain;
+  background: url(../../static/ground/close.png) no-repeat center center / contain;
 }
 .chooseWorkerPlaceWrap .chooseboard .chooseTitle[data-v-8fc36c4d] {
   position: relative;
@@ -692,7 +690,7 @@
 .chooseWorkerPlaceWrap .chooseboard .wrap1 .itemWrap .select[data-v-8fc36c4d] {
   width: 10%;
   height: 100%;
-  background: url('../../static/talentCenter/btn2.png') no-repeat center center / contain;
+  background: url('../../static/ground/btn2.png') no-repeat center center / contain;
 }
 .chooseWorkerPlaceWrap .chooseboard .retireBtn[data-v-8fc36c4d] {
   position: absolute;
@@ -702,7 +700,7 @@
   width: 30vw;
   height: 17vw;
   color: aliceblue;
-  background: url('../../static/talentCenter/btn2.png') no-repeat center center / contain;
+  background: url('../../static/ground/btn2.png') no-repeat center center / contain;
 }
 
 .talentWrap[data-v-52356c3d] {
@@ -720,7 +718,7 @@
   bottom: 7vw;
   width: 13vw;
   height: 13vw;
-  background: url("../../static/talentCenter/close.png") no-repeat center center / contain;
+  background: url("../../static/ground/close.png") no-repeat center center / contain;
 }
 .talentWrap .board[data-v-52356c3d] {
   display: flex;
@@ -809,7 +807,7 @@
   line-height: 8.7vw;
   color: aliceblue;
   font-weight: bold;
-  background: url("../../static/talentCenter/btn2.png") no-repeat center center / contain;
+  background: url("../../static/ground/btn2.png") no-repeat center center / contain;
 }
 
 .loadingWrap[data-v-d56252fb] {

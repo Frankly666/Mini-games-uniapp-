@@ -23,7 +23,7 @@
 	}
 	
 	async function toGame() {
-		const phone = 15182344075, avatar = 'https://ts1.cn.mm.bing.net/th?id=OIP-C.1PjYL0WYwiZAYSWtOQryjwHaHa&w=250&h=250&c=8&rs=1&qlt=90&o=6&dpr=1.1&pid=3.1&rm=2';
+		const phone = 12345678902, avatar = 'https://ts1.cn.mm.bing.net/th?id=OIP-C.1PjYL0WYwiZAYSWtOQryjwHaHa&w=250&h=250&c=8&rs=1&qlt=90&o=6&dpr=1.1&pid=3.1&rm=2';
 		setCache(PHONE, phone)
 		setCache(AVATAR, avatar)
 		gameInfo.isLoad = 0

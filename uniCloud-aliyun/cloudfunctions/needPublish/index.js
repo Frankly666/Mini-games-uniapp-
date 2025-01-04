@@ -8,7 +8,7 @@ exports.main = async (event, context) => {
 	
 	const userAssets = await db.collection('assets').where({userId}).get()
 	const assetsId = userAssets.data[0]._id
-	const nowNum = userAssets.data[0].powerStone
+	const nowNum = userAssets.data[0].jewel
 	
 	function roundToOneDecimal(num) {
 	  return Math.round(num * 10) / 10;
@@ -17,7 +17,7 @@ exports.main = async (event, context) => {
 	try {
 		const res1 = await transaction.collection("buyRequirement").add(addData)
 		const res2 = await transaction.collection("assets").doc(assetsId).update({
-			powerStone: roundToOneDecimal(nowNum - totalPrice)
+			jewel: roundToOneDecimal(nowNum - totalPrice)
 		})
 		await transaction.commit();
 		return true;

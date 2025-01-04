@@ -32,9 +32,10 @@
 				</view>
 			</view>
 			
+			<!-- 单价 -->
 			<view class="price" >
 				<text>{{title}}单价(限价:0.2~10):</text>
-				<view class="gemImg"></view>
+				<view class="gemImg" :style="`background-image: url(${getGemImg('jewel')});`"></view>
 				<view class="priceInputWrap">
 					<input type="digit" :value="inputPriceValue" @input="(res) => {setPriceValue(res.detail.value)}"/>
 				</view>
@@ -54,17 +55,17 @@
 				</view>
 				<view class="premium item" v-if="isSell">
 					<text>手续费</text>
-					<view class="itemImg" :style="`background-image: url(${getGemImg('powerStone')});`"></view>
+					<view class="itemImg" :style="`background-image: url(${getGemImg('jewel')});`"></view>
 					<text>5%</text>
 				</view>
 				<view class="obtain item" v-if="isSell">
 					<text>预获得</text>
-					<view class="itemImg" :style="`background-image: url(${getGemImg('powerStone')});`"></view>
+					<view class="itemImg" :style="`background-image: url(${getGemImg('jewel')});`"></view>
 					<text>{{expectedNum}}</text>
 				</view>
 				<view class="needPowerStone item" v-if="!isSell">
 					<text>需要扣除</text>
-					<view class="itemImg" :style="`background-image: url(${getGemImg('powerStone')});`"></view>
+					<view class="itemImg" :style="`background-image: url(${getGemImg('jewel')});`"></view>
 					<text>{{needPowerStoneNum}}</text>
 				</view>
 			</view>
@@ -78,7 +79,7 @@
 
 <script setup>
 	import { computed, onMounted, ref } from 'vue';
-	import { POWERSTONE, useGameInfoStore } from '../stores/gameInfo';
+	import { JEWEL, POWERSTONE, useGameInfoStore } from '../stores/gameInfo';
 	import { roundToOneDecimal } from '../utils/roundToOneDecimal';
 	import { netWorkError, showTips } from '../utils/error';
 	
@@ -195,7 +196,7 @@
 		const gemType = props.gemImgName[selectIndex.value]
 		const totalPrice = roundToOneDecimal(inputNumValue.value * inputPriceValue.value)
 		
-		if(totalPrice > gameInfo.assets[POWERSTONE]) {
+		if(totalPrice > gameInfo.assets[JEWEL]) {
 			isShowNotEnough.value = true;
 			showTips("余额不足")
 			return
@@ -222,7 +223,7 @@
 			}
 		}).then(res => {
 			if(res) {
-				gameInfo.assets[POWERSTONE] =  roundToOneDecimal(gameInfo.assets[POWERSTONE] - totalPrice ) ;
+				gameInfo.assets[JEWEL] =  roundToOneDecimal(gameInfo.assets[JEWEL] - totalPrice ) ;
 				props.controlPublish(false)
 				props.updateData()
 				uni.hideLoading()

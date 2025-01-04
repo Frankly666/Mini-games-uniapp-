@@ -35,67 +35,61 @@
 		
 		<!-- 地皮 -->
 		<view class="grounds">
-			<view class="item small">
+			<view class="item small" v-for="item in 1">
 				<view class="realGround type1">
-					<view class="personWrap" v-show="false">
-						<worker-vue :type="'2'" :delay='0'></worker-vue>
+					<view class="personWrap"  v-show="selectWorker(1, item)">
+						<worker-vue :type="selectWorker(1, item)"  :delay="-item"></worker-vue>
 					</view>
-				</view>
-			</view>
-									  
-			<view class="item scarce" v-for="item in 3">
-				<view class="realGround type2">
-					<view class="personWrap"  v-show="selectWorker(2, item)">
-						<worker-vue :type="selectWorker(2, item)" :delay="-item"></worker-vue>
-					</view>
-					<view class="lockGround" v-show="!judgeOwnThisGround(2, item)" @click="() => { clickLockGround(2, item)}">
+					<view class="lockGround" v-show="!judgeOwnThisGround(1, item)" @click="() => { clickLockGround(1, item)}">
 						<view class="title">
-							<text >稀缺地皮</text>
+							<text >{{gameInfo.groundsMeta[1].groundName}}</text>
 						</view>
 					</view>
 				</view>
 			</view>
+									  
+			
 									    
-			<view class="item big" v-for="item in 5">
+			<view class="item big" v-for="item in 3">
 				<view class="realGround type3">
 					<view class="personWrap" v-show="selectWorker(3, item)">
 						<worker-vue :type="selectWorker(3, item)" :delay="-item"></worker-vue>
 					</view>
 					<view class="lockGround" v-show="!judgeOwnThisGround(3, item)" @click="() => {clickLockGround(3, item)}">
 						<view class="title">
-							<text style="color: brown;">大地皮</text>
+							<text style="color: brown;">{{gameInfo.groundsMeta[3].groundName}}</text>
 						</view>
 					</view>
 				</view>
 			</view>
 			
-			<view class="item resource" v-for="item in 6">
+			<view class="item resource" v-for="item in 1">
 				<view class="realGround type4">
 					<view class="personWrap" v-show="selectWorker(4, item)">
 						<worker-vue :type="selectWorker(4, item)" :delay="-item"></worker-vue>
 					</view>
 					<view class="lockGround" v-show="!judgeOwnThisGround(4, item)" @click="() => {clickLockGround(4, item)}">
 						<view class="title">
-							<text>资源地皮</text>
+							<text>{{gameInfo.groundsMeta[4].groundName}}</text>
 						</view>
 					</view>
 				</view>
 			</view>
 									   
-			<view class="item black" v-for="item in 8">
+			<view class="item black" v-for="item in 1">
 				<view class="realGround type5">
 					<view class="personWrap" v-show="!!selectWorker(5, item)">
 						<worker-vue :type="selectWorker(5, item)" :delay="-item"></worker-vue>
 					</view>
 					<view class="lockGround" v-show="!judgeOwnThisGround(5, item)" @click="() => {clickLockGround(5, item)}"> 
 						<view class="title">
-							<text style="color: black;">黑土地皮</text>
+							<text style="color: black;">{{gameInfo.groundsMeta[5].groundName}}</text>
 						</view>
 					</view>
 				</view>
 			</view>
 									   
-			<view class="item diamond" v-for="item in 3">
+			<view class="item diamond" v-for="item in 1">
 				<view class="realGround type6">
 					<view class="diamonds">
 						<view class="d1 item"></view>
@@ -107,12 +101,25 @@
 					</view>
 					<view class="lockGround" v-show="!judgeOwnThisGround(6, item)" @click="() => {clickLockGround(6, item)}">
 						<view class="title">
-							<text style="color: chocolate;">钻石地皮</text>
+							<text style="color: chocolate;">{{gameInfo.groundsMeta[6].groundName}}</text>
 						</view>
 					</view>
 				</view>
 			</view>
-									   
+			
+			<!-- 资源地皮 -->
+			<view class="item scarce" v-for="item in 19">
+				<view class="realGround type2">
+					<view class="personWrap"  v-show="selectWorker(2, item)">
+						<worker-vue :type="selectWorker(2, item)" :delay="-item"></worker-vue>
+					</view>
+					<view class="lockGround" v-show="!judgeOwnThisGround(2, item)" @click="() => { clickLockGround(2, item)}">
+						<view class="title">
+							<text >{{gameInfo.groundsMeta[2].groundName}}</text>
+						</view>
+					</view>
+				</view>
+			</view>		 
 			
 		</view>
 	

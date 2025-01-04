@@ -37,7 +37,7 @@
 			</view>
 		</view>
 		
-		<!-- 资源石 -->
+		<!-- 石头 -->
 		<view class="gemstones">
 			<view class="tabs">
 				<view 
@@ -90,8 +90,8 @@
 	const itemCertainIndex = ref(0)
 	const isShowMarketPublish = ref(false)
 	const isShowBuySellPop = ref(false)
-	const gemItems = ['金刚石', '资源石', '无球粒陨石']
-	const gemImgName = ['diamond', 'resourceStone', 'meteorite']
+	const gemItems = ['金刚石', '资源石', '能量石']
+	const gemImgName = ['diamond', 'resourceStone', 'powerStone']
 	const marketItems = ['出售', '求购']
 	const buttonWord = ['购买', '出售']
 	const marketDB = uniCloud.importObject('market')
@@ -233,16 +233,22 @@
 				.gemItem {
 					.gemImg {
 						display: inline;
-						width: 9vw;
-						height: 9vw;
+						width: 10vw;
+						height: 10vw;
 						background: no-repeat center center / contain;
 						margin-right: 1vw;
 					}
 					
 					&:first-of-type>.gemImg {
-						width: 7.5vw;
-						height: 7.5vw;
+						width: 11vw;
+						height: 11vw;
+					}
+					
+					&:last-of-type>.gemImg {
+						width: 8vw;
+						height: 8vw;
 					}					
+					
 				}
 							
 				.gemItem {
@@ -302,8 +308,8 @@
 							display: flex;
 							width: 36vw;
 							.gemImg {
-								width: 6vw;
-								height: 6vw;
+								width: 8vw;
+								height: 8vw;
 								margin-right: 2vw;
 								background: no-repeat center center / contain;
 							}
@@ -315,7 +321,7 @@
 								margin-right: 2vw;
 								width: 6vw;
 								height: 6vw;
-								background: url('../../static/market/powerStone.png') no-repeat center center / contain;
+								background: url('../../static/market/jewel.png') no-repeat center center / contain;
 							}
 						}
 										

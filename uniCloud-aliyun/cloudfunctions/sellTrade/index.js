@@ -7,23 +7,46 @@ exports.main = async (event, context) => {
 	const db = uniCloud.database();
 	const transaction = await db.startTransaction();
 	
-	// 寻找assets的索引id
+	// 寻找该用户assets的索引id
 	const userAssets = await db.collection('assets').where({userId}).get()
 	const assetsId = userAssets.data[0]._id
-	const nowNum = userAssets.data[0].powerStone
+	const nowNum = userAssets.data[0].jewel
+	console.log("nowNum", nowNum)
+	
+	
+	// 寻找发布者的assets的索引id
+	const publishAssets = await db.collection('assets').where({userId: sellerId}).get()
+	console.log("hhhh",publishAssets.data[0])
+	const publishAssetsId = publishAssets.data[0]._id
+	const publlishNowNum = publishAssets.data[0].jewel
+	
+	// 1表示购买者和发布者不同, 2表示两者相同
+	let code = userId === sellerId ? 2 : 1;
 	
 	function roundToOneDecimal(num) {
-	  return Math.round(num * 10) / 10;
+	  return Math.round(num * 100) / 100;
 	}
 	
 	try {
-		// 扣除能量石
-		const res3 = await transaction.collection('assets').doc(assetsId).update({
-			powerStone: roundToOneDecimal(nowNum-totalPrice)
-		})
+		// 如果购买者和发布者都一样就直接扣除0.05的手续费就行
+		if(code === 2) {
+			const res5 = await transaction.collection('assets').doc(assetsId).update({
+				jewel: roundToOneDecimal(nowNum - (totalPrice * 0.05))
+			}) 
+		}else {
+			// 加上发布者应获得的宝石, 需要打上折扣0.95
+			const res4 = await transaction.collection('assets').doc(publishAssetsId).update({
+				jewel: roundToOneDecimal(publlishNowNum + (totalPrice * 0.95))
+			}) 
+			// 扣除该用户的宝石
+			const res3 = await transaction.collection('assets').doc(assetsId).update({
+				jewel: roundToOneDecimal(nowNum - totalPrice)	
+			})
+		}
+		
 		  
-		// 加上用户买的宝石
-		const res4 = await transaction.collection('assets').doc(assetsId).update({
+		// 加上用户买的相应资源
+		const res5 = await transaction.collection('assets').doc(assetsId).update({
 		  [demType]: db.command.inc(inputNumValue),
 		});
 		
@@ -50,12 +73,12 @@ exports.main = async (event, context) => {
 	  }
 	
 	  await transaction.commit();
-		return true;
+		return code
 	} catch (e) {
 		console.error('transaction error', e.message);
 	  await transaction.rollback();
 	  
 	  // 这里可以处理错误，比如显示错误消息等
-		return false;
+		return -1
 	}	
 };

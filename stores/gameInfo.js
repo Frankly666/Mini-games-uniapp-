@@ -57,48 +57,48 @@ export const useGameInfoStore = defineStore('gameInfo', {
 			},
 			groundsMeta: {
 				"1": {
-					"groundName": "小地皮",
-					"unlockFunds": 30,  // 解锁租金 
+					"groundName": "一级土地",
+					"unlockFunds": 98,  // 解锁租金 
 					"duration": 30,  // 租用时限
-					"dailyEarnings": 5,  // 每日收益
+					"dailyEarnings": 5.9,  // 每日收益
 					"directPushEarnings": 0.1,  // 直推收益
 					"inDepthReturns": 0.01  // 间推收益
 				},
 				"2": {
-					"groundName": "稀缺地皮",
-					"unlockFunds": 698,
-					"duration": 118,
-					"dailyEarnings": 9,
-					"directPushEarnings": 0.15,
-					"inDepthReturns": 0.03
-				},
-				"3": {
-					"groundName": "大地皮",
-					"unlockFunds": 1698,
-					"duration": 240,
-					"dailyEarnings": 12.5,
-					"directPushEarnings": 0.2,
-					"inDepthReturns": 0.04
-				},
-				"4": {
 					"groundName": "资源地皮",
-					"unlockFunds": 698,
+					"unlockFunds": 298,
 					"duration": 48,
-					"dailyEarnings": 5,
+					"dailyEarnings": 9,
 					"directPushEarnings": 0.12,
 					"inDepthReturns": 0.02
 				},
+				"3": {
+					"groundName": "二级土地",
+					"unlockFunds": 698,
+					"duration": 240,
+					"dailyEarnings": 10.7,
+					"directPushEarnings": 0.15,
+					"inDepthReturns": 0.03
+				},
+				"4": {
+					"groundName": "三级土地",
+					"unlockFunds": 1690,
+					"duration": 48,
+					"dailyEarnings": 12.5,
+					"directPushEarnings": 0.20,
+					"inDepthReturns": 0.04
+				},
 				"5": {
-					"groundName": "黑土地皮",
+					"groundName": "四级土地",
 					"unlockFunds": 5980,
 					"duration": 450,
-					"dailyEarnings": 24,
+					"dailyEarnings": 35.3,
 					"directPushEarnings": 0.25,
 					"inDepthReturns": 0.05
 				},
 				"6": {
-					"groundName":"钻石地皮",
-					"unlockFunds": 16980,
+					"groundName":"五级土地",
+					"unlockFunds": 15980,
 					"duration": 900,
 					"dailyEarnings": 50,
 					"directPushEarnings": 0.3,
@@ -119,4 +119,5 @@ export const ASSETS = 'assets'
 export const POWERSTONE = 'powerStone'
 export const DIAMOND = 'diamond'
 export const RESOURCESTONE = 'resourceStone'
+export const JEWEL = 'jewel'
 

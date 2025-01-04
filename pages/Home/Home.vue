@@ -189,7 +189,7 @@ onMounted(async () => {
 	updateOwnGrounds()
 	setTimeout(function() {
 		isShowLoading.value = false;
-	}, 600);
+	}, 1000);
 	
 })
 </script>

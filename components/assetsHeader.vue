@@ -26,9 +26,8 @@ import { PHONE, useGameInfoStore } from '../stores/gameInfo';
 import Cache from '../utils/cache';
 	
 // 这里是详情页中的资源展示
-const assets = ['powerStone', 'diamond', 'resourceStone'];
+const assets = ['powerStone', 'diamond', 'resourceStone', 'jewel'];
 
-const assetsMap = ['能', '金', '源'];
 const gameInfo = useGameInfoStore()
 // const userAssets = reactive({})
 const props = defineProps(['judge'])
@@ -53,79 +52,84 @@ function getImageUrl(name) {
 </script>
 
 <style lang="less">
-.assetsBar1 {
-  position: fixed;
-  flex-wrap: wrap;
-  right: 2vw;
-  top: 10vw;
-  display: flex;
-  justify-content: space-between;
-  width: 100vw;
-  z-index: 99;
-  color: #dcc5ab;
-  font-size: 3.6vw;
-  font-weight: bold;
+	// 交易中心所用的
+	.assetsBar1 {
+		position: fixed;
+		flex-wrap: wrap;
+		right: 2vw;
+		top: 3vw;
+		display: flex;
+		justify-content: space-between;
+		width: 100vw;
+		z-index: 99;
+		color: #dcc5ab;
+		box-sizing: border-box;
+		padding: 0 10vw 0 10vw;
+		font-size: 3.6vw;
+		
+		font-weight: bold;
 
-  .asset {
-    position: relative;
-    display: flex;
-    align-items: center;
-	text-align: center;
-	justify-content: center;
-    width: 30.67vw;
+		.asset {
+			position: relative;
+			display: flex;
+			align-items: center;
+			text-align: center;
+			justify-content: center;
+			box-sizing: border-box;
+			width: 33.67vw;
+			height: 10vw;
+		
+			&:first-of-type {
+				// margin-left: 4vw;
+			}
+		 //  &:last-of-type {
+		 //    width: 16vw;
+		 //    height: 8vw;
+		 //  }
+
+			span {
+				position: relative;
+				top: -0.53vw;
+			}
+		}
+	}
 	
-    height: 10vw;
-	
-    &:first-of-type {
-	  margin-left: 4vw;
-    }
-   //  &:last-of-type {
-   //    width: 16vw;
-   //    height: 8vw;
-   //  }
+	// 主页所用的
+	.assetsBar2 {
+		position: fixed;
+		flex-wrap: wrap;
+		right: 2vw;
+		top: 3vw;
+		display: flex;
+		justify-content: space-between;
+		width: 70vw;
+		z-index: 99;
+		color: #dcc5ab;
+		font-size: 3.6vw;
+		font-weight: bold;
 
-    span {
-      position: relative;
-      top: -0.53vw;
-    }
-  }
-}
+		.asset {
+			position: relative;
+			display: flex;
+			align-items: center;
+			text-align: center;
+			justify-content: center;
+			width: 31.67vw;
+			height: 10vw;
+			line-height: 7vw;
+			margin-bottom: 1vw;
+			&:first-of-type {
+				// width: 26vw;
+				// height: 8vw;
+			}
+			&:last-of-type {
+				// width: 26vw;
+				// height: 8vw;
+			}
 
-.assetsBar2 {
-  position: fixed;
-  flex-wrap: wrap;
-  right: 2vw;
-  top: 3vw;
-  display: flex;
-  justify-content: space-between;
-  width: 70vw;
-  z-index: 99;
-  color: #dcc5ab;
-  font-size: 3.6vw;
-  font-weight: bold;
-
-  .asset {
-    position: relative;
-    display: flex;
-    align-items: center;
-	text-align: center;
-	justify-content: center;
-    width: 31.67vw;
-    height: 10vw;
-	line-height: 7vw;
-    &:first-of-type {
-      // width: 26vw;
-      // height: 8vw;
-    }
-    &:last-of-type {
-      // width: 26vw;
-      // height: 8vw;
-	  margin-top: 2vw;
-    }
-
-    span {
-      position: relative;
-    }
-  }
+			span {
+				position: relative;
+			}
+		}
 }
 </style>

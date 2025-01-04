@@ -69,7 +69,6 @@
 		}
 		
 		// 小地皮是本来就有的
-		if(type === 1) flag = true;
 		return flag;
 	}
 	
