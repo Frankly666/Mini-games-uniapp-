@@ -377,6 +377,178 @@
   background: url("../../static/mine/btn_Purple.png") no-repeat center center / contain;
 }
 
+.publishWrap[data-v-e13ff159] {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 99;
+  width: 100vw;
+  height: 100vh;
+  font-weight: bold;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+.publishWrap .board[data-v-e13ff159] {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 87vw;
+  height: 57vh;
+  background: url('../../static/market/table.png') no-repeat center center / contain;
+}
+.publishWrap .board .close[data-v-e13ff159] {
+  position: absolute;
+  top: 1vw;
+  right: 2vw;
+  width: 12vw;
+  height: 12vw;
+  background: url('../../static/market/lamb-close.png') no-repeat center center / contain;
+}
+.publishWrap .board .title[data-v-e13ff159] {
+  position: absolute;
+  top: 12vw;
+  width: 40vw;
+  font-size: 5vw;
+  text-align: center;
+}
+.publishWrap .board .gems[data-v-e13ff159] {
+  position: absolute;
+  top: 21vw;
+  left: 10vw;
+  display: flex;
+  width: 100%;
+}
+.publishWrap .board .gems .gemItem[data-v-e13ff159] {
+  margin-right: 3vw;
+  font-size: 3.5vw;
+  text-align: center;
+}
+.publishWrap .board .gems .gemItem .imgWrap[data-v-e13ff159] {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 3vw;
+  width: 12vw;
+  height: 12vw;
+  margin-right: 2vw;
+  box-sizing: border-box;
+}
+.publishWrap .board .gems .gemItem .imgWrap.active[data-v-e13ff159] {
+  background-color: rgba(0, 0, 0, 0.5);
+  border: greenyellow 1px solid;
+}
+.publishWrap .board .gems .gemItem .imgWrap .gemImg[data-v-e13ff159] {
+  width: 9vw;
+  height: 9vw;
+  background: no-repeat center center / contain;
+}
+.publishWrap .board .gems .gemItem .name[data-v-e13ff159] {
+  margin-top: 2vw;
+  padding-right: 1.4vw;
+}
+.publishWrap .board .publishNum[data-v-e13ff159] {
+  position: absolute;
+  top: 42vw;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 3vw;
+  width: 81%;
+  height: 12vw;
+  padding: 0 3vw;
+  box-sizing: border-box;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+.publishWrap .board .publishNum .add[data-v-e13ff159] {
+  width: 7vw;
+  height: 7vw;
+  background: url('../../static/market/add_btn.png') no-repeat center center / contain;
+}
+.publishWrap .board .publishNum .sub[data-v-e13ff159] {
+  width: 7vw;
+  height: 7vw;
+  background: url('../../static/market/sub_btn.png') no-repeat center center / contain;
+}
+.publishWrap .board .publishNum .max[data-v-e13ff159] {
+  margin-left: 2.7vw;
+  width: 9vw;
+  height: 7vw;
+  font-size: 3vw;
+  text-align: center;
+  line-height: 6vw;
+  color: #863f10;
+  background: url('../../static/market/btn_frame.png') no-repeat center center / contain;
+}
+.publishWrap .board .publishNum .inputWrap[data-v-e13ff159] {
+  flex: 1;
+  margin: 0 3vw;
+  height: 9vw;
+  line-height: 9vw;
+  text-align: center;
+  border-radius: 3vw;
+  background-color: #fff;
+  border: black 1px solid;
+}
+.publishWrap .board .publishNum .inputWrap uni-input[data-v-e13ff159] {
+  width: 100%;
+  height: 100%;
+}
+.publishWrap .board .sentPhone[data-v-e13ff159] {
+  position: absolute;
+  top: 58vw;
+  display: flex;
+  align-items: center;
+  width: 85%;
+  height: 8vw;
+  padding: 0 4vw;
+  box-sizing: border-box;
+}
+.publishWrap .board .sentPhone .phoneInputWrap[data-v-e13ff159] {
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+  border: black 1px solid;
+  text-align: center;
+  border-radius: 3vw;
+}
+.publishWrap .board .sentPhone .phoneInputWrap uni-input[data-v-e13ff159] {
+  width: 100%;
+  height: 100%;
+}
+.publishWrap .board .tip[data-v-e13ff159] {
+  position: absolute;
+  width: 90%;
+  height: 7vw;
+  bottom: 24vw;
+  display: flex;
+  justify-content: space-between;
+  font-size: 3.1vw;
+  padding: 0 3vw;
+  box-sizing: border-box;
+}
+.publishWrap .board .tip .item[data-v-e13ff159] {
+  display: flex;
+  align-items: center;
+}
+.publishWrap .board .tip .item .itemImg[data-v-e13ff159] {
+  width: 4vw;
+  height: 4vw;
+  background: no-repeat center center / contain;
+  margin: 0 1vw;
+}
+.publishWrap .board .confirmBtn[data-v-e13ff159] {
+  position: absolute;
+  bottom: 11vw;
+  width: 25vw;
+  height: 12vw;
+  text-align: center;
+  color: aliceblue;
+  line-height: 10vw;
+  font-size: 4vw;
+  background: url('../../static/mine/btn_Purple.png') no-repeat center center / contain;
+}
+
 .tradingMarketWrap {
   position: relative;
   width: 100vw;
@@ -412,6 +584,17 @@
 .tradingMarketWrap .topWrap .markets .marketItem.active {
   color: #95e23d;
   background: url('../../static/assetsHeader/marketBg.png') no-repeat center center / cover;
+}
+.tradingMarketWrap .topWrap .sent {
+  position: absolute;
+  right: 23vw;
+  top: 2vw;
+  width: 16vw;
+  height: 8vw;
+  line-height: 7.5vw;
+  text-align: center;
+  border-radius: 5vw;
+  background-color: rgba(70, 89, 106, 0.14);
 }
 .tradingMarketWrap .topWrap .publish {
   position: absolute;

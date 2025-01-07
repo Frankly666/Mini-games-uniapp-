@@ -20,6 +20,13 @@
 			:updateData='updateData'
 			/>
 		
+		<sent-pop-vue
+			v-if="isShowSentPop"
+			:gemItems='gemItems'
+			:gemImgName='gemImgName'
+			:closePop = '() => {setShowSentPop(false)}'
+		/>
+		
 		<!-- 出售求购 -->
 		<view class="topWrap">
 			<view class="markets">
@@ -30,6 +37,10 @@
 					>
 					<text>{{item}}市场</text>
 				</view>
+			</view>
+			
+			<view class="sent" @click="() => {setShowSentPop(true)}">
+				<text>转赠</text>
 			</view>
 			
 			<view class="publish" @click="() => {controlPublish(true)}">
@@ -84,7 +95,8 @@
 	import assetsHeader1 from '../../components/assetsHeader.vue';
 	import marketPublish from '../../components/marketPublish.vue';
 	import buyCellPop from '../../components/buyCellPop.vue';
-	
+	import sentPopVue from '../../components/sentPop.vue';
+
 	const marketCurrentIndex = ref(0)
 	const itemCurrentIndex = ref(0)
 	const itemCertainIndex = ref(0)
@@ -98,6 +110,7 @@
 	const assetsDB = uniCloud.importObject('assets')
 	const sellRequirement = ref({})
 	const buyRequirement = ref({})
+	const isShowSentPop = ref(false)
 	
 	// 动态得到展示的字段名
 	const showListData = computed(() => {
@@ -137,15 +150,22 @@
 		return `../../static/market/${item}.png`
 	}
 	
+	// 发布的弹窗控制
 	function controlPublish(bool) {
 		isShowMarketPublish.value = bool
 	}
 	
+	// 购买或者出售的弹窗控制
 	function controlShowPop (bool) {
 		isShowBuySellPop.value = bool;
 	}
 	function setCertainIndex(index) {
 		itemCertainIndex.value = index;
+	}
+	
+	// 转赠的弹窗
+	function setShowSentPop(type) {
+		isShowSentPop.value = type
 	}
 	
 	async function updateData() {
@@ -200,6 +220,18 @@
 						background: url('../../static/assetsHeader/marketBg.png') no-repeat center center /cover;
 					}
 				}
+			}
+			
+			.sent {
+				position: absolute;
+				right: 23vw;
+				top: 2vw;
+				width: 16vw;
+				height: 8vw;
+				line-height: 7.5vw;
+				text-align: center;
+				border-radius: 5vw;
+				background-color: rgba(70, 89,106, .14);
 			}
 			
 			.publish {

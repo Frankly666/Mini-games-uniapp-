@@ -1,0 +1,7 @@
+{
+  "name": "sentAssets",
+  "dependencies": {},
+  "extensions": {
+    "uni-cloud-jql": {}
+  }
+}

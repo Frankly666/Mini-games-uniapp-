@@ -11,8 +11,6 @@ exports.main = async (event, context) => {
 	const userAssets = await db.collection('assets').where({userId}).get()
 	const assetsId = userAssets.data[0]._id
 	const nowNum = userAssets.data[0].jewel
-	console.log("nowNum", nowNum)
-	
 	
 	// 寻找发布者的assets的索引id
 	const publishAssets = await db.collection('assets').where({userId: sellerId}).get()
@@ -43,7 +41,6 @@ exports.main = async (event, context) => {
 				jewel: roundToOneDecimal(nowNum - totalPrice)	
 			})
 		}
-		
 		  
 		// 加上用户买的相应资源
 		const res5 = await transaction.collection('assets').doc(assetsId).update({
@@ -61,6 +58,7 @@ exports.main = async (event, context) => {
 														transactionNum: inputNumValue,
 														transactionTime: new Date()
 													})
+													
 		// 对这条需求进行操作
 	  if (sellNum === inputNumValue) {
 	    await transaction.collection('sellRequirement').doc(id).update({

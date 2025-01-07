@@ -8,7 +8,7 @@ export const useGameInfoStore = defineStore('gameInfo', {
 		return { 
 			id: getCache(ID) | '', 
 			userName: getCache(USERNAME), 
-			phone: '', 
+			phone: null, 
 			avatar: getCache(AVATAR) | '', 
 			isFirst: getCache(ISFIRST),
 			bgm: uni.createInnerAudioContext(),
