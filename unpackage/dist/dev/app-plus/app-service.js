@@ -6558,7 +6558,7 @@ This will fail in production if not fixed.`);
       const needPowerStoneNum = vue.computed(() => {
         if (inputNumValue.value <= 0)
           return 0;
-        return roundToOneDecimal(inputNumValue.value * premium);
+        return roundToOneDecimal(inputNumValue.value * (1 + premium));
       });
       function getGemImg(item) {
         return `../../static/market/${item}.png`;
@@ -6591,7 +6591,7 @@ This will fail in production if not fixed.`);
       }
       async function confirmFun() {
         const gemType = props.gemImgName[selectIndex.value];
-        if (inputNumValue.value > gameInfo.assets[gemType] || inputNumValue.value < 0) {
+        if (needPowerStoneNum.value > gameInfo.assets[gemType] || inputNumValue.value < 0) {
           showTips("转赠数量有误");
           return;
         }
@@ -6608,14 +6608,13 @@ This will fail in production if not fixed.`);
           data: {
             phone: phoneInputValue.value,
             userId: gameInfo.id,
-            assetsType: props.gemImgName[selectIndex.value],
-            sentNum: inputNumValue.value,
+            assetsType: gemType,
+            sendNum: inputNumValue.value,
             premium
           }
         }).then((res) => {
           if (res.result > 0) {
-            const type = props.gemImgName[selectIndex.value];
-            gameInfo.assets[type] = roundToOneDecimal(gameInfo.assets[type] - inputNumValue.value);
+            gameInfo.assets[gemType] = roundToOneDecimal(gameInfo.assets[gemType] - needPowerStoneNum.value);
             props.closePop();
             uni.hideLoading();
           } else {
@@ -6758,7 +6757,7 @@ This will fail in production if not fixed.`);
             )
           ]),
           vue.createElementVNode("view", { class: "needPowerStone item" }, [
-            vue.createElementVNode("text", null, "需要扣除"),
+            vue.createElementVNode("text", null, "最终需要扣除"),
             vue.createElementVNode(
               "view",
               {

@@ -51,7 +51,7 @@
 					<text>{{premium*100}}%</text>
 				</view>
 				<view class="needPowerStone item">
-					<text>需要扣除</text>
+					<text>最终需要扣除</text>
 					<view class="itemImg" :style="`background-image: url(${getGemImg(gemImgName[selectIndex])});`"></view>
 					<text>{{needPowerStoneNum}}</text>
 				</view>
@@ -81,7 +81,7 @@
 	// 需要扣除的手续费
 	const needPowerStoneNum = computed(() => {
 		if(inputNumValue.value <= 0) return 0
-		return roundToOneDecimal(inputNumValue.value * premium)
+		return roundToOneDecimal(inputNumValue.value * (1 + premium))
 	})
 	
 	function getGemImg(item) {
@@ -120,19 +120,16 @@
 	
 	// 发布求购的逻辑操作
 	async function confirmFun() {
-
 		const gemType = props.gemImgName[selectIndex.value]
 		
-		if(inputNumValue.value > gameInfo.assets[gemType] || inputNumValue.value < 0) {
+		if(needPowerStoneNum.value > gameInfo.assets[gemType] || inputNumValue.value < 0) {
 			showTips("转赠数量有误")
 			return
 		}
-		
 		if(phoneInputValue.value < 999999999 || phoneInputValue.value > 99999999999) {
 			showTips("号码格式有误")
 			return
 		}
-		
 		
 		uni.showLoading({
 			title: '转赠中',
@@ -145,14 +142,13 @@
 			data:{
 				phone: phoneInputValue.value,
 				userId: gameInfo.id,
-				assetsType: props.gemImgName[selectIndex.value],
-				sentNum: inputNumValue.value,
+				assetsType: gemType,
+				sendNum: inputNumValue.value,
 				premium: premium
 			}
 		}).then(res => {
 			if(res.result > 0) {
-				const type = props.gemImgName[selectIndex.value];
-				gameInfo.assets[type] =  roundToOneDecimal(gameInfo.assets[type] - inputNumValue.value) ;
+				gameInfo.assets[gemType] =  roundToOneDecimal(gameInfo.assets[gemType] - needPowerStoneNum.value) ;
 				props.closePop()
 				uni.hideLoading()
 			}else {
