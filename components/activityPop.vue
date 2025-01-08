@@ -2,10 +2,10 @@
 	<view class="announcementWrap">
 		<view class="pop">
 			<view class="title">
-				<text>公告</text>
+				<text>活动</text>
 			</view>
 			
-			<view class="close" @click="() => {props.handleShow(3, false)}"></view>
+			<view class="close" @click="() => {props.handleShow(2, false)}"></view>
 		</view>
 	</view>
 </template>

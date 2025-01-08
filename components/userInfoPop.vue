@@ -2,17 +2,20 @@
 	<view class="userInfoWrap">
 		<view class="infoBgc">
 			<view class="closeBtn" @click="props.closeInfo"></view>
-			<view class="avatar" :style="`background-image: url(${avatar});`"></view>
-			<view class="userName">
-				<text>{{userName}}</text>
+			<view class="wrap1">
+				<view class="avatar" :style="`background-image: url(${avatar});`"></view>
+				<view class="userName">
+					<text>{{userName}}</text>
+				</view>
+				<view class="desc">
+					<text v-if="isFirstEdit">(首次免费修改)</text>
+					<text v-else>(修改需消耗100能量石)</text>
+				</view>
+				<view class="editName" @click="openEditNamePop">
+					<text>修改</text>
+				</view>
 			</view>
-			<view class="desc">
-				<text v-if="isFirstEdit">(首次免费修改)</text>
-				<text v-else>(修改需消耗100能量石)</text>
-			</view>
-			<view class="editName" @click="openEditNamePop">
-				<text>修改</text>
-			</view>
+			
 			<view class="assetsArea"></view>
 		</view>
 		
@@ -94,8 +97,6 @@
 		gameInfo.isFirst = 1
 		isShowEditPop.value = false;
 		isFirstEdit.value = false;
-		
-		
 	}
 	
 </script>
@@ -110,7 +111,7 @@
 		width: 100vw;
 		height: 100vh;
 		background-color: rgba(0,0,0,.7);
-		color: #dcc5aa;
+		color: black;
 		
 		.editPop {
 			display: flex;
@@ -127,8 +128,7 @@
 				top: 50vw;
 				width: 50vw;
 				height: 60vw;
-				background-color: #fff;
-				background: url('/static/home/changeName.png') no-repeat center center / contain;
+				background: url('/static/home/table.png') no-repeat center center / contain;
 				
 				.tip {
 					position: absolute;
@@ -137,20 +137,29 @@
 					width: 30vw;
 					text-align: center;
 					font-size: 3vw;
+					color: red;
 				}
 				
 				.close {
 					position: absolute;
-					right: 0;
-					top: 3vw;
-					width: 8vw;
-					height: 8vw;
+					right: 2vw;
+					top: 2vw;
+					width: 6vw;
+					height: 6vw;
+					background: url('/static/home/close.png') no-repeat center center / contain;
 				}
 				
 				.confirm {
 					position: absolute;
-					left: 16.6vw;
+					width: 22vw;
+					height: 10vw;
+					left: 13vw;
 					bottom: 12.8vw;
+					text-align: center;
+					line-height: 9vw;
+					font-weight: bold;
+					color: beige;
+					background: url('/static/home/btn_Green.png') no-repeat center center / contain;
 				}
 				
 				.inputBgc {
@@ -162,7 +171,7 @@
 					width: 40vw;
 					height: 10vw;
 					border-radius: 4vw;
-					background: url('/static/home/edit.png') no-repeat center center / cover;
+					background-color: rgba(0, 0, 0, .1);
 					
 					input {
 						margin-left: 3vw;
@@ -175,25 +184,32 @@
 			position: relative;
 			width: 80vw;
 			height: 115vw;
-			background-color: #fff;
-			background: url('/static/home/userInfo.png') no-repeat center center / contain;
+			background: url('/static/home/table.png') no-repeat center center / contain;
 			
 			.closeBtn {
 				position: absolute;
-				right: 1vw;
-				top: 9vw;
-				width: 15vw;
-				height: 15vw;
-				background: url('/static/home/button_close.png') no-repeat center center / contain;
+				z-index: 99;
+				right: 3vw;
+				top: 12vw;
+				width: 8vw;
+				height: 8vw;
+				background: url('/static/home/close.png') no-repeat center center / contain;
+			}
+			
+			.wrap1 {
+				position: absolute;
+				top: 5vw;
+				width: 100%;
+				height: 100%;
 			}
 			
 			.avatar {
 				position: absolute;
-				width: 24vw;
-				height: 24vw;
+				width: 20vw;
+				height: 20vw;
 				border-radius: 50%;
 				left: 28vw;
-				top: 3vw;
+				top: 14vw;
 				background: no-repeat center center / contain;
 			}
 			
@@ -205,7 +221,6 @@
 				left: 15vw;
 				font-weight: bold;
 				font-size: 5vw;
-				
 			}
 			
 			.desc {
@@ -226,6 +241,7 @@
 				background: url('../static/home/edit.png') no-repeat center center / contain;
 				text-align: center;
 				line-height: 8vw;
+				color: #fff;
 			}
 			
 			.assetsArea {

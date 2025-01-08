@@ -24,12 +24,12 @@
 		flex-direction: column;
 		justify-content: center;
 		position: fixed;
-		top: 2vw; 
+		top: 0vw; 
 		left: 3vw;
 		width: 20.33vw; 
 		height: 20.33vw; 
 		z-index: 99;
-		background: url("../static/toolsBar/avatar.png") no-repeat center center / contain;
+		// background: url("../static/toolsBar/avatar.png") no-repeat center center / contain;
 		
 		.avatarImg {
 			position: absolute;

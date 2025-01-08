@@ -21,8 +21,8 @@
 <script setup>
 	import { ref } from 'vue';
 	
-	const imgList = ['setting','warehouse', 'shop', 'announcement', 'rule'];
-	const imgMap = ['设置', '仓库', '商店', '公告', '玩法'];
+	const imgList = ['setting','warehouse', 'activity', 'announcement', 'rule'];
+	const imgMap = ['设置', '仓库', '活动', '公告', '玩法'];
 	const needFold = ref(true)
 	const props = defineProps(['handleShow']);
 	

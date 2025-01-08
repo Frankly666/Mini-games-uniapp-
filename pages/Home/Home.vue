@@ -12,6 +12,7 @@
 			<setting-pop v-if="isShowSettingPop" :handleShow="handleShow"></setting-pop>
 			<rule-pop v-if="isShowRulePop" :handleShow="handleShow"></rule-pop>
 			<announcement-pop v-if="isShowAnnouncementPop" :handleShow="handleShow"></announcement-pop>
+			<activity-pop-vue v-if="isShowActivityPop" :handleShow="handleShow"></activity-pop-vue>
 			<talent-center-pop v-if="isShowTalentPop" :handleShowTanlentPop="handleShowTanlentPop"></talent-center-pop>
 			
 			<view class="map-container"
@@ -42,6 +43,7 @@ import clickMask from '../../components/clickMask.vue';
 import userInfoPop from '../../components/userInfoPop.vue';
 import settingPop from '../../components/settingPop.vue';
 import rulePop from '../../components/rulePop.vue';
+import activityPopVue from '../../components/activityPop.vue';
 import announcementPop from '../../components/announcementPop.vue';
 import talentCenterPop from '../../components/talentCenterPop.vue';
 import { ASSETS, AVATAR, ID, ISFIRST, PHONE, USERNAME, useGameInfoStore } from '../../stores/gameInfo';
@@ -63,6 +65,7 @@ const isShowSettingPop = ref(false);
 const isShowRulePop = ref(false);
 const isShowAnnouncementPop = ref(false);
 const isShowTalentPop = ref(false);
+const isShowActivityPop = ref(false);
 const gameInfo = useGameInfoStore()
 const bgm = gameInfo.bgm;
 const setCache = Cache.setCache; // 这里使用的是实例化函数
@@ -130,6 +133,7 @@ function handleTouchEnd() {}
 // 控制展示工具栏中的弹窗
 function handleShow(type, bool) {
 	if(type === 0) isShowSettingPop.value = bool;
+	if(type === 2) isShowActivityPop.value = bool;
 	if(type === 3) isShowAnnouncementPop.value = bool;
 	if(type === 4) isShowRulePop.value = bool;
 }

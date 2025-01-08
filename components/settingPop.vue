@@ -2,11 +2,16 @@
 	<view class="settingWrap">
 		<view class="bgc">
 			<view class="close" @click="() => {props.handleShow(0, false)}"></view>
+			<view class="title">
+				<text>设置</text>
+			</view>
 			<view 
 				class="switch" 
 				@click="() => {handleImg()}"
 				:style="`background-image: url(${gameInfo.bgmIsOpen ?  openImg : closeImg});`"
-				/>
+				>
+					<text class="text">bgm</text>
+			</view>
 			<view class="exit" @click="exit">
 				<text>退出游戏</text>
 			</view>
@@ -57,38 +62,64 @@
 		
 		.bgc {
 			position: relative;
-			width: 80vw;
-			height: 60vw;
-			background: url('../static/toolsBar/settings.png') no-repeat center center / contain;
+			width: 90vw;
+			height: 70vw;
+			background: url('../static/toolsBar/board1.png') no-repeat center center / contain;
 			
 			.close {
 				position: absolute;
-				right: 0vw;
-				top: 2vw;
-				width: 8vw;
-				height: 8vw;
-				background: url('../static/toolsBar/button_close.png') no-repeat center center / contain;
+				right: 1vw;
+				top: 9vw;
+				width: 10vw;
+				height: 10vw;
+				transform: rotate(45deg);
+				background: url('../static/toolsBar/close_btn.png') no-repeat center center / contain;
+			}
+			
+			.title {
+				position: absolute;
+				right: 27vw;
+				top: 7.5vw;
+				width: 40vw;
+				height: 15vw;
+				text-align: center;
+				line-height: 14vw;
+				font-weight: bold;
+				font-size: 4vw;
+				color: aliceblue;
+				// background: url('../static/toolsBar/title.png') no-repeat center center / contain;				
 			}
 			
 			.switch {
 				position: absolute;
-				left: 24vw;
-				top: 13.8vw;
-				width: 15vw;
-				height: 6vw;
+				left: 10vw;
+				top: 22vw;
+				width: 9vw;
+				height: 9vw;
 				background: no-repeat center center / contain;
+				color: #877862;
+				font-weight: bold;
+				font-size: 4vw;
+				
+				.text {
+					position: absolute;
+					right: -11vw;
+					top: 1.3vw;
+				}
+				
 			}
 			
 			.exit {
 				position: absolute;
-				bottom: 5vw;
-				left: 28.4vw;
+				bottom: 13vw;
+				left: 32.5vw;
 				width: 23vw;
 				height: 11vw;
 				background: url('../static/home/btn_Green.png') no-repeat center center / contain;
 				color: #fefba8;
 				text-align: center;
 				line-height: 9vw;
+				font-weight: bold;
 				
 			}
 		}
