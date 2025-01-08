@@ -7,7 +7,7 @@
   justify-content: space-between;
   width: 100vw;
   z-index: 99;
-  color: #dcc5ab;
+  color: aliceblue;
   box-sizing: border-box;
   padding: 0 10vw 0 10vw;
   font-size: 3.6vw;
@@ -17,11 +17,25 @@
   position: relative;
   display: flex;
   align-items: center;
-  text-align: center;
-  justify-content: center;
-  box-sizing: border-box;
+  justify-content: left;
   width: 33.67vw;
   height: 10vw;
+  padding-left: 3vw;
+  box-sizing: border-box;
+  background: url("../../static/assetsHeader/assets_bar.png") no-repeat center center / contain;
+}
+.assetsBar1 .asset:first-of-type > .dem[data-v-618629f7] {
+  width: 6vw;
+  height: 6vw;
+}
+.assetsBar1 .asset:last-of-type > .dem[data-v-618629f7] {
+  width: 6vw;
+  height: 6vw;
+}
+.assetsBar1 .asset .dem[data-v-618629f7] {
+  width: 8vw;
+  height: 8vw;
+  margin-right: 4vw;
 }
 .assetsBar1 .asset span[data-v-618629f7] {
   position: relative;
@@ -36,7 +50,7 @@
   justify-content: space-between;
   width: 70vw;
   z-index: 99;
-  color: #dcc5ab;
+  color: aliceblue;
   font-size: 3.6vw;
   font-weight: bold;
 }
@@ -44,12 +58,27 @@
   position: relative;
   display: flex;
   align-items: center;
-  text-align: center;
-  justify-content: center;
+  justify-content: left;
   width: 31.67vw;
   height: 10vw;
   line-height: 7vw;
   margin-bottom: 1vw;
+  padding-left: 3vw;
+  box-sizing: border-box;
+  background: url("../../static/assetsHeader/assets_bar.png") no-repeat center center / contain;
+}
+.assetsBar2 .asset:first-of-type > .dem[data-v-618629f7] {
+  width: 6vw;
+  height: 6vw;
+}
+.assetsBar2 .asset:last-of-type > .dem[data-v-618629f7] {
+  width: 6vw;
+  height: 6vw;
+}
+.assetsBar2 .asset .dem[data-v-618629f7] {
+  width: 8vw;
+  height: 8vw;
+  margin-right: 4vw;
 }
 .assetsBar2 .asset span[data-v-618629f7] {
   position: relative;
@@ -205,7 +234,7 @@
   right: 0;
   width: 15vw;
   height: 15vw;
-  background: url('../../static/talentCenter/close.png') no-repeat center center / contain;
+  background: url('../../static/ground/close.png') no-repeat center center / contain;
 }
 .groundPopWrap .board .title[data-v-002acaef] {
   position: relative;
@@ -249,7 +278,7 @@
   line-height: 13.4vw;
   font-size: 5vw;
   font-weight: bold;
-  background: url('../../static/talentCenter/btn2.png') no-repeat center center / contain;
+  background: url('../../static/ground/btn2.png') no-repeat center center / contain;
 }
 
 .groundWrap {
@@ -266,7 +295,7 @@
   left: 7vw;
   width: 15vw;
   height: 15vw;
-  background: url("../../static/market/return.png") no-repeat center center / contain;
+  background: url("../../static/ground/return.png") no-repeat center center / contain;
 }
 .groundWrap .treesWrap1 .item1 {
   position: absolute;

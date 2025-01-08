@@ -366,7 +366,7 @@ if (uni.restoreGlobal) {
   function I(e2) {
     return e2 && "string" == typeof e2 ? JSON.parse(e2) : e2;
   }
-  const S = true, b = "app", A = I(define_process_env_UNI_SECURE_NETWORK_CONFIG_default), C = b, P = I('{\n    "address": [\n        "127.0.0.1",\n        "2.0.0.1",\n        "169.254.37.199",\n        "192.168.137.1",\n        "192.168.65.1",\n        "172.16.40.200"\n    ],\n    "debugPort": 9002,\n    "initialLaunchType": "local",\n    "servePort": 7002,\n    "skipFiles": [\n        "<node_internals>/**",\n        "D:/HBuilderX/HBuilderX/plugins/unicloud/**/*.js"\n    ]\n}\n'), T = I('[{"provider":"aliyun","spaceName":"fun-cloud-city-game","spaceId":"mp-4de62d5a-2380-467f-b109-457713276d05","clientSecret":"ZD2WgXn3K1WSmV78nmjvUQ==","endpoint":"https://api.next.bspapp.com"}]') || [];
+  const S = true, b = "app", A = I(define_process_env_UNI_SECURE_NETWORK_CONFIG_default), C = b, P = I('{\n    "address": [\n        "127.0.0.1",\n        "2.0.0.1",\n        "169.254.37.199",\n        "192.168.137.1",\n        "192.168.65.1",\n        "172.16.40.200"\n    ],\n    "debugPort": 9001,\n    "initialLaunchType": "local",\n    "servePort": 7001,\n    "skipFiles": [\n        "<node_internals>/**",\n        "D:/HBuilderX/HBuilderX/plugins/unicloud/**/*.js"\n    ]\n}\n'), T = I('[{"provider":"aliyun","spaceName":"fun-cloud-city-game","spaceId":"mp-4de62d5a-2380-467f-b109-457713276d05","clientSecret":"ZD2WgXn3K1WSmV78nmjvUQ==","endpoint":"https://api.next.bspapp.com"}]') || [];
   let O = "";
   try {
     O = "__UNI__1B67F5F";
@@ -4596,7 +4596,7 @@ This will fail in production if not fixed.`);
     }
     return target;
   };
-  const _sfc_main$o = {
+  const _sfc_main$p = {
     __name: "Mock",
     setup(__props, { expose: __expose }) {
       __expose();
@@ -4641,7 +4641,7 @@ This will fail in production if not fixed.`);
       return __returned__;
     }
   };
-  function _sfc_render$n(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$o(_ctx, _cache, $props, $setup, $data, $options) {
     return vue.openBlock(), vue.createElementBlock("view", null, [
       vue.createElementVNode("button", {
         type: "primary",
@@ -4655,8 +4655,8 @@ This will fail in production if not fixed.`);
       }, "点击进入云城")
     ]);
   }
-  const PagesMockMock = /* @__PURE__ */ _export_sfc(_sfc_main$o, [["render", _sfc_render$n], ["__file", "D:/HBuilderProjects/Game/pages/Mock/Mock.vue"]]);
-  const _sfc_main$n = {
+  const PagesMockMock = /* @__PURE__ */ _export_sfc(_sfc_main$p, [["render", _sfc_render$o], ["__file", "D:/HBuilderProjects/Game/pages/Mock/Mock.vue"]]);
+  const _sfc_main$o = {
     __name: "assetsHeader",
     props: ["judge"],
     setup(__props, { expose: __expose }) {
@@ -4678,7 +4678,7 @@ This will fail in production if not fixed.`);
         gameInfo.isLoad = true;
       });
       function getImageUrl(name) {
-        return `../static/assetsHeader/${name}.png`;
+        return `../static/market/${name}.png`;
       }
       const __returned__ = { assets, gameInfo, props, getCache: getCache2, assetsDB, userDB, getImageUrl, onMounted: vue.onMounted, reactive: vue.reactive, ref: vue.ref, watch: vue.watch, get PHONE() {
         return PHONE;
@@ -4691,7 +4691,7 @@ This will fail in production if not fixed.`);
       return __returned__;
     }
   };
-  function _sfc_render$m(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$n(_ctx, _cache, $props, $setup, $data, $options) {
     return vue.openBlock(), vue.createElementBlock("view", null, [
       $setup.props.judge === 2 ? (vue.openBlock(), vue.createElementBlock("view", {
         key: 0,
@@ -4701,25 +4701,28 @@ This will fail in production if not fixed.`);
           vue.Fragment,
           null,
           vue.renderList($setup.assets, (item, index) => {
-            return vue.createElementVNode(
-              "view",
-              {
-                class: "asset",
-                key: index,
-                style: vue.normalizeStyle(`background: url(${$setup.getImageUrl(item)}) no-repeat center center / contain;`)
-              },
-              [
-                vue.createElementVNode(
-                  "span",
-                  null,
-                  vue.toDisplayString($setup.gameInfo.assets[item]),
-                  1
-                  /* TEXT */
-                )
-              ],
-              4
-              /* STYLE */
-            );
+            return vue.createElementVNode("view", {
+              class: "asset",
+              key: index
+            }, [
+              vue.createElementVNode(
+                "view",
+                {
+                  class: "dem",
+                  style: vue.normalizeStyle(`background: url(${$setup.getImageUrl(item)}) no-repeat center center / contain;`)
+                },
+                null,
+                4
+                /* STYLE */
+              ),
+              vue.createElementVNode(
+                "span",
+                null,
+                vue.toDisplayString($setup.gameInfo.assets[item]),
+                1
+                /* TEXT */
+              )
+            ]);
           }),
           64
           /* STABLE_FRAGMENT */
@@ -4733,25 +4736,28 @@ This will fail in production if not fixed.`);
           vue.Fragment,
           null,
           vue.renderList($setup.assets, (item, index) => {
-            return vue.createElementVNode(
-              "view",
-              {
-                class: "asset",
-                key: index,
-                style: vue.normalizeStyle(`background: url(${$setup.getImageUrl(item)}) no-repeat center center / contain;`)
-              },
-              [
-                vue.createElementVNode(
-                  "span",
-                  null,
-                  vue.toDisplayString($setup.gameInfo.assets[item]),
-                  1
-                  /* TEXT */
-                )
-              ],
-              4
-              /* STYLE */
-            );
+            return vue.createElementVNode("view", {
+              class: "asset",
+              key: index
+            }, [
+              vue.createElementVNode(
+                "view",
+                {
+                  class: "dem",
+                  style: vue.normalizeStyle(`background: url(${$setup.getImageUrl(item)}) no-repeat center center / contain;`)
+                },
+                null,
+                4
+                /* STYLE */
+              ),
+              vue.createElementVNode(
+                "span",
+                null,
+                vue.toDisplayString($setup.gameInfo.assets[item]),
+                1
+                /* TEXT */
+              )
+            ]);
           }),
           64
           /* STABLE_FRAGMENT */
@@ -4759,8 +4765,8 @@ This will fail in production if not fixed.`);
       ])) : vue.createCommentVNode("v-if", true)
     ]);
   }
-  const assetsHeader = /* @__PURE__ */ _export_sfc(_sfc_main$n, [["render", _sfc_render$m], ["__scopeId", "data-v-618629f7"], ["__file", "D:/HBuilderProjects/Game/components/assetsHeader.vue"]]);
-  const _sfc_main$m = {
+  const assetsHeader = /* @__PURE__ */ _export_sfc(_sfc_main$o, [["render", _sfc_render$n], ["__scopeId", "data-v-618629f7"], ["__file", "D:/HBuilderProjects/Game/components/assetsHeader.vue"]]);
+  const _sfc_main$n = {
     __name: "avatar",
     setup(__props, { expose: __expose }) {
       __expose();
@@ -4773,7 +4779,7 @@ This will fail in production if not fixed.`);
       return __returned__;
     }
   };
-  function _sfc_render$l(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$m(_ctx, _cache, $props, $setup, $data, $options) {
     return vue.openBlock(), vue.createElementBlock("view", { class: "avatar" }, [
       $setup.avatar ? (vue.openBlock(), vue.createElementBlock(
         "view",
@@ -4797,16 +4803,16 @@ This will fail in production if not fixed.`);
       ])
     ]);
   }
-  const avatar = /* @__PURE__ */ _export_sfc(_sfc_main$m, [["render", _sfc_render$l], ["__scopeId", "data-v-32a3f906"], ["__file", "D:/HBuilderProjects/Game/components/avatar.vue"]]);
+  const avatar = /* @__PURE__ */ _export_sfc(_sfc_main$n, [["render", _sfc_render$m], ["__scopeId", "data-v-32a3f906"], ["__file", "D:/HBuilderProjects/Game/components/avatar.vue"]]);
   const _imports_0 = "/static/toolsBar/arrowRight.png";
   const _imports_1 = "/static/toolsBar/arrowLeft.png";
-  const _sfc_main$l = {
+  const _sfc_main$m = {
     __name: "toolsBar",
     props: ["handleShow"],
     setup(__props, { expose: __expose }) {
       __expose();
-      const imgList = ["setting", "warehouse", "shop", "announcement", "rule"];
-      const imgMap = ["设置", "仓库", "商店", "公告", "玩法"];
+      const imgList = ["setting", "warehouse", "activity", "announcement", "rule"];
+      const imgMap = ["设置", "仓库", "活动", "公告", "玩法"];
       const needFold = vue.ref(true);
       const props = __props;
       function toggleFold() {
@@ -4817,7 +4823,7 @@ This will fail in production if not fixed.`);
       return __returned__;
     }
   };
-  function _sfc_render$k(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$l(_ctx, _cache, $props, $setup, $data, $options) {
     return vue.openBlock(), vue.createElementBlock("view", { class: "toolsBar" }, [
       vue.createElementVNode("view", {
         class: "controll",
@@ -4874,8 +4880,8 @@ This will fail in production if not fixed.`);
       )
     ]);
   }
-  const toolsBar = /* @__PURE__ */ _export_sfc(_sfc_main$l, [["render", _sfc_render$k], ["__scopeId", "data-v-aed0e88d"], ["__file", "D:/HBuilderProjects/Game/components/toolsBar.vue"]]);
-  const _sfc_main$k = {
+  const toolsBar = /* @__PURE__ */ _export_sfc(_sfc_main$m, [["render", _sfc_render$l], ["__scopeId", "data-v-aed0e88d"], ["__file", "D:/HBuilderProjects/Game/components/toolsBar.vue"]]);
+  const _sfc_main$l = {
     name: "cloudTip",
     data() {
       return {};
@@ -4889,7 +4895,7 @@ This will fail in production if not fixed.`);
       }
     }
   };
-  function _sfc_render$j(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$k(_ctx, _cache, $props, $setup, $data, $options) {
     return vue.openBlock(), vue.createElementBlock("view", { class: "cloudWrap" }, [
       vue.createElementVNode("view", {
         class: "mine item",
@@ -4908,8 +4914,8 @@ This will fail in production if not fixed.`);
       ])
     ]);
   }
-  const cloudTip = /* @__PURE__ */ _export_sfc(_sfc_main$k, [["render", _sfc_render$j], ["__scopeId", "data-v-04c56f99"], ["__file", "D:/HBuilderProjects/Game/components/cloudTip.vue"]]);
-  const _sfc_main$j = {
+  const cloudTip = /* @__PURE__ */ _export_sfc(_sfc_main$l, [["render", _sfc_render$k], ["__scopeId", "data-v-04c56f99"], ["__file", "D:/HBuilderProjects/Game/components/cloudTip.vue"]]);
+  const _sfc_main$k = {
     name: "dynamicPeople",
     data() {
       return {};
@@ -4918,7 +4924,7 @@ This will fail in production if not fixed.`);
     },
     methods: {}
   };
-  function _sfc_render$i(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$j(_ctx, _cache, $props, $setup, $data, $options) {
     return vue.openBlock(), vue.createElementBlock("view", { class: "peopleWrap" }, [
       vue.createElementVNode("view", { class: "flowers" }, [
         vue.createElementVNode("view", { class: "flower f1" }),
@@ -4947,8 +4953,8 @@ This will fail in production if not fixed.`);
       ])
     ]);
   }
-  const dynamicPeople = /* @__PURE__ */ _export_sfc(_sfc_main$j, [["render", _sfc_render$i], ["__scopeId", "data-v-2a3805e5"], ["__file", "D:/HBuilderProjects/Game/components/dynamicPeople.vue"]]);
-  const _sfc_main$i = {
+  const dynamicPeople = /* @__PURE__ */ _export_sfc(_sfc_main$k, [["render", _sfc_render$j], ["__scopeId", "data-v-2a3805e5"], ["__file", "D:/HBuilderProjects/Game/components/dynamicPeople.vue"]]);
+  const _sfc_main$j = {
     __name: "clickMask",
     props: ["handleShowTanlentPop"],
     setup(__props, { expose: __expose }) {
@@ -4977,7 +4983,7 @@ This will fail in production if not fixed.`);
       return __returned__;
     }
   };
-  function _sfc_render$h(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$i(_ctx, _cache, $props, $setup, $data, $options) {
     return vue.openBlock(), vue.createElementBlock("view", { class: "clickMaskWrap" }, [
       vue.createElementVNode("view", {
         class: "item tradingMarket",
@@ -4997,8 +5003,8 @@ This will fail in production if not fixed.`);
       })
     ]);
   }
-  const clickMask = /* @__PURE__ */ _export_sfc(_sfc_main$i, [["render", _sfc_render$h], ["__scopeId", "data-v-37646fb3"], ["__file", "D:/HBuilderProjects/Game/components/clickMask.vue"]]);
-  const _sfc_main$h = {
+  const clickMask = /* @__PURE__ */ _export_sfc(_sfc_main$j, [["render", _sfc_render$i], ["__scopeId", "data-v-37646fb3"], ["__file", "D:/HBuilderProjects/Game/components/clickMask.vue"]]);
+  const _sfc_main$i = {
     __name: "userInfoPop",
     props: ["closeInfo"],
     setup(__props, { expose: __expose }) {
@@ -5057,40 +5063,42 @@ This will fail in production if not fixed.`);
       return __returned__;
     }
   };
-  function _sfc_render$g(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$h(_ctx, _cache, $props, $setup, $data, $options) {
     return vue.openBlock(), vue.createElementBlock("view", { class: "userInfoWrap" }, [
       vue.createElementVNode("view", { class: "infoBgc" }, [
         vue.createElementVNode("view", {
           class: "closeBtn",
           onClick: _cache[0] || (_cache[0] = (...args) => $setup.props.closeInfo && $setup.props.closeInfo(...args))
         }),
-        vue.createElementVNode(
-          "view",
-          {
-            class: "avatar",
-            style: vue.normalizeStyle(`background-image: url(${$setup.avatar});`)
-          },
-          null,
-          4
-          /* STYLE */
-        ),
-        vue.createElementVNode("view", { class: "userName" }, [
+        vue.createElementVNode("view", { class: "wrap1" }, [
           vue.createElementVNode(
-            "text",
+            "view",
+            {
+              class: "avatar",
+              style: vue.normalizeStyle(`background-image: url(${$setup.avatar});`)
+            },
             null,
-            vue.toDisplayString($setup.userName),
-            1
-            /* TEXT */
-          )
-        ]),
-        vue.createElementVNode("view", { class: "desc" }, [
-          $setup.isFirstEdit ? (vue.openBlock(), vue.createElementBlock("text", { key: 0 }, "(首次免费修改)")) : (vue.openBlock(), vue.createElementBlock("text", { key: 1 }, "(修改需消耗100能量石)"))
-        ]),
-        vue.createElementVNode("view", {
-          class: "editName",
-          onClick: $setup.openEditNamePop
-        }, [
-          vue.createElementVNode("text", null, "修改")
+            4
+            /* STYLE */
+          ),
+          vue.createElementVNode("view", { class: "userName" }, [
+            vue.createElementVNode(
+              "text",
+              null,
+              vue.toDisplayString($setup.userName),
+              1
+              /* TEXT */
+            )
+          ]),
+          vue.createElementVNode("view", { class: "desc" }, [
+            $setup.isFirstEdit ? (vue.openBlock(), vue.createElementBlock("text", { key: 0 }, "(首次免费修改)")) : (vue.openBlock(), vue.createElementBlock("text", { key: 1 }, "(修改需消耗100能量石)"))
+          ]),
+          vue.createElementVNode("view", {
+            class: "editName",
+            onClick: $setup.openEditNamePop
+          }, [
+            vue.createElementVNode("text", null, "修改")
+          ])
         ]),
         vue.createElementVNode("view", { class: "assetsArea" })
       ]),
@@ -5129,10 +5137,10 @@ This will fail in production if not fixed.`);
       ])) : vue.createCommentVNode("v-if", true)
     ]);
   }
-  const userInfoPop = /* @__PURE__ */ _export_sfc(_sfc_main$h, [["render", _sfc_render$g], ["__scopeId", "data-v-13ced562"], ["__file", "D:/HBuilderProjects/Game/components/userInfoPop.vue"]]);
+  const userInfoPop = /* @__PURE__ */ _export_sfc(_sfc_main$i, [["render", _sfc_render$h], ["__scopeId", "data-v-13ced562"], ["__file", "D:/HBuilderProjects/Game/components/userInfoPop.vue"]]);
   const openImg = "../static/toolsBar/switchOn.png";
   const closeImg = "../static/toolsBar/switchOff.png";
-  const _sfc_main$g = {
+  const _sfc_main$h = {
     __name: "settingPop",
     props: ["handleShow"],
     setup(__props, { expose: __expose }) {
@@ -5150,7 +5158,7 @@ This will fail in production if not fixed.`);
       function exit() {
         bgm.stop();
         bgm.onStop(() => {
-          formatAppLog("log", "at components/settingPop.vue:36", "音乐停止播放");
+          formatAppLog("log", "at components/settingPop.vue:41", "音乐停止播放");
         });
         uni.navigateTo({
           url: "/pages/Mock/Mock"
@@ -5163,7 +5171,7 @@ This will fail in production if not fixed.`);
       return __returned__;
     }
   };
-  function _sfc_render$f(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$g(_ctx, _cache, $props, $setup, $data, $options) {
     return vue.openBlock(), vue.createElementBlock("view", { class: "settingWrap" }, [
       vue.createElementVNode("view", { class: "bgc" }, [
         vue.createElementVNode("view", {
@@ -5172,6 +5180,9 @@ This will fail in production if not fixed.`);
             $setup.props.handleShow(0, false);
           })
         }),
+        vue.createElementVNode("view", { class: "title" }, [
+          vue.createElementVNode("text", null, "设置")
+        ]),
         vue.createElementVNode(
           "view",
           {
@@ -5181,7 +5192,9 @@ This will fail in production if not fixed.`);
             }),
             style: vue.normalizeStyle(`background-image: url(${$setup.gameInfo.bgmIsOpen ? $setup.openImg : $setup.closeImg});`)
           },
-          null,
+          [
+            vue.createElementVNode("text", { class: "text" }, "bgm")
+          ],
           4
           /* STYLE */
         ),
@@ -5194,8 +5207,8 @@ This will fail in production if not fixed.`);
       ])
     ]);
   }
-  const settingPop = /* @__PURE__ */ _export_sfc(_sfc_main$g, [["render", _sfc_render$f], ["__scopeId", "data-v-9e95edd8"], ["__file", "D:/HBuilderProjects/Game/components/settingPop.vue"]]);
-  const _sfc_main$f = {
+  const settingPop = /* @__PURE__ */ _export_sfc(_sfc_main$h, [["render", _sfc_render$g], ["__scopeId", "data-v-9e95edd8"], ["__file", "D:/HBuilderProjects/Game/components/settingPop.vue"]]);
+  const _sfc_main$g = {
     __name: "rulePop",
     props: ["handleShow"],
     setup(__props, { expose: __expose }) {
@@ -5206,7 +5219,7 @@ This will fail in production if not fixed.`);
       return __returned__;
     }
   };
-  function _sfc_render$e(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$f(_ctx, _cache, $props, $setup, $data, $options) {
     return vue.openBlock(), vue.createElementBlock("view", { class: "ruleWrap" }, [
       vue.createElementVNode("view", { class: "pop" }, [
         vue.createElementVNode("view", { class: "title" }, [
@@ -5221,7 +5234,34 @@ This will fail in production if not fixed.`);
       ])
     ]);
   }
-  const rulePop = /* @__PURE__ */ _export_sfc(_sfc_main$f, [["render", _sfc_render$e], ["__scopeId", "data-v-961e39f0"], ["__file", "D:/HBuilderProjects/Game/components/rulePop.vue"]]);
+  const rulePop = /* @__PURE__ */ _export_sfc(_sfc_main$g, [["render", _sfc_render$f], ["__scopeId", "data-v-961e39f0"], ["__file", "D:/HBuilderProjects/Game/components/rulePop.vue"]]);
+  const _sfc_main$f = {
+    __name: "activityPop",
+    props: ["handleShow"],
+    setup(__props, { expose: __expose }) {
+      __expose();
+      const props = __props;
+      const __returned__ = { props };
+      Object.defineProperty(__returned__, "__isScriptSetup", { enumerable: false, value: true });
+      return __returned__;
+    }
+  };
+  function _sfc_render$e(_ctx, _cache, $props, $setup, $data, $options) {
+    return vue.openBlock(), vue.createElementBlock("view", { class: "announcementWrap" }, [
+      vue.createElementVNode("view", { class: "pop" }, [
+        vue.createElementVNode("view", { class: "title" }, [
+          vue.createElementVNode("text", null, "活动")
+        ]),
+        vue.createElementVNode("view", {
+          class: "close",
+          onClick: _cache[0] || (_cache[0] = () => {
+            $setup.props.handleShow(2, false);
+          })
+        })
+      ])
+    ]);
+  }
+  const activityPopVue = /* @__PURE__ */ _export_sfc(_sfc_main$f, [["render", _sfc_render$e], ["__scopeId", "data-v-83f5b7af"], ["__file", "D:/HBuilderProjects/Game/components/activityPop.vue"]]);
   const _sfc_main$e = {
     __name: "announcementPop",
     props: ["handleShow"],
@@ -5581,6 +5621,7 @@ This will fail in production if not fixed.`);
       const isShowRulePop = vue.ref(false);
       const isShowAnnouncementPop = vue.ref(false);
       const isShowTalentPop = vue.ref(false);
+      const isShowActivityPop = vue.ref(false);
       const gameInfo = useGameInfoStore();
       const bgm = gameInfo.bgm;
       const setCache = Cache.setCache;
@@ -5641,6 +5682,8 @@ This will fail in production if not fixed.`);
       function handleShow(type, bool) {
         if (type === 0)
           isShowSettingPop.value = bool;
+        if (type === 2)
+          isShowActivityPop.value = bool;
         if (type === 3)
           isShowAnnouncementPop.value = bool;
         if (type === 4)
@@ -5660,14 +5703,14 @@ This will fail in production if not fixed.`);
         bgm.loop = true;
         bgm.play();
         bgm.onError((err) => {
-          formatAppLog("log", "at pages/Home/Home.vue:155", err);
+          formatAppLog("log", "at pages/Home/Home.vue:159", err);
         });
         const phone = getCache2(PHONE), avatar2 = getCache2(AVATAR);
         const user = Ys.importObject("user");
         const assets = Ys.importObject("assets");
         const res1 = await user.select(phone);
         if (res1.res.affectedDocs === 0) {
-          formatAppLog("log", "at pages/Home/Home.vue:168", "该用户没有激活过云城", res1);
+          formatAppLog("log", "at pages/Home/Home.vue:172", "该用户没有激活过云城", res1);
           const res2 = await user.init(phone, avatar2);
           await assets.init(res2.res.id);
           setCache(USERNAME, "趣选云城");
@@ -5675,7 +5718,7 @@ This will fail in production if not fixed.`);
           gameInfo.userName = "趣选云城";
           gameInfo.isFirst = 0;
         } else {
-          formatAppLog("log", "at pages/Home/Home.vue:176", "该用户已经激活过云城(在mock页面中)", res1);
+          formatAppLog("log", "at pages/Home/Home.vue:180", "该用户已经激活过云城(在mock页面中)", res1);
           const data = res1.res.data[0];
           gameInfo.userName = data.userName;
           gameInfo.isFirst = data.isFirst;
@@ -5689,7 +5732,7 @@ This will fail in production if not fixed.`);
           isShowLoading.value = false;
         }, 1e3);
       });
-      const __returned__ = { keyword, screenWidth, screenHeight, mapWidth, mapHeight, startX, startY, translateX, translateY, isShowInfo, isShowSettingPop, isShowRulePop, isShowAnnouncementPop, isShowTalentPop, gameInfo, bgm, setCache, getCache: getCache2, groundsDB, isShowLoading, systemInfo, getVwVhInPx, handleTouchStart, handleTouchMove, handleTouchEnd, handleShow, handleInfo, handleShowTanlentPop, onMounted: vue.onMounted, onUnmounted: vue.onUnmounted, ref: vue.ref, assetsHeader, avatar, toolsBar, cloudTip, dynamicPeople, clickMask, userInfoPop, settingPop, rulePop, announcementPop, talentCenterPop, get ASSETS() {
+      const __returned__ = { keyword, screenWidth, screenHeight, mapWidth, mapHeight, startX, startY, translateX, translateY, isShowInfo, isShowSettingPop, isShowRulePop, isShowAnnouncementPop, isShowTalentPop, isShowActivityPop, gameInfo, bgm, setCache, getCache: getCache2, groundsDB, isShowLoading, systemInfo, getVwVhInPx, handleTouchStart, handleTouchMove, handleTouchEnd, handleShow, handleInfo, handleShowTanlentPop, onMounted: vue.onMounted, onUnmounted: vue.onUnmounted, ref: vue.ref, assetsHeader, avatar, toolsBar, cloudTip, dynamicPeople, clickMask, userInfoPop, settingPop, rulePop, activityPopVue, announcementPop, talentCenterPop, get ASSETS() {
         return ASSETS;
       }, get AVATAR() {
         return AVATAR;
@@ -5742,8 +5785,12 @@ This will fail in production if not fixed.`);
         key: 4,
         handleShow: $setup.handleShow
       })) : vue.createCommentVNode("v-if", true),
-      $setup.isShowTalentPop ? (vue.openBlock(), vue.createBlock($setup["talentCenterPop"], {
+      $setup.isShowActivityPop ? (vue.openBlock(), vue.createBlock($setup["activityPopVue"], {
         key: 5,
+        handleShow: $setup.handleShow
+      })) : vue.createCommentVNode("v-if", true),
+      $setup.isShowTalentPop ? (vue.openBlock(), vue.createBlock($setup["talentCenterPop"], {
+        key: 6,
         handleShowTanlentPop: $setup.handleShowTanlentPop
       })) : vue.createCommentVNode("v-if", true),
       vue.createElementVNode(

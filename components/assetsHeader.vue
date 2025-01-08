@@ -4,7 +4,8 @@
       <view class="asset" 
             v-for="(item, index) in assets" 
             :key="index" 
-            :style="`background: url(${getImageUrl(item)}) no-repeat center center / contain;`">		
+            >
+				<view class="dem" :style="`background: url(${getImageUrl(item)}) no-repeat center center / contain;`"></view>
         <span>{{gameInfo.assets[item]}}</span>
       </view>
     </view>
@@ -13,7 +14,8 @@
 	    <view class="asset" 
 	          v-for="(item, index) in assets" 
 	          :key="index" 
-	          :style="`background: url(${getImageUrl(item)}) no-repeat center center / contain;`">		
+	          >
+				<view class="dem" :style="`background: url(${getImageUrl(item)}) no-repeat center center / contain;`"></view>
 	      <span>{{gameInfo.assets[item]}}</span>
 	    </view>
 	</view>
@@ -47,7 +49,7 @@ onMounted(async () => {
 })
 
 function getImageUrl(name) {
-	return `../static/assetsHeader/${name}.png`;
+	return `../static/market/${name}.png`;
 }
 </script>
 
@@ -62,30 +64,38 @@ function getImageUrl(name) {
 		justify-content: space-between;
 		width: 100vw;
 		z-index: 99;
-		color: #dcc5ab;
+		color: aliceblue;
 		box-sizing: border-box;
 		padding: 0 10vw 0 10vw;
 		font-size: 3.6vw;
-		
 		font-weight: bold;
 
 		.asset {
 			position: relative;
 			display: flex;
 			align-items: center;
-			text-align: center;
-			justify-content: center;
+			justify-content: left;
 			box-sizing: border-box;
 			width: 33.67vw;
 			height: 10vw;
-		
-			&:first-of-type {
-				// margin-left: 4vw;
+			padding-left: 3vw;
+			box-sizing: border-box;
+			background: url("../static/assetsHeader/assets_bar.png") no-repeat center center / contain;
+			
+			&:first-of-type>.dem {
+				 width: 6vw;
+				 height: 6vw;
 			}
-		 //  &:last-of-type {
-		 //    width: 16vw;
-		 //    height: 8vw;
-		 //  }
+			&:last-of-type>.dem {
+			   width: 6vw;
+			   height: 6vw;
+			}
+			
+			.dem {
+				width: 8vw;
+				height: 8vw;
+				margin-right: 4vw;
+			}
 
 			span {
 				position: relative;
@@ -104,7 +114,7 @@ function getImageUrl(name) {
 		justify-content: space-between;
 		width: 70vw;
 		z-index: 99;
-		color: #dcc5ab;
+		color: aliceblue;
 		font-size: 3.6vw;
 		font-weight: bold;
 
@@ -112,19 +122,28 @@ function getImageUrl(name) {
 			position: relative;
 			display: flex;
 			align-items: center;
-			text-align: center;
-			justify-content: center;
+			justify-content: left;
 			width: 31.67vw;
 			height: 10vw;
 			line-height: 7vw;
 			margin-bottom: 1vw;
-			&:first-of-type {
-				// width: 26vw;
-				// height: 8vw;
+			padding-left: 3vw;
+			box-sizing: border-box;
+			background: url("../static/assetsHeader/assets_bar.png") no-repeat center center / contain;
+			
+			&:first-of-type>.dem {
+				 width: 6vw;
+				 height: 6vw;
 			}
-			&:last-of-type {
-				// width: 26vw;
-				// height: 8vw;
+			&:last-of-type>.dem {
+			   width: 6vw;
+			   height: 6vw;
+			}
+			
+			.dem {
+				width: 8vw;
+				height: 8vw;
+				margin-right: 4vw;
 			}
 
 			span {
