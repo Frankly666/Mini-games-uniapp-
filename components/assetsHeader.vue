@@ -59,7 +59,7 @@ function getImageUrl(name) {
 		position: fixed;
 		flex-wrap: wrap;
 		right: 2vw;
-		top: 3vw;
+		top: 7vw;
 		display: flex;
 		justify-content: space-between;
 		width: 100vw;
@@ -109,7 +109,7 @@ function getImageUrl(name) {
 		position: fixed;
 		flex-wrap: wrap;
 		right: 2vw;
-		top: 3vw;
+		top: 8vw;
 		display: flex;
 		justify-content: space-between;
 		width: 70vw;

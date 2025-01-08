@@ -101,7 +101,7 @@ import { useGameInfoStore } from '../stores/gameInfo';
 			flex-direction: column;
 			align-items: center;
 			width: 87vw;
-			height: 57vh;
+			height: 104vw;
 			background: url('../static/market/table.png') no-repeat center center / contain;
 			
 			.close {

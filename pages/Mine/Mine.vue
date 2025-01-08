@@ -116,7 +116,7 @@
 			position: fixed;
 			top: 0;
 			width: 100%;
-			height: 36vh;
+			height: 70vw;
 			background: url('../../static/mine/mineBg.webp') no-repeat center center /cover;
 			
 			.miner {

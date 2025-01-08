@@ -150,6 +150,7 @@ function handleShowTanlentPop(type) {
 onMounted(async () => {
 	if(gameInfo.isLoad) return;  // 只执行一次
 	
+	uni.hideLoading()
 	// bgm播放设置
 	bgm.src ='/static/bgm/bgm.mp3'
 	bgm.autoplay = true;

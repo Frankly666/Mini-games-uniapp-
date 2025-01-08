@@ -5698,19 +5698,20 @@ This will fail in production if not fixed.`);
       vue.onMounted(async () => {
         if (gameInfo.isLoad)
           return;
+        uni.hideLoading();
         bgm.src = "/static/bgm/bgm.mp3";
         bgm.autoplay = true;
         bgm.loop = true;
         bgm.play();
         bgm.onError((err) => {
-          formatAppLog("log", "at pages/Home/Home.vue:159", err);
+          formatAppLog("log", "at pages/Home/Home.vue:160", err);
         });
         const phone = getCache2(PHONE), avatar2 = getCache2(AVATAR);
         const user = Ys.importObject("user");
         const assets = Ys.importObject("assets");
         const res1 = await user.select(phone);
         if (res1.res.affectedDocs === 0) {
-          formatAppLog("log", "at pages/Home/Home.vue:172", "该用户没有激活过云城", res1);
+          formatAppLog("log", "at pages/Home/Home.vue:173", "该用户没有激活过云城", res1);
           const res2 = await user.init(phone, avatar2);
           await assets.init(res2.res.id);
           setCache(USERNAME, "趣选云城");
@@ -5718,7 +5719,7 @@ This will fail in production if not fixed.`);
           gameInfo.userName = "趣选云城";
           gameInfo.isFirst = 0;
         } else {
-          formatAppLog("log", "at pages/Home/Home.vue:180", "该用户已经激活过云城(在mock页面中)", res1);
+          formatAppLog("log", "at pages/Home/Home.vue:181", "该用户已经激活过云城(在mock页面中)", res1);
           const data = res1.res.data[0];
           gameInfo.userName = data.userName;
           gameInfo.isFirst = data.isFirst;
@@ -6642,7 +6643,7 @@ This will fail in production if not fixed.`);
           showTips("转赠数量有误");
           return;
         }
-        if (phoneInputValue.value < 999999999 || phoneInputValue.value > 99999999999) {
+        if (phoneInputValue.value < 9999999999 || phoneInputValue.value > 99999999999) {
           showTips("号码格式有误");
           return;
         }

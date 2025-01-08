@@ -2,7 +2,7 @@
   position: fixed;
   flex-wrap: wrap;
   right: 2vw;
-  top: 3vw;
+  top: 7vw;
   display: flex;
   justify-content: space-between;
   width: 100vw;
@@ -45,7 +45,7 @@
   position: fixed;
   flex-wrap: wrap;
   right: 2vw;
-  top: 3vw;
+  top: 8vw;
   display: flex;
   justify-content: space-between;
   width: 70vw;
@@ -89,7 +89,7 @@
   flex-direction: column;
   justify-content: center;
   position: fixed;
-  top: 0vw;
+  top: 5vw;
   left: 3vw;
   width: 20.33vw;
   height: 20.33vw;
@@ -109,7 +109,7 @@
   position: absolute;
   width: 28vw;
   text-align: center;
-  top: 20vw;
+  top: 18.3vw;
   left: -3vw;
   font-weight: bold;
   color: #fff;
@@ -119,7 +119,7 @@
   z-index: 99;
   position: fixed;
   width: 95vw;
-  bottom: 10vw;
+  bottom: 15vw;
   right: 2vw;
   display: flex;
   flex-direction: row-reverse;
@@ -127,7 +127,6 @@
 .toolsBar .controll[data-v-aed0e88d] {
   position: relative;
   width: 15vw;
-  background: url('../../static/toolsBar/btn_Blue.png') no-repeat center center / contain;
 }
 .toolsBar .controll .arrow[data-v-aed0e88d] {
   position: absolute;

@@ -36,7 +36,7 @@
 		z-index: 99;
 		position: fixed;
 		width: 95vw;
-		bottom: 10vw;
+		bottom: 15vw;
 		right: 2vw;
 		display: flex;
 		flex-direction: row-reverse;
@@ -44,7 +44,7 @@
 		.controll {
 			position: relative;
 			width: 15vw;
-			background: url('../static/toolsBar/btn_Blue.png') no-repeat center center / contain;
+			// background: url('../static/toolsBar/btn_Blue.png') no-repeat center center / contain;
 			
 			.arrow {
 				position: absolute;

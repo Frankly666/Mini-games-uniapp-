@@ -2,7 +2,7 @@
   position: fixed;
   flex-wrap: wrap;
   right: 2vw;
-  top: 3vw;
+  top: 7vw;
   display: flex;
   justify-content: space-between;
   width: 100vw;
@@ -45,7 +45,7 @@
   position: fixed;
   flex-wrap: wrap;
   right: 2vw;
-  top: 3vw;
+  top: 8vw;
   display: flex;
   justify-content: space-between;
   width: 70vw;
@@ -101,7 +101,7 @@
   flex-direction: column;
   align-items: center;
   width: 87vw;
-  height: 57vh;
+  height: 120vw;
   background: url('../../static/home/table.png') no-repeat center center / contain;
 }
 .publishWrap .board .close[data-v-16940c0f] {
@@ -292,7 +292,7 @@
   flex-direction: column;
   align-items: center;
   width: 73vw;
-  height: 50vh;
+  height: 90vw;
   background: url("../../static/home/table.png") no-repeat center center / contain;
 }
 .buyCellPopWrap .board .close[data-v-f77da028] {
@@ -423,7 +423,7 @@
   flex-direction: column;
   align-items: center;
   width: 87vw;
-  height: 57vh;
+  height: 106vw;
   background: url('../../static/home/table.png') no-repeat center center / contain;
 }
 .publishWrap .board .close[data-v-e13ff159] {
@@ -549,7 +549,7 @@
   position: absolute;
   width: 90%;
   height: 7vw;
-  bottom: 24vw;
+  top: 69vw;
   display: flex;
   justify-content: space-between;
   font-size: 3.1vw;
@@ -568,7 +568,7 @@
 }
 .publishWrap .board .confirmBtn[data-v-e13ff159] {
   position: absolute;
-  bottom: 11vw;
+  top: 78vw;
   width: 25vw;
   height: 12vw;
   text-align: center;
@@ -586,7 +586,7 @@
 }
 .tradingMarketWrap .topWrap {
   position: absolute;
-  top: 26vw;
+  top: 33vw;
   color: aliceblue;
   font-size: 4vw;
   width: 100%;
@@ -637,7 +637,7 @@
 }
 .tradingMarketWrap .gemstones {
   position: absolute;
-  top: 39vw;
+  top: 47vw;
   width: 100%;
 }
 .tradingMarketWrap .gemstones .tabs {

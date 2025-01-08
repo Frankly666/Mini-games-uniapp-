@@ -316,7 +316,7 @@ async function confirmNeedPublish() {
     flex-direction: column;
     align-items: center;
     width: 73vw;
-    height: 50vh;
+    height: 90vw;
     background: url("../static/market/table.png") no-repeat center center /
       contain;
 

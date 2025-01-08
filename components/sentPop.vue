@@ -126,7 +126,7 @@
 			showTips("转赠数量有误")
 			return
 		}
-		if(phoneInputValue.value < 999999999 || phoneInputValue.value > 99999999999) {
+		if(phoneInputValue.value < 9999999999 || phoneInputValue.value > 99999999999) {
 			showTips("号码格式有误")
 			return
 		}
@@ -181,7 +181,7 @@
 			flex-direction: column;
 			align-items: center;
 			width: 87vw;
-			height: 57vh;
+			height: 106vw;
 			background: url('../static/market/table.png') no-repeat center center / contain;
 			
 			.close {
@@ -326,7 +326,7 @@
 				position: absolute;
 				width: 90%;
 				height: 7vw;
-				bottom: 24vw;
+				top: 69vw;
 				display: flex;
 				justify-content: space-between;
 				font-size: 3.1vw;
@@ -348,7 +348,7 @@
 			
 			.confirmBtn {
 				position: absolute;
-				bottom: 11vw;
+				top: 78vw;
 				width: 25vw;
 				height: 12vw;
 				text-align: center;

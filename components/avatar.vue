@@ -24,7 +24,7 @@
 		flex-direction: column;
 		justify-content: center;
 		position: fixed;
-		top: 0vw; 
+		top: 5vw; 
 		left: 3vw;
 		width: 20.33vw; 
 		height: 20.33vw; 
@@ -46,7 +46,7 @@
 			position: absolute;
 			width: 28vw;
 			text-align: center;
-			top: 20vw; 
+			top: 18.3vw; 
 			left: -3vw; 
 			font-weight: bold;
 			color: #fff;

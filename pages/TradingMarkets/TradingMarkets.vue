@@ -191,7 +191,7 @@
 		
 		.topWrap {
 			position: absolute;
-			top: 26vw;
+			top: 33vw;
 			color: aliceblue;
 			font-size: 4vw;
 			width: 100%;
@@ -248,7 +248,7 @@
 		
 		.gemstones {
 			position: absolute;
-			top: 39vw;
+			top: 47vw;
 			width: 100%;
 			
 			.tabs {
