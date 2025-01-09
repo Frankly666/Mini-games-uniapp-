@@ -384,7 +384,7 @@ if (uni.restoreGlobal) {
   function I(e2) {
     return e2 && "string" == typeof e2 ? JSON.parse(e2) : e2;
   }
-  const S = true, b = "app", A = I(define_process_env_UNI_SECURE_NETWORK_CONFIG_default), C = b, P = I('{\n    "address": [\n        "127.0.0.1",\n        "2.0.0.1",\n        "169.254.37.199",\n        "192.168.137.1",\n        "192.168.65.1",\n        "192.168.132.119"\n    ],\n    "debugPort": 9001,\n    "initialLaunchType": "local",\n    "servePort": 7001,\n    "skipFiles": [\n        "<node_internals>/**",\n        "D:/HBuilderX/HBuilderX/plugins/unicloud/**/*.js"\n    ]\n}\n'), T = I('[{"provider":"aliyun","spaceName":"fun-cloud-city-game","spaceId":"mp-4de62d5a-2380-467f-b109-457713276d05","clientSecret":"ZD2WgXn3K1WSmV78nmjvUQ==","endpoint":"https://api.next.bspapp.com"}]') || [];
+  const S = true, b = "app", A = I(define_process_env_UNI_SECURE_NETWORK_CONFIG_default), C = b, P = I('{\n    "address": [\n        "127.0.0.1",\n        "2.0.0.1",\n        "169.254.37.199",\n        "192.168.137.1",\n        "192.168.65.1",\n        "172.16.40.200"\n    ],\n    "debugPort": 9001,\n    "initialLaunchType": "local",\n    "servePort": 7001,\n    "skipFiles": [\n        "<node_internals>/**",\n        "D:/HBuilderX/HBuilderX/plugins/unicloud/**/*.js"\n    ]\n}\n'), T = I('[{"provider":"aliyun","spaceName":"fun-cloud-city-game","spaceId":"mp-4de62d5a-2380-467f-b109-457713276d05","clientSecret":"ZD2WgXn3K1WSmV78nmjvUQ==","endpoint":"https://api.next.bspapp.com"}]') || [];
   let O = "";
   try {
     O = "__UNI__1B67F5F";
@@ -4613,24 +4613,6 @@ This will fail in production if not fixed.`);
     const res = await groundsDB.selectAllGrounds(gameInfo.id);
     gameInfo.ownGrounds = res;
   }
-  async function getAvatarUrl(avatarID) {
-    try {
-      const fileID = `cloud://${avatarID}`;
-      const result = await Ys.getTempFileURL({
-        fileList: [fileID]
-        // 传入 fileID
-      });
-      if (result.fileList && result.fileList.length > 0) {
-        return result.fileList[0].tempFileURL;
-        formatAppLog("log", "at utils/getAvatarUrl.js:19", "url:", result.fileList);
-      } else {
-        throw new Error("未找到对应的图片");
-      }
-    } catch (error) {
-      formatAppLog("error", "at utils/getAvatarUrl.js:24", "获取图片 URL 失败:", error);
-      throw error;
-    }
-  }
   const _export_sfc = (sfc, props) => {
     const target = sfc.__vccOpts || sfc;
     for (const [key, val] of props) {
@@ -4703,7 +4685,7 @@ This will fail in production if not fixed.`);
           }
         }).catch((err) => {
           uni.hideLoading();
-          formatAppLog("error", "at pages/login/login.vue:144", "登录失败:", err);
+          formatAppLog("error", "at pages/login/login.vue:143", "登录失败:", err);
           uni.showToast({
             title: "登录失败，服务器错误",
             icon: "none"
@@ -4770,7 +4752,7 @@ This will fail in production if not fixed.`);
           }
         }).catch((err) => {
           uni.hideLoading();
-          formatAppLog("error", "at pages/login/login.vue:233", "注册失败:", err);
+          formatAppLog("error", "at pages/login/login.vue:232", "注册失败:", err);
           uni.showToast({
             title: "注册失败，服务器错误",
             icon: "none"
@@ -4789,8 +4771,6 @@ This will fail in production if not fixed.`);
         return useGameInfoStore;
       }, get updateOwnGrounds() {
         return updateOwnGrounds;
-      }, get getAvatarUrl() {
-        return getAvatarUrl;
       } };
       Object.defineProperty(__returned__, "__isScriptSetup", { enumerable: false, value: true });
       return __returned__;
@@ -4963,7 +4943,7 @@ This will fail in production if not fixed.`);
     ]);
   }
   const PagesLoginLogin = /* @__PURE__ */ _export_sfc(_sfc_main$v, [["render", _sfc_render$u], ["__file", "D:/HBuilderProjects/Game/pages/login/login.vue"]]);
-  const _imports_0$1 = "/static/energy-stone.png";
+  const _imports_0$1 = "/static/market/powerStone.png";
   const _sfc_main$u = {
     __name: "userToShopkeeperPop",
     props: {
@@ -5216,10 +5196,11 @@ This will fail in production if not fixed.`);
       __expose();
       function navigateToBuyMarket() {
         formatAppLog("log", "at components/mart.vue:22", "跳转到求购集市页面");
-        uni.navigateTo({ url: "/pages/MerchantCenter/MerchantCenter" });
+        uni.navigateTo({ url: "/pages/TradingMarkets/TradingMarkets" });
       }
       function navigateToSellMarket() {
         formatAppLog("log", "at components/mart.vue:29", "跳转到出售集市页面");
+        uni.navigateTo({ url: "/pages/MerchantCenter/MerchantCenter" });
       }
       const __returned__ = { navigateToBuyMarket, navigateToSellMarket };
       Object.defineProperty(__returned__, "__isScriptSetup", { enumerable: false, value: true });
@@ -5254,10 +5235,11 @@ This will fail in production if not fixed.`);
     setup(__props, { expose: __expose }) {
       __expose();
       function enterCloudCity() {
-        formatAppLog("log", "at components/clickIntoCloudCity.vue:26", "进入云城");
         uni.navigateTo({ url: "/pages/GameHome/GameHome" });
       }
-      const __returned__ = { enterCloudCity };
+      const __returned__ = { enterCloudCity, get ID() {
+        return ID;
+      } };
       Object.defineProperty(__returned__, "__isScriptSetup", { enumerable: false, value: true });
       return __returned__;
     }
@@ -5450,6 +5432,22 @@ This will fail in production if not fixed.`);
     ]);
   }
   const PagesMockMock = /* @__PURE__ */ _export_sfc(_sfc_main$p, [["render", _sfc_render$o], ["__file", "D:/HBuilderProjects/Game/pages/Mock/Mock.vue"]]);
+  function updateGameInfoFromStorage() {
+    const gameInfoStore = useGameInfoStore();
+    const userInfo = uni.getStorageSync("userInfo");
+    if (userInfo) {
+      gameInfoStore.$patch((state) => {
+        state.id = userInfo.userId || "";
+        state.userName = userInfo.userName || "";
+        state.phone = userInfo.phone || "";
+        state.avatar = userInfo.avatar || "";
+        state.isFirst = userInfo.isFirst || 0;
+      });
+      formatAppLog("log", "at utils/updateGameInfo.js:23", "从本地存储更新 gameInfo 成功");
+    } else {
+      formatAppLog("warn", "at utils/updateGameInfo.js:25", "本地存储中未找到 userInfo");
+    }
+  }
   const _sfc_main$o = {
     __name: "assetsHeader",
     props: ["judge"],
@@ -5461,25 +5459,49 @@ This will fail in production if not fixed.`);
       const getCache2 = Cache.getCache;
       const assetsDB = Ys.importObject("assets");
       const userDB = Ys.importObject("user");
-      vue.onMounted(async () => {
-        if (gameInfo.isLoad)
-          return;
-        const phone = getCache2(PHONE);
-        const res1 = await userDB.select(phone);
-        const id = res1.res.data[0]._id;
-        const res2 = await assetsDB.select(id);
-        gameInfo.assets = res2.res.data[0];
-        gameInfo.isLoad = true;
-      });
       function getImageUrl(name) {
         return `../static/market/${name}.png`;
       }
+      vue.onMounted(async () => {
+        const gameInfoStore = useGameInfoStore();
+        const userId = getCache2(ID);
+        if (!userId) {
+          formatAppLog("error", "at components/assetsHeader.vue:49", "用户 ID 不存在");
+          return;
+        }
+        try {
+          const userRes = await userDB.getUserById(userId);
+          if (userRes.code !== 200 || !userRes.data) {
+            formatAppLog("error", "at components/assetsHeader.vue:58", "查询用户信息失败:", userRes.message);
+            return;
+          }
+          const userInfo = userRes.data;
+          const id = userInfo._id;
+          const assetsRes = await assetsDB.select(id);
+          formatAppLog("log", "at components/assetsHeader.vue:67", "assetsRes: ", assetsRes);
+          if (assetsRes.res.affectedDocs === 0 || !assetsRes.res.data) {
+            formatAppLog("error", "at components/assetsHeader.vue:70", "查询资产信息失败:", assetsRes.message);
+            return;
+          }
+          gameInfoStore.$patch((state) => {
+            state.assets = assetsRes.res.data[0];
+          });
+          formatAppLog("log", "at components/assetsHeader.vue:79", "用户资产信息更新成功");
+          updateGameInfoFromStorage();
+        } catch (error) {
+          formatAppLog("error", "at components/assetsHeader.vue:82", "初始化失败:", error);
+        }
+      });
       const __returned__ = { assets, gameInfo, props, getCache: getCache2, assetsDB, userDB, getImageUrl, onMounted: vue.onMounted, reactive: vue.reactive, ref: vue.ref, watch: vue.watch, get PHONE() {
         return PHONE;
       }, get useGameInfoStore() {
         return useGameInfoStore;
+      }, get ID() {
+        return ID;
       }, get Cache() {
         return Cache;
+      }, get updateGameInfoFromStorage() {
+        return updateGameInfoFromStorage;
       } };
       Object.defineProperty(__returned__, "__isScriptSetup", { enumerable: false, value: true });
       return __returned__;
@@ -5495,6 +5517,7 @@ This will fail in production if not fixed.`);
           vue.Fragment,
           null,
           vue.renderList($setup.assets, (item, index) => {
+            var _a;
             return vue.createElementVNode("view", {
               class: "asset",
               key: index
@@ -5512,7 +5535,7 @@ This will fail in production if not fixed.`);
               vue.createElementVNode(
                 "span",
                 null,
-                vue.toDisplayString($setup.gameInfo.assets[item]),
+                vue.toDisplayString((_a = $setup.gameInfo.assets) == null ? void 0 : _a[item]),
                 1
                 /* TEXT */
               )
@@ -5530,6 +5553,7 @@ This will fail in production if not fixed.`);
           vue.Fragment,
           null,
           vue.renderList($setup.assets, (item, index) => {
+            var _a;
             return vue.createElementVNode("view", {
               class: "asset",
               key: index
@@ -5547,7 +5571,7 @@ This will fail in production if not fixed.`);
               vue.createElementVNode(
                 "span",
                 null,
-                vue.toDisplayString($setup.gameInfo.assets[item]),
+                vue.toDisplayString((_a = $setup.gameInfo.assets) == null ? void 0 : _a[item]),
                 1
                 /* TEXT */
               )
@@ -6504,7 +6528,7 @@ This will fail in production if not fixed.`);
       const setCache = Cache.setCache;
       const getCache2 = Cache.getCache;
       const groundsDB = Ys.importObject("grounds");
-      const isShowLoading = vue.ref(false);
+      const isShowLoading = vue.ref(true);
       translateX.value = gameInfo.translateX;
       translateY.value = gameInfo.translateY;
       getVwVhInPx();
@@ -6573,19 +6597,18 @@ This will fail in production if not fixed.`);
         isShowTalentPop.value = type;
       }
       vue.onMounted(async () => {
-        if (gameInfo.isLoad)
-          return;
         uni.hideLoading();
         bgm.src = "/static/bgm/bgm.mp3";
         bgm.autoplay = true;
         bgm.loop = true;
         bgm.play();
         bgm.onError((err) => {
-          formatAppLog("log", "at pages/GameHome/GameHome.vue:160", err);
+          formatAppLog("log", "at pages/GameHome/GameHome.vue:159", err);
         });
+        updateGameInfoFromStorage();
         setTimeout(function() {
           isShowLoading.value = false;
-        }, 1e3);
+        }, 2e3);
       });
       const __returned__ = { keyword, screenWidth, screenHeight, mapWidth, mapHeight, startX, startY, translateX, translateY, isShowInfo, isShowSettingPop, isShowRulePop, isShowAnnouncementPop, isShowTalentPop, isShowActivityPop, gameInfo, bgm, setCache, getCache: getCache2, groundsDB, isShowLoading, systemInfo, getVwVhInPx, handleTouchStart, handleTouchMove, handleTouchEnd, handleShow, handleInfo, handleShowTanlentPop, onMounted: vue.onMounted, onUnmounted: vue.onUnmounted, ref: vue.ref, assetsHeader, avatar, toolsBar, cloudTip, dynamicPeople, clickMask, userInfoPop, settingPop, rulePop, activityPopVue, announcementPop, talentCenterPop, get ASSETS() {
         return ASSETS;
@@ -6605,7 +6628,9 @@ This will fail in production if not fixed.`);
         return Cache;
       }, get updateOwnGrounds() {
         return updateOwnGrounds;
-      }, loadingVue };
+      }, loadingVue, get updateGameInfoFromStorage() {
+        return updateGameInfoFromStorage;
+      } };
       Object.defineProperty(__returned__, "__isScriptSetup", { enumerable: false, value: true });
       return __returned__;
     }

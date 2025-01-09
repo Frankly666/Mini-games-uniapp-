@@ -50,6 +50,7 @@ import { ASSETS, AVATAR, ID, ISFIRST, PHONE, USERNAME, useGameInfoStore } from '
 import Cache from '../../utils/cache';
 import { updateOwnGrounds } from '../../utils/updateOwnGrounds';
 import loadingVue from '../../components/loading.vue';
+import { updateGameInfoFromStorage } from '../../utils/updateGameInfo';
 
 const keyword = ref('');
 const screenWidth = ref(0);
@@ -71,7 +72,7 @@ const bgm = gameInfo.bgm;
 const setCache = Cache.setCache; // 这里使用的是实例化函数
 const getCache = Cache.getCache;  // 使用的是静态函数
 const groundsDB = uniCloud.importObject("grounds");
-const isShowLoading = ref(false);
+const isShowLoading = ref(true);
 
 translateX.value = gameInfo.translateX
 translateY.value = gameInfo.translateY
@@ -147,9 +148,7 @@ function handleShowTanlentPop(type) {
 	isShowTalentPop.value = type
 }
 
-onMounted(async () => {
-	if(gameInfo.isLoad) return;  // 只执行一次
-	
+onMounted(async () => {	
 	uni.hideLoading()
 	// bgm播放设置
 	bgm.src ='/static/bgm/bgm.mp3'
@@ -159,42 +158,10 @@ onMounted(async () => {
 	bgm.onError((err) => {
 		console.log(err)
 	})
+	updateGameInfoFromStorage()
 	setTimeout(function() {
 		isShowLoading.value = false;
-	}, 1000);
-	
-	// const phone = getCache(PHONE), avatar = getCache(AVATAR)
-	
-	// // 在数据库中进行查询是否存在不存在进行增添数据
-	// const user = uniCloud.importObject('user');
-	// const assets = uniCloud.importObject('assets')
-	
-	// 查询是否存在此用户
-	// const res1 = await user.select(phone)
-	// if(res1.res.affectedDocs === 0) {
-	// 	// 初始化用户的游戏信息
-	// 	console.log('该用户没有激活过云城', res1)
-	// 	const res2 = await user.init(phone, avatar)
-	// 	await assets.init(res2.res.id)
-	// 	setCache(USERNAME, '趣选云城')
-	// 	setCache(ISFIRST, 0)
-	// 	gameInfo.userName = '趣选云城'
-	// 	gameInfo.isFirst = 0;
-	// }else {
-	// 	console.log("该用户已经激活过云城(在mock页面中)", res1)
-	// 	const data = res1.res.data[0]
-	// 	gameInfo.userName = data.userName;
-	// 	gameInfo.isFirst = data.isFirst;
-	// 	gameInfo.id = data._id;
-	// 	setCache( USERNAME,data.userName)
-	// 	setCache(ID, data._id)
-	// 	setCache(ISFIRST, data.isFirst)
-	// }
-	
-	// // 给用户添加送的地皮
-	
-	
-	
+	}, 2000);
 })
 </script>
 

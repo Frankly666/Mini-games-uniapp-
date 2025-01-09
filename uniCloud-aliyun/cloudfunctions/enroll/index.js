@@ -3,6 +3,31 @@ const db = uniCloud.database(); // 获取数据库引用
 const crypto = require('crypto'); // 引入加密模块
 const defaultAvatar = '../static/avatar.png';
 
+// 生成一个随机的 8 位数字
+function generateRandomCode() {
+  return Math.floor(10000000 + Math.random() * 90000000).toString(); // 生成 8 位数字
+}
+
+// 检查邀请码是否已存在
+async function isInviteCodeUnique(inviteCode) {
+  const userCollection = db.collection('user');
+  const queryResult = await userCollection.where({ inviteCode }).get();
+  return queryResult.data.length === 0; // 如果不存在，返回 true
+}
+
+// 生成唯一的邀请码
+async function generateUniqueInviteCode() {
+  let inviteCode;
+  let isUnique = false;
+
+  while (!isUnique) {
+    inviteCode = generateRandomCode(); // 生成一个邀请码
+    isUnique = await isInviteCodeUnique(inviteCode); // 检查是否唯一
+  }
+
+  return inviteCode;
+}
+
 // 生成一个随机的 8 位数字 gameId
 function generateGameId() {
   return Math.floor(10000000 + Math.random() * 90000000).toString(); // 生成 8 位数字
@@ -91,11 +116,15 @@ exports.main = async (event, context) => {
     const gameId = await generateUniqueGameId();
     userData.gameID = gameId; // 将生成的 gameId 添加到用户数据中
 
-    // 5. 插入新用户到 user 表
+    // 5. 生成唯一的邀请码
+    const inviteCodeUnique = await generateUniqueInviteCode();
+    userData.inviteCode = inviteCodeUnique; // 将生成的邀请码添加到用户数据中
+
+    // 6. 插入新用户到 user 表
     const userInsertResult = await userCollection.add(userData);
     const userId = userInsertResult.id; // 获取新插入用户的 userId
 
-    // 6. 插入用户资源到 assets 表
+    // 7. 插入用户资源到 assets 表
     const assetsCollection = db.collection('assets');
     const assetsData = {
       userId,
@@ -120,6 +149,7 @@ exports.main = async (event, context) => {
         phone: userData.phone,
         avatar: defaultAvatar, // 返回默认头像
         isOldUser, // 标识是否为老用户
+        inviteCode: inviteCodeUnique, // 返回生成的邀请码
       },
     };
   } catch (error) {

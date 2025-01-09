@@ -55,7 +55,6 @@
 import { ref, onMounted } from 'vue';
 import { AVATAR, ID, PHONE, USERNAME, useGameInfoStore } from '../../stores/gameInfo';
 import { updateOwnGrounds } from '../../utils/updateOwnGrounds';
-import { getAvatarUrl } from '../../utils/getAvatarUrl';
 
 // 定义绑定变量
 const phone = ref('');

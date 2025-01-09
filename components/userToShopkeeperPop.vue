@@ -28,7 +28,7 @@
 
 				<!-- 手续费显示 -->
 				<view class="fee-info">
-					<image class="energy-stone-icon" src="/static/energy-stone.png" mode="aspectFit"></image>
+					<image class="energy-stone-icon" src="/static/market/powerStone.png" mode="aspectFit"></image>
 					<text class="fee-text">手续费: 8%</text>
 				</view>
 

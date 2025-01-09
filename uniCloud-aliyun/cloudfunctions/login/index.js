@@ -53,7 +53,8 @@ exports.main = async (event, context) => {
         phone: userData.phone, // 手机号
         avatar: userData.avatar, // 用户头像 ID
         isMerchant: userData.isMerchant, // 是否为商人
-				isFirst: userData.isFirst // 修改名字的次数
+        isFirst: userData.isFirst, // 修改名字的次数
+        inviteCode: userData.inviteCode, // 用户的邀请码
       },
     };
   } catch (error) {

@@ -21,9 +21,10 @@
 </template>
 
 <script setup>
+import { ID } from '../stores/gameInfo';
+
 // 进入云城按钮点击事件
 function enterCloudCity() {
-	console.log('进入云城');
 	// 这里可以添加跳转逻辑，例如：
 	uni.navigateTo({ url: '/pages/GameHome/GameHome' });
 }

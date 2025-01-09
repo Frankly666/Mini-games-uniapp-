@@ -6,7 +6,7 @@
             :key="index" 
             >
 				<view class="dem" :style="`background: url(${getImageUrl(item)}) no-repeat center center / contain;`"></view>
-        <span>{{gameInfo.assets[item]}}</span>
+        <span>{{gameInfo.assets?.[item]}}</span>
       </view>
     </view>
 	
@@ -16,7 +16,7 @@
 	          :key="index" 
 	          >
 				<view class="dem" :style="`background: url(${getImageUrl(item)}) no-repeat center center / contain;`"></view>
-	      <span>{{gameInfo.assets[item]}}</span>
+	      <span>{{gameInfo.assets?.[item]}}</span>
 	    </view>
 	</view>
   </view>
@@ -24,33 +24,64 @@
 
 <script setup>
 import { onMounted, reactive, ref, watch } from 'vue';
-import { PHONE, useGameInfoStore } from '../stores/gameInfo';
+import { PHONE, useGameInfoStore, ID } from '../stores/gameInfo';
 import Cache from '../utils/cache';
+import { updateGameInfoFromStorage } from '../utils/updateGameInfo';
 	
 // 这里是详情页中的资源展示
 const assets = ['powerStone', 'diamond', 'resourceStone', 'jewel'];
-
 const gameInfo = useGameInfoStore()
-// const userAssets = reactive({})
 const props = defineProps(['judge'])
 const getCache = Cache.getCache;
 const assetsDB = uniCloud.importObject('assets')
 const userDB  = uniCloud.importObject('user')
 
-onMounted(async () => {
-	if(gameInfo.isLoad) return;
-	const phone = getCache(PHONE);
-	const res1 = await userDB.select(phone)
-	const id = res1.res.data[0]._id;
-	const res2 = await assetsDB.select(id);
-	// Object.assign(userAssets, res2.res.data[0]);
-	gameInfo.assets = res2.res.data[0]
-	gameInfo.isLoad = true;
-})
-
 function getImageUrl(name) {
 	return `../static/market/${name}.png`;
 }
+
+// 防止刷新丢失数据
+onMounted(async () => {
+  const gameInfoStore = useGameInfoStore(); // 获取 Pinia store 实例
+  const userId = getCache(ID); // 从缓存中获取用户 ID
+
+  if (!userId) {
+    console.error('用户 ID 不存在');
+    return;
+  }
+
+  try {
+    // 1. 查询用户信息
+    const userRes = await userDB.getUserById(userId);
+
+    if (userRes.code !== 200 || !userRes.data) {
+      console.error('查询用户信息失败:', userRes.message);
+      return;
+    }
+
+    const userInfo = userRes.data;
+    const id = userInfo._id; // 获取用户 ID
+
+    // 2. 查询资产信息
+    const assetsRes = await assetsDB.select(id);
+		console.log("assetsRes: ", assetsRes)
+
+    if (assetsRes.res.affectedDocs === 0 || !assetsRes.res.data) {
+      console.error('查询资产信息失败:', assetsRes.message);
+      return;
+    }
+
+    // 3. 更新 gameInfo 状态
+    gameInfoStore.$patch((state) => {
+      state.assets = assetsRes.res.data[0];
+    });
+
+    console.log('用户资产信息更新成功');
+		updateGameInfoFromStorage()
+  } catch (error) {
+    console.error('初始化失败:', error);
+  }
+});
 </script>
 
 <style lang="less">

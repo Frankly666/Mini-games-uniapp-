@@ -21,14 +21,14 @@
 function navigateToBuyMarket() {
 	console.log('跳转到求购集市页面');
 	// 这里可以添加跳转逻辑，例如：
-	uni.navigateTo({ url: "/pages/MerchantCenter/MerchantCenter" });
+	uni.navigateTo({ url: "/pages/TradingMarkets/TradingMarkets" });
 }
 
 // 跳转到出售集市页面
 function navigateToSellMarket() {
 	console.log('跳转到出售集市页面');
 	// 这里可以添加跳转逻辑，例如：
-	// uni.navigateTo({ url: '/pages/sell-market' });
+	uni.navigateTo({ url: "/pages/MerchantCenter/MerchantCenter" });
 }
 </script>
 

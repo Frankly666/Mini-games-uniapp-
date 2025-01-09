@@ -6,3 +6,4 @@ export async function updateOwnGrounds() {
 	const res = await groundsDB.selectAllGrounds(gameInfo.id)
 	gameInfo.ownGrounds = res;
 }
+

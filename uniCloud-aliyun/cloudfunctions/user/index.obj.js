@@ -24,17 +24,34 @@ module.exports = {
 	/**  使用用户电话查询用户是否存在
 	 * @param {Number} phone
 	 */
-	async select(phone) {
-		const db = uniCloud.database()
-		const res = await db.collection('user').where({
-			phone: phone
-		}).get()
-		
-		return {
-			res
-		}
-	},
+	async  getUserById(id) {
+	  const db = uniCloud.database();
+	  try {
+	    // 查询用户数据
+	    const res = await db.collection('user').doc(id).get();
 	
+	    // 如果查询结果为空（文档不存在）
+	    if (!res.data || res.data.length === 0) {
+	      return {
+	        code: 404,
+	        message: '用户不存在',
+	      };
+	    }
+	
+	    // 返回查询结果
+	    return {
+	      code: 200,
+	      message: '查询成功',
+	      data: res.data[0], // 返回用户数据
+	    };
+	  } catch (error) {
+	    console.error('查询用户失败:', error);
+	    return {
+	      code: 500,
+	      message: '查询用户失败，服务器内部错误',
+	    };
+	  }
+	},
 
 	/**  修改用户名
 	 * @param {String} id
