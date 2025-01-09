@@ -40,13 +40,31 @@ if (uni.restoreGlobal) {
   }
   const pages = [
     {
+      path: "pages/login/login",
+      style: {
+        navigationStyle: "custom"
+      }
+    },
+    {
+      path: "pages/MerchantCenter/MerchantCenter",
+      style: {
+        navigationStyle: "custom"
+      }
+    },
+    {
+      path: "pages/HomePage/HomePage",
+      style: {
+        navigationStyle: "custom"
+      }
+    },
+    {
       path: "pages/Mock/Mock",
       style: {
         navigationStyle: "custom"
       }
     },
     {
-      path: "pages/Home/Home",
+      path: "pages/GameHome/GameHome",
       style: {
         navigationStyle: "custom"
       }
@@ -366,7 +384,7 @@ if (uni.restoreGlobal) {
   function I(e2) {
     return e2 && "string" == typeof e2 ? JSON.parse(e2) : e2;
   }
-  const S = true, b = "app", A = I(define_process_env_UNI_SECURE_NETWORK_CONFIG_default), C = b, P = I('{\n    "address": [\n        "127.0.0.1",\n        "2.0.0.1",\n        "169.254.37.199",\n        "192.168.137.1",\n        "192.168.65.1",\n        "172.16.40.200"\n    ],\n    "debugPort": 9001,\n    "initialLaunchType": "local",\n    "servePort": 7001,\n    "skipFiles": [\n        "<node_internals>/**",\n        "D:/HBuilderX/HBuilderX/plugins/unicloud/**/*.js"\n    ]\n}\n'), T = I('[{"provider":"aliyun","spaceName":"fun-cloud-city-game","spaceId":"mp-4de62d5a-2380-467f-b109-457713276d05","clientSecret":"ZD2WgXn3K1WSmV78nmjvUQ==","endpoint":"https://api.next.bspapp.com"}]') || [];
+  const S = true, b = "app", A = I(define_process_env_UNI_SECURE_NETWORK_CONFIG_default), C = b, P = I('{\n    "address": [\n        "127.0.0.1",\n        "2.0.0.1",\n        "169.254.37.199",\n        "192.168.137.1",\n        "192.168.65.1",\n        "192.168.132.119"\n    ],\n    "debugPort": 9001,\n    "initialLaunchType": "local",\n    "servePort": 7001,\n    "skipFiles": [\n        "<node_internals>/**",\n        "D:/HBuilderX/HBuilderX/plugins/unicloud/**/*.js"\n    ]\n}\n'), T = I('[{"provider":"aliyun","spaceName":"fun-cloud-city-game","spaceId":"mp-4de62d5a-2380-467f-b109-457713276d05","clientSecret":"ZD2WgXn3K1WSmV78nmjvUQ==","endpoint":"https://api.next.bspapp.com"}]') || [];
   let O = "";
   try {
     O = "__UNI__1B67F5F";
@@ -4589,6 +4607,30 @@ This will fail in production if not fixed.`);
   const ASSETS = "assets";
   const POWERSTONE = "powerStone";
   const JEWEL = "jewel";
+  async function updateOwnGrounds() {
+    const groundsDB = Ys.importObject("grounds");
+    const gameInfo = useGameInfoStore();
+    const res = await groundsDB.selectAllGrounds(gameInfo.id);
+    gameInfo.ownGrounds = res;
+  }
+  async function getAvatarUrl(avatarID) {
+    try {
+      const fileID = `cloud://${avatarID}`;
+      const result = await Ys.getTempFileURL({
+        fileList: [fileID]
+        // 传入 fileID
+      });
+      if (result.fileList && result.fileList.length > 0) {
+        return result.fileList[0].tempFileURL;
+        formatAppLog("log", "at utils/getAvatarUrl.js:19", "url:", result.fileList);
+      } else {
+        throw new Error("未找到对应的图片");
+      }
+    } catch (error) {
+      formatAppLog("error", "at utils/getAvatarUrl.js:24", "获取图片 URL 失败:", error);
+      throw error;
+    }
+  }
   const _export_sfc = (sfc, props) => {
     const target = sfc.__vccOpts || sfc;
     for (const [key, val] of props) {
@@ -4596,6 +4638,758 @@ This will fail in production if not fixed.`);
     }
     return target;
   };
+  const _sfc_main$v = {
+    __name: "login",
+    setup(__props, { expose: __expose }) {
+      __expose();
+      const phone = vue.ref("");
+      const password = vue.ref("");
+      const repeatPassword = vue.ref("");
+      const inviteCode = vue.ref("");
+      const isLogin = vue.ref(true);
+      const gameInfo = useGameInfoStore();
+      function switchTab(tab) {
+        isLogin.value = tab === "login";
+      }
+      function handleInput(field, event) {
+      }
+      function handleLogin() {
+        if (!phone.value || !password.value) {
+          uni.showToast({
+            title: "请输入手机号和密码",
+            icon: "none"
+          });
+          return;
+        }
+        uni.showLoading({
+          title: "登录中...",
+          mask: true
+          // 防止用户点击穿透
+        });
+        Ys.callFunction({
+          name: "login",
+          data: {
+            phone: phone.value,
+            password: password.value
+          }
+        }).then((res) => {
+          uni.hideLoading();
+          const { code, message, data } = res.result;
+          if (code === 200) {
+            uni.showToast({
+              title: "登录成功",
+              icon: "success"
+            });
+            uni.setStorageSync("userInfo", data);
+            uni.setStorageSync(PHONE, data.phone);
+            uni.setStorageSync(USERNAME, data.userName);
+            uni.setStorageSync(PHONE, data.phone);
+            uni.setStorageSync(ID, data.userId);
+            uni.setStorageSync(AVATAR, data.avatar);
+            gameInfo.id = data.userId;
+            gameInfo.userName = data.userName;
+            gameInfo.phone = data.phone;
+            gameInfo.isFirst = data.isFirst;
+            gameInfo.avatar = data.avatar;
+            updateOwnGrounds();
+            uni.navigateTo({
+              url: "/pages/HomePage/HomePage"
+            });
+          } else {
+            uni.showToast({
+              title: message || "登录失败，请重试",
+              icon: "none"
+            });
+          }
+        }).catch((err) => {
+          uni.hideLoading();
+          formatAppLog("error", "at pages/login/login.vue:144", "登录失败:", err);
+          uni.showToast({
+            title: "登录失败，服务器错误",
+            icon: "none"
+          });
+        });
+      }
+      function handleRegister() {
+        if (phone.value.length < 6) {
+          uni.showToast({
+            title: "手机号/帐号长度不能少于6个字符",
+            icon: "none"
+          });
+          return;
+        }
+        if (password.value !== repeatPassword.value) {
+          uni.showToast({
+            title: "两次输入的密码不一致",
+            icon: "none"
+          });
+          return;
+        }
+        if (!phone.value || !password.value || !repeatPassword.value) {
+          uni.showToast({
+            title: "请填写完整信息",
+            icon: "none"
+          });
+          return;
+        }
+        uni.showLoading({
+          title: "注册中...",
+          mask: true
+          // 防止用户点击穿透
+        });
+        Ys.callFunction({
+          name: "enroll",
+          data: {
+            phone: phone.value,
+            password: password.value,
+            inviteCode: inviteCode.value
+          }
+        }).then((res) => {
+          uni.hideLoading();
+          const { code, message, data } = res.result;
+          if (code === 200) {
+            uni.showToast({
+              title: "注册成功",
+              icon: "success"
+            });
+            phone.value = "";
+            password.value = "";
+            repeatPassword.value = "";
+            inviteCode.value = "";
+            isLogin.value = true;
+          } else if (code === 400) {
+            uni.showToast({
+              title: message || "该账号已注册，请直接登录或修改账号名",
+              icon: "none"
+            });
+          } else {
+            uni.showToast({
+              title: message || "注册失败，请重试",
+              icon: "none"
+            });
+          }
+        }).catch((err) => {
+          uni.hideLoading();
+          formatAppLog("error", "at pages/login/login.vue:233", "注册失败:", err);
+          uni.showToast({
+            title: "注册失败，服务器错误",
+            icon: "none"
+          });
+        });
+      }
+      const __returned__ = { phone, password, repeatPassword, inviteCode, isLogin, gameInfo, switchTab, handleInput, handleLogin, handleRegister, ref: vue.ref, onMounted: vue.onMounted, get AVATAR() {
+        return AVATAR;
+      }, get ID() {
+        return ID;
+      }, get PHONE() {
+        return PHONE;
+      }, get USERNAME() {
+        return USERNAME;
+      }, get useGameInfoStore() {
+        return useGameInfoStore;
+      }, get updateOwnGrounds() {
+        return updateOwnGrounds;
+      }, get getAvatarUrl() {
+        return getAvatarUrl;
+      } };
+      Object.defineProperty(__returned__, "__isScriptSetup", { enumerable: false, value: true });
+      return __returned__;
+    }
+  };
+  function _sfc_render$u(_ctx, _cache, $props, $setup, $data, $options) {
+    return vue.openBlock(), vue.createElementBlock("view", { class: "container" }, [
+      vue.createCommentVNode(" 标题 "),
+      vue.createElementVNode("view", { class: "title" }, "趣选云城"),
+      vue.createCommentVNode(" Tab 切换 "),
+      vue.createElementVNode("view", { class: "tab" }, [
+        vue.createElementVNode(
+          "button",
+          {
+            class: vue.normalizeClass(["tab-btn", { active: $setup.isLogin }]),
+            onClick: _cache[0] || (_cache[0] = ($event) => $setup.switchTab("login"))
+          },
+          "登录",
+          2
+          /* CLASS */
+        ),
+        vue.createElementVNode(
+          "button",
+          {
+            class: vue.normalizeClass(["tab-btn", { active: !$setup.isLogin }]),
+            onClick: _cache[1] || (_cache[1] = ($event) => $setup.switchTab("register"))
+          },
+          "注册",
+          2
+          /* CLASS */
+        )
+      ]),
+      vue.createCommentVNode(" 提示信息 "),
+      vue.createElementVNode("view", { class: "tip" }, [
+        vue.createElementVNode("text", null, "老用户需要使用原手机号进行重新注册后进行使用\\n"),
+        vue.createTextVNode(" 新用户可随意初始化账户名(建议使用手机号) ")
+      ]),
+      vue.createCommentVNode(" 登录表单 "),
+      $setup.isLogin ? (vue.openBlock(), vue.createElementBlock("view", {
+        key: 0,
+        class: "form"
+      }, [
+        vue.createElementVNode("view", { class: "input-group" }, [
+          vue.createElementVNode("text", { class: "label" }, "电话/帐号"),
+          vue.withDirectives(vue.createElementVNode(
+            "input",
+            {
+              class: "input",
+              type: "text",
+              placeholder: "请输入",
+              "onUpdate:modelValue": _cache[2] || (_cache[2] = ($event) => $setup.phone = $event),
+              onInput: _cache[3] || (_cache[3] = ($event) => $setup.handleInput("phone", $event))
+            },
+            null,
+            544
+            /* NEED_HYDRATION, NEED_PATCH */
+          ), [
+            [vue.vModelText, $setup.phone]
+          ])
+        ]),
+        vue.createElementVNode("view", { class: "input-group" }, [
+          vue.createElementVNode("text", { class: "label" }, "密码"),
+          vue.withDirectives(vue.createElementVNode(
+            "input",
+            {
+              class: "input",
+              type: "password",
+              placeholder: "请输入密码",
+              "onUpdate:modelValue": _cache[4] || (_cache[4] = ($event) => $setup.password = $event),
+              onInput: _cache[5] || (_cache[5] = ($event) => $setup.handleInput("password", $event))
+            },
+            null,
+            544
+            /* NEED_HYDRATION, NEED_PATCH */
+          ), [
+            [vue.vModelText, $setup.password]
+          ])
+        ]),
+        vue.createElementVNode("button", {
+          class: "btn login-btn",
+          onClick: $setup.handleLogin
+        }, "登录")
+      ])) : (vue.openBlock(), vue.createElementBlock(
+        vue.Fragment,
+        { key: 1 },
+        [
+          vue.createCommentVNode(" 注册表单 "),
+          vue.createElementVNode("view", { class: "form" }, [
+            vue.createElementVNode("view", { class: "input-group" }, [
+              vue.createElementVNode("text", { class: "label" }, "电话/帐号"),
+              vue.withDirectives(vue.createElementVNode(
+                "input",
+                {
+                  class: "input",
+                  type: "text",
+                  placeholder: "请输入",
+                  "onUpdate:modelValue": _cache[6] || (_cache[6] = ($event) => $setup.phone = $event),
+                  onInput: _cache[7] || (_cache[7] = ($event) => $setup.handleInput("phone", $event))
+                },
+                null,
+                544
+                /* NEED_HYDRATION, NEED_PATCH */
+              ), [
+                [vue.vModelText, $setup.phone]
+              ])
+            ]),
+            vue.createElementVNode("view", { class: "input-group" }, [
+              vue.createElementVNode("text", { class: "label" }, "密码"),
+              vue.withDirectives(vue.createElementVNode(
+                "input",
+                {
+                  class: "input",
+                  type: "password",
+                  placeholder: "请输入密码",
+                  "onUpdate:modelValue": _cache[8] || (_cache[8] = ($event) => $setup.password = $event),
+                  onInput: _cache[9] || (_cache[9] = ($event) => $setup.handleInput("password", $event))
+                },
+                null,
+                544
+                /* NEED_HYDRATION, NEED_PATCH */
+              ), [
+                [vue.vModelText, $setup.password]
+              ])
+            ]),
+            vue.createElementVNode("view", { class: "input-group" }, [
+              vue.createElementVNode("text", { class: "label" }, "重复密码"),
+              vue.withDirectives(vue.createElementVNode(
+                "input",
+                {
+                  class: "input",
+                  type: "password",
+                  placeholder: "请再次输入密码",
+                  "onUpdate:modelValue": _cache[10] || (_cache[10] = ($event) => $setup.repeatPassword = $event),
+                  onInput: _cache[11] || (_cache[11] = ($event) => $setup.handleInput("repeatPassword", $event))
+                },
+                null,
+                544
+                /* NEED_HYDRATION, NEED_PATCH */
+              ), [
+                [vue.vModelText, $setup.repeatPassword]
+              ])
+            ]),
+            vue.createElementVNode("view", { class: "input-group" }, [
+              vue.createElementVNode("text", { class: "label" }, "邀请码"),
+              vue.withDirectives(vue.createElementVNode(
+                "input",
+                {
+                  class: "input",
+                  type: "text",
+                  placeholder: "请输入邀请码(选填)",
+                  "onUpdate:modelValue": _cache[12] || (_cache[12] = ($event) => $setup.inviteCode = $event),
+                  onInput: _cache[13] || (_cache[13] = ($event) => $setup.handleInput("inviteCode", $event))
+                },
+                null,
+                544
+                /* NEED_HYDRATION, NEED_PATCH */
+              ), [
+                [vue.vModelText, $setup.inviteCode]
+              ])
+            ]),
+            vue.createElementVNode("button", {
+              class: "btn register-btn",
+              onClick: $setup.handleRegister
+            }, "注册")
+          ])
+        ],
+        2112
+        /* STABLE_FRAGMENT, DEV_ROOT_FRAGMENT */
+      ))
+    ]);
+  }
+  const PagesLoginLogin = /* @__PURE__ */ _export_sfc(_sfc_main$v, [["render", _sfc_render$u], ["__file", "D:/HBuilderProjects/Game/pages/login/login.vue"]]);
+  const _imports_0$1 = "/static/energy-stone.png";
+  const _sfc_main$u = {
+    __name: "userToShopkeeperPop",
+    props: {
+      owner: {
+        type: Object,
+        required: true
+      }
+    },
+    emits: ["close"],
+    setup(__props, { expose: __expose, emit: __emit }) {
+      __expose();
+      const props = __props;
+      const resourceAmount = vue.ref(0);
+      const ownerGameId = vue.ref(props.owner.gameId);
+      const emit = __emit;
+      const handleClose = () => {
+        emit("close");
+      };
+      const handleSubmit = () => {
+        if (!ownerGameId.value || !resourceAmount.value) {
+          formatAppLog("log", "at components/userToShopkeeperPop.vue:66", "请输入完整的游戏ID和能量石数量");
+          return;
+        }
+        formatAppLog("log", "at components/userToShopkeeperPop.vue:69", "店主游戏ID:", ownerGameId.value);
+        formatAppLog("log", "at components/userToShopkeeperPop.vue:70", "转移能量石数量:", resourceAmount.value);
+        handleClose();
+      };
+      const __returned__ = { props, resourceAmount, ownerGameId, emit, handleClose, handleSubmit, ref: vue.ref };
+      Object.defineProperty(__returned__, "__isScriptSetup", { enumerable: false, value: true });
+      return __returned__;
+    }
+  };
+  function _sfc_render$t(_ctx, _cache, $props, $setup, $data, $options) {
+    return vue.openBlock(), vue.createElementBlock("view", { class: "popup-container" }, [
+      vue.createCommentVNode(" 遮罩层 "),
+      vue.createElementVNode("view", {
+        class: "mask",
+        onClick: $setup.handleClose
+      }),
+      vue.createCommentVNode(" 弹窗内容 "),
+      vue.createElementVNode("view", { class: "popup-content" }, [
+        vue.createCommentVNode(" 店主信息 "),
+        vue.createElementVNode("view", { class: "owner-info" }, [
+          vue.createElementVNode("image", {
+            class: "owner-avatar",
+            src: $props.owner.avatar,
+            mode: "aspectFill"
+          }, null, 8, ["src"]),
+          vue.createElementVNode(
+            "text",
+            { class: "owner-name" },
+            "店主: " + vue.toDisplayString($props.owner.name),
+            1
+            /* TEXT */
+          ),
+          vue.createElementVNode(
+            "text",
+            { class: "owner-id" },
+            "游戏ID: " + vue.toDisplayString($props.owner.gameId),
+            1
+            /* TEXT */
+          ),
+          vue.createElementVNode(
+            "text",
+            { class: "owner-wechat" },
+            "微信号: " + vue.toDisplayString($props.owner.wechat),
+            1
+            /* TEXT */
+          )
+        ]),
+        vue.createCommentVNode(" 资源转移表单 "),
+        vue.createElementVNode("view", { class: "transfer-form" }, [
+          vue.createCommentVNode(" 游戏ID输入框 "),
+          vue.createElementVNode("view", { class: "input-group" }, [
+            vue.createElementVNode("text", { class: "label" }, "店主游戏ID"),
+            vue.withDirectives(vue.createElementVNode(
+              "input",
+              {
+                class: "input",
+                type: "text",
+                placeholder: "请输入店主的游戏ID",
+                "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => $setup.ownerGameId = $event)
+              },
+              null,
+              512
+              /* NEED_PATCH */
+            ), [
+              [vue.vModelText, $setup.ownerGameId]
+            ])
+          ]),
+          vue.createCommentVNode(" 资源数量输入框 "),
+          vue.createElementVNode("view", { class: "input-group" }, [
+            vue.createElementVNode("text", { class: "label" }, "能量石数量"),
+            vue.withDirectives(vue.createElementVNode(
+              "input",
+              {
+                class: "input",
+                type: "number",
+                placeholder: "请输入能量石数量",
+                "onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => $setup.resourceAmount = $event)
+              },
+              null,
+              512
+              /* NEED_PATCH */
+            ), [
+              [vue.vModelText, $setup.resourceAmount]
+            ])
+          ]),
+          vue.createCommentVNode(" 手续费显示 "),
+          vue.createElementVNode("view", { class: "fee-info" }, [
+            vue.createElementVNode("image", {
+              class: "energy-stone-icon",
+              src: _imports_0$1,
+              mode: "aspectFit"
+            }),
+            vue.createElementVNode("text", { class: "fee-text" }, "手续费: 8%")
+          ]),
+          vue.createCommentVNode(" 确认转移按钮 "),
+          vue.createElementVNode("button", {
+            class: "submit-btn",
+            onClick: $setup.handleSubmit
+          }, "确认转移")
+        ])
+      ])
+    ]);
+  }
+  const UserToShopkeeperPopVue = /* @__PURE__ */ _export_sfc(_sfc_main$u, [["render", _sfc_render$t], ["__scopeId", "data-v-8237659e"], ["__file", "D:/HBuilderProjects/Game/components/userToShopkeeperPop.vue"]]);
+  const _sfc_main$t = {
+    __name: "MerchantCenter",
+    setup(__props, { expose: __expose }) {
+      __expose();
+      const isShowPop = vue.ref(false);
+      const selectedOwner = vue.ref(null);
+      const shopOwners = vue.ref([
+        {
+          avatar: "https://via.placeholder.com/100",
+          // 店主头像
+          name: "王者荣耀玩家",
+          // 店主姓名（同时也是游戏名）
+          gameId: "GamePlayer123",
+          // 游戏ID
+          wechat: "wechat123"
+          // 微信号
+        },
+        {
+          avatar: "https://via.placeholder.com/100",
+          name: "和平精英玩家",
+          gameId: "GamePlayer456",
+          wechat: "wechat456"
+        },
+        {
+          avatar: "https://via.placeholder.com/100",
+          name: "原神玩家",
+          gameId: "GamePlayer789",
+          wechat: "wechat789"
+        }
+      ]);
+      const handlePop = (type) => {
+        isShowPop.value = type;
+      };
+      const handleBack = () => {
+        formatAppLog("log", "at pages/MerchantCenter/MerchantCenter.vue:74", "返回上一页");
+        uni.navigateTo({
+          url: "/pages/HomePage/HomePage"
+        });
+      };
+      const transferResources = (owner) => {
+        formatAppLog("log", "at pages/MerchantCenter/MerchantCenter.vue:83", "跳转到资源转移页面，店主信息:", owner);
+        selectedOwner.value = owner;
+        handlePop(true);
+      };
+      const __returned__ = { isShowPop, selectedOwner, shopOwners, handlePop, handleBack, transferResources, ref: vue.ref, UserToShopkeeperPopVue };
+      Object.defineProperty(__returned__, "__isScriptSetup", { enumerable: false, value: true });
+      return __returned__;
+    }
+  };
+  function _sfc_render$s(_ctx, _cache, $props, $setup, $data, $options) {
+    return vue.openBlock(), vue.createElementBlock("view", { class: "shop-owner-container" }, [
+      vue.createCommentVNode(" 弹窗组件 "),
+      $setup.isShowPop ? (vue.openBlock(), vue.createBlock($setup["UserToShopkeeperPopVue"], {
+        key: 0,
+        owner: $setup.selectedOwner,
+        onClose: _cache[0] || (_cache[0] = ($event) => $setup.handlePop(false))
+      }, null, 8, ["owner"])) : vue.createCommentVNode("v-if", true),
+      vue.createCommentVNode(" Header "),
+      vue.createElementVNode("view", { class: "header" }, [
+        vue.createElementVNode("view", {
+          class: "back-icon",
+          onClick: $setup.handleBack
+        }, [
+          vue.createElementVNode("text", { class: "icon" }, "←")
+        ]),
+        vue.createElementVNode("text", { class: "header-title" }, "店主交易大厅")
+      ]),
+      vue.createCommentVNode(" 店主信息卡片 "),
+      (vue.openBlock(true), vue.createElementBlock(
+        vue.Fragment,
+        null,
+        vue.renderList($setup.shopOwners, (owner, index) => {
+          return vue.openBlock(), vue.createElementBlock("view", {
+            class: "shop-owner-card",
+            key: index
+          }, [
+            vue.createCommentVNode(" 店主头像 "),
+            vue.createElementVNode("image", {
+              class: "owner-avatar",
+              src: owner.avatar,
+              mode: "aspectFill"
+            }, null, 8, ["src"]),
+            vue.createCommentVNode(" 店主信息 "),
+            vue.createElementVNode("view", { class: "owner-info" }, [
+              vue.createElementVNode(
+                "text",
+                { class: "owner-name" },
+                "店主: " + vue.toDisplayString(owner.name),
+                1
+                /* TEXT */
+              ),
+              vue.createElementVNode(
+                "text",
+                { class: "owner-id" },
+                "游戏ID: " + vue.toDisplayString(owner.gameId),
+                1
+                /* TEXT */
+              ),
+              vue.createElementVNode(
+                "text",
+                { class: "owner-wechat" },
+                "微信号: " + vue.toDisplayString(owner.wechat),
+                1
+                /* TEXT */
+              )
+            ]),
+            vue.createCommentVNode(" 转移资源按钮 "),
+            vue.createElementVNode("button", {
+              class: "transfer-btn",
+              onClick: ($event) => $setup.transferResources(owner)
+            }, "转移资源", 8, ["onClick"])
+          ]);
+        }),
+        128
+        /* KEYED_FRAGMENT */
+      ))
+    ]);
+  }
+  const PagesMerchantCenterMerchantCenter = /* @__PURE__ */ _export_sfc(_sfc_main$t, [["render", _sfc_render$s], ["__file", "D:/HBuilderProjects/Game/pages/MerchantCenter/MerchantCenter.vue"]]);
+  const _sfc_main$s = {
+    __name: "mart",
+    setup(__props, { expose: __expose }) {
+      __expose();
+      function navigateToBuyMarket() {
+        formatAppLog("log", "at components/mart.vue:22", "跳转到求购集市页面");
+        uni.navigateTo({ url: "/pages/MerchantCenter/MerchantCenter" });
+      }
+      function navigateToSellMarket() {
+        formatAppLog("log", "at components/mart.vue:29", "跳转到出售集市页面");
+      }
+      const __returned__ = { navigateToBuyMarket, navigateToSellMarket };
+      Object.defineProperty(__returned__, "__isScriptSetup", { enumerable: false, value: true });
+      return __returned__;
+    }
+  };
+  function _sfc_render$r(_ctx, _cache, $props, $setup, $data, $options) {
+    return vue.openBlock(), vue.createElementBlock("view", { class: "market-container" }, [
+      vue.createCommentVNode(" 求购集市卡片 "),
+      vue.createElementVNode("view", {
+        class: "card buy-card",
+        onClick: $setup.navigateToBuyMarket
+      }, [
+        vue.createElementVNode("text", { class: "card-title" }, "交易市集\\n"),
+        vue.createElementVNode("text", { class: "card-description" }, "可与玩家进行求购和交易"),
+        vue.createElementVNode("view", { class: "card-icon" }, "🛒")
+      ]),
+      vue.createCommentVNode(" 出售集市卡片 "),
+      vue.createElementVNode("view", {
+        class: "card sell-card",
+        onClick: $setup.navigateToSellMarket
+      }, [
+        vue.createElementVNode("text", { class: "card-title" }, "商人集市\\n"),
+        vue.createElementVNode("text", { class: "card-description" }, "向店主出售物资"),
+        vue.createElementVNode("view", { class: "card-icon" }, "💰")
+      ])
+    ]);
+  }
+  const martVue = /* @__PURE__ */ _export_sfc(_sfc_main$s, [["render", _sfc_render$r], ["__scopeId", "data-v-80d3d254"], ["__file", "D:/HBuilderProjects/Game/components/mart.vue"]]);
+  const _sfc_main$r = {
+    __name: "clickIntoCloudCity",
+    setup(__props, { expose: __expose }) {
+      __expose();
+      function enterCloudCity() {
+        formatAppLog("log", "at components/clickIntoCloudCity.vue:26", "进入云城");
+        uni.navigateTo({ url: "/pages/GameHome/GameHome" });
+      }
+      const __returned__ = { enterCloudCity };
+      Object.defineProperty(__returned__, "__isScriptSetup", { enumerable: false, value: true });
+      return __returned__;
+    }
+  };
+  function _sfc_render$q(_ctx, _cache, $props, $setup, $data, $options) {
+    return vue.openBlock(), vue.createElementBlock("view", { class: "cloud-city-container" }, [
+      vue.createCommentVNode(" 云城背景 "),
+      vue.createElementVNode("view", { class: "cloud-city-background" }, [
+        vue.createElementVNode("view", { class: "cloud cloud-1" }),
+        vue.createElementVNode("view", { class: "cloud cloud-2" }),
+        vue.createElementVNode("view", { class: "cloud cloud-3" })
+      ]),
+      vue.createCommentVNode(" 云城内容区域 "),
+      vue.createElementVNode("view", { class: "cloud-city-content" }, [
+        vue.createElementVNode("text", { class: "welcome-text" }, "欢迎来到云城\\n"),
+        vue.createElementVNode("text", { class: "description-text" }, "探索未知的世界，发现无限可能")
+      ]),
+      vue.createCommentVNode(" 进入云城按钮 "),
+      vue.createElementVNode("view", {
+        class: "enter-button",
+        onClick: $setup.enterCloudCity
+      }, [
+        vue.createElementVNode("text", { class: "button-text" }, "进入云城")
+      ])
+    ]);
+  }
+  const clickIntoCloudCityVue = /* @__PURE__ */ _export_sfc(_sfc_main$r, [["render", _sfc_render$q], ["__scopeId", "data-v-9783c51e"], ["__file", "D:/HBuilderProjects/Game/components/clickIntoCloudCity.vue"]]);
+  const _sfc_main$q = {
+    __name: "HomePage",
+    setup(__props, { expose: __expose }) {
+      __expose();
+      const activeTab = vue.ref("cloud");
+      function handleMarket() {
+        activeTab.value = "market";
+        formatAppLog("log", "at pages/HomePage/HomePage.vue:68", "切换到集市页面");
+      }
+      function handleCloud() {
+        activeTab.value = "cloud";
+        formatAppLog("log", "at pages/HomePage/HomePage.vue:75", "切换到云城页面");
+      }
+      const __returned__ = { activeTab, handleMarket, handleCloud, ref: vue.ref, martVue, clickIntoCloudCityVue };
+      Object.defineProperty(__returned__, "__isScriptSetup", { enumerable: false, value: true });
+      return __returned__;
+    }
+  };
+  function _sfc_render$p(_ctx, _cache, $props, $setup, $data, $options) {
+    return vue.openBlock(), vue.createElementBlock("view", { class: "container" }, [
+      vue.createCommentVNode(" 顶部 Header "),
+      vue.createElementVNode("view", { class: "header" }, [
+        vue.createElementVNode("text", { class: "header-title" }, "趣选云城")
+      ]),
+      vue.createCommentVNode(" 页面内容 "),
+      vue.createElementVNode("view", { class: "content" }, [
+        vue.createCommentVNode(" 动态显示页面内容 "),
+        $setup.activeTab === "intro" ? (vue.openBlock(), vue.createElementBlock("view", {
+          key: 0,
+          class: "section"
+        }, [
+          vue.createElementVNode("text", { class: "section-title" }, "介绍"),
+          vue.createElementVNode("text", { class: "section-description" }, "这里是趣选云城的介绍页面。")
+        ])) : vue.createCommentVNode("v-if", true),
+        $setup.activeTab === "market" ? (vue.openBlock(), vue.createElementBlock("view", {
+          key: 1,
+          class: "section"
+        }, [
+          vue.createVNode($setup["martVue"])
+        ])) : vue.createCommentVNode("v-if", true),
+        $setup.activeTab === "cloud" ? (vue.openBlock(), vue.createElementBlock("view", {
+          key: 2,
+          class: "section"
+        }, [
+          vue.createVNode($setup["clickIntoCloudCityVue"])
+        ])) : vue.createCommentVNode("v-if", true),
+        $setup.activeTab === "promotion" ? (vue.openBlock(), vue.createElementBlock("view", {
+          key: 3,
+          class: "section"
+        }, [
+          vue.createElementVNode("text", { class: "section-title" }, "推广"),
+          vue.createElementVNode("text", { class: "section-description" }, "这里是趣选云城的推广页面。")
+        ])) : vue.createCommentVNode("v-if", true),
+        $setup.activeTab === "guild" ? (vue.openBlock(), vue.createElementBlock("view", {
+          key: 4,
+          class: "section"
+        }, [
+          vue.createElementVNode("text", { class: "section-title" }, "公会"),
+          vue.createElementVNode("text", { class: "section-description" }, "这里是趣选云城的公会页面。")
+        ])) : vue.createCommentVNode("v-if", true)
+      ]),
+      vue.createCommentVNode(" 底部 Tab 栏 "),
+      vue.createElementVNode("view", { class: "tab-bar" }, [
+        vue.createCommentVNode(" 介绍 Tab（禁用） "),
+        vue.createElementVNode("view", { class: "tab-item disabled" }, [
+          vue.createElementVNode("text", { class: "tab-text" }, "介绍")
+        ]),
+        vue.createCommentVNode(" 集市 Tab（可点击） "),
+        vue.createElementVNode(
+          "view",
+          {
+            class: vue.normalizeClass(["tab-item", { active: $setup.activeTab === "market" }]),
+            onClick: $setup.handleMarket
+          },
+          [
+            vue.createElementVNode("text", { class: "tab-text" }, "集市")
+          ],
+          2
+          /* CLASS */
+        ),
+        vue.createCommentVNode(" 云城 Tab（可点击） "),
+        vue.createElementVNode(
+          "view",
+          {
+            class: vue.normalizeClass(["tab-item", { active: $setup.activeTab === "cloud" }]),
+            onClick: $setup.handleCloud
+          },
+          [
+            vue.createElementVNode("text", { class: "tab-text" }, "云城")
+          ],
+          2
+          /* CLASS */
+        ),
+        vue.createCommentVNode(" 推广 Tab（禁用） "),
+        vue.createElementVNode("view", { class: "tab-item disabled" }, [
+          vue.createElementVNode("text", { class: "tab-text" }, "推广")
+        ]),
+        vue.createCommentVNode(" 公会 Tab（禁用） "),
+        vue.createElementVNode("view", { class: "tab-item disabled" }, [
+          vue.createElementVNode("text", { class: "tab-text" }, "公会")
+        ])
+      ])
+    ]);
+  }
+  const PagesHomePageHomePage = /* @__PURE__ */ _export_sfc(_sfc_main$q, [["render", _sfc_render$p], ["__file", "D:/HBuilderProjects/Game/pages/HomePage/HomePage.vue"]]);
   const _sfc_main$p = {
     __name: "Mock",
     setup(__props, { expose: __expose }) {
@@ -4617,7 +5411,7 @@ This will fail in production if not fixed.`);
         setCache(AVATAR, avatar2);
         gameInfo.isLoad = 0;
         uni.navigateTo({
-          url: "/pages/Home/Home"
+          url: "/pages/GameHome/GameHome"
         });
       }
       const __returned__ = { gameInfo, setCache, getCache: getCache2, assetsDB, addAssets, toGame, get ASSETS() {
@@ -4771,8 +5565,18 @@ This will fail in production if not fixed.`);
     setup(__props, { expose: __expose }) {
       __expose();
       const gameInfo = useGameInfoStore();
-      const avatar2 = uni.getStorageSync("avatar");
-      const __returned__ = { gameInfo, avatar: avatar2, ref: vue.ref, get useGameInfoStore() {
+      const avatarUrl = vue.computed(() => {
+        return gameInfo.avatar || uni.getStorageSync("avatar") || "";
+      });
+      vue.watch(
+        () => gameInfo.avatar,
+        (newAvatar) => {
+          if (newAvatar) {
+            uni.setStorageSync("avatar", newAvatar);
+          }
+        }
+      );
+      const __returned__ = { gameInfo, avatarUrl, ref: vue.ref, watch: vue.watch, computed: vue.computed, get useGameInfoStore() {
         return useGameInfoStore;
       } };
       Object.defineProperty(__returned__, "__isScriptSetup", { enumerable: false, value: true });
@@ -4781,17 +5585,19 @@ This will fail in production if not fixed.`);
   };
   function _sfc_render$m(_ctx, _cache, $props, $setup, $data, $options) {
     return vue.openBlock(), vue.createElementBlock("view", { class: "avatar" }, [
-      $setup.avatar ? (vue.openBlock(), vue.createElementBlock(
+      vue.createCommentVNode(" 头像区域 "),
+      $setup.avatarUrl ? (vue.openBlock(), vue.createElementBlock(
         "view",
         {
           key: 0,
           class: "avatarImg",
-          style: vue.normalizeStyle(`background-image: url(${$setup.avatar});`)
+          style: vue.normalizeStyle(`background-image: url(${$setup.avatarUrl});`)
         },
         null,
         4
         /* STYLE */
       )) : vue.createCommentVNode("v-if", true),
+      vue.createCommentVNode(" 用户名 "),
       vue.createElementVNode("view", { class: "userName" }, [
         vue.createElementVNode(
           "text",
@@ -5011,44 +5817,106 @@ This will fail in production if not fixed.`);
       __expose();
       const gameInfo = useGameInfoStore();
       const props = __props;
-      const avatar2 = Cache.getCache(AVATAR);
-      const userName = vue.ref(Cache.getCache(USERNAME));
+      const avatarUrl = vue.ref(Cache.getCache(AVATAR) || "");
+      const userName = vue.ref(Cache.getCache(USERNAME) || "");
       const isShowEditPop = vue.ref(false);
       const isShowTip = vue.ref(false);
       const newName = vue.ref("");
-      const isFirstEdit = vue.ref(gameInfo.isFirst === 0);
+      const isFirstEdit = vue.ref(gameInfo.isFirst == 0);
+      const showAvatarTip = vue.ref(false);
+      formatAppLog("log", "at components/userInfoPop.vue:63", "gameInfo.isFirst:", gameInfo.isFirst);
       function openEditNamePop() {
         isShowEditPop.value = true;
       }
       function closeEditNamePop() {
         isShowEditPop.value = false;
+        isShowTip.value = false;
+        newName.value = "";
       }
-      function updateName(e2) {
-        newName.value = e2.detail.value;
-      }
-      function confirm() {
-        if (newName.value === "")
+      async function confirm() {
+        if (!newName.value)
           return;
         if (!isFirstEdit.value && gameInfo.assets.powerStone < 100) {
           isShowTip.value = true;
           return;
         }
-        if (!isFirstEdit.value) {
-          gameInfo.assets.powerStone -= 100;
-          const assetsDB = Ys.importObject("assets");
-          assetsDB.update(gameInfo.id, POWERSTONE, -100);
+        try {
+          if (!isFirstEdit.value) {
+            gameInfo.assets.powerStone -= 100;
+            const assetsDB = Ys.importObject("assets");
+            await assetsDB.update(gameInfo.id, POWERSTONE, -100);
+          }
+          const user = Ys.importObject("user");
+          const id = uni.getStorageSync("id");
+          await user.changeName(id, newName.value);
+          userName.value = newName.value;
+          Cache.setCache(USERNAME, newName.value);
+          gameInfo.userName = newName.value;
+          gameInfo.isFirst = 1;
+          isFirstEdit.value = false;
+          closeEditNamePop();
+          uni.showToast({ title: "修改成功", icon: "success" });
+        } catch (err) {
+          formatAppLog("error", "at components/userInfoPop.vue:106", "修改失败", err);
+          uni.showToast({ title: "修改失败", icon: "none" });
         }
-        const user = Ys.importObject("user");
-        const id = uni.getStorageSync("id");
-        user.changeName(id, newName.value);
-        uni.setStorageSync("userName", newName.value);
-        gameInfo.userName = newName.value;
-        userName.value = newName.value;
-        gameInfo.isFirst = 1;
-        isShowEditPop.value = false;
-        isFirstEdit.value = false;
       }
-      const __returned__ = { gameInfo, props, avatar: avatar2, userName, isShowEditPop, isShowTip, newName, isFirstEdit, openEditNamePop, closeEditNamePop, updateName, confirm, ref: vue.ref, get AVATAR() {
+      async function changeAvatar() {
+        showAvatarTip.value = false;
+        try {
+          const res = await uni.chooseImage({
+            count: 1,
+            sizeType: ["compressed"],
+            sourceType: ["album", "camera"]
+          });
+          const tempFilePath = res.tempFilePaths[0];
+          await uploadAvatarToUniCloud(tempFilePath);
+        } catch (err) {
+          formatAppLog("error", "at components/userInfoPop.vue:123", "选择图片失败", err);
+          uni.showToast({ title: "选择图片失败", icon: "none" });
+        }
+      }
+      async function uploadAvatarToUniCloud(filePath) {
+        uni.showLoading({ title: "上传中..." });
+        try {
+          const result = await Ys.uploadFile({
+            filePath,
+            cloudPath: `avatars/${Date.now()}_${Math.random().toString(36).substring(2)}.jpg`
+          });
+          const avatarUrlValue = await getTempFileURL(result.fileID);
+          const id = uni.getStorageSync("id");
+          const updateResult = await Ys.callFunction({
+            name: "updateAvatar",
+            data: { userId: id, avatarUrl: avatarUrlValue }
+          });
+          if (updateResult.result.code === 200) {
+            uni.setStorageSync("avatar", avatarUrlValue);
+            avatarUrl.value = avatarUrlValue;
+            gameInfo.avatar = avatarUrlValue;
+            uni.showToast({ title: "头像更新成功", icon: "success" });
+          } else {
+            uni.showToast({ title: "头像更新失败", icon: "none" });
+            formatAppLog("error", "at components/userInfoPop.vue:163", "云函数返回错误:", updateResult.result.message);
+          }
+        } catch (err) {
+          formatAppLog("error", "at components/userInfoPop.vue:167", "上传失败", err);
+          uni.showToast({ title: "上传失败", icon: "none" });
+        } finally {
+          uni.hideLoading();
+        }
+      }
+      async function getTempFileURL(fileID) {
+        if (!fileID)
+          return "";
+        try {
+          const result = await Ys.getTempFileURL({ fileList: [fileID] });
+          return result.fileList[0].tempFileURL;
+        } catch (err) {
+          formatAppLog("error", "at components/userInfoPop.vue:181", "获取文件 URL 失败", err);
+          return "";
+        }
+      }
+      const __returned__ = { gameInfo, props, avatarUrl, userName, isShowEditPop, isShowTip, newName, isFirstEdit, showAvatarTip, openEditNamePop, closeEditNamePop, confirm, changeAvatar, uploadAvatarToUniCloud, getTempFileURL, ref: vue.ref, get AVATAR() {
         return AVATAR;
       }, get POWERSTONE() {
         return POWERSTONE;
@@ -5071,13 +5939,20 @@ This will fail in production if not fixed.`);
           onClick: _cache[0] || (_cache[0] = (...args) => $setup.props.closeInfo && $setup.props.closeInfo(...args))
         }),
         vue.createElementVNode("view", { class: "wrap1" }, [
+          vue.createCommentVNode(" 头像区域 "),
           vue.createElementVNode(
             "view",
             {
               class: "avatar",
-              style: vue.normalizeStyle(`background-image: url(${$setup.avatar});`)
+              style: vue.normalizeStyle(`background-image: url(${$setup.avatarUrl});`),
+              onClick: $setup.changeAvatar
             },
-            null,
+            [
+              $setup.showAvatarTip ? (vue.openBlock(), vue.createElementBlock("view", {
+                key: 0,
+                class: "avatarTip"
+              }, "点击更换头像")) : vue.createCommentVNode("v-if", true)
+            ],
             4
             /* STYLE */
           ),
@@ -5102,6 +5977,7 @@ This will fail in production if not fixed.`);
         ]),
         vue.createElementVNode("view", { class: "assetsArea" })
       ]),
+      vue.createCommentVNode(" 修改名字弹窗 "),
       $setup.isShowEditPop ? (vue.openBlock(), vue.createElementBlock("view", {
         key: 0,
         class: "editPop"
@@ -5118,14 +5994,21 @@ This will fail in production if not fixed.`);
             vue.createElementVNode("text", null, "确定修改")
           ]),
           vue.createElementVNode("view", { class: "inputBgc" }, [
-            vue.createElementVNode("input", {
-              type: "text",
-              value: $setup.newName,
-              maxlength: "6",
-              onInput: $setup.updateName,
-              "auto-focus": true,
-              placeholder: "名字最大长度为6"
-            }, null, 40, ["value"])
+            vue.withDirectives(vue.createElementVNode(
+              "input",
+              {
+                type: "text",
+                "onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => $setup.newName = $event),
+                maxlength: "6",
+                "auto-focus": true,
+                placeholder: "名字最大长度为6"
+              },
+              null,
+              512
+              /* NEED_PATCH */
+            ), [
+              [vue.vModelText, $setup.newName]
+            ])
           ]),
           $setup.isShowTip ? (vue.openBlock(), vue.createElementBlock("view", {
             key: 0,
@@ -5161,7 +6044,7 @@ This will fail in production if not fixed.`);
           formatAppLog("log", "at components/settingPop.vue:41", "音乐停止播放");
         });
         uni.navigateTo({
-          url: "/pages/Mock/Mock"
+          url: "/pages/HomePage/HomePage"
         });
       }
       const __returned__ = { gameInfo, props, openImg, closeImg, bgm, handleImg, exit, ref: vue.ref, get useGameInfoStore() {
@@ -5310,12 +6193,6 @@ This will fail in production if not fixed.`);
     const newTimestamp = timestamp + duration * 24 * 3600 * 1e3;
     const newDate = new Date(newTimestamp);
     return newDate.toISOString();
-  }
-  async function updateOwnGrounds() {
-    const groundsDB = Ys.importObject("grounds");
-    const gameInfo = useGameInfoStore();
-    const res = await groundsDB.selectAllGrounds(gameInfo.id);
-    gameInfo.ownGrounds = res;
   }
   function netWorkError() {
     uni.showToast({
@@ -5604,7 +6481,7 @@ This will fail in production if not fixed.`);
   }
   const loadingVue = /* @__PURE__ */ _export_sfc(_sfc_main$b, [["render", _sfc_render$a], ["__scopeId", "data-v-d56252fb"], ["__file", "D:/HBuilderProjects/Game/components/loading.vue"]]);
   const _sfc_main$a = {
-    __name: "Home",
+    __name: "GameHome",
     setup(__props, { expose: __expose }) {
       __expose();
       const keyword = vue.ref("");
@@ -5627,7 +6504,7 @@ This will fail in production if not fixed.`);
       const setCache = Cache.setCache;
       const getCache2 = Cache.getCache;
       const groundsDB = Ys.importObject("grounds");
-      const isShowLoading = vue.ref(true);
+      const isShowLoading = vue.ref(false);
       translateX.value = gameInfo.translateX;
       translateY.value = gameInfo.translateY;
       getVwVhInPx();
@@ -5704,31 +6581,8 @@ This will fail in production if not fixed.`);
         bgm.loop = true;
         bgm.play();
         bgm.onError((err) => {
-          formatAppLog("log", "at pages/Home/Home.vue:160", err);
+          formatAppLog("log", "at pages/GameHome/GameHome.vue:160", err);
         });
-        const phone = getCache2(PHONE), avatar2 = getCache2(AVATAR);
-        const user = Ys.importObject("user");
-        const assets = Ys.importObject("assets");
-        const res1 = await user.select(phone);
-        if (res1.res.affectedDocs === 0) {
-          formatAppLog("log", "at pages/Home/Home.vue:173", "该用户没有激活过云城", res1);
-          const res2 = await user.init(phone, avatar2);
-          await assets.init(res2.res.id);
-          setCache(USERNAME, "趣选云城");
-          setCache(ISFIRST, 0);
-          gameInfo.userName = "趣选云城";
-          gameInfo.isFirst = 0;
-        } else {
-          formatAppLog("log", "at pages/Home/Home.vue:181", "该用户已经激活过云城(在mock页面中)", res1);
-          const data = res1.res.data[0];
-          gameInfo.userName = data.userName;
-          gameInfo.isFirst = data.isFirst;
-          gameInfo.id = data._id;
-          setCache(USERNAME, data.userName);
-          setCache(ID, data._id);
-          setCache(ISFIRST, data.isFirst);
-        }
-        updateOwnGrounds();
         setTimeout(function() {
           isShowLoading.value = false;
         }, 1e3);
@@ -5824,7 +6678,7 @@ This will fail in production if not fixed.`);
       )
     ]);
   }
-  const PagesHomeHome = /* @__PURE__ */ _export_sfc(_sfc_main$a, [["render", _sfc_render$9], ["__scopeId", "data-v-7ffebbf4"], ["__file", "D:/HBuilderProjects/Game/pages/Home/Home.vue"]]);
+  const PagesGameHomeGameHome = /* @__PURE__ */ _export_sfc(_sfc_main$a, [["render", _sfc_render$9], ["__scopeId", "data-v-c1aae60e"], ["__file", "D:/HBuilderProjects/Game/pages/GameHome/GameHome.vue"]]);
   const _sfc_main$9 = {
     __name: "marketPublish",
     props: ["controlPublish", "title", "gemItems", "gemImgName", "updateData"],
@@ -8026,8 +8880,11 @@ This will fail in production if not fixed.`);
     ]);
   }
   const PagesGroundGround = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["render", _sfc_render], ["__file", "D:/HBuilderProjects/Game/pages/Ground/Ground.vue"]]);
+  __definePage("pages/login/login", PagesLoginLogin);
+  __definePage("pages/MerchantCenter/MerchantCenter", PagesMerchantCenterMerchantCenter);
+  __definePage("pages/HomePage/HomePage", PagesHomePageHomePage);
   __definePage("pages/Mock/Mock", PagesMockMock);
-  __definePage("pages/Home/Home", PagesHomeHome);
+  __definePage("pages/GameHome/GameHome", PagesGameHomeGameHome);
   __definePage("pages/TradingMarkets/TradingMarkets", PagesTradingMarketsTradingMarkets);
   __definePage("pages/Mine/Mine", PagesMineMine);
   __definePage("pages/Ground/Ground", PagesGroundGround);

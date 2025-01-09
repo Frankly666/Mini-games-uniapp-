@@ -30,7 +30,7 @@
 		
 		// 跳转游戏主页
 		uni.navigateTo({
-			url:'/pages/Home/Home'
+			url:'/pages/GameHome/GameHome'
 		})
 	}
 </script>

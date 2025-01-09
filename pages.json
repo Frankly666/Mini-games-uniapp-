@@ -1,13 +1,35 @@
 {
   "pages": [
+		{
+			"path" : "pages/login/login",
+			"style" : 
+			{
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/MerchantCenter/MerchantCenter",
+			"style" : 
+			{
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/HomePage/HomePage",
+			"style" : 
+			{
+				"navigationStyle": "custom"
+			}
+		},
+	
+		{
+		  "path": "pages/Mock/Mock",
+		  "style": {
+		    "navigationStyle": "custom"
+		  }
+		},
     {
-      "path": "pages/Mock/Mock",
-      "style": {
-        "navigationStyle": "custom"
-      }
-    },
-    {
-      "path": "pages/Home/Home",
+      "path": "pages/GameHome/GameHome",
       "style": {
         "navigationStyle": "custom"
       }

@@ -42,7 +42,7 @@
 		})
 		
 		uni.navigateTo({
-			url:'/pages/Mock/Mock'
+			url:'/pages/HomePage/HomePage'
 		})
 	}
 	

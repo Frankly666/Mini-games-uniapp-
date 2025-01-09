@@ -253,7 +253,7 @@
 			flex-direction: column;
 			align-items: center;
 			width: 87vw;
-			height: 120vw;
+			height: 104vw;
 			background: url('../static/market/table.png') no-repeat center center / contain;
 			
 			.close {
@@ -294,7 +294,6 @@
 						height: 12vw;
 						margin-right: 2vw;
 						box-sizing: border-box;
-						
 						
 						&.active {
 							background-color: rgba(0, 0, 0, .5);

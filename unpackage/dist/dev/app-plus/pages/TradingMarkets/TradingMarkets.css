@@ -101,8 +101,8 @@
   flex-direction: column;
   align-items: center;
   width: 87vw;
-  height: 120vw;
-  background: url('../../static/home/table.png') no-repeat center center / contain;
+  height: 104vw;
+  background: url('../../static/market/table.png') no-repeat center center / contain;
 }
 .publishWrap .board .close[data-v-16940c0f] {
   position: absolute;
@@ -293,7 +293,7 @@
   align-items: center;
   width: 73vw;
   height: 90vw;
-  background: url("../../static/home/table.png") no-repeat center center / contain;
+  background: url("../../static/market/table.png") no-repeat center center / contain;
 }
 .buyCellPopWrap .board .close[data-v-f77da028] {
   position: absolute;
@@ -424,7 +424,7 @@
   align-items: center;
   width: 87vw;
   height: 106vw;
-  background: url('../../static/home/table.png') no-repeat center center / contain;
+  background: url('../../static/market/table.png') no-repeat center center / contain;
 }
 .publishWrap .board .close[data-v-e13ff159] {
   position: absolute;

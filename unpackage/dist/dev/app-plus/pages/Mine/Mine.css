@@ -16,7 +16,7 @@
   align-items: center;
   width: 87vw;
   height: 104vw;
-  background: url('../../static/home/table.png') no-repeat center center / contain;
+  background: url('../../static/market/table.png') no-repeat center center / contain;
 }
 .activateWrap .board .close[data-v-bf0f1432] {
   position: absolute;
