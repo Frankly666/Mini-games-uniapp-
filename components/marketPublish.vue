@@ -34,7 +34,8 @@
 			
 			<!-- 单价 -->
 			<view class="price" >
-				<text>{{title}}单价(限价:0.2~10):</text>
+				<text v-if="isSell">出售最低单价: {{minimumPrice[gemImgName[selectIndex]]}}个</text>
+				<text v-else>求购最低单价: {{minimumPrice[gemImgName[selectIndex]]}}个</text>
 				<view class="gemImg" :style="`background-image: url(${getGemImg('jewel')});`"></view>
 				<view class="priceInputWrap">
 					<input type="digit" :value="inputPriceValue" @input="(res) => {setPriceValue(res.detail.value)}"/>
@@ -89,6 +90,11 @@
 	const inputNumValue = ref(0)
 	const inputPriceValue = ref(0)
 	const isShowNotEnough = ref(false)
+	const minimumPrice ={
+		'diamond': 2,
+		'resourceStone': 0.33,
+		'powerStone': 1
+	}
 	
 	
 	const expectedNum = computed(() => {
@@ -145,7 +151,7 @@
 	// 发布出售逻辑操作
 	async function confirmSellPublish() {
 		
-		if(inputPriceValue.value < 0.2 || inputPriceValue.value > 10 || inputNumValue.value <= 0) {
+		if(inputPriceValue.value < minimumPrice[props.gemImgName[selectIndex.value]]) {
 			showTips("单价不满足要求")
 			return
 		};
@@ -189,7 +195,7 @@
 	
 	// 发布求购的逻辑操作
 	async function confirmNeedPublish() {
-		if(inputPriceValue.value < 0.2 || inputPriceValue.value > 10 || inputNumValue.value <= 0) {
+		if(inputPriceValue.value < minimumPrice[props.gemImgName[selectIndex.value]]) {
 			showTips("单价不符合要求")
 			return
 		};

@@ -89,6 +89,12 @@ const transferResources = (owner) => {
   selectedOwner.value = owner; // 设置当前选中的店主
   handlePop(true); // 显示弹窗
 };
+
+
+// 组件挂载时调用
+onMounted(() => {
+	updateAssets()
+});
 </script>
 
 <style lang="less">

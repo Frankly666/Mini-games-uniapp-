@@ -9,6 +9,7 @@
         </view>
         <view class="userName">
           <text>{{ userName }}</text>
+          <text v-if="userInfo.isMerchant" class="merchantTag">(商人)</text>
         </view>
         <view class="desc">
           <text v-if="isFirstEdit">(首次免费修改)</text>
@@ -232,17 +233,6 @@ async function getTempFileURL(fileID) {
   }
 }
 
-// 点击转赠记录
-function handleTransferRecord() {
-  console.log('点击转赠记录');
-  
-}
-
-// 点击交易记录
-function handleTradeRecord() {
-  console.log('点击交易记录');
-  
-}
 
 // 点击推广收益
 function handlePromoEarnings() {
@@ -387,6 +377,13 @@ function handlePromoEarnings() {
         font-weight: bold;
         font-size: 5vw;
         color: black; // 字体颜色为黑色
+      
+        .merchantTag {
+          color: red; // 红色字体
+          font-weight: bold; // 加粗
+          margin-left: 1vw; // 与用户名保持一定间距
+					font-size: 3vw;
+        }
       }
 
       .desc {

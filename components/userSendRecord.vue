@@ -112,7 +112,7 @@ async function loadTransferRecords() {
         },
       }));
     } else {
-      uni.showToast({ title: res.result.message || '加载失败', icon: 'none' });
+      uni.showToast({ title: res.result.message || '还没有赠送记录', icon: 'none' });
     }
   } catch (err) {
     console.error('加载失败', err);

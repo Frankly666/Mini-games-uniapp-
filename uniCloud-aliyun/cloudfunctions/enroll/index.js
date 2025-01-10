@@ -92,7 +92,7 @@ exports.main = async (event, context) => {
         userName: oldUserData.name, // 使用 oldUser 中的用户名
         createTime: new Date().toISOString(), // 当前时间
         isFirst: 0, // 初始化为 0
-        pusherPhone: oldUserData.pusherPhone || null, // 推荐者电话，如果没有则为 null
+        pusherCode: oldUserData.pusherCode || null, // 推荐者邀请码，如果没有则为 null
         isMerchant: false, // 初始化为 false
         wechat: "", // 初始化 wechat 字段为空字符串
       };
@@ -104,7 +104,7 @@ exports.main = async (event, context) => {
         userName: userName || "趣选云城", // 使用传入的用户名，如果没有则初始化为 "趣选云城"
         createTime: new Date().toISOString(), // 当前时间
         isFirst: 0, // 初始化为 0
-        pusherPhone: inviteCode || null, // 使用传入的推荐者电话，如果没有则为 null
+        pusherCode: inviteCode || null, // 使用传入的推荐者邀请码，如果没有则为 null
         isMerchant: false, // 初始化为 false
         wechat: "", // 初始化 wechat 字段为空字符串
       };

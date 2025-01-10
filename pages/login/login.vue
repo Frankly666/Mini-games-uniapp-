@@ -241,15 +241,15 @@ function handleRegister() {
 }
 
 // 页面加载时检查本地存储
-// onMounted(() => {
-//   const storedPhone = uni.getStorageSync(PHONE);
-//   if (storedPhone) {
-//     // 如果本地存储中有电话号码，直接跳转到首页
-//     uni.navigateTo({
-//       url: "/pages/HomePage/HomePage"
-//     });
-//   }
-// });
+onMounted(() => {
+  const storedPhone = uni.getStorageSync(PHONE);
+  if (storedPhone) {
+    // 如果本地存储中有电话号码，直接跳转到首页
+    uni.navigateTo({
+      url: "/pages/HomePage/HomePage"
+    });
+  }
+});
 </script>
 
 <style lang="less">

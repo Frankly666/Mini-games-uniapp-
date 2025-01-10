@@ -1,0 +1,7 @@
+{
+  "name": "updateWechat",
+  "dependencies": {},
+  "extensions": {
+    "uni-cloud-jql": {}
+  }
+}

@@ -27,7 +27,7 @@
 				</view>
 				<!-- 资源数量输入框 -->
 				<view class="input-group">
-					<text class="label">能量石数量</text>
+					<text class="label">所转移能量石数量</text>
 					<input class="input" type="number" placeholder="请输入能量石数量" v-model="resourceAmount" />
 				</view>
 				
@@ -306,7 +306,8 @@ onMounted(async () => {
 
 .fee-text {
 	font-size: 3.5vw;
-	color: #666;
+	color: black;
+	font-weight: bold;
 }
 
 /* 总扣除能量石数量 */
