@@ -160,6 +160,29 @@
   height: 100vh;
   background-color: #fff;
 }
+.mineWrap .mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+.mineWrap .mask .maskContent {
+  background-color: #fff;
+  padding: 5vw;
+  border-radius: 3vw;
+  text-align: center;
+}
+.mineWrap .mask .maskContent .maskText {
+  font-size: 4.5vw;
+  font-weight: bold;
+  color: #333;
+}
 .mineWrap .mineBg {
   position: fixed;
   top: 0;

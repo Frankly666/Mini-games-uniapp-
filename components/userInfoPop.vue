@@ -64,16 +64,20 @@
       </view>
     </view>
   
-		<!-- 记录弹窗区域 -->
-		<user-send-record-vue 
-				v-if="isShowSendRecordPop" 
-				@close="() => {handleSendRecordPop(false)}"
-				/>
-		<user-transaction-record-vue
-			v-if="isShowTransationPop"
-			@close="() => {handleTransactionRecord(false)}"
-		/>
-	</view>
+    <!-- 记录弹窗区域 -->
+    <user-send-record-vue 
+      v-if="isShowSendRecordPop" 
+      @close="() => {handleSendRecordPop(false)}"
+    />
+    <user-transaction-record-vue
+      v-if="isShowTransationPop"
+      @close="() => {handleTransactionRecord(false)}"
+    />
+    <referral-earnings-record-vue
+      v-if="isShowReferralPop"
+      @close="() => {isShowReferralPop = false}"
+    />
+  </view>
 </template>
 
 <script setup>
@@ -82,18 +86,20 @@ import { AVATAR, POWERSTONE, USERNAME, useGameInfoStore } from '../stores/gameIn
 import Cache from '../utils/cache';
 import userSendRecordVue from './userSendRecord.vue';
 import userTransactionRecordVue from './userTransactionRecord.vue';
+import referralEarningsRecordVue from './referralEarningsRecord.vue';
 
 const gameInfo = useGameInfoStore();
 const props = defineProps(['closeInfo']);
-const avatarUrl = ref(Cache.getCache(AVATAR) || ''); // 头像 URL
+const avatarUrl = ref(Cache.getCache(AVATAR) || '');
 const userName = ref(Cache.getCache(USERNAME) || '');
 const isShowEditPop = ref(false);
 const isShowTip = ref(false);
 const newName = ref('');
 const isFirstEdit = ref(gameInfo.isFirst == 0);
 const showAvatarTip = ref(false);
-const isShowSendRecordPop = ref(false)
-const isShowTransationPop = ref(false)
+const isShowSendRecordPop = ref(false);
+const isShowTransationPop = ref(false);
+const isShowReferralPop = ref(false); // 控制推广收益弹窗的显示和隐藏
 
 // 从缓存中获取 userInfo
 const userInfo = uni.getStorageSync('userInfo') || {};
@@ -114,14 +120,18 @@ function closeEditNamePop() {
 
 // 转赠记录弹窗控制
 function handleSendRecordPop(type) {
-	isShowSendRecordPop.value = type;
+  isShowSendRecordPop.value = type;
 }
+
 // 交易记录弹窗控制
 function handleTransactionRecord(type) {
-	isShowTransationPop.value = type;
+  isShowTransationPop.value = type;
 }
 
-
+// 推广收益弹窗控制
+function handlePromoEarnings() {
+  isShowReferralPop.value = true; // 显示推广收益弹窗
+}
 
 // 确认修改名字
 async function confirm() {
@@ -232,13 +242,6 @@ async function getTempFileURL(fileID) {
     return '';
   }
 }
-
-
-// 点击推广收益
-function handlePromoEarnings() {
-  console.log('点击推广收益');
-  
-}
 </script>
 
 <style lang="less">
@@ -339,7 +342,7 @@ function handlePromoEarnings() {
     .wrap1 {
       position: absolute;
       top: 18vw;
-			left: 2vw;
+      left: 2vw;
       width: 100%;
       height: 100%;
 
@@ -382,7 +385,7 @@ function handlePromoEarnings() {
           color: red; // 红色字体
           font-weight: bold; // 加粗
           margin-left: 1vw; // 与用户名保持一定间距
-					font-size: 3vw;
+          font-size: 3vw;
         }
       }
 
@@ -410,22 +413,22 @@ function handlePromoEarnings() {
     }
 
     .infoRow {
-			display: flex;
-			justify-content: space-between;
+      display: flex;
+      justify-content: space-between;
       position: absolute;
       top: 69vw;
-			left: 8vw;
+      left: 8vw;
       width: 78vw;
       display: flex;
       justify-content: space-between;
       font-size: 3.5vw;
       color: black; // 字体颜色为黑色
-			font-weight: bold;
-			
-			.infoText {
-				width: 50%;
-				box-sizing: border-box;
-			}
+      font-weight: bold;
+      
+      .infoText {
+        width: 50%;
+        box-sizing: border-box;
+      }
     }
 
     .actionButtons {
@@ -435,12 +438,12 @@ function handlePromoEarnings() {
       width: 60vw;
       display: flex;
       flex-direction: column;
-			font-weight: bold;
+      font-weight: bold;
 
       .buttonRow {
         display: flex;
         justify-content: left;
-				width: 100%;
+        width: 100%;
       }
 
       .button {
@@ -451,17 +454,15 @@ function handlePromoEarnings() {
         color: black; // 字体颜色为黑色
         font-size: 4vw;
         cursor: pointer;
-				padding: 3vw;
-				margin-right: 2vw;
-				box-sizing: border-box;
-				margin-top: 2vw;
+        padding: 3vw;
+        margin-right: 2vw;
+        box-sizing: border-box;
+        margin-top: 2vw;
 
         &:active {
           background-color: rgba(255, 255, 255, 0.6);
         }
       }
-
-      
     }
   }
 }

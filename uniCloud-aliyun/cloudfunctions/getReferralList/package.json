@@ -1,0 +1,7 @@
+{
+  "name": "getReferralList",
+  "dependencies": {},
+  "extensions": {
+    "uni-cloud-jql": {}
+  }
+}
