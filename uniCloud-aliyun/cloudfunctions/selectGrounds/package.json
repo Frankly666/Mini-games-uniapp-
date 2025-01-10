@@ -1,0 +1,7 @@
+{
+  "name": "selectGrounds",
+  "dependencies": {},
+  "extensions": {
+    "uni-cloud-jql": {}
+  }
+}

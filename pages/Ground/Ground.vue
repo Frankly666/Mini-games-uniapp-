@@ -1,5 +1,8 @@
 <template>
 	<view class="groundWrap">
+		<!-- 签到组件 -->
+		<grond-sign-in-presentation-vue />
+		
 		<!-- 地皮购买弹窗 -->
 		<buy-ground-pop-vue 
 					v-if="isShowGroundPop" 
@@ -158,6 +161,7 @@
 	import workerVue from '../../components/worker.vue';
 	import buyGroundPopVue from '../../components/buyGroundPop.vue';
 	import { useGameInfoStore } from '../../stores/gameInfo';
+	import grondSignInPresentationVue from '../../components/grondSignInPresentation.vue';
 
 	const groundType = ref(null)
 	const groundIndex = ref(null);

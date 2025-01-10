@@ -92,22 +92,31 @@ exports.main = async (event, context) => {
         userName: oldUserData.name, // 使用 oldUser 中的用户名
         createTime: new Date().toISOString(), // 当前时间
         isFirst: 0, // 初始化为 0
-        pusherCode: oldUserData.pusherCode || null, // 推荐者邀请码，如果没有则为 null
-        isMerchant: false, // 初始化为 false
+        pusherCode: oldUserData.pusherPhone || null, // 如果 oldUser 中的 pusherPhone 有值，则将其添加到 pusherCode 字段
+        isMerchant: oldUserData.isMerchant || false, // 使用 oldUser 中的 isMerchant 字段，如果没有则默认为 false
         wechat: "", // 初始化 wechat 字段为空字符串
       };
     } else {
       // 如果 oldUser 中不存在该用户，直接使用传入的数据注册
       userData = {
         phone,
-        avatar: defaultAvatar, 
+        avatar: defaultAvatar,
         userName: userName || "趣选云城", // 使用传入的用户名，如果没有则初始化为 "趣选云城"
         createTime: new Date().toISOString(), // 当前时间
         isFirst: 0, // 初始化为 0
-        pusherCode: inviteCode || null, // 使用传入的推荐者邀请码，如果没有则为 null
+        pusherCode: null, // 初始化为 null，后续会根据 inviteCode 更新
         isMerchant: false, // 初始化为 false
         wechat: "", // 初始化 wechat 字段为空字符串
       };
+
+      // 如果新用户提供了 inviteCode，则根据 inviteCode 查找 pusherCode
+      if (inviteCode) {
+        const pusherQuery = await userCollection.where({ inviteCode }).get();
+        if (pusherQuery.data.length > 0) {
+          // 如果找到了对应的用户，将其 phone 赋值给 pusherCode
+          userData.pusherCode = pusherQuery.data[0].phone;
+        }
+      }
     }
 
     // 3. 对密码进行加密

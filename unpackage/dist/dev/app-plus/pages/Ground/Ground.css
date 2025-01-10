@@ -281,6 +281,90 @@
   background: url('../../static/talentCenter/btn2.png') no-repeat center center / contain;
 }
 
+.rewardModal[data-v-d5e6e080] {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+.rewardModal .modalContent[data-v-d5e6e080] {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 6.7vw;
+  /* 20px -> 6.7vw */
+  border-radius: 3.3vw;
+  /* 10px -> 3.3vw */
+  width: 70vw;
+  height: 70vw;
+  text-align: center;
+  background: url("../../static/ground/board.png") no-repeat center center / contain;
+}
+.rewardModal .modalContent .activityName[data-v-d5e6e080] {
+  position: absolute;
+  text-align: center;
+  top: 14vw;
+  left: -1vw;
+  width: 100%;
+  font-size: 6vw;
+  /* 16px -> 4.3vw */
+  color: #555;
+  font-weight: bold;
+}
+.rewardModal .modalContent .rewardInfo[data-v-d5e6e080] {
+  position: absolute;
+  top: 27.3vw;
+  /* 40px -> 13.3vw */
+  left: 30vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.rewardModal .modalContent .rewardInfo .gemImage[data-v-d5e6e080] {
+  width: 11vw;
+  /* 50px -> 13.3vw */
+  height: 11vw;
+  /* 50px -> 13.3vw */
+  margin-bottom: 2.7vw;
+  /* 10px -> 2.7vw */
+}
+.rewardModal .modalContent .rewardInfo .gemAmount[data-v-d5e6e080] {
+  font-size: 4vw;
+  /* 18px -> 4.8vw */
+  font-weight: bold;
+  color: #333;
+}
+.rewardModal .modalContent .claimButton[data-v-d5e6e080] {
+  position: absolute;
+  width: 27vw;
+  /* 80px -> 26.7vw */
+  height: 14vw;
+  /* 50px -> 13.3vw */
+  top: 53.3vw;
+  /* 160px -> 53.3vw */
+  left: 50%;
+  transform: translateX(-50%);
+  color: #fff;
+  font-weight: bold;
+  font-size: 4.3vw;
+  /* 16px -> 4.3vw */
+  border: none;
+  cursor: pointer;
+  line-height: 12.3vw;
+  /* 50px -> 13.3vw */
+  background: url("../../static/mine/btn_Green.png") no-repeat center center / contain;
+}
+.rewardModal .modalContent .claimButton[data-v-d5e6e080]:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
 .groundWrap {
   position: relative;
   width: 100vw;
@@ -295,7 +379,7 @@
   left: 7vw;
   width: 15vw;
   height: 15vw;
-  background: url("../../static/ground/return.png") no-repeat center center / contain;
+  background: url("../../static/market/return.png") no-repeat center center / contain;
 }
 .groundWrap .treesWrap1 .item1 {
   position: absolute;
