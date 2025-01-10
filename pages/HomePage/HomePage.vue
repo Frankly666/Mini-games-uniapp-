@@ -14,6 +14,7 @@
 			</view>
 			<view class="section" v-if="activeTab === 'market'">
 				<mart-vue></mart-vue>
+				
 			</view>
 			<view class="section" v-if="activeTab === 'cloud'">
 				<click-into-cloud-city-vue></click-into-cloud-city-vue>

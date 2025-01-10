@@ -55,6 +55,7 @@ exports.main = async (event, context) => {
         isMerchant: userData.isMerchant, // 是否为商人
         isFirst: userData.isFirst, // 修改名字的次数
         inviteCode: userData.inviteCode, // 用户的邀请码
+        wechat: userData.wechat || "", // 用户的微信号，如果不存在则返回空字符串
       },
     };
   } catch (error) {

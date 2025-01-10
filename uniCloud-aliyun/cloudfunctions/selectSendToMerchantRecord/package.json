@@ -1,0 +1,7 @@
+{
+  "name": "selectSendToMerchantRecord",
+  "dependencies": {},
+  "extensions": {
+    "uni-cloud-jql": {}
+  }
+}

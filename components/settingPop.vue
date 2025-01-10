@@ -13,7 +13,7 @@
 					<text class="text">bgm</text>
 			</view>
 			<view class="exit" @click="exit">
-				<text>退出游戏</text>
+				<text>退出云城</text>
 			</view>
 		</view>
 	</view>

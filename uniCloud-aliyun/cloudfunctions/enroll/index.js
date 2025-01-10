@@ -1,7 +1,7 @@
 'use strict';
 const db = uniCloud.database(); // 获取数据库引用
 const crypto = require('crypto'); // 引入加密模块
-const defaultAvatar = '../static/avatar.png';
+const defaultAvatar = 'https://mp-4de62d5a-2380-467f-b109-457713276d05.cdn.bspapp.com/cloudstorage/c9e58edf-ac5f-4890-88bc-aa8a8f3951a5.jpg';
 
 // 生成一个随机的 8 位数字
 function generateRandomCode() {
@@ -94,6 +94,7 @@ exports.main = async (event, context) => {
         isFirst: 0, // 初始化为 0
         pusherPhone: oldUserData.pusherPhone || null, // 推荐者电话，如果没有则为 null
         isMerchant: false, // 初始化为 false
+        wechat: "", // 初始化 wechat 字段为空字符串
       };
     } else {
       // 如果 oldUser 中不存在该用户，直接使用传入的数据注册
@@ -105,6 +106,7 @@ exports.main = async (event, context) => {
         isFirst: 0, // 初始化为 0
         pusherPhone: inviteCode || null, // 使用传入的推荐者电话，如果没有则为 null
         isMerchant: false, // 初始化为 false
+        wechat: "", // 初始化 wechat 字段为空字符串
       };
     }
 
@@ -150,6 +152,7 @@ exports.main = async (event, context) => {
         avatar: defaultAvatar, // 返回默认头像
         isOldUser, // 标识是否为老用户
         inviteCode: inviteCodeUnique, // 返回生成的邀请码
+        wechat: userData.wechat, // 返回初始化的 wechat 字段
       },
     };
   } catch (error) {

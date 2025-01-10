@@ -18,7 +18,27 @@
           <text>修改</text>
         </view>
       </view>
-      <view class="assetsArea"></view>
+
+      <!-- 展示 gameID 和 inviteCode -->
+      <view class="infoRow">
+        <text class="infoText">游戏ID: {{ gameID }}</text>
+        <text class="infoText">邀请码: {{ inviteCode }}</text>
+      </view>
+
+      <!-- 功能按钮区域 -->
+      <view class="actionButtons">
+        <view class="buttonRow">
+          <view class="button" @click="() => {handleSendRecordPop(true)}">
+            <text>转赠记录</text>
+          </view>
+          <view class="button" @click="() => {handleTransactionRecord(true)}">
+            <text>交易记录</text>
+          </view>
+        </view>
+        <view class="button" @click="handlePromoEarnings">
+          <text>推广收益</text>
+        </view>
+      </view>
     </view>
 
     <!-- 修改名字弹窗 -->
@@ -42,13 +62,25 @@
         </view>
       </view>
     </view>
-  </view>
+  
+		<!-- 记录弹窗区域 -->
+		<user-send-record-vue 
+				v-if="isShowSendRecordPop" 
+				@close="() => {handleSendRecordPop(false)}"
+				/>
+		<user-transaction-record-vue
+			v-if="isShowTransationPop"
+			@close="() => {handleTransactionRecord(false)}"
+		/>
+	</view>
 </template>
 
 <script setup>
-import { defineProps, ref } from 'vue';
+import { defineProps, ref, computed } from 'vue';
 import { AVATAR, POWERSTONE, USERNAME, useGameInfoStore } from '../stores/gameInfo';
 import Cache from '../utils/cache';
+import userSendRecordVue from './userSendRecord.vue';
+import userTransactionRecordVue from './userTransactionRecord.vue';
 
 const gameInfo = useGameInfoStore();
 const props = defineProps(['closeInfo']);
@@ -57,10 +89,16 @@ const userName = ref(Cache.getCache(USERNAME) || '');
 const isShowEditPop = ref(false);
 const isShowTip = ref(false);
 const newName = ref('');
-const isFirstEdit = ref(gameInfo.isFirst == 0 );
+const isFirstEdit = ref(gameInfo.isFirst == 0);
 const showAvatarTip = ref(false);
+const isShowSendRecordPop = ref(false)
+const isShowTransationPop = ref(false)
 
-console.log("gameInfo.isFirst:", gameInfo.isFirst)
+// 从缓存中获取 userInfo
+const userInfo = uni.getStorageSync('userInfo') || {};
+const gameID = computed(() => userInfo.gameID || '');
+const inviteCode = computed(() => userInfo.inviteCode || '');
+
 // 打开修改名字弹窗
 function openEditNamePop() {
   isShowEditPop.value = true;
@@ -72,6 +110,17 @@ function closeEditNamePop() {
   isShowTip.value = false;
   newName.value = '';
 }
+
+// 转赠记录弹窗控制
+function handleSendRecordPop(type) {
+	isShowSendRecordPop.value = type;
+}
+// 交易记录弹窗控制
+function handleTransactionRecord(type) {
+	isShowTransationPop.value = type;
+}
+
+
 
 // 确认修改名字
 async function confirm() {
@@ -150,8 +199,7 @@ async function uploadAvatarToUniCloud(filePath) {
     if (updateResult.result.code === 200) {
       // 更新本地缓存
       uni.setStorageSync('avatar', avatarUrlValue);
-			
-			avatarUrl.value = avatarUrlValue;
+      avatarUrl.value = avatarUrlValue;
       // 更新 gameInfo 中的 avatar
       gameInfo.avatar = avatarUrlValue;
 
@@ -171,6 +219,7 @@ async function uploadAvatarToUniCloud(filePath) {
     uni.hideLoading();
   }
 }
+
 // 获取临时文件 URL
 async function getTempFileURL(fileID) {
   if (!fileID) return '';
@@ -181,6 +230,24 @@ async function getTempFileURL(fileID) {
     console.error('获取文件 URL 失败', err);
     return '';
   }
+}
+
+// 点击转赠记录
+function handleTransferRecord() {
+  console.log('点击转赠记录');
+  
+}
+
+// 点击交易记录
+function handleTradeRecord() {
+  console.log('点击交易记录');
+  
+}
+
+// 点击推广收益
+function handlePromoEarnings() {
+  console.log('点击推广收益');
+  
 }
 </script>
 
@@ -265,15 +332,15 @@ async function getTempFileURL(fileID) {
 
   .infoBgc {
     position: relative;
-    width: 80vw;
-    height: 115vw;
+    width: 85vw;
+    height: 142vw; // 调整高度以容纳新内容
     background: url('/static/home/table.png') no-repeat center center / contain;
 
     .closeBtn {
       position: absolute;
       z-index: 99;
       right: 3vw;
-      top: 12vw;
+      top: 23vw;
       width: 8vw;
       height: 8vw;
       background: url('/static/home/close.png') no-repeat center center / contain;
@@ -281,7 +348,8 @@ async function getTempFileURL(fileID) {
 
     .wrap1 {
       position: absolute;
-      top: 5vw;
+      top: 18vw;
+			left: 2vw;
       width: 100%;
       height: 100%;
 
@@ -318,6 +386,7 @@ async function getTempFileURL(fileID) {
         left: 15vw;
         font-weight: bold;
         font-size: 5vw;
+        color: black; // 字体颜色为黑色
       }
 
       .desc {
@@ -327,6 +396,7 @@ async function getTempFileURL(fileID) {
         text-align: center;
         width: 50vw;
         font-size: 3vw;
+        color: black; // 字体颜色为黑色
       }
 
       .editName {
@@ -338,8 +408,63 @@ async function getTempFileURL(fileID) {
         background: url('../static/home/edit.png') no-repeat center center / contain;
         text-align: center;
         line-height: 8vw;
-        color: #fff;
+        color: #fff; // 字体颜色为黑色
       }
+    }
+
+    .infoRow {
+			display: flex;
+			justify-content: space-between;
+      position: absolute;
+      top: 69vw;
+			left: 8vw;
+      width: 78vw;
+      display: flex;
+      justify-content: space-between;
+      font-size: 3.5vw;
+      color: black; // 字体颜色为黑色
+			font-weight: bold;
+			
+			.infoText {
+				width: 50%;
+				box-sizing: border-box;
+			}
+    }
+
+    .actionButtons {
+      position: absolute;
+      top: 75vw;
+      left: 10vw;
+      width: 60vw;
+      display: flex;
+      flex-direction: column;
+			font-weight: bold;
+
+      .buttonRow {
+        display: flex;
+        justify-content: left;
+				width: 100%;
+      }
+
+      .button {
+        width: 50%; // 两个按钮平分一行
+        background-color: rgba(255, 255, 255, 0.3);
+        border-radius: 2vw;
+        text-align: center;
+        color: black; // 字体颜色为黑色
+        font-size: 4vw;
+        cursor: pointer;
+				padding: 3vw;
+				margin-right: 2vw;
+				box-sizing: border-box;
+				margin-top: 2vw;
+
+        &:active {
+          background-color: rgba(255, 255, 255, 0.6);
+        }
+      }
+
+      
     }
   }
 }

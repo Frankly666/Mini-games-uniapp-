@@ -116,11 +116,14 @@ function handleLogin() {
 			uni.setStorageSync(PHONE, data.phone);
 			uni.setStorageSync(ID, data.userId);
 			uni.setStorageSync(AVATAR, data.avatar);
+			uni.setStorageSync("wechat", data.wechat || ""); // 存储 wechat 字段，如果不存在则存储空字符串
+			
 			gameInfo.id = data.userId;
 			gameInfo.userName = data.userName;
 			gameInfo.phone = data.phone;
 			gameInfo.isFirst = data.isFirst;
 			gameInfo.avatar = data.avatar;
+			gameInfo.wechat = data.wechat || ""; // 存储 wechat 字段，如果不存在则存储空字符串
 			
 			// 加载地皮
 			updateOwnGrounds()

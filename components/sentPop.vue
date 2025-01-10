@@ -32,14 +32,14 @@
 				</view>
 			</view>
 			
-			<!-- 受赠者电话 -->
-			<view class="sentPhone">
-				<view class="phoneInputWrap">
+			<!-- 受赠者gameID -->
+			<view class="sentGameID">
+				<view class="gameIDInputWrap">
 					<input 
-						type="number" 
-						:value="phoneInputValue" 
-						placeholder="请输入赠送对象电话" 
-						@input="res => {setPhoneNumValue(res.detail.value)}"
+						type="text" 
+						:value="gameIDInputValue" 
+						placeholder="请输入赠送对象游戏ID" 
+						@input="res => {setGameIDValue(res.detail.value)}"
 					/>
 				</view>
 			</view>
@@ -68,14 +68,16 @@
 	import { computed, onMounted, ref } from 'vue';
 	import { JEWEL, POWERSTONE, useGameInfoStore } from '../stores/gameInfo';
 	import { roundToOneDecimal } from '../utils/roundToOneDecimal';
-	import { netWorkError, showTips } from '../utils/error';
+	import { netWorkError, showSuccus, showTips } from '../utils/error';
 	
 	const gameInfo = useGameInfoStore()
-	const props = defineProps(['closePop', 'title', 'gemItems', 'gemImgName', 'updateData'])
+	const props = defineProps(['closePop', 'title','updateData'])
 	const selectIndex = ref(0)
 	const inputNumValue = ref(0)
-	const phoneInputValue = ref(null)
+	const gameIDInputValue = ref(null)
 	const premium = 0.08;
+	const gemItems = ['能量石']
+	const gemImgName = ['powerStone']
 	
 	
 	// 需要扣除的手续费
@@ -93,14 +95,11 @@
 		// 切换矿石时需要重置提示信息
 		inputNumValue.value = 0
 	}
-	function setPriceValue(price) {
-		inputPriceValue.value = price
-	}
 	function setNumValue(num) {
 		inputNumValue.value = num
 	}
-	function setPhoneNumValue(num) {
-		phoneInputValue.value = num
+	function setGameIDValue(gameID) {
+		gameIDInputValue.value = gameID
 	}
 	
 	// 处理加减数量以及设置最大值
@@ -118,47 +117,87 @@
 	
 	
 	
-	// 发布求购的逻辑操作
+	// 转赠的逻辑操作
 	async function confirmFun() {
-		const gemType = props.gemImgName[selectIndex.value]
-		
-		if(needPowerStoneNum.value > gameInfo.assets[gemType] || inputNumValue.value < 0) {
-			showTips("转赠数量有误")
-			return
-		}
-		if(phoneInputValue.value < 9999999999 || phoneInputValue.value > 99999999999) {
-			showTips("号码格式有误")
-			return
-		}
-		
-		uni.showLoading({
-			title: '转赠中',
-			mask: true
-		})
-		
-		// 求购后端逻辑操作
-		uniCloud.callFunction({
-			name:"sentAssets",
-			data:{
-				phone: phoneInputValue.value,
-				userId: gameInfo.id,
-				assetsType: gemType,
-				sendNum: inputNumValue.value,
-				premium: premium
-			}
-		}).then(res => {
-			if(res.result > 0) {
-				gameInfo.assets[gemType] =  roundToOneDecimal(gameInfo.assets[gemType] - needPowerStoneNum.value) ;
-				props.closePop()
-				uni.hideLoading()
-			}else {
-				if(res.result === -1) {
-					showTips("未找到该用户")
-				}else if(res.result === -2) {
-					showTips("不能给自己转赠")
-				}
-			}
-		})
+	  const gemType = props.gemImgName[selectIndex.value];
+	
+	  // 检查转赠数量是否合法
+	  if (inputNumValue.value <= 0) {
+	    showTips('转赠数量有误');
+	    return;
+	  }
+	
+	  // 检查余额是否足够
+	  if (needPowerStoneNum.value > gameInfo.assets[gemType]) {
+	    showTips('余额不足!');
+	    return;
+	  }
+	
+	  // 检查是否输入了 gameID
+	  if (!gameIDInputValue.value) {
+	    showTips('请输入 gameID');
+	    return;
+	  }
+	
+	  // 显示加载中提示
+	  uni.showLoading({
+	    title: '转赠中',
+	    mask: true,
+	  });
+	
+	  try {
+	    // 调用云函数进行转赠操作
+	    const res = await uniCloud.callFunction({
+	      name: 'sentAssets',
+	      data: {
+	        gameID: gameIDInputValue.value,
+	        userId: gameInfo.id,
+	        assetsType: gemType,
+	        sendNum: inputNumValue.value,
+	        premium: premium,
+	      },
+	    });
+	
+	    console.log('云函数返回结果:', res.result);
+	
+	    // 处理云函数返回结果
+	    if (res.result.code === 1) {
+	      // 更新本地资产数量
+	      gameInfo.assets[gemType] = roundToOneDecimal(
+	        gameInfo.assets[gemType] - needPowerStoneNum.value
+	      );
+	      // 显示转赠成功提示
+	      showSuccus('转赠成功!');
+	      // 关闭弹窗
+	      props.closePop();
+	    } else {
+	      let errorMessage = '转赠失败，请重试';
+	      switch (res.result.code) {
+	        case -1:
+	          errorMessage = '未找到该用户';
+	          break;
+	        case -2:
+	          errorMessage = '不能给自己转赠';
+	          break;
+	        case -3:
+	          errorMessage = '资源不足';
+	          break;
+	        case -4:
+	          errorMessage = '无效的资源类型';
+	          break;
+	        default:
+	          errorMessage = res.result.message || '未知错误';
+	      }
+	      showTips(errorMessage);
+	    }
+	  } catch (err) {
+	    // 捕获异常并显示错误提示
+	    console.error('转赠失败:', err);
+	    showTips('转赠失败，请重试');
+	  } finally {
+	    // 无论成功或失败，都隐藏加载中提示
+	    uni.hideLoading();
+	  }
 	}
 	
 </script>
@@ -297,7 +336,7 @@
 			}
 
 			
-			.sentPhone {
+			.sentGameID {
 				position: absolute;
 				top: 58vw;
 				display: flex;
@@ -307,7 +346,7 @@
 				padding: 0 4vw;
 				box-sizing: border-box;
 				
-				.phoneInputWrap {
+				.gameIDInputWrap {
 					width: 100%;
 					height: 100%;
 					background-color: #fff;

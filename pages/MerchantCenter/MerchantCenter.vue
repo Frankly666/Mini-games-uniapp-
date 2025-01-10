@@ -34,55 +34,60 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import UserToShopkeeperPopVue from '../../components/userToShopkeeperPop.vue';
+import { updateAssets } from '../../utils/updateGameInfo';
 
 // 控制弹窗显示
 const isShowPop = ref(false);
 // 当前选中的店主信息
 const selectedOwner = ref(null);
 
-// 模拟店主信息数据
-const shopOwners = ref([
-	{
-		avatar: 'https://via.placeholder.com/100', // 店主头像
-		name: '王者荣耀玩家', // 店主姓名（同时也是游戏名）
-		gameId: 'GamePlayer123', // 游戏ID
-		wechat: 'wechat123' // 微信号
-	},
-	{
-		avatar: 'https://via.placeholder.com/100',
-		name: '和平精英玩家',
-		gameId: 'GamePlayer456',
-		wechat: 'wechat456'
-	},
-	{
-		avatar: 'https://via.placeholder.com/100',
-		name: '原神玩家',
-		gameId: 'GamePlayer789',
-		wechat: 'wechat789'
-	}
-]);
+// 店主信息数据
+const shopOwners = ref([]);
+
+// 加载店主信息
+async function loadShopOwners() {
+  try {
+    const res = await uniCloud.callFunction({
+      name: 'selectAllMerchant', // 调用云函数
+    });
+
+    if (res.result.code === 200) {
+      shopOwners.value = res.result.data; // 更新店主信息
+    } else {
+      uni.showToast({ title: res.result.message || '加载失败', icon: 'none' });
+    }
+  } catch (err) {
+    console.error('加载失败:', err);
+    uni.showToast({ title: '加载失败', icon: 'none' });
+  }
+}
+
+// 组件挂载时加载店主信息
+onMounted(() => {
+  loadShopOwners();
+	updateAssets()
+});
 
 // 控制弹窗显示
 const handlePop = (type) => {
-	isShowPop.value = type;
+  isShowPop.value = type;
 };
 
 // 返回按钮点击事件
 const handleBack = () => {
-	console.log('返回上一页');
-	// 这里可以添加返回逻辑，例如：
-	uni.navigateTo({
-		url: "/pages/HomePage/HomePage"
-	})
+  console.log('返回上一页');
+  uni.navigateTo({
+    url: "/pages/HomePage/HomePage"
+  });
 };
 
 // 转移资源按钮点击事件
 const transferResources = (owner) => {
-	console.log('跳转到资源转移页面，店主信息:', owner);
-	selectedOwner.value = owner; // 设置当前选中的店主
-	handlePop(true); // 显示弹窗
+  console.log('跳转到资源转移页面，店主信息:', owner);
+  selectedOwner.value = owner; // 设置当前选中的店主
+  handlePop(true); // 显示弹窗
 };
 </script>
 

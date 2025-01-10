@@ -1,6 +1,9 @@
 <template>
 	<view class="tradingMarketWrap">		
 		<view class="return" @click="back"></view>
+		<view class="reload" @click="updateData">
+			<text class="text">刷新</text>
+		</view>
 		<assets-header1 :judge='2'/>
 		<market-publish 
 			v-if="isShowMarketPublish" 
@@ -22,8 +25,6 @@
 		
 		<sent-pop-vue
 			v-if="isShowSentPop"
-			:gemItems='gemItems'
-			:gemImgName='gemImgName'
 			:closePop = '() => {setShowSentPop(false)}'
 		/>
 		
@@ -381,6 +382,24 @@
 			width: 13vw;
 			height: 13vw;
 			background: url("../../static/market/return.png") no-repeat center center / contain;
+		}
+		
+		.reload {
+			position: absolute;
+			bottom: 7vw;
+			right: 5vw;
+			width: 10vw;
+			height: 10vw;
+			background: url("../../static/market/reload.png") no-repeat center center / contain;
+			
+			.text {
+				position: absolute;
+				width: 100%;
+				text-align: center;
+				bottom: -4vw;
+				font-size: 3vw;
+				font-weight: bold;
+			}
 		}
 	}
 </style>

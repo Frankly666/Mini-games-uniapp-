@@ -102,7 +102,7 @@
   align-items: center;
   width: 87vw;
   height: 104vw;
-  background: url('../../static/market/table.png') no-repeat center center / contain;
+  background: url('../../static/home/table.png') no-repeat center center / contain;
 }
 .publishWrap .board .close[data-v-16940c0f] {
   position: absolute;
@@ -293,7 +293,7 @@
   align-items: center;
   width: 73vw;
   height: 90vw;
-  background: url("../../static/market/table.png") no-repeat center center / contain;
+  background: url("../../static/home/table.png") no-repeat center center / contain;
 }
 .buyCellPopWrap .board .close[data-v-f77da028] {
   position: absolute;
@@ -424,7 +424,7 @@
   align-items: center;
   width: 87vw;
   height: 106vw;
-  background: url('../../static/market/table.png') no-repeat center center / contain;
+  background: url('../../static/home/table.png') no-repeat center center / contain;
 }
 .publishWrap .board .close[data-v-e13ff159] {
   position: absolute;
@@ -523,7 +523,7 @@
   width: 100%;
   height: 100%;
 }
-.publishWrap .board .sentPhone[data-v-e13ff159] {
+.publishWrap .board .sentGameID[data-v-e13ff159] {
   position: absolute;
   top: 58vw;
   display: flex;
@@ -533,7 +533,7 @@
   padding: 0 4vw;
   box-sizing: border-box;
 }
-.publishWrap .board .sentPhone .phoneInputWrap[data-v-e13ff159] {
+.publishWrap .board .sentGameID .gameIDInputWrap[data-v-e13ff159] {
   width: 100%;
   height: 100%;
   background-color: #fff;
@@ -541,7 +541,7 @@
   text-align: center;
   border-radius: 3vw;
 }
-.publishWrap .board .sentPhone .phoneInputWrap uni-input[data-v-e13ff159] {
+.publishWrap .board .sentGameID .gameIDInputWrap uni-input[data-v-e13ff159] {
   width: 100%;
   height: 100%;
 }
@@ -749,4 +749,20 @@
   width: 13vw;
   height: 13vw;
   background: url("../../static/market/return.png") no-repeat center center / contain;
+}
+.tradingMarketWrap .reload {
+  position: absolute;
+  bottom: 7vw;
+  right: 5vw;
+  width: 10vw;
+  height: 10vw;
+  background: url("../../static/market/reload.png") no-repeat center center / contain;
+}
+.tradingMarketWrap .reload .text {
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  bottom: -4vw;
+  font-size: 3vw;
+  font-weight: bold;
 }
