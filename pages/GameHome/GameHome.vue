@@ -12,8 +12,11 @@
 			<setting-pop v-if="isShowSettingPop" :handleShow="handleShow"></setting-pop>
 			<rule-pop v-if="isShowRulePop" :handleShow="handleShow"></rule-pop>
 			<announcement-pop v-if="isShowAnnouncementPop" :handleShow="handleShow"></announcement-pop>
-			<activity-pop-vue v-if="isShowActivityPop" :handleShow="handleShow"></activity-pop-vue>
-			<talent-center-pop v-if="isShowTalentPop" :handleShowTanlentPop="handleShowTanlentPop"></talent-center-pop>
+			<activity-pop-vue v-show="isShowActivityPop" :handleShow="handleShow"></activity-pop-vue>
+			<talent-center-pop v-show="isShowTalentPop" :handleShowTanlentPop="handleShowTanlentPop"></talent-center-pop>
+			
+			<!-- 签到组件 -->
+			<home-sign-in-presentation-vue/>
 			
 			<view class="map-container"
 				@touchstart="handleTouchStart"
@@ -46,11 +49,12 @@ import rulePop from '../../components/rulePop.vue';
 import activityPopVue from '../../components/activityPop.vue';
 import announcementPop from '../../components/announcementPop.vue';
 import talentCenterPop from '../../components/talentCenterPop.vue';
+import homeSignInPresentationVue from '../../components/homeSignInPresentation.vue';
 import { ASSETS, AVATAR, ID, ISFIRST, PHONE, USERNAME, useGameInfoStore } from '../../stores/gameInfo';
 import Cache from '../../utils/cache';
 import { updateOwnGrounds } from '../../utils/updateOwnGrounds';
 import loadingVue from '../../components/loading.vue';
-import { updateGameInfoFromStorage } from '../../utils/updateGameInfo';
+import { updateAssets, updateGameInfoFromStorage } from '../../utils/updateGameInfo';
 
 const keyword = ref('');
 const screenWidth = ref(0);
@@ -159,9 +163,11 @@ onMounted(async () => {
 		console.log(err)
 	})
 	updateGameInfoFromStorage()
+	
 	setTimeout(function() {
 		isShowLoading.value = false;
 	}, 2000);
+	
 })
 </script>
 

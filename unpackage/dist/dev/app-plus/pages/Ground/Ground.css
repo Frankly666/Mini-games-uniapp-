@@ -295,7 +295,7 @@
   left: 7vw;
   width: 15vw;
   height: 15vw;
-  background: url("../../static/market/return.png") no-repeat center center / contain;
+  background: url("../../static/ground/return.png") no-repeat center center / contain;
 }
 .groundWrap .treesWrap1 .item1 {
   position: absolute;

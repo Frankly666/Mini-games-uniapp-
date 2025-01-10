@@ -1,0 +1,7 @@
+{
+  "name": "selectPurchaseActivity",
+  "dependencies": {},
+  "extensions": {
+    "uni-cloud-jql": {}
+  }
+}
