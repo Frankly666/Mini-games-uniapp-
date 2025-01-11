@@ -13,8 +13,7 @@
           解锁时限: {{ groundMeta.duration }}天
         </view>
         <view class="desc">
-          描述: 每天收获{{ groundMeta.dailyEarnings }}块能量石,享受直推收益 {{ groundMeta.directPushEarnings * 100 }}% ,
-          间推收益 {{ parseFloat((groundMeta.inDepthReturns * 100).toFixed(2)) }}%
+          描述: 每天收获{{ groundMeta.dailyEarnings }}块能量石
         </view>
       </view>
 
@@ -56,7 +55,7 @@ function confirmUnclock() {
     name: 'buyGround',
     data: {
       addUserGroundData: {
-        userId: gameInfo.id,
+        userId: uni.getStorageSync('id'),
         groundType: props.groundType,
         groundIndex: props.groundIndex,
         rentTime: new Date(), // 租赁时间
@@ -66,7 +65,7 @@ function confirmUnclock() {
         workerType: null,
         workerEndTime: null
       },
-      userId: gameInfo.id,
+      userId: uni.getStorageSync('id'),
       unlockFunds: unlockFunds
     }
   })

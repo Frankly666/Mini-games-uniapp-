@@ -1,4 +1,5 @@
 'use strict';
+
 exports.main = async (event, context) => {
   const { userId } = event;
 

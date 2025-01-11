@@ -54,7 +54,7 @@ import { ASSETS, AVATAR, ID, ISFIRST, PHONE, USERNAME, useGameInfoStore } from '
 import Cache from '../../utils/cache';
 import { updateOwnGrounds } from '../../utils/updateOwnGrounds';
 import loadingVue from '../../components/loading.vue';
-import { updateAssets, updateGameInfoFromStorage } from '../../utils/updateGameInfo';
+import { updateAssets } from '../../utils/updateGameInfo';
 
 const keyword = ref('');
 const screenWidth = ref(0);
@@ -162,7 +162,6 @@ onMounted(async () => {
 	bgm.onError((err) => {
 		console.log(err)
 	})
-	updateGameInfoFromStorage()
 	updateOwnGrounds()
 	
 	setTimeout(function() {

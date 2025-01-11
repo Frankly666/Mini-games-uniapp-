@@ -53,6 +53,10 @@ export const updateAssets = async () => {
 
     const userInfo = userRes.data;
     const id = userInfo._id; // 获取用户 ID
+				
+		uni.setStorageSync('userInfo', userInfo)
+		
+		updateGameInfoFromStorage()
 
     // 2. 查询资产信息
     const assetsRes = await uniCloud.importObject('assets').select(id);

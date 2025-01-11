@@ -108,7 +108,7 @@
 		return roundToOneDecimal(inputNumValue.value * inputPriceValue.value)
 	})
 	const isShowWran = computed(() => {
-		return (inputPriceValue.value < 0.2 || inputPriceValue.value > 10)
+		return (inputPriceValue.value < minimumPrice[props.gemImgName[selectIndex.value]])
 	})
 	const isSell = computed(() => {
 		return props.title === '出售'
@@ -171,7 +171,7 @@
 			name:"sellPublish",
 			data:{
 				addData: {
-					sellerId: gameInfo.id,
+					sellerId: uni.getStorageSync('id'),
 					demType: gemType,
 					sellNum: parseInt(inputNumValue.value),
 					sellPrice: parseFloat(inputPriceValue.value),
@@ -179,7 +179,7 @@
 					publishTime: new Date()
 				},
 				inputNumValue: inputNumValue.value,
-				userId: gameInfo.id
+				userId: uni.getStorageSync('id')
 			}
 		}).then(res => {
 			if(res) {
@@ -217,7 +217,7 @@
 			name:"needPublish",
 			data:{
 				addData: {
-					buyerId: gameInfo.id,
+					buyerId: uni.getStorageSync('id'),
 					demType: gemType,
 					buyNum: parseInt(inputNumValue.value),
 					buyPrice: parseFloat(inputPriceValue.value),
@@ -225,7 +225,7 @@
 					publishTime: new Date()
 				},
 				totalPrice: totalPrice,
-				userId: gameInfo.id
+				userId: uni.getStorageSync('id')
 			}
 		}).then(res => {
 			if(res) {

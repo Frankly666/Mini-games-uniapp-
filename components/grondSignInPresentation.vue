@@ -39,13 +39,15 @@ const isClaiming = ref(false); // 是否正在领取
 let directEarning = 0;
 let indirectEarning = 0;
 
+console.log("hhhhh")
+
 // 查询用户地皮
 async function fetchUserGrounds() {
   try {
     const res = await uniCloud.callFunction({
       name: 'selectGrounds',
       data: {
-        userId: gameInfo.id
+        userId: uni.getStorageSync('id')
       }
     });
 
@@ -110,7 +112,7 @@ async function claimEarnings() {
     const res = await uniCloud.callFunction({
       name: 'claimGroundRewards',
       data: {
-        userId: gameInfo.id,
+        userId: uni.getStorageSync('id'),
         earnings: totalEarnings.value,
 				directEarning: roundToOneDecimal(directEarning),
 				indirectEarning: roundToOneDecimal(indirectEarning)

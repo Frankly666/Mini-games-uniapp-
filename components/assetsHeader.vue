@@ -26,7 +26,7 @@
 import { onMounted, reactive, ref, watch } from 'vue';
 import { PHONE, useGameInfoStore, ID } from '../stores/gameInfo';
 import Cache from '../utils/cache';
-import { updateAssets, updateGameInfoFromStorage } from '../utils/updateGameInfo';
+import { updateAssets } from '../utils/updateGameInfo';
 	
 // 这里是详情页中的资源展示
 const assets = ['powerStone', 'diamond', 'resourceStone', 'jewel'];
@@ -44,7 +44,6 @@ function getImageUrl(name) {
 onMounted(async () => {
   try {
 		updateAssets()
-		updateGameInfoFromStorage()
   } catch (error) {
     console.error('初始化失败:', error);
   }

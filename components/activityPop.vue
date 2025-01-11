@@ -68,7 +68,7 @@ const activities = ref([
 		id: '1',
 		image: '/static/home/th.jpg',
 		name: '蛇年限定礼包',
-		description: '每日产出金刚石2个共持续18天',
+		description: '永久工人 + 锄头1/个',
 		price: 58, // 价格（水晶）
 		duration: 18, // 礼包期限（天）
 		dailyReward: 2 // 每日收获数量

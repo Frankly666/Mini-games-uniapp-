@@ -8,8 +8,8 @@
 				
 				<!-- 宝石图片和数量 -->
 				<view class="rewardInfo">
-					<image class="gemImage" src="../static/market/jewel.png" mode="widthFix"></image>
-					<text class="gemAmount">{{ selectedActivity.dailyReward }} 宝石</text>
+					<image class="gemImage" src="../static/market/diamond.png" mode="widthFix"></image>
+					<text class="gemAmount">{{ selectedActivity.dailyReward }} 金刚石</text>
 				</view>
 				
 				<!-- 签到按钮 -->
@@ -22,6 +22,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useGameInfoStore } from '../stores/gameInfo';
+import { roundToOneDecimal } from '../utils/roundToOneDecimal';
 
 const gameInfo = useGameInfoStore();
 
@@ -103,8 +104,8 @@ const handleClaim = async () => {
 				icon: 'success'
 			});
 
-			// 更新本地宝石数量
-			gameInfo.assets.jewel += selectedActivity.value.dailyReward;
+			// 更新本地金刚石数量
+			gameInfo.assets.diamond = roundToOneDecimal(selectedActivity.value.dailyReward + gameInfo.assets.diamond);
 
 			// 关闭弹窗
 			showRewardModal.value = false;

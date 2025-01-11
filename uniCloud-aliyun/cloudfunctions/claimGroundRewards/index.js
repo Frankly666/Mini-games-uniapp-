@@ -1,79 +1,7 @@
 'use strict';
 const db = uniCloud.database();
-
-/**
- * 更新用户资源（能量石）
- * @param {string} userId - 用户 ID
- * @param {number} earnings - 要增加的能量石数量
- * @returns {Promise<{code: number, message: string}>} - 返回操作结果
- */
-async function updateUserAssets(userId, earnings) {
-  const transaction = await db.startTransaction();
-
-  try {
-    // 获取用户资产
-    const userAssets = await db.collection('assets').where({ userId }).get();
-    if (userAssets.data.length === 0) {
-      throw new Error('用户资产不存在');
-    }
-
-    const assetsId = userAssets.data[0]._id;
-    const nowNum = userAssets.data[0].powerStone;
-
-    // 计算新的能量石数量，并保留两位小数
-    const newPowerStone = parseFloat((nowNum + (earnings || 0)).toFixed(2));
-
-    // 更新用户资产（增加能量石）
-    await transaction.collection('assets').doc(assetsId).update({
-      powerStone: newPowerStone
-    });
-
-    // 提交事务
-    await transaction.commit();
-    return {
-      code: 0,
-      message: '更新成功'
-    };
-  } catch (e) {
-    console.error('更新用户资源失败:', e.message);
-    await transaction.rollback();
-    return {
-      code: -1,
-      message: '更新失败，请重试'
-    };
-  }
-}
-
-/**
- * 递归查找推荐人
- * @param {string} userId - 用户 ID
- * @param {string[]} referrers - 推荐人列表（递归时传递）
- * @returns {Promise<string[]>} - 返回推荐人 ID 列表
- */
-async function findReferrers(userId, referrers = []) {
-  // 获取当前用户信息
-  const userInfo = await db.collection('user').where({ _id: userId }).get();
-  if (userInfo.data.length === 0) {
-    return referrers; // 如果用户不存在，返回当前结果
-  }
-
-  const pusherCode = userInfo.data[0].pusherCode; // 获取推荐人手机号
-  if (!pusherCode) {
-    return referrers; // 如果没有推荐人，返回当前结果
-  }
-
-  // 查找推荐人信息
-  const referrerInfo = await db.collection('user').where({ phone: pusherCode }).get();
-  if (referrerInfo.data.length === 0) {
-    return referrers; // 如果推荐人不存在，返回当前结果
-  }
-
-  const referrerId = referrerInfo.data[0]._id; // 获取推荐人 ID
-  referrers.push(referrerId); // 将推荐人 ID 加入列表
-
-  // 递归查找推荐人的推荐人
-  return findReferrers(referrerId, referrers);
-}
+const updateUserResource = require('../common/updateUserResource'); // 引入更新用户资源模块
+const findReferrers = require('../common/findReferrers'); // 引入查找推荐人模块
 
 /**
  * 更新用户土地的 lastClaimTime
@@ -152,16 +80,13 @@ async function updateReferrersAssets(userId, referrers, directEarning, indirectE
       // 保留两位小数
       const earningsRounded = parseFloat((earnings || 0).toFixed(2));
 
-      // 调用 updateUserAssets 更新推荐人的能量石
-      const updateResult = await updateUserAssets(referrerId, earningsRounded);
-      if (updateResult.code !== 0) {
-        throw new Error(`更新推荐人 ${referrerId} 的能量石失败: ${updateResult.message}`);
-      }
+      // 调用公共模块更新推荐人的能量石
+      await updateUserResource(referrerId, 'powerStone', earningsRounded, transaction);
 
       // 添加收益记录到 referralEarningsRecord 表
       await transaction.collection('referralEarningsRecord').add({
         userId, // 当前用户 ID
-        referrerId, // 推荐人 ID	
+        referrerId, // 推荐人 ID
         amount: earningsRounded, // 收益数量（保留两位小数）
         type: isDirect ? 'direct' : 'indirect', // 收益类型（直接或间接）
         createTime: new Date() // 当前时间
@@ -198,15 +123,15 @@ exports.main = async (event, context) => {
   const { userId, earnings, directEarning, indirectEarning } = event;
 
   try {
+    const transaction = await db.startTransaction();
+
     // 1. 更新用户资源（能量石）
-    const updateAssetsResult = await updateUserAssets(userId, parseFloat((earnings).toFixed(2)));
-    if (updateAssetsResult.code !== 0) {
-      return updateAssetsResult; // 如果更新失败，直接返回错误信息
-    }
+    await updateUserResource(userId, 'powerStone', parseFloat((earnings).toFixed(2)), transaction);
 
     // 2. 更新用户土地的 lastClaimTime
     const updateGroundsResult = await updateUserGroundsLastClaimTime(userId);
     if (updateGroundsResult.code !== 0) {
+      await transaction.rollback();
       return updateGroundsResult; // 如果更新失败，直接返回错误信息
     }
 
@@ -222,16 +147,19 @@ exports.main = async (event, context) => {
         parseFloat((indirectEarning).toFixed(2))
       );
       if (updateReferrersResult.code !== 0) {
+        await transaction.rollback();
         return updateReferrersResult; // 如果更新失败，直接返回错误信息
       }
     }
+
+    // 提交事务
+    await transaction.commit();
 
     // 返回成功结果
     return {
       code: 0,
       message: '操作成功',
       data: {
-        updateAssetsResult,
         updateGroundsResult,
         referrers // 返回推荐人列表
       }

@@ -1,39 +1,39 @@
 'use strict';
+const db = uniCloud.database();
+const updateUserResource = require('../common/updateUserResource'); // 引入更新用户资源模块
+
+// 购买地皮的逻辑
 exports.main = async (event, context) => {
   // event为客户端上传的参数
   console.log('event : ', event);
 
   const { addUserGroundData, userId, unlockFunds } = event;
-  const db = uniCloud.database();
   const transaction = await db.startTransaction();
 
-  // 获取用户资产
-  const userAssets = await db.collection('assets').where({ userId }).get();
-  const assetsId = userAssets.data[0]._id;
-  const nowNum = userAssets.data[0].powerStone;
-
-  // 四舍五入到一位小数
-  function roundToOneDecimal(num) {
-    return Math.round(num * 10) / 10;
-  }
-
   try {
-    // 添加地皮记录，初始化 lastSignInTime 为 null
+    // 1. 添加地皮记录，初始化 lastSignInTime 为 null
     const res1 = await transaction.collection('userGrounds').add({
       ...addUserGroundData,
     });
 
-    // 更新用户资产
-    const res2 = await transaction.collection('assets').doc(assetsId).update({
-      powerStone: roundToOneDecimal(nowNum - unlockFunds)
-    });
+    // 2. 调用公共模块更新用户资产（减少 powerStone）
+    await updateUserResource(userId, 'powerStone', -unlockFunds, transaction);
 
-    // 提交事务
+    // 3. 提交事务
     await transaction.commit();
-    return true;
+    return {
+      code: 0,
+      message: '操作成功',
+      data: {
+        groundId: res1.id // 返回新添加的地皮记录 ID
+      }
+    };
   } catch (e) {
-    console.error('transaction error', e.message);
+    console.error('操作失败:', e.message);
     await transaction.rollback();
-    return false;
+    return {
+      code: -1,
+      message: '操作失败，请重试'
+    };
   }
 };

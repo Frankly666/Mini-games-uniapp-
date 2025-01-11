@@ -22,7 +22,7 @@ module.exports = {
 	
 	
 	/**  使用用户电话查询用户是否存在
-	 * @param {Number} phone
+	 * @param {String} id
 	 */
 	async  getUserById(id) {
 	  const db = uniCloud.database();

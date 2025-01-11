@@ -175,6 +175,8 @@
 		})
 	}
 	
+	// if(!gameInfo.ownGrounds) await updateData()
+	
 	// 处理弹窗的函数
 	function handleIsShowGroundPop(flag) {
 		isShowGroundPop.value = flag;
@@ -218,12 +220,34 @@
 		return false;
 	}
 	
-	// 获取后端用户地皮数据
 	async function updateData() {
-		const classifyGrounds = await groundsDB.selectAllGrounds(gameInfo.id)
-		userGrounds.value = classifyGrounds;
-		gameInfo.ownGrounds = classifyGrounds
+	  try {
+	    const userId = uni.getStorageSync('id');
+	    if (!userId) {
+	      console.error('用户 ID 为空');
+	      return;
+	    }
+	
+	    // 调用云函数
+	    const res = await uniCloud.callFunction({
+	      name: 'selectUserGrounds', // 云函数名称
+	      data: { userId } // 传入参数
+	    });
+	
+	    console.log('云函数返回结果:', res); // 打印云函数返回结果
+	
+	    if (res.result.code === 0) {
+	      const classifyGrounds = res.result.data;
+	      userGrounds.value = classifyGrounds;
+	      gameInfo.ownGrounds = classifyGrounds;
+	    } else {
+	      console.error('云函数调用失败:', res.result.message);
+	    }
+	  } catch (error) {
+	    console.error('updateData 出错:', error.message);
+	  }
 	}
+	
 	onMounted(async () => {
 		if(!gameInfo.ownGrounds) await updateData()
 	})

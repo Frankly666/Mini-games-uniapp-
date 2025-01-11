@@ -209,7 +209,7 @@ async function confirmSellPublish() {
 				sellPrice: sellPrice,
 				sellerId: props.certainItem.sellerId,
 				demType: demType,
-				userId: gameInfo.id,
+				userId: uni.getStorageSync('id'),
 				totalPrice: totalPrice.value,
 				inputNumValue: inputNumValue.value,
 			}
@@ -274,7 +274,7 @@ async function confirmNeedPublish() {
 				buyPrice: buyPrice,
 				buyerId: props.certainItem.buyerId,
 				demType: demType,
-				userId: gameInfo.id,
+				userId: uni.getStorageSync('id'),
 				expected: expected.value,
 				inputNumValue: inputNumValue.value,
 			},

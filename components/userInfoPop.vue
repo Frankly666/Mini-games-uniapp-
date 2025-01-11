@@ -147,7 +147,7 @@ async function confirm() {
     if (!isFirstEdit.value) {
       gameInfo.assets.powerStone = roundToOneDecimal(gameInfo.assets.powerStone - 100);
       const assetsDB = uniCloud.importObject('assets');
-      await assetsDB.update(gameInfo.id, POWERSTONE, -100);
+      await assetsDB.update(uni.getStorageSync('id'), POWERSTONE, -100);
     }
 
     const user = uniCloud.importObject('user');

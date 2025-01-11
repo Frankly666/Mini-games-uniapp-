@@ -151,7 +151,7 @@
 	      name: 'sentAssets',
 	      data: {
 	        gameID: gameIDInputValue.value,
-	        userId: gameInfo.id,
+	        userId: uni.getStorageSync('id'),
 	        assetsType: gemType,
 	        sendNum: inputNumValue.value,
 	        premium: premium,

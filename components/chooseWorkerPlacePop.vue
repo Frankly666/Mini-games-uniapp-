@@ -96,7 +96,7 @@
 		uniCloud.callFunction({
 			name:"hireWorker",
 			data: {
-				userId: gameInfo.id,
+				userId: uni.getStorageSync('id'),
 				hirePrice: workerPrice,
 				workerType: props.workerType,
 				groundType: selectIndex.value,
