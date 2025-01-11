@@ -160,6 +160,12 @@
   height: 100vh;
   background-color: #fff;
 }
+.mineWrap .gemImg1 {
+  width: 7vw;
+  height: 7vw;
+  margin: 0 2vw;
+  background: no-repeat center center / contain;
+}
 .mineWrap .mask {
   position: fixed;
   top: 0;
@@ -305,7 +311,7 @@
   top: -44vw;
   display: flex;
   justify-content: space-between;
-  width: 97%;
+  width: 100%;
   height: 10vw;
   background-color: #fff;
   border-radius: 4vw;
@@ -313,6 +319,7 @@
   padding: 0 3vw;
   line-height: 9vw;
   font-weight: bold;
+  font-size: 3.5vw;
 }
 .mineWrap .scrollArea .mineContent .header2 .gemImg1 {
   width: 7vw;
@@ -328,9 +335,6 @@
 .mineWrap .scrollArea .mineContent .header2 .left {
   display: flex;
   align-items: center;
-}
-.mineWrap .scrollArea .mineContent .header2 .left .gemImg1 {
-  background-image: url('../../static/market/diamond.png');
 }
 .mineWrap .scrollArea .mineContent .header2 .right {
   display: flex;

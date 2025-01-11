@@ -390,7 +390,7 @@ if (uni.restoreGlobal) {
   function I(e2) {
     return e2 && "string" == typeof e2 ? JSON.parse(e2) : e2;
   }
-  const S = true, b = "app", A = I(define_process_env_UNI_SECURE_NETWORK_CONFIG_default), C = b, P = I('{\n    "address": [\n        "127.0.0.1",\n        "2.0.0.1",\n        "169.254.37.199",\n        "192.168.1.13",\n        "192.168.137.1",\n        "192.168.65.1"\n    ],\n    "debugPort": 9001,\n    "initialLaunchType": "local",\n    "servePort": 7001,\n    "skipFiles": [\n        "<node_internals>/**",\n        "D:/HBuilderX/HBuilderX/plugins/unicloud/**/*.js"\n    ]\n}\n'), T = I('[{"provider":"aliyun","spaceName":"fun-cloud-city-game","spaceId":"mp-4de62d5a-2380-467f-b109-457713276d05","clientSecret":"ZD2WgXn3K1WSmV78nmjvUQ==","endpoint":"https://api.next.bspapp.com"}]') || [];
+  const S = true, b = "app", A = I(define_process_env_UNI_SECURE_NETWORK_CONFIG_default), C = b, P = I('{\n    "address": [\n        "127.0.0.1",\n        "2.0.0.1",\n        "169.254.37.199",\n        "192.168.1.3",\n        "192.168.137.1",\n        "192.168.65.1"\n    ],\n    "debugPort": 9001,\n    "initialLaunchType": "local",\n    "servePort": 7001,\n    "skipFiles": [\n        "<node_internals>/**",\n        "D:/HBuilderX/HBuilderX/plugins/unicloud/**/*.js"\n    ]\n}\n'), T = I('[{"provider":"aliyun","spaceName":"fun-cloud-city-game","spaceId":"mp-4de62d5a-2380-467f-b109-457713276d05","clientSecret":"ZD2WgXn3K1WSmV78nmjvUQ==","endpoint":"https://api.next.bspapp.com"}]') || [];
   let O = "";
   try {
     O = "__UNI__1B67F5F";
@@ -4614,10 +4614,29 @@ This will fail in production if not fixed.`);
   const POWERSTONE = "powerStone";
   const JEWEL = "jewel";
   async function updateOwnGrounds() {
-    const groundsDB = Ys.importObject("grounds");
     const gameInfo = useGameInfoStore();
-    const res = await groundsDB.selectAllGrounds(gameInfo.id);
-    gameInfo.ownGrounds = res;
+    const userId = uni.getStorageSync("id");
+    try {
+      if (!userId) {
+        formatAppLog("error", "at utils/updateOwnGrounds.js:9", "用户 ID 为空");
+        return;
+      }
+      const res = await Ys.callFunction({
+        name: "selectGrounds",
+        // 云函数名称
+        data: { userId }
+        // 传入参数
+      });
+      formatAppLog("log", "at utils/updateOwnGrounds.js:19", "云函数返回结果:", res);
+      if (res.result.code === 0) {
+        const classifyGrounds = res.result.data;
+        gameInfo.ownGrounds = classifyGrounds;
+      } else {
+        formatAppLog("error", "at utils/updateOwnGrounds.js:25", "云函数调用失败:", res.result.message);
+      }
+    } catch (error) {
+      formatAppLog("error", "at utils/updateOwnGrounds.js:28", "updateOwnGrounds 出错:", error.message);
+    }
   }
   const _export_sfc = (sfc, props) => {
     const target = sfc.__vccOpts || sfc;
@@ -4990,18 +5009,20 @@ This will fail in production if not fixed.`);
       }
       const userInfo = userRes.data;
       const id = userInfo._id;
+      uni.setStorageSync("userInfo", userInfo);
+      updateGameInfoFromStorage();
       const assetsRes = await Ys.importObject("assets").select(id);
-      formatAppLog("log", "at utils/updateGameInfo.js:59", "assetsRes: ", assetsRes);
+      formatAppLog("log", "at utils/updateGameInfo.js:63", "assetsRes: ", assetsRes);
       if (assetsRes.res.affectedDocs === 0 || !assetsRes.res.data) {
-        formatAppLog("error", "at utils/updateGameInfo.js:62", "查询资产信息失败:", assetsRes.message);
+        formatAppLog("error", "at utils/updateGameInfo.js:66", "查询资产信息失败:", assetsRes.message);
         return;
       }
       gameInfoStore.$patch((state) => {
         state.assets = assetsRes.res.data[0];
       });
-      formatAppLog("log", "at utils/updateGameInfo.js:71", "用户资产信息更新成功");
+      formatAppLog("log", "at utils/updateGameInfo.js:75", "用户资产信息更新成功");
     } catch (error) {
-      formatAppLog("error", "at utils/updateGameInfo.js:73", "初始化失败:", error);
+      formatAppLog("error", "at utils/updateGameInfo.js:77", "初始化失败:", error);
     }
   };
   const _imports_0$2 = "/static/market/powerStone.png";
@@ -5640,6 +5661,19 @@ This will fail in production if not fixed.`);
     ]);
   }
   const PagesMockMock = /* @__PURE__ */ _export_sfc(_sfc_main$w, [["render", _sfc_render$v], ["__file", "D:/HBuilderProjects/Game/pages/Mock/Mock.vue"]]);
+  function formatLargeNumber(number) {
+    const num = typeof number === "string" ? parseFloat(number) : number;
+    if (isNaN(num)) {
+      throw new Error("Invalid input: input must be a number or a string representing a number");
+    }
+    if (num >= 1e4) {
+      return (num / 1e4).toFixed(2) + "w";
+    } else if (num >= 1e3) {
+      return (num / 1e3).toFixed(2) + "k";
+    } else {
+      return num.toString();
+    }
+  }
   const _sfc_main$v = {
     __name: "assetsHeader",
     props: ["judge"],
@@ -5657,9 +5691,8 @@ This will fail in production if not fixed.`);
       vue.onMounted(async () => {
         try {
           updateAssets();
-          updateGameInfoFromStorage();
         } catch (error) {
-          formatAppLog("error", "at components/assetsHeader.vue:49", "初始化失败:", error);
+          formatAppLog("error", "at components/assetsHeader.vue:50", "初始化失败:", error);
         }
       });
       const __returned__ = { assets, gameInfo, props, getCache: getCache2, assetsDB, userDB, getImageUrl, onMounted: vue.onMounted, reactive: vue.reactive, ref: vue.ref, watch: vue.watch, get PHONE() {
@@ -5672,8 +5705,8 @@ This will fail in production if not fixed.`);
         return Cache;
       }, get updateAssets() {
         return updateAssets;
-      }, get updateGameInfoFromStorage() {
-        return updateGameInfoFromStorage;
+      }, get formatLargeNumber() {
+        return formatLargeNumber;
       } };
       Object.defineProperty(__returned__, "__isScriptSetup", { enumerable: false, value: true });
       return __returned__;
@@ -5707,7 +5740,7 @@ This will fail in production if not fixed.`);
               vue.createElementVNode(
                 "span",
                 null,
-                vue.toDisplayString((_a = $setup.gameInfo.assets) == null ? void 0 : _a[item]),
+                vue.toDisplayString($setup.formatLargeNumber((_a = $setup.gameInfo.assets) == null ? void 0 : _a[item])),
                 1
                 /* TEXT */
               )
@@ -5743,7 +5776,7 @@ This will fail in production if not fixed.`);
               vue.createElementVNode(
                 "span",
                 null,
-                vue.toDisplayString((_a = $setup.gameInfo.assets) == null ? void 0 : _a[item]),
+                vue.toDisplayString($setup.formatLargeNumber((_a = $setup.gameInfo.assets) == null ? void 0 : _a[item])),
                 1
                 /* TEXT */
               )
@@ -5903,16 +5936,16 @@ This will fail in production if not fixed.`);
         class: "mine item",
         onClick: _cache[0] || (_cache[0] = (...args) => $options.toTradingMarket && $options.toTradingMarket(...args))
       }, [
-        vue.createElementVNode("text", null, "矿洞")
+        vue.createElementVNode("text", null, "赫尔卡矿洞")
       ]),
       vue.createElementVNode("view", { class: "ground item" }, [
-        vue.createElementVNode("text", null, "地皮管理")
+        vue.createElementVNode("text", null, "土地管理")
       ]),
       vue.createElementVNode("view", { class: "mart item" }, [
         vue.createElementVNode("text", null, "交易中心")
       ]),
       vue.createElementVNode("view", { class: "talentCenter item" }, [
-        vue.createElementVNode("text", null, "人才中心")
+        vue.createElementVNode("text", null, "人才市场")
       ])
     ]);
   }
@@ -6523,6 +6556,9 @@ This will fail in production if not fixed.`);
     ]);
   }
   const referralEarningsRecordVue = /* @__PURE__ */ _export_sfc(_sfc_main$n, [["render", _sfc_render$m], ["__scopeId", "data-v-1f5a25d1"], ["__file", "D:/HBuilderProjects/Game/components/referralEarningsRecord.vue"]]);
+  function roundToOneDecimal(num) {
+    return Math.round(num * 100) / 100;
+  }
   const _sfc_main$m = {
     __name: "userInfoPop",
     props: ["closeInfo"],
@@ -6540,6 +6576,7 @@ This will fail in production if not fixed.`);
       const isShowSendRecordPop = vue.ref(false);
       const isShowTransationPop = vue.ref(false);
       const isShowReferralPop = vue.ref(false);
+      const isShowConfirmPop = vue.ref(false);
       const userInfo = uni.getStorageSync("userInfo") || {};
       const gameID = vue.computed(() => userInfo.gameID || "");
       const inviteCode = vue.computed(() => userInfo.inviteCode || "");
@@ -6560,18 +6597,22 @@ This will fail in production if not fixed.`);
       function handlePromoEarnings() {
         isShowReferralPop.value = true;
       }
-      async function confirm() {
+      function handleConfirm() {
         if (!newName.value)
           return;
         if (!isFirstEdit.value && gameInfo.assets.powerStone < 100) {
           isShowTip.value = true;
           return;
         }
+        isShowConfirmPop.value = true;
+      }
+      async function handleRealConfirm() {
+        isShowConfirmPop.value = false;
         try {
           if (!isFirstEdit.value) {
-            gameInfo.assets.powerStone -= 100;
+            gameInfo.assets.powerStone = roundToOneDecimal(gameInfo.assets.powerStone - 100);
             const assetsDB = Ys.importObject("assets");
-            await assetsDB.update(gameInfo.id, POWERSTONE, -100);
+            await assetsDB.update(uni.getStorageSync("id"), POWERSTONE, -100);
           }
           const user = Ys.importObject("user");
           const id = uni.getStorageSync("id");
@@ -6584,7 +6625,7 @@ This will fail in production if not fixed.`);
           closeEditNamePop();
           uni.showToast({ title: "修改成功", icon: "success" });
         } catch (err) {
-          formatAppLog("error", "at components/userInfoPop.vue:166", "修改失败", err);
+          formatAppLog("error", "at components/userInfoPop.vue:194", "修改失败", err);
           uni.showToast({ title: "修改失败", icon: "none" });
         }
       }
@@ -6599,7 +6640,7 @@ This will fail in production if not fixed.`);
           const tempFilePath = res.tempFilePaths[0];
           await uploadAvatarToUniCloud(tempFilePath);
         } catch (err) {
-          formatAppLog("error", "at components/userInfoPop.vue:183", "选择图片失败", err);
+          formatAppLog("error", "at components/userInfoPop.vue:211", "选择图片失败", err);
           uni.showToast({ title: "选择图片失败", icon: "none" });
         }
       }
@@ -6623,10 +6664,10 @@ This will fail in production if not fixed.`);
             uni.showToast({ title: "头像更新成功", icon: "success" });
           } else {
             uni.showToast({ title: "头像更新失败", icon: "none" });
-            formatAppLog("error", "at components/userInfoPop.vue:222", "云函数返回错误:", updateResult.result.message);
+            formatAppLog("error", "at components/userInfoPop.vue:250", "云函数返回错误:", updateResult.result.message);
           }
         } catch (err) {
-          formatAppLog("error", "at components/userInfoPop.vue:226", "上传失败", err);
+          formatAppLog("error", "at components/userInfoPop.vue:254", "上传失败", err);
           uni.showToast({ title: "上传失败", icon: "none" });
         } finally {
           uni.hideLoading();
@@ -6639,11 +6680,11 @@ This will fail in production if not fixed.`);
           const result = await Ys.getTempFileURL({ fileList: [fileID] });
           return result.fileList[0].tempFileURL;
         } catch (err) {
-          formatAppLog("error", "at components/userInfoPop.vue:241", "获取文件 URL 失败", err);
+          formatAppLog("error", "at components/userInfoPop.vue:269", "获取文件 URL 失败", err);
           return "";
         }
       }
-      const __returned__ = { gameInfo, props, avatarUrl, userName, isShowEditPop, isShowTip, newName, isFirstEdit, showAvatarTip, isShowSendRecordPop, isShowTransationPop, isShowReferralPop, userInfo, gameID, inviteCode, openEditNamePop, closeEditNamePop, handleSendRecordPop, handleTransactionRecord, handlePromoEarnings, confirm, changeAvatar, uploadAvatarToUniCloud, getTempFileURL, ref: vue.ref, computed: vue.computed, get AVATAR() {
+      const __returned__ = { gameInfo, props, avatarUrl, userName, isShowEditPop, isShowTip, newName, isFirstEdit, showAvatarTip, isShowSendRecordPop, isShowTransationPop, isShowReferralPop, isShowConfirmPop, userInfo, gameID, inviteCode, openEditNamePop, closeEditNamePop, handleSendRecordPop, handleTransactionRecord, handlePromoEarnings, handleConfirm, handleRealConfirm, changeAvatar, uploadAvatarToUniCloud, getTempFileURL, ref: vue.ref, computed: vue.computed, get AVATAR() {
         return AVATAR;
       }, get POWERSTONE() {
         return POWERSTONE;
@@ -6653,7 +6694,9 @@ This will fail in production if not fixed.`);
         return useGameInfoStore;
       }, get Cache() {
         return Cache;
-      }, userSendRecordVue, userTransactionRecordVue, referralEarningsRecordVue };
+      }, userSendRecordVue, userTransactionRecordVue, referralEarningsRecordVue, get roundToOneDecimal() {
+        return roundToOneDecimal;
+      } };
       Object.defineProperty(__returned__, "__isScriptSetup", { enumerable: false, value: true });
       return __returned__;
     }
@@ -6763,7 +6806,7 @@ This will fail in production if not fixed.`);
           }),
           vue.createElementVNode("view", {
             class: "confirm",
-            onClick: $setup.confirm
+            onClick: $setup.handleConfirm
           }, [
             vue.createElementVNode("text", null, "确定修改")
           ]),
@@ -6792,22 +6835,48 @@ This will fail in production if not fixed.`);
           ])) : vue.createCommentVNode("v-if", true)
         ])
       ])) : vue.createCommentVNode("v-if", true),
+      vue.createCommentVNode(" 二次确认弹窗 "),
+      $setup.isShowConfirmPop ? (vue.openBlock(), vue.createElementBlock("view", {
+        key: 1,
+        class: "confirmPop"
+      }, [
+        vue.createElementVNode("view", { class: "confirmBgc" }, [
+          vue.createElementVNode("view", { class: "confirmTitle" }, "确认修改"),
+          vue.createElementVNode("view", { class: "confirmContent" }, [
+            vue.createElementVNode("text", null, "修改名字将消耗 100 能量石，是否继续？")
+          ]),
+          vue.createElementVNode("view", { class: "confirmButtons" }, [
+            vue.createElementVNode("view", {
+              class: "confirmButton cancel",
+              onClick: _cache[4] || (_cache[4] = ($event) => $setup.isShowConfirmPop = false)
+            }, [
+              vue.createElementVNode("text", null, "取消")
+            ]),
+            vue.createElementVNode("view", {
+              class: "confirmButton ok",
+              onClick: $setup.handleRealConfirm
+            }, [
+              vue.createElementVNode("text", null, "确定")
+            ])
+          ])
+        ])
+      ])) : vue.createCommentVNode("v-if", true),
       vue.createCommentVNode(" 记录弹窗区域 "),
       $setup.isShowSendRecordPop ? (vue.openBlock(), vue.createBlock($setup["userSendRecordVue"], {
-        key: 1,
-        onClose: _cache[4] || (_cache[4] = () => {
+        key: 2,
+        onClose: _cache[5] || (_cache[5] = () => {
           $setup.handleSendRecordPop(false);
         })
       })) : vue.createCommentVNode("v-if", true),
       $setup.isShowTransationPop ? (vue.openBlock(), vue.createBlock($setup["userTransactionRecordVue"], {
-        key: 2,
-        onClose: _cache[5] || (_cache[5] = () => {
+        key: 3,
+        onClose: _cache[6] || (_cache[6] = () => {
           $setup.handleTransactionRecord(false);
         })
       })) : vue.createCommentVNode("v-if", true),
       $setup.isShowReferralPop ? (vue.openBlock(), vue.createBlock($setup["referralEarningsRecordVue"], {
-        key: 3,
-        onClose: _cache[6] || (_cache[6] = () => {
+        key: 4,
+        onClose: _cache[7] || (_cache[7] = () => {
           $setup.isShowReferralPop = false;
         })
       })) : vue.createCommentVNode("v-if", true)
@@ -6911,7 +6980,7 @@ This will fail in production if not fixed.`);
     ]);
   }
   const rulePop = /* @__PURE__ */ _export_sfc(_sfc_main$k, [["render", _sfc_render$j], ["__scopeId", "data-v-961e39f0"], ["__file", "D:/HBuilderProjects/Game/components/rulePop.vue"]]);
-  const _imports_0 = "/static/market/jewel.png";
+  const _imports_0 = "/static/market/diamond.png";
   const _sfc_main$j = {
     __name: "homeSignInPresentation",
     setup(__props, { expose: __expose }) {
@@ -6943,7 +7012,7 @@ This will fail in production if not fixed.`);
             }
           }
         } catch (err) {
-          formatAppLog("error", "at components/homeSignInPresentation.vue:63", "查询失败:", err);
+          formatAppLog("error", "at components/homeSignInPresentation.vue:64", "查询失败:", err);
         }
       });
       const handleClaim = async () => {
@@ -6977,7 +7046,7 @@ This will fail in production if not fixed.`);
               title: "领取成功！",
               icon: "success"
             });
-            gameInfo.assets.jewel += selectedActivity.value.dailyReward;
+            gameInfo.assets.diamond = roundToOneDecimal(selectedActivity.value.dailyReward + gameInfo.assets.diamond);
             showRewardModal.value = false;
           } else {
             uni.hideLoading();
@@ -6987,7 +7056,7 @@ This will fail in production if not fixed.`);
             });
           }
         } catch (err) {
-          formatAppLog("error", "at components/homeSignInPresentation.vue:119", "领取失败:", err);
+          formatAppLog("error", "at components/homeSignInPresentation.vue:120", "领取失败:", err);
           uni.hideLoading();
           uni.showToast({
             title: "领取失败，请重试！",
@@ -6997,6 +7066,8 @@ This will fail in production if not fixed.`);
       };
       const __returned__ = { gameInfo, showRewardModal, selectedActivity, handleClaim, ref: vue.ref, onMounted: vue.onMounted, get useGameInfoStore() {
         return useGameInfoStore;
+      }, get roundToOneDecimal() {
+        return roundToOneDecimal;
       } };
       Object.defineProperty(__returned__, "__isScriptSetup", { enumerable: false, value: true });
       return __returned__;
@@ -7028,7 +7099,7 @@ This will fail in production if not fixed.`);
             vue.createElementVNode(
               "text",
               { class: "gemAmount" },
-              vue.toDisplayString($setup.selectedActivity.dailyReward) + " 宝石",
+              vue.toDisplayString($setup.selectedActivity.dailyReward) + " 金刚石",
               1
               /* TEXT */
             )
@@ -7056,7 +7127,7 @@ This will fail in production if not fixed.`);
           id: "1",
           image: "/static/home/th.jpg",
           name: "蛇年限定礼包",
-          description: "每日产出金刚石2个共持续18天",
+          description: "永久工人 + 锄头1/个",
           price: 58,
           // 价格（水晶）
           duration: 18,
@@ -7301,9 +7372,6 @@ This will fail in production if not fixed.`);
     ]);
   }
   const announcementPop = /* @__PURE__ */ _export_sfc(_sfc_main$h, [["render", _sfc_render$g], ["__scopeId", "data-v-c26e9d23"], ["__file", "D:/HBuilderProjects/Game/components/announcementPop.vue"]]);
-  function roundToOneDecimal(num) {
-    return Math.round(num * 100) / 100;
-  }
   function findEmptyGround(groundType) {
     const gameInfo = useGameInfoStore();
     const thisTypeGrounds = gameInfo.ownGrounds[groundType];
@@ -7341,7 +7409,7 @@ This will fail in production if not fixed.`);
     });
     setTimeout(() => {
       uni.hideToast();
-    }, 600);
+    }, 1e3);
   }
   function showSuccus(string) {
     uni.showToast({
@@ -7399,7 +7467,7 @@ This will fail in production if not fixed.`);
         Ys.callFunction({
           name: "hireWorker",
           data: {
-            userId: gameInfo.id,
+            userId: uni.getStorageSync("id"),
             hirePrice: workerPrice,
             workerType: props.workerType,
             groundType: selectIndex.value,
@@ -7747,7 +7815,7 @@ This will fail in production if not fixed.`);
         bgm.onError((err) => {
           formatAppLog("log", "at pages/GameHome/GameHome.vue:163", err);
         });
-        updateGameInfoFromStorage();
+        updateOwnGrounds();
         setTimeout(function() {
           isShowLoading.value = false;
         }, 2e3);
@@ -7772,8 +7840,6 @@ This will fail in production if not fixed.`);
         return updateOwnGrounds;
       }, loadingVue, get updateAssets() {
         return updateAssets;
-      }, get updateGameInfoFromStorage() {
-        return updateGameInfoFromStorage;
       } };
       Object.defineProperty(__returned__, "__isScriptSetup", { enumerable: false, value: true });
       return __returned__;
@@ -7888,7 +7954,7 @@ This will fail in production if not fixed.`);
         return roundToOneDecimal(inputNumValue.value * inputPriceValue.value);
       });
       const isShowWran = vue.computed(() => {
-        return inputPriceValue.value < 0.2 || inputPriceValue.value > 10;
+        return inputPriceValue.value < minimumPrice[props.gemImgName[selectIndex.value]];
       });
       const isSell2 = vue.computed(() => {
         return props.title === "出售";
@@ -7943,7 +8009,7 @@ This will fail in production if not fixed.`);
           name: "sellPublish",
           data: {
             addData: {
-              sellerId: gameInfo.id,
+              sellerId: uni.getStorageSync("id"),
               demType: gemType,
               sellNum: parseInt(inputNumValue.value),
               sellPrice: parseFloat(inputPriceValue.value),
@@ -7951,7 +8017,7 @@ This will fail in production if not fixed.`);
               publishTime: /* @__PURE__ */ new Date()
             },
             inputNumValue: inputNumValue.value,
-            userId: gameInfo.id
+            userId: uni.getStorageSync("id")
           }
         }).then((res) => {
           if (res) {
@@ -7984,7 +8050,7 @@ This will fail in production if not fixed.`);
           name: "needPublish",
           data: {
             addData: {
-              buyerId: gameInfo.id,
+              buyerId: uni.getStorageSync("id"),
               demType: gemType,
               buyNum: parseInt(inputNumValue.value),
               buyPrice: parseFloat(inputPriceValue.value),
@@ -7992,7 +8058,7 @@ This will fail in production if not fixed.`);
               publishTime: /* @__PURE__ */ new Date()
             },
             totalPrice,
-            userId: gameInfo.id
+            userId: uni.getStorageSync("id")
           }
         }).then((res) => {
           if (res) {
@@ -8355,7 +8421,7 @@ This will fail in production if not fixed.`);
             sellPrice,
             sellerId: props.certainItem.sellerId,
             demType,
-            userId: gameInfo.id,
+            userId: uni.getStorageSync("id"),
             totalPrice: totalPrice.value,
             inputNumValue: inputNumValue.value
           }
@@ -8405,7 +8471,7 @@ This will fail in production if not fixed.`);
             buyPrice,
             buyerId: props.certainItem.buyerId,
             demType,
-            userId: gameInfo.id,
+            userId: uni.getStorageSync("id"),
             expected: expected.value,
             inputNumValue: inputNumValue.value
           }
@@ -8705,7 +8771,7 @@ This will fail in production if not fixed.`);
             name: "sentAssets",
             data: {
               gameID: gameIDInputValue.value,
-              userId: gameInfo.id,
+              userId: uni.getStorageSync("id"),
               assetsType: gemType,
               sendNum: inputNumValue.value,
               premium
@@ -9411,21 +9477,52 @@ This will fail in production if not fixed.`);
           vue.createElementVNode("view", { class: "normalArea" }, [
             vue.createElementVNode("view", { class: "header2" }, [
               vue.createElementVNode("view", { class: "left" }, [
-                vue.createElementVNode("text", null, "已添加:"),
-                vue.createElementVNode("view", { class: "gemImg1" }),
-                vue.createElementVNode("text", null, vue.toDisplayString(0))
-              ]),
-              vue.createElementVNode("view", { class: "right" }, [
-                vue.createElementVNode("text", null, "产出:"),
-                vue.createElementVNode("view", { class: "gemImg1" }),
-                vue.createElementVNode("text", null, vue.toDisplayString(0))
+                vue.createElementVNode("text", null, "需要:"),
+                vue.createElementVNode("view", {
+                  class: "gemImg1",
+                  style: { "background-image": "url('../../static/market/jewel.png')" }
+                }),
+                vue.createElementVNode("text", null, vue.toDisplayString(834)),
+                vue.createElementVNode("view", {
+                  class: "gemImg1",
+                  style: { "background-image": "url('../../static/market/diamond.png')" }
+                }),
+                vue.createElementVNode("text", null, vue.toDisplayString(695)),
+                vue.createElementVNode("view", {
+                  class: "gemImg1",
+                  style: { "background-image": "url('../../static/market/resourceStone.png')" }
+                }),
+                vue.createElementVNode("text", null, vue.toDisplayString(1338)),
+                vue.createElementVNode("view", {
+                  class: "gemImg1",
+                  style: { "background-image": "url('../../static/market/powerStone.png')" }
+                }),
+                vue.createElementVNode("text", null, vue.toDisplayString(1248))
               ])
             ]),
             vue.createCommentVNode(" 可收获数量 "),
             vue.createElementVNode("view", { class: "nowHarvest" }, [
               vue.createElementVNode("text", null, "当前可收获:"),
               vue.createElementVNode("view", { class: "wrap" }, [
-                vue.createElementVNode("view", { class: "gemImg2" }),
+                vue.createElementVNode("view", {
+                  class: "gemImg1",
+                  style: { "background-image": "url('../../static/market/jewel.png')" }
+                }),
+                vue.createElementVNode("text", null, vue.toDisplayString(0)),
+                vue.createElementVNode("view", {
+                  class: "gemImg1",
+                  style: { "background-image": "url('../../static/market/diamond.png')" }
+                }),
+                vue.createElementVNode("text", null, vue.toDisplayString(0)),
+                vue.createElementVNode("view", {
+                  class: "gemImg1",
+                  style: { "background-image": "url('../../static/market/resourceStone.png')" }
+                }),
+                vue.createElementVNode("text", null, vue.toDisplayString(0)),
+                vue.createElementVNode("view", {
+                  class: "gemImg1",
+                  style: { "background-image": "url('../../static/market/powerStone.png')" }
+                }),
                 vue.createElementVNode("text", null, vue.toDisplayString(0))
               ])
             ]),
@@ -9434,26 +9531,57 @@ This will fail in production if not fixed.`);
             vue.createElementVNode("view", {
               class: "btn add",
               onClick: _cache[0] || (_cache[0] = () => $setup.handlePop(true))
-            }, "添加")
+            }, "激活")
           ]),
           vue.createElementVNode("view", { class: "bigArea" }, [
             vue.createElementVNode("view", { class: "header2" }, [
               vue.createElementVNode("view", { class: "left" }, [
-                vue.createElementVNode("text", null, "已添加:"),
-                vue.createElementVNode("view", { class: "gemImg1" }),
-                vue.createElementVNode("text", null, vue.toDisplayString(0))
-              ]),
-              vue.createElementVNode("view", { class: "right" }, [
-                vue.createElementVNode("text", null, "产出:"),
-                vue.createElementVNode("view", { class: "gemImg1" }),
-                vue.createElementVNode("text", null, vue.toDisplayString(0))
+                vue.createElementVNode("text", null, "需要:"),
+                vue.createElementVNode("view", {
+                  class: "gemImg1",
+                  style: { "background-image": "url('../../static/market/jewel.png')" }
+                }),
+                vue.createElementVNode("text", null, vue.toDisplayString(3336)),
+                vue.createElementVNode("view", {
+                  class: "gemImg1",
+                  style: { "background-image": "url('../../static/market/diamond.png')" }
+                }),
+                vue.createElementVNode("text", null, vue.toDisplayString(2780)),
+                vue.createElementVNode("view", {
+                  class: "gemImg1",
+                  style: { "background-image": "url('../../static/market/resourceStone.png')" }
+                }),
+                vue.createElementVNode("text", null, vue.toDisplayString(5552)),
+                vue.createElementVNode("view", {
+                  class: "gemImg1",
+                  style: { "background-image": "url('../../static/market/powerStone.png')" }
+                }),
+                vue.createElementVNode("text", null, vue.toDisplayString(4992))
               ])
             ]),
             vue.createCommentVNode(" 可收获数量 "),
             vue.createElementVNode("view", { class: "nowHarvest" }, [
               vue.createElementVNode("text", null, "当前可收获:"),
               vue.createElementVNode("view", { class: "wrap" }, [
-                vue.createElementVNode("view", { class: "gemImg2" }),
+                vue.createElementVNode("view", {
+                  class: "gemImg1",
+                  style: { "background-image": "url('../../static/market/jewel.png')" }
+                }),
+                vue.createElementVNode("text", null, vue.toDisplayString(0)),
+                vue.createElementVNode("view", {
+                  class: "gemImg1",
+                  style: { "background-image": "url('../../static/market/diamond.png')" }
+                }),
+                vue.createElementVNode("text", null, vue.toDisplayString(0)),
+                vue.createElementVNode("view", {
+                  class: "gemImg1",
+                  style: { "background-image": "url('../../static/market/resourceStone.png')" }
+                }),
+                vue.createElementVNode("text", null, vue.toDisplayString(0)),
+                vue.createElementVNode("view", {
+                  class: "gemImg1",
+                  style: { "background-image": "url('../../static/market/powerStone.png')" }
+                }),
                 vue.createElementVNode("text", null, vue.toDisplayString(0))
               ])
             ]),
@@ -9464,7 +9592,7 @@ This will fail in production if not fixed.`);
               onClick: _cache[1] || (_cache[1] = () => {
                 $setup.handlePop(true);
               })
-            }, "添加")
+            }, "激活")
           ])
         ]),
         vue.createElementVNode("view", { class: "intro" })
@@ -9570,10 +9698,35 @@ This will fail in production if not fixed.`);
       const props = __props;
       const gameInfo = useGameInfoStore();
       const groundMeta = gameInfo.groundsMeta[props.groundType];
-      function confirmUnclock() {
+      async function checkActivity() {
+        try {
+          const res = await Ys.callFunction({
+            name: "selectPurchaseActivity",
+            data: {
+              userId: uni.getStorageSync("id")
+            }
+          });
+          if (res.result.code === 0) {
+            const hasActivity = res.result.data.some((record) => record.activityId === "1");
+            return hasActivity;
+          } else {
+            formatAppLog("error", "at components/buyGroundPop.vue:53", "查询活动失败:", res.result.message);
+            return false;
+          }
+        } catch (err) {
+          formatAppLog("error", "at components/buyGroundPop.vue:57", "调用云函数失败:", err);
+          return false;
+        }
+      }
+      async function confirmUnclock() {
+        const haveActivity = await checkActivity();
+        if (!haveActivity) {
+          showTips("未购买蛇年限定礼包");
+          return;
+        }
         const unlockFunds = gameInfo.groundsMeta[props.groundType].unlockFunds;
         const nowNum = gameInfo.assets[POWERSTONE];
-        formatAppLog("log", "at components/buyGroundPop.vue:41", unlockFunds, nowNum);
+        formatAppLog("log", "at components/buyGroundPop.vue:71", unlockFunds, nowNum);
         if (nowNum < unlockFunds) {
           showTips("余额不足");
           return;
@@ -9586,7 +9739,7 @@ This will fail in production if not fixed.`);
           name: "buyGround",
           data: {
             addUserGroundData: {
-              userId: gameInfo.id,
+              userId: uni.getStorageSync("id"),
               groundType: props.groundType,
               groundIndex: props.groundIndex,
               rentTime: /* @__PURE__ */ new Date(),
@@ -9599,7 +9752,7 @@ This will fail in production if not fixed.`);
               workerType: null,
               workerEndTime: null
             },
-            userId: gameInfo.id,
+            userId: uni.getStorageSync("id"),
             unlockFunds
           }
         }).then((res) => {
@@ -9612,11 +9765,11 @@ This will fail in production if not fixed.`);
             netWorkError();
           }
         }).catch((err) => {
-          formatAppLog("error", "at components/buyGroundPop.vue:85", "购买失败:", err);
+          formatAppLog("error", "at components/buyGroundPop.vue:115", "购买失败:", err);
           netWorkError();
         });
       }
-      const __returned__ = { props, gameInfo, groundMeta, confirmUnclock, get POWERSTONE() {
+      const __returned__ = { props, gameInfo, groundMeta, checkActivity, confirmUnclock, get POWERSTONE() {
         return POWERSTONE;
       }, get useGameInfoStore() {
         return useGameInfoStore;
@@ -9671,7 +9824,7 @@ This will fail in production if not fixed.`);
             vue.createElementVNode(
               "view",
               { class: "desc" },
-              " 描述: 每天收获" + vue.toDisplayString($setup.groundMeta.dailyEarnings) + "块能量石,享受直推收益 " + vue.toDisplayString($setup.groundMeta.directPushEarnings * 100) + "% , 间推收益 " + vue.toDisplayString(parseFloat(($setup.groundMeta.inDepthReturns * 100).toFixed(2))) + "% ",
+              " 描述: 每天收获" + vue.toDisplayString($setup.groundMeta.dailyEarnings) + "块能量石 ",
               1
               /* TEXT */
             )
@@ -9699,21 +9852,22 @@ This will fail in production if not fixed.`);
       const isClaiming = vue.ref(false);
       let directEarning = 0;
       let indirectEarning = 0;
+      formatAppLog("log", "at components/grondSignInPresentation.vue:42", "hhhhh");
       async function fetchUserGrounds() {
         try {
           const res = await Ys.callFunction({
             name: "selectGrounds",
             data: {
-              userId: gameInfo.id
+              userId: uni.getStorageSync("id")
             }
           });
           if (res.result.code === 0) {
             userGrounds.value = res.result.data;
           } else {
-            formatAppLog("error", "at components/grondSignInPresentation.vue:55", "查询失败:", res.result.message);
+            formatAppLog("error", "at components/grondSignInPresentation.vue:57", "查询失败:", res.result.message);
           }
         } catch (err) {
-          formatAppLog("error", "at components/grondSignInPresentation.vue:58", "调用云函数失败:", err);
+          formatAppLog("error", "at components/grondSignInPresentation.vue:60", "调用云函数失败:", err);
         }
       }
       function isTodayClaimed(lastClaimTime) {
@@ -9757,9 +9911,9 @@ This will fail in production if not fixed.`);
         });
         try {
           const res = await Ys.callFunction({
-            name: "claimDailyReward",
+            name: "claimGroundRewards",
             data: {
-              userId: gameInfo.id,
+              userId: uni.getStorageSync("id"),
               earnings: totalEarnings.value,
               directEarning: roundToOneDecimal(directEarning),
               indirectEarning: roundToOneDecimal(indirectEarning)
@@ -9784,7 +9938,7 @@ This will fail in production if not fixed.`);
             });
           }
         } catch (err) {
-          formatAppLog("error", "at components/grondSignInPresentation.vue:146", "领取失败:", err);
+          formatAppLog("error", "at components/grondSignInPresentation.vue:148", "领取失败:", err);
           uni.hideLoading();
           uni.showToast({
             title: "领取失败，请重试！",
@@ -9916,9 +10070,29 @@ This will fail in production if not fixed.`);
         return false;
       }
       async function updateData() {
-        const classifyGrounds = await groundsDB.selectAllGrounds(gameInfo.id);
-        userGrounds.value = classifyGrounds;
-        gameInfo.ownGrounds = classifyGrounds;
+        try {
+          const userId = uni.getStorageSync("id");
+          if (!userId) {
+            formatAppLog("error", "at pages/Ground/Ground.vue:227", "用户 ID 为空");
+            return;
+          }
+          const res = await Ys.callFunction({
+            name: "selectGrounds",
+            // 云函数名称
+            data: { userId }
+            // 传入参数
+          });
+          formatAppLog("log", "at pages/Ground/Ground.vue:237", "云函数返回结果:", res);
+          if (res.result.code === 0) {
+            const classifyGrounds = res.result.data;
+            userGrounds.value = classifyGrounds;
+            gameInfo.ownGrounds = classifyGrounds;
+          } else {
+            formatAppLog("error", "at pages/Ground/Ground.vue:244", "云函数调用失败:", res.result.message);
+          }
+        } catch (error) {
+          formatAppLog("error", "at pages/Ground/Ground.vue:247", "updateData 出错:", error.message);
+        }
       }
       vue.onMounted(async () => {
         if (!gameInfo.ownGrounds)

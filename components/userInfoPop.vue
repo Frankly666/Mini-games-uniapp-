@@ -422,7 +422,7 @@ async function getTempFileURL(fileID) {
     .wrap1 {
       position: absolute;
       top: 18vw;
-      left: 2vw;
+      left: 3vw;
       width: 100%;
       height: 100%;
 
@@ -456,7 +456,7 @@ async function getTempFileURL(fileID) {
         width: 42vw;
         text-align: center;
         top: 35.4vw;
-        left: 15vw;
+        left: 12vw;
         font-weight: bold;
         font-size: 5vw;
         color: black;
@@ -497,7 +497,7 @@ async function getTempFileURL(fileID) {
       justify-content: space-between;
       position: absolute;
       top: 69vw;
-      left: 8vw;
+      left: 9vw;
       width: 78vw;
       display: flex;
       justify-content: space-between;
@@ -514,7 +514,7 @@ async function getTempFileURL(fileID) {
     .actionButtons {
       position: absolute;
       top: 75vw;
-      left: 10vw;
+      left: 11vw;
       width: 60vw;
       display: flex;
       flex-direction: column;
