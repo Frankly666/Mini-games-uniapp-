@@ -188,80 +188,80 @@ import { roundToOneDecimal } from '../../utils/roundToOneDecimal';
 	}
 	
 	
-// 取消操作
-async function handleCancel(item) {
-  uni.showModal({
-    title: '确认取消',
-    content: '您确定要撤销这条记录吗？\n操作后将返还你的资源',
-    success: async (res) => {
-      if (res.confirm) {
-        try {
-          // 显示加载提示
-          uni.showLoading({
-            title: '处理中...',
-            mask: true, // 防止用户点击其他区域
-          });
+	// 取消操作
+	async function handleCancel(item) {
+		uni.showModal({
+			title: '确认取消',
+			content: '您确定要撤销这条记录吗？\n操作后将返还你的资源',
+			success: async (res) => {
+				if (res.confirm) {
+					try {
+						// 显示加载提示
+						uni.showLoading({
+							title: '处理中...',
+							mask: true, // 防止用户点击其他区域
+						});
 
-          // 构造云函数参数
-          const params = {
-            userId: uni.getStorageSync('id'), // 当前用户 ID
-            recordId: item._id, // 交易记录 ID
-            resourceType: item.demType, // 资源类型
-            resourceAmount: marketCurrentIndex.value === 0 ? item.sellNum : item.buyNum, // 资源数量
-            price: marketCurrentIndex.value === 0 ? item.sellPrice : item.buyPrice, // 资源单价
-            type: marketCurrentIndex.value, // 交易类型（0: 出售, 1: 求购）
-          };
+						// 构造云函数参数
+						const params = {
+							userId: uni.getStorageSync('id'), // 当前用户 ID
+							recordId: item._id, // 交易记录 ID
+							resourceType: item.demType, // 资源类型
+							resourceAmount: marketCurrentIndex.value === 0 ? item.sellNum : item.buyNum, // 资源数量
+							price: marketCurrentIndex.value === 0 ? item.sellPrice : item.buyPrice, // 资源单价
+							type: marketCurrentIndex.value, // 交易类型（0: 出售, 1: 求购）
+						};
 
-          // 调用云函数
-          const result = await uniCloud.callFunction({
-            name: 'cancelTradeRequirement',
-            data: params,
-          });
+						// 调用云函数
+						const result = await uniCloud.callFunction({
+							name: 'cancelTradeRequirement',
+							data: params,
+						});
 
-          // 隐藏加载提示
-          uni.hideLoading();
+						// 隐藏加载提示
+						uni.hideLoading();
 
-          // 处理云函数返回结果
-          if (result.result.code === 0) {
-            uni.showToast({
-              title: '取消成功',
-              icon: 'success',
-              duration: 2000, // 提示显示时长
-            });
-						
-						const num = marketCurrentIndex.value === 0 ? item.sellNum : item.buyNum;
-						if(marketCurrentIndex.value===0) {
+						// 处理云函数返回结果
+						if (result.result.code === 0) {
+							uni.showToast({
+								title: '取消成功',
+								icon: 'success',
+								duration: 2000, // 提示显示时长
+							});
 							
-							gameInfo.assets[item.demType] = roundToOneDecimal(gameInfo.assets[item.demType] + item.sellNum);
-						}else {
-							const totalNum = item.buyPrice * item.buyNum
-							gameInfo.assets.jewel = roundToOneDecimal(gameInfo.assets.jewel + totalNum)
+							const num = marketCurrentIndex.value === 0 ? item.sellNum : item.buyNum;
+							if(marketCurrentIndex.value===0) {
+								
+								gameInfo.assets[item.demType] = roundToOneDecimal(gameInfo.assets[item.demType] + item.sellNum);
+							}else {
+								const totalNum = item.buyPrice * item.buyNum
+								gameInfo.assets.jewel = roundToOneDecimal(gameInfo.assets.jewel + totalNum)
+							}
+
+							// 刷新数据
+							await updateData();
+						} else {
+							uni.showToast({
+								title: '取消失败：' + result.result.message,
+								icon: 'none',
+								duration: 3000, // 提示显示时长
+							});
 						}
+					} catch (err) {
+						// 隐藏加载提示
+						uni.hideLoading();
 
-            // 刷新数据
-            await updateData();
-          } else {
-            uni.showToast({
-              title: '取消失败：' + result.result.message,
-              icon: 'none',
-              duration: 3000, // 提示显示时长
-            });
-          }
-        } catch (err) {
-          // 隐藏加载提示
-          uni.hideLoading();
-
-          // 显示错误提示
-          uni.showToast({
-            title: '取消失败：' + err.message,
-            icon: 'none',
-            duration: 3000, // 提示显示时长
-          });
-        }
-      }
-    },
-  });
-}
+						// 显示错误提示
+						uni.showToast({
+							title: '取消失败：' + err.message,
+							icon: 'none',
+							duration: 3000, // 提示显示时长
+						});
+					}
+				}
+			},
+		});
+	}
 	
 	
 	onMounted(async () => {

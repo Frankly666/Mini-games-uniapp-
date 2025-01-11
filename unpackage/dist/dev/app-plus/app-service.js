@@ -5942,7 +5942,7 @@ This will fail in production if not fixed.`);
         vue.createElementVNode("text", null, "土地管理")
       ]),
       vue.createElementVNode("view", { class: "mart item" }, [
-        vue.createElementVNode("text", null, "交易中心")
+        vue.createElementVNode("text", null, "交易集市")
       ]),
       vue.createElementVNode("view", { class: "talentCenter item" }, [
         vue.createElementVNode("text", null, "人才市场")

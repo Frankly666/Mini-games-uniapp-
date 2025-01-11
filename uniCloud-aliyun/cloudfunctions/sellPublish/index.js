@@ -1,4 +1,7 @@
 'use strict';
+const addAssetsChangeRecord = require('../common/addAssetsChangeRecord');
+const { assetsNameMap } = require('../common/const'); // 引入资源名称映射表
+
 exports.main = async (event, context) => {
 	//event为客户端上传的参数
 	console.log('event : ', event)
@@ -19,6 +22,10 @@ exports.main = async (event, context) => {
 		const res2 = await transaction.collection("assets").doc(assetsId).update({
 			[addData.gemType]: roundToOneDecimal(nowNum - inputNumValue)
 		})
+		
+		const description = `交易集市中发布出售${assetsNameMap[addData.demType]}${addData.sellNum}个, 单价为${addData.sellPrice}, 共扣除${addData.sellNum}个`
+		await addAssetsChangeRecord(userId, addData.demType, description, new Date(), transaction);
+		
 		await transaction.commit();
 		return "成功发布!";
 	}catch (e) {

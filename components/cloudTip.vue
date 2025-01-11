@@ -7,7 +7,7 @@
 			<text>土地管理</text>
 		</view>
 		<view class="mart item" >
-			<text>交易中心</text>
+			<text>交易集市</text>
 		</view>
 		<view class="talentCenter item">
 			<text>人才市场</text>
