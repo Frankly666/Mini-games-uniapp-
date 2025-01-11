@@ -52,13 +52,17 @@
 					<view class="personWrap"  v-show="selectWorker(1, item)">
 						<worker-vue :type="selectWorker(1, item)"  :delay="-item"></worker-vue>
 					</view>
+					<view class="typeDesc">
+						<text>一级土地\n</text>
+						<text class="endTime">{{getEndTime(1, item)}}到期</text>
+					</view>
 					<view class="lockGround" v-show="!judgeOwnThisGround(1, item)" @click="() => { clickLockGround(1, item)}">
 						<view class="title">
 							<text >{{gameInfo.groundsMeta[1].groundName}}</text>
 						</view>
 					</view>
 				</view>
-			</view>
+		</view>
 									  
 			
 									    
@@ -66,6 +70,10 @@
 				<view class="realGround type3">
 					<view class="personWrap" v-show="selectWorker(3, item)">
 						<worker-vue :type="selectWorker(3, item)" :delay="-item"></worker-vue>
+					</view>
+					<view class="typeDesc">
+						<text>二级土地\n</text>
+						<text class="endTime">({{getEndTime(3, item)}}到期)</text>
 					</view>
 					<view class="lockGround" v-show="!judgeOwnThisGround(3, item)" @click="() => {clickLockGround(3, item)}">
 						<view class="title">
@@ -80,6 +88,10 @@
 					<view class="personWrap" v-show="selectWorker(4, item)">
 						<worker-vue :type="selectWorker(4, item)" :delay="-item"></worker-vue>
 					</view>
+					<view class="typeDesc">
+						<text>三级土地\n</text>
+						<text class="endTime">{{getEndTime(4, item)}}到期</text>
+					</view>
 					<view class="lockGround" v-show="!judgeOwnThisGround(4, item)" @click="() => {clickLockGround(4, item)}">
 						<view class="title">
 							<text>{{gameInfo.groundsMeta[4].groundName}}</text>
@@ -92,6 +104,10 @@
 				<view class="realGround type5">
 					<view class="personWrap" v-show="!!selectWorker(5, item)">
 						<worker-vue :type="selectWorker(5, item)" :delay="-item"></worker-vue>
+					</view>
+					<view class="typeDesc">
+						<text>四级土地\n</text>
+						<text class="endTime">{{getEndTime(5, item)}}到期</text>
 					</view>
 					<view class="lockGround" v-show="!judgeOwnThisGround(5, item)" @click="() => {clickLockGround(5, item)}"> 
 						<view class="title">
@@ -110,6 +126,9 @@
 					</view>
 					<view class="personWrap" v-show="selectWorker(6, item)">
 						<worker-vue :type="selectWorker(6, item)" :delay="-item"></worker-vue>
+					</view>
+					<view class="typeDesc">
+						<text>五级土地</text>
 					</view>
 					<view class="lockGround" v-show="!judgeOwnThisGround(6, item)" @click="() => {clickLockGround(6, item)}">
 						<view class="title">
@@ -234,6 +253,40 @@
 			}
 		}
 		return false;
+	}
+	
+	/**
+	 * 格式化时间，返回精确到日的字符串（YYYY-MM-DD）
+	 * @param {Date|string} date - 日期对象或日期字符串
+	 * @returns {string} - 格式化后的日期字符串
+	 */
+	function formatDateToDay(date) {
+	  // 如果传入的是字符串，转换为 Date 对象
+	  if (typeof date === 'string') {
+	    date = new Date(date);
+	  }
+	
+	  // 获取年、月、日
+	  const year = date.getFullYear();
+	  const month = String(date.getMonth() + 1).padStart(2, '0'); // 月份从 0 开始，需要加 1
+	  const day = String(date.getDate()).padStart(2, '0');
+	
+	  // 返回格式化后的日期字符串
+	  return `${year}/${month}/${day}`;
+	}
+	
+	// 获取到期时间
+	function getEndTime(type, index) {
+		const thisGrounds = gameInfo.ownGrounds?.[type];
+		if(thisGrounds) {
+			for(let i = 0; i < thisGrounds.length; i ++ ) {
+				const item = thisGrounds[i];
+				if(item.groundIndex === index) {
+					return formatDateToDay(item.endTime)
+				}
+			}
+		}
+		return false
 	}
 	
 	async function updateData() {
@@ -430,6 +483,19 @@
 					
 					&.type6 {
 						background-image: url("../../static/ground/ground4.png");
+					}
+					
+					.typeDesc {
+						position: absolute;
+						left: 10vw;
+						top: 2vw;
+						font-weight: bold;
+						
+						.endTime {
+							position: absolute;
+							font-size: 2vw;
+							font-weight: normal;
+						}
 					}
 					
 					.personWrap {

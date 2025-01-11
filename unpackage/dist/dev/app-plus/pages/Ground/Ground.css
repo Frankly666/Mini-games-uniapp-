@@ -583,6 +583,17 @@
 .groundWrap .grounds .item .realGround.type6 {
   background-image: url("../../static/ground/ground4.png");
 }
+.groundWrap .grounds .item .realGround .typeDesc {
+  position: absolute;
+  left: 10vw;
+  top: 2vw;
+  font-weight: bold;
+}
+.groundWrap .grounds .item .realGround .typeDesc .endTime {
+  position: absolute;
+  font-size: 2vw;
+  font-weight: normal;
+}
 .groundWrap .grounds .item .realGround .personWrap {
   position: absolute;
   left: 3vw;

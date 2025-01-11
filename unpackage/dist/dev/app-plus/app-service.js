@@ -10285,11 +10285,33 @@ This will fail in production if not fixed.`);
         }
         return false;
       }
+      function formatDateToDay(date) {
+        if (typeof date === "string") {
+          date = new Date(date);
+        }
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const day = String(date.getDate()).padStart(2, "0");
+        return `${year}/${month}/${day}`;
+      }
+      function getEndTime(type, index) {
+        var _a;
+        const thisGrounds = (_a = gameInfo.ownGrounds) == null ? void 0 : _a[type];
+        if (thisGrounds) {
+          for (let i2 = 0; i2 < thisGrounds.length; i2++) {
+            const item = thisGrounds[i2];
+            if (item.groundIndex === index) {
+              return formatDateToDay(item.endTime);
+            }
+          }
+        }
+        return false;
+      }
       async function updateData() {
         try {
           const userId = uni.getStorageSync("id");
           if (!userId) {
-            formatAppLog("error", "at pages/Ground/Ground.vue:243", "用户 ID 为空");
+            formatAppLog("error", "at pages/Ground/Ground.vue:296", "用户 ID 为空");
             return;
           }
           const res = await Ys.callFunction({
@@ -10298,23 +10320,23 @@ This will fail in production if not fixed.`);
             data: { userId }
             // 传入参数
           });
-          formatAppLog("log", "at pages/Ground/Ground.vue:253", "云函数返回结果:", res);
+          formatAppLog("log", "at pages/Ground/Ground.vue:306", "云函数返回结果:", res);
           if (res.result.code === 0) {
             const classifyGrounds = res.result.data;
             userGrounds.value = classifyGrounds;
             gameInfo.ownGrounds = classifyGrounds;
           } else {
-            formatAppLog("error", "at pages/Ground/Ground.vue:260", "云函数调用失败:", res.result.message);
+            formatAppLog("error", "at pages/Ground/Ground.vue:313", "云函数调用失败:", res.result.message);
           }
         } catch (error) {
-          formatAppLog("error", "at pages/Ground/Ground.vue:263", "updateData 出错:", error.message);
+          formatAppLog("error", "at pages/Ground/Ground.vue:316", "updateData 出错:", error.message);
         }
       }
       vue.onMounted(async () => {
         if (!gameInfo.ownGrounds)
           await updateData();
       });
-      const __returned__ = { groundType, groundIndex, isShowGroundPop, isShowRecordPop, groundsDB, gameInfo, userGrounds, back, handleIsShowGroundPop, handleIsShowRecordPop, clickLockGround, judgeOwnThisGround, selectWorker, updateData, onMounted: vue.onMounted, onUnmounted: vue.onUnmounted, ref: vue.ref, assetsHeader, workerVue, buyGroundPopVue, get useGameInfoStore() {
+      const __returned__ = { groundType, groundIndex, isShowGroundPop, isShowRecordPop, groundsDB, gameInfo, userGrounds, back, handleIsShowGroundPop, handleIsShowRecordPop, clickLockGround, judgeOwnThisGround, selectWorker, formatDateToDay, getEndTime, updateData, onMounted: vue.onMounted, onUnmounted: vue.onUnmounted, ref: vue.ref, assetsHeader, workerVue, buyGroundPopVue, get useGameInfoStore() {
         return useGameInfoStore;
       }, grondSignInPresentationVue, groundRecieveRecordVue };
       Object.defineProperty(__returned__, "__isScriptSetup", { enumerable: false, value: true });
@@ -10395,6 +10417,16 @@ This will fail in production if not fixed.`);
                 ), [
                   [vue.vShow, $setup.selectWorker(1, item)]
                 ]),
+                vue.createElementVNode("view", { class: "typeDesc" }, [
+                  vue.createElementVNode("text", null, "一级土地\\n"),
+                  vue.createElementVNode(
+                    "text",
+                    { class: "endTime" },
+                    vue.toDisplayString($setup.getEndTime(1, item)) + "到期",
+                    1
+                    /* TEXT */
+                  )
+                ]),
                 vue.withDirectives(vue.createElementVNode("view", {
                   class: "lockGround",
                   onClick: () => {
@@ -10438,6 +10470,16 @@ This will fail in production if not fixed.`);
                   /* NEED_PATCH */
                 ), [
                   [vue.vShow, $setup.selectWorker(3, item)]
+                ]),
+                vue.createElementVNode("view", { class: "typeDesc" }, [
+                  vue.createElementVNode("text", null, "二级土地\\n"),
+                  vue.createElementVNode(
+                    "text",
+                    { class: "endTime" },
+                    "(" + vue.toDisplayString($setup.getEndTime(3, item)) + "到期)",
+                    1
+                    /* TEXT */
+                  )
                 ]),
                 vue.withDirectives(vue.createElementVNode("view", {
                   class: "lockGround",
@@ -10483,6 +10525,16 @@ This will fail in production if not fixed.`);
                 ), [
                   [vue.vShow, $setup.selectWorker(4, item)]
                 ]),
+                vue.createElementVNode("view", { class: "typeDesc" }, [
+                  vue.createElementVNode("text", null, "三级土地\\n"),
+                  vue.createElementVNode(
+                    "text",
+                    { class: "endTime" },
+                    vue.toDisplayString($setup.getEndTime(4, item)) + "到期",
+                    1
+                    /* TEXT */
+                  )
+                ]),
                 vue.withDirectives(vue.createElementVNode("view", {
                   class: "lockGround",
                   onClick: () => {
@@ -10526,6 +10578,16 @@ This will fail in production if not fixed.`);
                   /* NEED_PATCH */
                 ), [
                   [vue.vShow, !!$setup.selectWorker(5, item)]
+                ]),
+                vue.createElementVNode("view", { class: "typeDesc" }, [
+                  vue.createElementVNode("text", null, "四级土地\\n"),
+                  vue.createElementVNode(
+                    "text",
+                    { class: "endTime" },
+                    vue.toDisplayString($setup.getEndTime(5, item)) + "到期",
+                    1
+                    /* TEXT */
+                  )
                 ]),
                 vue.withDirectives(vue.createElementVNode("view", {
                   class: "lockGround",
@@ -10575,6 +10637,9 @@ This will fail in production if not fixed.`);
                   /* NEED_PATCH */
                 ), [
                   [vue.vShow, $setup.selectWorker(6, item)]
+                ]),
+                vue.createElementVNode("view", { class: "typeDesc" }, [
+                  vue.createElementVNode("text", null, "五级土地")
                 ]),
                 vue.withDirectives(vue.createElementVNode("view", {
                   class: "lockGround",
