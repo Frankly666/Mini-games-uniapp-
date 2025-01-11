@@ -63,27 +63,31 @@
 			</view>
 			
 			<view class="contentWrap">
-				<view class="content">
-					<view class="item" v-for="(item, index) in showListData">
+				<view class="content">	
+					<view class="item" v-for="(item, index) in showListData" :key="index">
 						<view class="numWrap">
 							<view class="gemImg" :style="`background-image: url(${getGemImg(gemImgName[itemCurrentIndex])});`"></view>
 							<view class="num">
-								<text>{{marketItems[marketCurrentIndex]}} : {{item[numName]}}个</text>
+								<text>{{marketItems[marketCurrentIndex]}} : {{formatLargeNumber(item[numName])}}个</text>
 							</view>
 						</view>
 						<view class="priceWrap">
 							<view class="priceImg"></view>
 							<view class="price">
-								<text>{{item[priceName]}}/个</text>
+								<text>{{formatLargeNumber(item[priceName])}}/个</text>
 							</view>
 						</view>
 						<view class="button" @click="() => {setCertainIndex(index);controlShowPop(true)}">
 							<text>{{buttonWord[marketCurrentIndex]}}</text>
 						</view>
-					</view>
-					
-					<view class="tip" v-if="showListData?.length === 5">
-						<text>最多只展示前五条数据</text>
+						<!-- 新增：取消按钮 -->
+						<view 
+							v-if="(marketCurrentIndex === 0 && item.sellerId === userId) || (marketCurrentIndex === 1 && item.buyerId === userId)"
+							class="cancelButton" 
+							@click="() => {handleCancel(item)}"
+						>
+							<text>取消</text>
+						</view>
 					</view>
 				</view>
 			</view>
@@ -97,6 +101,9 @@
 	import marketPublish from '../../components/marketPublish.vue';
 	import buyCellPop from '../../components/buyCellPop.vue';
 	import sentPopVue from '../../components/sentPop.vue';
+	import { formatLargeNumber } from '../../utils/formatLargeNumber'
+import { useGameInfoStore } from '../../stores/gameInfo';
+import { roundToOneDecimal } from '../../utils/roundToOneDecimal';
 
 	const marketCurrentIndex = ref(0)
 	const itemCurrentIndex = ref(0)
@@ -112,6 +119,8 @@
 	const sellRequirement = ref({})
 	const buyRequirement = ref({})
 	const isShowSentPop = ref(false)
+	const userId = uni.getStorageSync('id')
+	const gameInfo = useGameInfoStore()
 	
 	// 动态得到展示的字段名
 	const showListData = computed(() => {
@@ -178,6 +187,83 @@
 		})
 	}
 	
+	
+// 取消操作
+async function handleCancel(item) {
+  uni.showModal({
+    title: '确认取消',
+    content: '您确定要撤销这条记录吗？\n操作后将返还你的资源',
+    success: async (res) => {
+      if (res.confirm) {
+        try {
+          // 显示加载提示
+          uni.showLoading({
+            title: '处理中...',
+            mask: true, // 防止用户点击其他区域
+          });
+
+          // 构造云函数参数
+          const params = {
+            userId: uni.getStorageSync('id'), // 当前用户 ID
+            recordId: item._id, // 交易记录 ID
+            resourceType: item.demType, // 资源类型
+            resourceAmount: marketCurrentIndex.value === 0 ? item.sellNum : item.buyNum, // 资源数量
+            price: marketCurrentIndex.value === 0 ? item.sellPrice : item.buyPrice, // 资源单价
+            type: marketCurrentIndex.value, // 交易类型（0: 出售, 1: 求购）
+          };
+
+          // 调用云函数
+          const result = await uniCloud.callFunction({
+            name: 'cancelTradeRequirement',
+            data: params,
+          });
+
+          // 隐藏加载提示
+          uni.hideLoading();
+
+          // 处理云函数返回结果
+          if (result.result.code === 0) {
+            uni.showToast({
+              title: '取消成功',
+              icon: 'success',
+              duration: 2000, // 提示显示时长
+            });
+						
+						const num = marketCurrentIndex.value === 0 ? item.sellNum : item.buyNum;
+						if(marketCurrentIndex.value===0) {
+							
+							gameInfo.assets[item.demType] = roundToOneDecimal(gameInfo.assets[item.demType] + item.sellNum);
+						}else {
+							const totalNum = item.buyPrice * item.buyNum
+							gameInfo.assets.jewel = roundToOneDecimal(gameInfo.assets.jewel + totalNum)
+						}
+
+            // 刷新数据
+            await updateData();
+          } else {
+            uni.showToast({
+              title: '取消失败：' + result.result.message,
+              icon: 'none',
+              duration: 3000, // 提示显示时长
+            });
+          }
+        } catch (err) {
+          // 隐藏加载提示
+          uni.hideLoading();
+
+          // 显示错误提示
+          uni.showToast({
+            title: '取消失败：' + err.message,
+            icon: 'none',
+            duration: 3000, // 提示显示时长
+          });
+        }
+      }
+    },
+  });
+}
+	
+	
 	onMounted(async () => {
 		await updateData()
 	})
@@ -189,6 +275,8 @@
 		width: 100vw;
 		height: 100vh;
 		background-color: rgba(139, 203, 244, 1);
+		
+		
 		
 		.topWrap {
 			position: absolute;
@@ -315,6 +403,8 @@
 				
 				.content {
 					width: 100%;
+					height: 50vh;
+					overflow-y: auto;
 					
 					.tip {
 						margin-top: 5vw;
@@ -340,6 +430,7 @@
 						.numWrap {
 							display: flex;
 							width: 36vw;
+							margin-left: -2vw;
 							.gemImg {
 								width: 8vw;
 								height: 8vw;
@@ -350,6 +441,7 @@
 						
 						.priceWrap {
 							display: flex;
+							margin-left: -2vw;
 							.priceImg {
 								margin-right: 2vw;
 								width: 6vw;
@@ -368,6 +460,19 @@
 							line-height: 8.7vw;
 							text-align: center;
 							color: aliceblue;
+						}
+						
+						.cancelButton {
+							position: absolute;
+							right: 23vw;
+							top: 3vw;
+							width: 10vw;
+							height: 6vw;
+							line-height: 5vw;
+							background: url('../../static/market/btn_Purple.png') no-repeat center center / contain;
+							text-align: center;
+							color: aliceblue;
+							font-size: 2.7vw;
 						}
 					}
 				}

@@ -14,8 +14,8 @@
 					
 		<!-- 领取记录的弹窗 -->
 		<ground-recieve-record-vue
-			v-if="isShowRecordPop"
-			@close="() => {handleIsShowRecordPop(false)}" 
+					v-if="isShowRecordPop"
+					@close="() => {handleIsShowRecordPop(false)}" 
 		/>
 						
 		<!-- 绝对定位 -->

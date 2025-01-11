@@ -8992,6 +8992,8 @@ This will fail in production if not fixed.`);
       const sellRequirement = vue.ref({});
       const buyRequirement = vue.ref({});
       const isShowSentPop = vue.ref(false);
+      const userId = uni.getStorageSync("id");
+      const gameInfo = useGameInfoStore();
       const showListData = vue.computed(() => {
         const itemName = gemImgName[itemCurrentIndex.value];
         return marketCurrentIndex.value === 0 ? sellRequirement.value[itemName] : buyRequirement.value[itemName];
@@ -9041,16 +9043,88 @@ This will fail in production if not fixed.`);
           buyRequirement.value[item] = res2.data;
         });
       }
+      async function handleCancel(item) {
+        uni.showModal({
+          title: "确认取消",
+          content: "您确定要撤销这条记录吗？\n操作后将返还你的资源",
+          success: async (res) => {
+            if (res.confirm) {
+              try {
+                uni.showLoading({
+                  title: "处理中...",
+                  mask: true
+                  // 防止用户点击其他区域
+                });
+                const params = {
+                  userId: uni.getStorageSync("id"),
+                  // 当前用户 ID
+                  recordId: item._id,
+                  // 交易记录 ID
+                  resourceType: item.demType,
+                  // 资源类型
+                  resourceAmount: marketCurrentIndex.value === 0 ? item.sellNum : item.buyNum,
+                  // 资源数量
+                  price: marketCurrentIndex.value === 0 ? item.sellPrice : item.buyPrice,
+                  // 资源单价
+                  type: marketCurrentIndex.value
+                  // 交易类型（0: 出售, 1: 求购）
+                };
+                const result = await Ys.callFunction({
+                  name: "cancelTradeRequirement",
+                  data: params
+                });
+                uni.hideLoading();
+                if (result.result.code === 0) {
+                  uni.showToast({
+                    title: "取消成功",
+                    icon: "success",
+                    duration: 2e3
+                    // 提示显示时长
+                  });
+                  const num = marketCurrentIndex.value === 0 ? item.sellNum : item.buyNum;
+                  if (marketCurrentIndex.value === 0) {
+                    gameInfo.assets[item.demType] = roundToOneDecimal(gameInfo.assets[item.demType] + item.sellNum);
+                  } else {
+                    const totalNum = item.buyPrice * item.buyNum;
+                    gameInfo.assets.jewel = roundToOneDecimal(gameInfo.assets.jewel + totalNum);
+                  }
+                  await updateData();
+                } else {
+                  uni.showToast({
+                    title: "取消失败：" + result.result.message,
+                    icon: "none",
+                    duration: 3e3
+                    // 提示显示时长
+                  });
+                }
+              } catch (err) {
+                uni.hideLoading();
+                uni.showToast({
+                  title: "取消失败：" + err.message,
+                  icon: "none",
+                  duration: 3e3
+                  // 提示显示时长
+                });
+              }
+            }
+          }
+        });
+      }
       vue.onMounted(async () => {
         await updateData();
       });
-      const __returned__ = { marketCurrentIndex, itemCurrentIndex, itemCertainIndex, isShowMarketPublish, isShowBuySellPop, gemItems, gemImgName, marketItems, buttonWord, marketDB, assetsDB, sellRequirement, buyRequirement, isShowSentPop, showListData, numName, priceName, certainRequirement, setItemIndex, setMarketIndex, back, getGemImg, controlPublish, controlShowPop, setCertainIndex, setShowSentPop, updateData, computed: vue.computed, onMounted: vue.onMounted, ref: vue.ref, assetsHeader1: assetsHeader, marketPublish, buyCellPop, sentPopVue };
+      const __returned__ = { marketCurrentIndex, itemCurrentIndex, itemCertainIndex, isShowMarketPublish, isShowBuySellPop, gemItems, gemImgName, marketItems, buttonWord, marketDB, assetsDB, sellRequirement, buyRequirement, isShowSentPop, userId, gameInfo, showListData, numName, priceName, certainRequirement, setItemIndex, setMarketIndex, back, getGemImg, controlPublish, controlShowPop, setCertainIndex, setShowSentPop, updateData, handleCancel, computed: vue.computed, onMounted: vue.onMounted, ref: vue.ref, assetsHeader1: assetsHeader, marketPublish, buyCellPop, sentPopVue, get formatLargeNumber() {
+        return formatLargeNumber;
+      }, get useGameInfoStore() {
+        return useGameInfoStore;
+      }, get roundToOneDecimal() {
+        return roundToOneDecimal;
+      } };
       Object.defineProperty(__returned__, "__isScriptSetup", { enumerable: false, value: true });
       return __returned__;
     }
   };
   function _sfc_render$9(_ctx, _cache, $props, $setup, $data, $options) {
-    var _a;
     return vue.openBlock(), vue.createElementBlock("view", { class: "tradingMarketWrap" }, [
       vue.createElementVNode("view", {
         class: "return",
@@ -9177,7 +9251,10 @@ This will fail in production if not fixed.`);
               vue.Fragment,
               null,
               vue.renderList($setup.showListData, (item, index) => {
-                return vue.openBlock(), vue.createElementBlock("view", { class: "item" }, [
+                return vue.openBlock(), vue.createElementBlock("view", {
+                  class: "item",
+                  key: index
+                }, [
                   vue.createElementVNode("view", { class: "numWrap" }, [
                     vue.createElementVNode(
                       "view",
@@ -9193,7 +9270,7 @@ This will fail in production if not fixed.`);
                       vue.createElementVNode(
                         "text",
                         null,
-                        vue.toDisplayString($setup.marketItems[$setup.marketCurrentIndex]) + " : " + vue.toDisplayString(item[$setup.numName]) + "个",
+                        vue.toDisplayString($setup.marketItems[$setup.marketCurrentIndex]) + " : " + vue.toDisplayString($setup.formatLargeNumber(item[$setup.numName])) + "个",
                         1
                         /* TEXT */
                       )
@@ -9205,7 +9282,7 @@ This will fail in production if not fixed.`);
                       vue.createElementVNode(
                         "text",
                         null,
-                        vue.toDisplayString(item[$setup.priceName]) + "/个",
+                        vue.toDisplayString($setup.formatLargeNumber(item[$setup.priceName])) + "/个",
                         1
                         /* TEXT */
                       )
@@ -9225,18 +9302,22 @@ This will fail in production if not fixed.`);
                       1
                       /* TEXT */
                     )
-                  ], 8, ["onClick"])
+                  ], 8, ["onClick"]),
+                  vue.createCommentVNode(" 新增：取消按钮 "),
+                  $setup.marketCurrentIndex === 0 && item.sellerId === $setup.userId || $setup.marketCurrentIndex === 1 && item.buyerId === $setup.userId ? (vue.openBlock(), vue.createElementBlock("view", {
+                    key: 0,
+                    class: "cancelButton",
+                    onClick: () => {
+                      $setup.handleCancel(item);
+                    }
+                  }, [
+                    vue.createElementVNode("text", null, "取消")
+                  ], 8, ["onClick"])) : vue.createCommentVNode("v-if", true)
                 ]);
               }),
-              256
-              /* UNKEYED_FRAGMENT */
-            )),
-            ((_a = $setup.showListData) == null ? void 0 : _a.length) === 5 ? (vue.openBlock(), vue.createElementBlock("view", {
-              key: 0,
-              class: "tip"
-            }, [
-              vue.createElementVNode("text", null, "最多只展示前五条数据")
-            ])) : vue.createCommentVNode("v-if", true)
+              128
+              /* KEYED_FRAGMENT */
+            ))
           ])
         ])
       ])
