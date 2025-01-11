@@ -51,16 +51,17 @@ exports.main = async (event, context) => {
     await transaction.collection('assets').doc(senderAssetsId).update({
       [assetsType]: roundToOneDecimal(senderCurrentAmount - totalDeduction),
     });
-
+		
+		const abtainNum = sendNum + sendNum * 0.03
     await transaction.collection('assets').doc(recipientAssetsId).update({
-      [assetsType]: roundToOneDecimal(recipientCurrentAmount + sendNum),
+      [assetsType]: roundToOneDecimal(recipientCurrentAmount + abtainNum),
     });
 
     await transaction.collection('sendRecord').add({
       userId,
       sendUserId: recipientId,
       assetsType,
-      sendNum,
+      sendNum: abtainNum,
       sendTime: new Date(),
     });
 
