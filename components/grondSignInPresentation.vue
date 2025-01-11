@@ -108,7 +108,7 @@ async function claimEarnings() {
 
   try {
     const res = await uniCloud.callFunction({
-      name: 'claimDailyReward',
+      name: 'claimGroundRewards',
       data: {
         userId: gameInfo.id,
         earnings: totalEarnings.value,
