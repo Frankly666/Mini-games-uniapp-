@@ -34,7 +34,38 @@ const props = defineProps(['groundType', 'groundIndex', 'closePop', 'offset', 'u
 const gameInfo = useGameInfoStore();
 const groundMeta = gameInfo.groundsMeta[props.groundType];
 
-function confirmUnclock() {
+
+// 检查用户是否购买了活动礼包
+async function checkActivity() {
+  try {
+    const res = await uniCloud.callFunction({
+      name: 'selectPurchaseActivity',
+      data: {
+        userId: uni.getStorageSync('id')
+      }
+    });
+
+    if (res.result.code === 0) {
+      // 检查是否有 activityId 为 1 的活动
+      const hasActivity = res.result.data.some(record => record.activityId === '1');
+      return hasActivity;
+    } else {
+      console.error('查询活动失败:', res.result.message);
+      return false;
+    }
+  } catch (err) {
+    console.error('调用云函数失败:', err);
+    return false;
+  }
+}
+
+async function confirmUnclock() {
+	const haveActivity = await checkActivity();
+	if(!haveActivity) {
+		showTips('未购买蛇年限定礼包');
+		return;
+	}
+	
   const unlockFunds = gameInfo.groundsMeta[props.groundType].unlockFunds;
   const nowNum = gameInfo.assets[POWERSTONE];
   console.log(unlockFunds, nowNum);

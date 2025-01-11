@@ -17,7 +17,7 @@ export function showTips(string) {
 	});
 	setTimeout(() => {
 		uni.hideToast()
-	}, 600)
+	}, 1000)
 }
 
 export function showSuccus(string) {

@@ -1,16 +1,16 @@
 <template>
 	<view class="cloudWrap">
 		<view class="mine item" @click="toTradingMarket">
-			<text>矿洞</text>
+			<text>赫尔卡矿洞</text>
 		</view>
 		<view class="ground item">
-			<text>地皮管理</text>
+			<text>土地管理</text>
 		</view>
 		<view class="mart item" >
 			<text>交易中心</text>
 		</view>
 		<view class="talentCenter item">
-			<text>人才中心</text>
+			<text>人才市场</text>
 		</view>
 	</view>
 </template>
@@ -54,7 +54,7 @@
 		.mine {
 			top: 50vw;
 			left: 195vw;
-			width: 20vw;
+			width: 30vw;
 			
 			
 			text {

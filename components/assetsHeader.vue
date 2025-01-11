@@ -6,7 +6,7 @@
             :key="index" 
             >
 				<view class="dem" :style="`background: url(${getImageUrl(item)}) no-repeat center center / contain;`"></view>
-        <span>{{gameInfo.assets?.[item]}}</span>
+        <span>{{formatLargeNumber(gameInfo.assets?.[item])}}</span>
       </view>
     </view>
 	
@@ -16,7 +16,7 @@
 	          :key="index" 
 	          >
 				<view class="dem" :style="`background: url(${getImageUrl(item)}) no-repeat center center / contain;`"></view>
-	      <span>{{gameInfo.assets?.[item]}}</span>
+	      <span>{{formatLargeNumber(gameInfo.assets?.[item])}}</span>
 	    </view>
 	</view>
   </view>
@@ -27,6 +27,8 @@ import { onMounted, reactive, ref, watch } from 'vue';
 import { PHONE, useGameInfoStore, ID } from '../stores/gameInfo';
 import Cache from '../utils/cache';
 import { updateAssets } from '../utils/updateGameInfo';
+import { formatLargeNumber } from '../utils/formatLargeNumber';
+
 	
 // 这里是详情页中的资源展示
 const assets = ['powerStone', 'diamond', 'resourceStone', 'jewel'];
