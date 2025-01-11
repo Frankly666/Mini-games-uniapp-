@@ -11,10 +11,19 @@
 					:closePop="() => {handleIsShowGroundPop(false)}"
 					:updateData="updateData"
 					/>
+					
+		<!-- 领取记录的弹窗 -->
+		<ground-recieve-record-vue
+			v-if="isShowRecordPop"
+			@close="() => {handleIsShowRecordPop(false)}" 
+		/>
 						
 		<!-- 绝对定位 -->
 		<assets-header :judge='2'></assets-header>
 		<view class="return" @click="back"></view>
+		<view class="record" @click="isShowRecordPop=true">
+			<text>领取记录</text>
+		</view>
 		
 		<!-- 树木动图 -->
 		<view class="treesWrap1">
@@ -162,10 +171,12 @@
 	import buyGroundPopVue from '../../components/buyGroundPop.vue';
 	import { useGameInfoStore } from '../../stores/gameInfo';
 	import grondSignInPresentationVue from '../../components/grondSignInPresentation.vue';
+	import groundRecieveRecordVue from '../../components/groundRecieveRecord.vue';
 
 	const groundType = ref(null)
 	const groundIndex = ref(null);
 	const isShowGroundPop = ref(false);
+	const isShowRecordPop = ref(false)
 	const groundsDB = uniCloud.importObject('grounds');
 	const gameInfo = useGameInfoStore();
 	const userGrounds = ref(gameInfo.ownGrounds);
@@ -180,6 +191,11 @@
 	// 处理弹窗的函数
 	function handleIsShowGroundPop(flag) {
 		isShowGroundPop.value = flag;
+	}
+	
+	// 控制记录弹窗
+	function handleIsShowRecordPop(flag) {
+		isShowRecordPop.value = flag;
 	}
 	
 	// 点击地皮以及解锁逻辑
@@ -269,6 +285,23 @@
 			width: 15vw;
 			height: 15vw;
 			background: url("../../static/ground/return.png") no-repeat center center /contain;
+		}
+		
+		.record {
+			position: fixed;
+			z-index: 99;
+			bottom: 7vw;
+			left: 78vw;
+			width: 13vw;
+			height: 13vw;
+			background: url("../../static/ground/record.png") no-repeat center center /contain;
+			
+			text {
+				position: absolute;
+				font-size: 3vw;
+				font-weight: bold;
+				top: 13vw;
+			}
 		}
 		
 		.treesWrap1 {

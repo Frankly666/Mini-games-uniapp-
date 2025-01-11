@@ -358,6 +358,103 @@
   cursor: not-allowed;
 }
 
+.receiveRecordPopup[data-v-90e58db4] {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 999;
+  background: rgba(0, 0, 0, 0.7);
+}
+.receiveRecordPopup .mask[data-v-90e58db4] {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.receiveRecordPopup .popup[data-v-90e58db4] {
+  position: absolute;
+  top: 10vh;
+  left: 5vw;
+  width: 90vw;
+  height: 80vh;
+  background-color: #fff;
+  border-radius: 2.7vw;
+  /* 20rpx -> 2.7vw */
+  padding: 2.7vw;
+  /* 20rpx -> 2.7vw */
+  box-sizing: border-box;
+}
+.receiveRecordPopup .popup .header[data-v-90e58db4] {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2.7vw;
+  /* 20rpx -> 2.7vw */
+}
+.receiveRecordPopup .popup .header .title[data-v-90e58db4] {
+  font-size: 4.8vw;
+  /* 36rpx -> 4.8vw */
+  font-weight: bold;
+  color: black;
+}
+.receiveRecordPopup .popup .header .closeBtn[data-v-90e58db4] {
+  font-size: 5.3vw;
+  /* 40rpx -> 5.3vw */
+  cursor: pointer;
+}
+.receiveRecordPopup .popup .recordList[data-v-90e58db4] {
+  height: 89%;
+  /* 100rpx -> 13.3vw */
+  overflow-y: auto;
+}
+.receiveRecordPopup .popup .recordList .empty[data-v-90e58db4] {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  font-size: 4vw;
+  color: #999;
+}
+.receiveRecordPopup .popup .recordList .card[data-v-90e58db4] {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2.7vw;
+  border-bottom: 0.1vw solid #eee;
+  /* 1rpx -> 0.1vw */
+}
+.receiveRecordPopup .popup .recordList .card .time[data-v-90e58db4] {
+  font-size: 3.2vw;
+  /* 24rpx -> 3.2vw */
+  color: #666;
+}
+.receiveRecordPopup .popup .recordList .card .info[data-v-90e58db4] {
+  display: flex;
+  align-items: center;
+  gap: 1.3vw;
+  /* 10rpx -> 1.3vw */
+}
+.receiveRecordPopup .popup .recordList .card .info uni-text[data-v-90e58db4] {
+  font-size: 3.2vw;
+  /* 24rpx -> 3.2vw */
+  color: #333;
+}
+.receiveRecordPopup .popup .recordList .card .info .stoneImg[data-v-90e58db4] {
+  width: 5vw;
+  /* 60rpx -> 8vw */
+  height: 5vw;
+  /* 60rpx -> 8vw */
+}
+.receiveRecordPopup .popup .recordList .card .info .stoneNum[data-v-90e58db4] {
+  font-size: 3.2vw;
+  /* 24rpx -> 3.2vw */
+  color: #666;
+}
+
 .groundWrap {
   position: relative;
   width: 100vw;
@@ -373,6 +470,21 @@
   width: 15vw;
   height: 15vw;
   background: url("../../static/market/return.png") no-repeat center center / contain;
+}
+.groundWrap .record {
+  position: fixed;
+  z-index: 99;
+  bottom: 7vw;
+  left: 78vw;
+  width: 13vw;
+  height: 13vw;
+  background: url("../../static/ground/record.png") no-repeat center center / contain;
+}
+.groundWrap .record uni-text {
+  position: absolute;
+  font-size: 3vw;
+  font-weight: bold;
+  top: 13vw;
 }
 .groundWrap .treesWrap1 .item1 {
   position: absolute;

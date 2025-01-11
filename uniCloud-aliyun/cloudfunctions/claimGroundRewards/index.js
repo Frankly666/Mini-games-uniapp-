@@ -128,17 +128,24 @@ exports.main = async (event, context) => {
     // 1. 更新用户资源（能量石）
     await updateUserResource(userId, 'powerStone', parseFloat((earnings).toFixed(2)), transaction);
 
-    // 2. 更新用户土地的 lastClaimTime
+    // 2. 添加领取记录到 groundRecieveRecord 表
+    await transaction.collection('groundRecieveRecord').add({
+      userId, // 用户 ID
+      powerStoneAmount: parseFloat((earnings).toFixed(2)), // 领取的能量石数量（保留两位小数）
+      receiveTime: new Date() // 领取时间
+    });
+
+    // 3. 更新用户土地的 lastClaimTime
     const updateGroundsResult = await updateUserGroundsLastClaimTime(userId);
     if (updateGroundsResult.code !== 0) {
       await transaction.rollback();
       return updateGroundsResult; // 如果更新失败，直接返回错误信息
     }
 
-    // 3. 查找推荐人
+    // 4. 查找推荐人
     const referrers = await findReferrers(userId);
 
-    // 4. 更新推荐人能量石并添加收益记录
+    // 5. 更新推荐人能量石并添加收益记录
     if (referrers.length > 0) {
       const updateReferrersResult = await updateReferrersAssets(
         userId,
