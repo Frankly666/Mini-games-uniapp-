@@ -36,10 +36,6 @@
 	}
 	
 	function exit() {
-		bgm.stop();
-		bgm.onStop(() => {
-			console.log('音乐停止播放')
-		})
 		
 		uni.navigateTo({
 			url:'/pages/HomePage/HomePage'

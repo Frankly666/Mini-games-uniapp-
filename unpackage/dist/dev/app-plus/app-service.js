@@ -5467,14 +5467,16 @@ This will fail in production if not fixed.`);
     setup(__props, { expose: __expose }) {
       __expose();
       const activeTab = vue.ref("cloud");
+      const gameInfo = useGameInfoStore();
+      const bgm = gameInfo.bgm;
       const showMenu = vue.ref(false);
       function handleMarket() {
         activeTab.value = "market";
-        formatAppLog("log", "at pages/HomePage/HomePage.vue:83", "切换到集市页面");
+        formatAppLog("log", "at pages/HomePage/HomePage.vue:85", "切换到集市页面");
       }
       function handleCloud() {
         activeTab.value = "cloud";
-        formatAppLog("log", "at pages/HomePage/HomePage.vue:89", "切换到云城页面");
+        formatAppLog("log", "at pages/HomePage/HomePage.vue:91", "切换到云城页面");
       }
       function handleLogout() {
         uni.setStorageSync("phone", "");
@@ -5485,8 +5487,20 @@ This will fail in production if not fixed.`);
           url: "/pages/login/login"
           // 替换为你的登录页面路径
         });
+        bgm.stop();
       }
-      const __returned__ = { activeTab, showMenu, handleMarket, handleCloud, handleLogout, ref: vue.ref, martVue, clickIntoCloudCityVue };
+      vue.onMounted(() => {
+        bgm.src = "/static/bgm/bgm.mp3";
+        bgm.autoplay = true;
+        bgm.loop = true;
+        bgm.play();
+        bgm.onError((err) => {
+          formatAppLog("log", "at pages/HomePage/HomePage.vue:119", err);
+        });
+      });
+      const __returned__ = { activeTab, gameInfo, bgm, showMenu, handleMarket, handleCloud, handleLogout, onMounted: vue.onMounted, ref: vue.ref, martVue, clickIntoCloudCityVue, get useGameInfoStore() {
+        return useGameInfoStore;
+      } };
       Object.defineProperty(__returned__, "__isScriptSetup", { enumerable: false, value: true });
       return __returned__;
     }
@@ -6901,10 +6915,6 @@ This will fail in production if not fixed.`);
           bgm.pause();
       }
       function exit() {
-        bgm.stop();
-        bgm.onStop(() => {
-          formatAppLog("log", "at components/settingPop.vue:41", "音乐停止播放");
-        });
         uni.navigateTo({
           url: "/pages/HomePage/HomePage"
         });
@@ -7870,13 +7880,6 @@ This will fail in production if not fixed.`);
       }
       vue.onMounted(async () => {
         uni.hideLoading();
-        bgm.src = "/static/bgm/bgm.mp3";
-        bgm.autoplay = true;
-        bgm.loop = true;
-        bgm.play();
-        bgm.onError((err) => {
-          formatAppLog("log", "at pages/GameHome/GameHome.vue:167", err);
-        });
         updateOwnGrounds();
         setTimeout(function() {
           isShowLoading.value = false;

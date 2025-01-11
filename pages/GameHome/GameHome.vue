@@ -158,14 +158,7 @@ function handleShowTanlentPop(type) {
 
 onMounted(async () => {	
 	uni.hideLoading()
-	// bgm播放设置
-	bgm.src ='/static/bgm/bgm.mp3'
-	bgm.autoplay = true;
-	bgm.loop = true;
-	bgm.play()
-	bgm.onError((err) => {
-		console.log(err)
-	})
+	
 	updateOwnGrounds()
 	
 	setTimeout(function() {

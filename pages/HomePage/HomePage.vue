@@ -67,13 +67,15 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import martVue from '../../components/mart.vue';
 import clickIntoCloudCityVue from '../../components/clickIntoCloudCity.vue';
+import { useGameInfoStore } from '../../stores/gameInfo';
 
 // 当前选中的 Tab
 const activeTab = ref('cloud');
-
+const gameInfo = useGameInfoStore()
+const bgm = gameInfo.bgm;
 // 控制弹窗显示
 const showMenu = ref(false);
 
@@ -102,8 +104,21 @@ function handleLogout() {
   // 跳转到登录页面
   uni.reLaunch({
     url: '/pages/login/login', // 替换为你的登录页面路径
-  });
+  }); 
+	
+	bgm.stop()
 }
+
+onMounted(() => {
+	// bgm播放设置
+	bgm.src ='/static/bgm/bgm.mp3'
+	bgm.autoplay = true;
+	bgm.loop = true;
+	bgm.play()
+	bgm.onError((err) => {
+		console.log(err)
+	})
+})
 </script>
 
 <style lang="less">
