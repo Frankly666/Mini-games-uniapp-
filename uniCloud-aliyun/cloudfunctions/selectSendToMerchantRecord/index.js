@@ -59,7 +59,12 @@ exports.main = async (event, context) => {
       })
     );
 
-    // 4. 返回结果
+    // 4. 按照 sendTime 从最新到最旧排序
+    recordList.sort((a, b) => {
+      return new Date(b.transferRecord.sendTime) - new Date(a.transferRecord.sendTime);
+    });
+
+    // 5. 返回结果
     return { code: 200, data: recordList };
   } catch (err) {
     console.error('查询失败', err);

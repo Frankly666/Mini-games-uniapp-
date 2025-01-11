@@ -99,7 +99,12 @@ exports.main = async (event, context) => {
     // 过滤掉 null 的记录
     const filteredRecordList = recordList.filter(record => record !== null);
 
-    // 4. 返回结果
+    // 4. 按照 transactionTime 从最新到最旧排序
+    filteredRecordList.sort((a, b) => {
+      return new Date(b.transactionRecord.transactionTime) - new Date(a.transactionRecord.transactionTime);
+    });
+
+    // 5. 返回结果
     return { code: 200, data: filteredRecordList };
   } catch (err) {
     console.error('查询失败', err);
