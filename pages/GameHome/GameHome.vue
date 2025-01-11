@@ -163,6 +163,7 @@ onMounted(async () => {
 		console.log(err)
 	})
 	updateGameInfoFromStorage()
+	updateOwnGrounds()
 	
 	setTimeout(function() {
 		isShowLoading.value = false;
