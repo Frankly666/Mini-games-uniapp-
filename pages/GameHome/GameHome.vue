@@ -13,6 +13,7 @@
 			<rule-pop v-if="isShowRulePop" :handleShow="handleShow"></rule-pop>
 			<announcement-pop v-if="isShowAnnouncementPop" :handleShow="handleShow"></announcement-pop>
 			<activity-pop-vue v-show="isShowActivityPop" :handleShow="handleShow"></activity-pop-vue>
+			<bag-vue v-if="isShowBagPop" :handleShow="handleShow"></bag-vue>
 			<talent-center-pop v-show="isShowTalentPop" :handleShowTanlentPop="handleShowTanlentPop"></talent-center-pop>
 			
 			<!-- 签到组件 -->
@@ -50,6 +51,7 @@ import activityPopVue from '../../components/activityPop.vue';
 import announcementPop from '../../components/announcementPop.vue';
 import talentCenterPop from '../../components/talentCenterPop.vue';
 import homeSignInPresentationVue from '../../components/homeSignInPresentation.vue';
+import bagVue from '../../components/bag.vue';
 import { ASSETS, AVATAR, ID, ISFIRST, PHONE, USERNAME, useGameInfoStore } from '../../stores/gameInfo';
 import Cache from '../../utils/cache';
 import { updateOwnGrounds } from '../../utils/updateOwnGrounds';
@@ -71,6 +73,7 @@ const isShowRulePop = ref(false);
 const isShowAnnouncementPop = ref(false);
 const isShowTalentPop = ref(false);
 const isShowActivityPop = ref(false);
+const isShowBagPop = ref(false)
 const gameInfo = useGameInfoStore()
 const bgm = gameInfo.bgm;
 const setCache = Cache.setCache; // 这里使用的是实例化函数
@@ -138,6 +141,7 @@ function handleTouchEnd() {}
 // 控制展示工具栏中的弹窗
 function handleShow(type, bool) {
 	if(type === 0) isShowSettingPop.value = bool;
+	if(type === 1) isShowBagPop.value = bool;
 	if(type === 2) isShowActivityPop.value = bool;
 	if(type === 3) isShowAnnouncementPop.value = bool;
 	if(type === 4) isShowRulePop.value = bool;
