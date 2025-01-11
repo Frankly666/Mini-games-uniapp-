@@ -230,7 +230,7 @@
 	
 	    // 调用云函数
 	    const res = await uniCloud.callFunction({
-	      name: 'selectUserGrounds', // 云函数名称
+	      name: 'selectGrounds', // 云函数名称
 	      data: { userId } // 传入参数
 	    });
 	

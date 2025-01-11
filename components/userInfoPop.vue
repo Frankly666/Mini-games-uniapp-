@@ -46,7 +46,7 @@
     <view class="editPop" v-if="isShowEditPop">
       <view class="bgc">
         <view class="close" @click="closeEditNamePop"></view>
-        <view class="confirm" @click="confirm">
+        <view class="confirm" @click="handleConfirm">
           <text>确定修改</text>
         </view>
         <view class="inputBgc">
@@ -63,7 +63,25 @@
         </view>
       </view>
     </view>
-  
+
+    <!-- 二次确认弹窗 -->
+    <view class="confirmPop" v-if="isShowConfirmPop">
+      <view class="confirmBgc">
+        <view class="confirmTitle">确认修改</view>
+        <view class="confirmContent">
+          <text>修改名字将消耗 100 能量石，是否继续？</text>
+        </view>
+        <view class="confirmButtons">
+          <view class="confirmButton cancel" @click="isShowConfirmPop = false">
+            <text>取消</text>
+          </view>
+          <view class="confirmButton ok" @click="handleRealConfirm">
+            <text>确定</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
     <!-- 记录弹窗区域 -->
     <user-send-record-vue 
       v-if="isShowSendRecordPop" 
@@ -100,7 +118,8 @@ const isFirstEdit = ref(gameInfo.isFirst == 0);
 const showAvatarTip = ref(false);
 const isShowSendRecordPop = ref(false);
 const isShowTransationPop = ref(false);
-const isShowReferralPop = ref(false); // 控制推广收益弹窗的显示和隐藏
+const isShowReferralPop = ref(false);
+const isShowConfirmPop = ref(false); // 控制二次确认弹窗的显示和隐藏
 
 // 从缓存中获取 userInfo
 const userInfo = uni.getStorageSync('userInfo') || {};
@@ -131,17 +150,25 @@ function handleTransactionRecord(type) {
 
 // 推广收益弹窗控制
 function handlePromoEarnings() {
-  isShowReferralPop.value = true; // 显示推广收益弹窗
+  isShowReferralPop.value = true;
 }
 
-// 确认修改名字
-async function confirm() {
+// 点击“确认修改”按钮
+function handleConfirm() {
   if (!newName.value) return;
 
   if (!isFirstEdit.value && gameInfo.assets.powerStone < 100) {
     isShowTip.value = true;
     return;
   }
+
+  // 显示二次确认弹窗
+  isShowConfirmPop.value = true;
+}
+
+// 二次确认弹窗的“确定”按钮
+async function handleRealConfirm() {
+  isShowConfirmPop.value = false; // 关闭二次确认弹窗
 
   try {
     if (!isFirstEdit.value) {
@@ -324,10 +351,62 @@ async function getTempFileURL(fileID) {
     }
   }
 
+  .confirmPop {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    z-index: 1001;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.7);
+
+    .confirmBgc {
+      width: 70vw;
+      padding: 5vw;
+      background-color: #fff;
+      border-radius: 3vw;
+      text-align: center;
+
+      .confirmTitle {
+        font-size: 5vw;
+        font-weight: bold;
+        margin-bottom: 3vw;
+      }
+
+      .confirmContent {
+        font-size: 4vw;
+        margin-bottom: 5vw;
+      }
+
+      .confirmButtons {
+        display: flex;
+        justify-content: space-between;
+
+        .confirmButton {
+          width: 45%;
+          padding: 2vw;
+          border-radius: 2vw;
+          font-size: 4vw;
+          cursor: pointer;
+
+          &.cancel {
+            background-color: #ccc;
+          }
+
+          &.ok {
+            background-color: #4cd964;
+            color: #fff;
+          }
+        }
+      }
+    }
+  }
+
   .infoBgc {
     position: relative;
     width: 85vw;
-    height: 142vw; // 调整高度以容纳新内容
+    height: 142vw;
     background: url('/static/home/table.png') no-repeat center center / contain;
 
     .closeBtn {
@@ -374,18 +453,18 @@ async function getTempFileURL(fileID) {
 
       .userName {
         position: absolute;
-        width: 32vw;
+        width: 42vw;
         text-align: center;
         top: 35.4vw;
         left: 15vw;
         font-weight: bold;
         font-size: 5vw;
-        color: black; // 字体颜色为黑色
-      
+        color: black;
+
         .merchantTag {
-          color: red; // 红色字体
-          font-weight: bold; // 加粗
-          margin-left: 1vw; // 与用户名保持一定间距
+          color: red;
+          font-weight: bold;
+          margin-left: 1vw;
           font-size: 3vw;
         }
       }
@@ -397,7 +476,7 @@ async function getTempFileURL(fileID) {
         text-align: center;
         width: 50vw;
         font-size: 3vw;
-        color: black; // 字体颜色为黑色
+        color: black;
       }
 
       .editName {
@@ -409,7 +488,7 @@ async function getTempFileURL(fileID) {
         background: url('../static/home/edit.png') no-repeat center center / contain;
         text-align: center;
         line-height: 8vw;
-        color: #fff; // 字体颜色为黑色
+        color: #fff;
       }
     }
 
@@ -423,9 +502,9 @@ async function getTempFileURL(fileID) {
       display: flex;
       justify-content: space-between;
       font-size: 3.5vw;
-      color: black; // 字体颜色为黑色
+      color: black;
       font-weight: bold;
-      
+
       .infoText {
         width: 50%;
         box-sizing: border-box;
@@ -448,11 +527,11 @@ async function getTempFileURL(fileID) {
       }
 
       .button {
-        width: 50%; // 两个按钮平分一行
+        width: 50%;
         background-color: rgba(255, 255, 255, 0.3);
         border-radius: 2vw;
         text-align: center;
-        color: black; // 字体颜色为黑色
+        color: black;
         font-size: 4vw;
         cursor: pointer;
         padding: 3vw;
