@@ -37,53 +37,67 @@
         <view class="normalArea">
           <view class="header2">
             <view class="left">
-              <text>已添加:</text>
-              <view class="gemImg1"></view>
-              <text>{{0}}</text>
-            </view>
-            <view class="right">
-              <text>产出:</text>
-              <view class="gemImg1"></view>
-              <text>{{0}}</text>
+              <text>需要:</text>
+              <view class="gemImg1" style="background-image: url('../../static/market/jewel.png');"></view>
+              <text>{{834}}</text>
+							<view class="gemImg1" style="background-image: url('../../static/market/diamond.png');"></view>
+							<text>{{695}}</text>
+							<view class="gemImg1" style="background-image: url('../../static/market/resourceStone.png');"></view>
+							<text>{{1338}}</text>
+							<view class="gemImg1" style="background-image: url('../../static/market/powerStone.png');"></view>
+							<text>{{1248}}</text>
             </view>
           </view>
           <!-- 可收获数量 -->
           <view class="nowHarvest">
             <text>当前可收获:</text>
             <view class="wrap">
-              <view class="gemImg2"></view>
+              <view class="gemImg1" style="background-image: url('../../static/market/jewel.png');"></view>
+              <text>{{0}}</text>
+              <view class="gemImg1" style="background-image: url('../../static/market/diamond.png');"></view>
+              <text>{{0}}</text>
+              <view class="gemImg1" style="background-image: url('../../static/market/resourceStone.png');"></view>
+              <text>{{0}}</text>
+              <view class="gemImg1" style="background-image: url('../../static/market/powerStone.png');"></view>
               <text>{{0}}</text>
             </view>
           </view>
           <!-- 按钮 -->
           <view class="btn harvest">收获</view>
-          <view class="btn add" @click="() => handlePop(true)">添加</view>
+          <view class="btn add" @click="() => handlePop(true)">激活</view>
         </view>
         
         <view class="bigArea">
           <view class="header2">
             <view class="left">
-              <text>已添加:</text>
-              <view class="gemImg1"></view>
-              <text>{{0}}</text>
-            </view>
-            <view class="right">
-              <text>产出:</text>
-              <view class="gemImg1"></view>
-              <text>{{0}}</text>
+              <text>需要:</text>
+              <view class="gemImg1" style="background-image: url('../../static/market/jewel.png');"></view>
+              <text>{{3336}}</text>
+              <view class="gemImg1" style="background-image: url('../../static/market/diamond.png');"></view>
+              <text>{{2780}}</text>
+              <view class="gemImg1" style="background-image: url('../../static/market/resourceStone.png');"></view>
+              <text>{{5552}}</text>
+              <view class="gemImg1" style="background-image: url('../../static/market/powerStone.png');"></view>
+              <text>{{4992}}</text>
             </view>
           </view>
           <!-- 可收获数量 -->
           <view class="nowHarvest">
             <text>当前可收获:</text>
             <view class="wrap">
-              <view class="gemImg2"></view>
+              <view class="gemImg1" style="background-image: url('../../static/market/jewel.png');"></view>
+              <text>{{0}}</text>
+              <view class="gemImg1" style="background-image: url('../../static/market/diamond.png');"></view>
+              <text>{{0}}</text>
+              <view class="gemImg1" style="background-image: url('../../static/market/resourceStone.png');"></view>
+              <text>{{0}}</text>
+              <view class="gemImg1" style="background-image: url('../../static/market/powerStone.png');"></view>
               <text>{{0}}</text>
             </view>
           </view>
           <!-- 按钮 -->
           <view class="btn harvest">收获</view>
-          <view class="btn add" @click="() => {handlePop(true)}">添加</view>
+          <view class="btn add" @click="() => {handlePop(true)}">激活</view>
         </view>
       </view>
       
@@ -123,6 +137,13 @@ function closeMask() {
   width: 100vw;
   height: 100vh;
   background-color: #fff;
+	
+	.gemImg1 {
+	  width: 7vw;
+	  height: 7vw;
+	  margin: 0 2vw;
+	  background:no-repeat center center / contain;
+	}
 
   .mask {
     position: fixed;
@@ -280,7 +301,7 @@ function closeMask() {
         top: -44vw;
         display: flex;
         justify-content: space-between;
-        width: 97%;
+        width: 100%;
         height: 10vw;
         background-color: #fff;
         border-radius: 4vw;
@@ -288,6 +309,7 @@ function closeMask() {
         padding: 0 3vw;
         line-height: 9vw;
         font-weight: bold;
+				font-size: 3.5vw;
 
         .gemImg1 {
           width: 7vw;
@@ -306,7 +328,7 @@ function closeMask() {
           display: flex;
           align-items: center;
           .gemImg1 {
-            background-image: url('../../static/market/diamond.png');
+            
           }
         }
 

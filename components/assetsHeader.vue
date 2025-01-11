@@ -81,23 +81,19 @@ onMounted(async () => {
 			background: url("../static/assetsHeader/assets_bar.png") no-repeat center center / contain;
 			
 			&:first-of-type>.dem {
-				 width: 6vw;
-				 height: 6vw;
+				 transform: scale(.85);
 			}
 			&:last-of-type>.dem {
-			   width: 6vw;
-			   height: 6vw;
+			   transform: scale(.85	);
 			}
 			
 			.dem {
 				width: 8vw;
 				height: 8vw;
-				margin-right: 4vw;
 			}
 
 			span {
 				position: relative;
-				top: -0.53vw;
 			}
 		}
 	}
@@ -130,18 +126,15 @@ onMounted(async () => {
 			background: url("../static/assetsHeader/assets_bar.png") no-repeat center center / contain;
 			
 			&:first-of-type>.dem {
-				 width: 6vw;
-				 height: 6vw;
+				 transform: scale(.85	);
 			}
 			&:last-of-type>.dem {
-			   width: 6vw;
-			   height: 6vw;
+			  transform: scale(.85	);
 			}
 			
 			.dem {
 				width: 8vw;
 				height: 8vw;
-				margin-right: 4vw;
 			}
 
 			span {

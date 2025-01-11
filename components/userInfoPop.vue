@@ -87,6 +87,7 @@ import Cache from '../utils/cache';
 import userSendRecordVue from './userSendRecord.vue';
 import userTransactionRecordVue from './userTransactionRecord.vue';
 import referralEarningsRecordVue from './referralEarningsRecord.vue';
+import { roundToOneDecimal } from '../utils/roundToOneDecimal';
 
 const gameInfo = useGameInfoStore();
 const props = defineProps(['closeInfo']);
@@ -144,7 +145,7 @@ async function confirm() {
 
   try {
     if (!isFirstEdit.value) {
-      gameInfo.assets.powerStone -= 100;
+      gameInfo.assets.powerStone = roundToOneDecimal(gameInfo.assets.powerStone - 100);
       const assetsDB = uniCloud.importObject('assets');
       await assetsDB.update(gameInfo.id, POWERSTONE, -100);
     }
