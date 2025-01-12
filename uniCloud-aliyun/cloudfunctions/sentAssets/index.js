@@ -52,16 +52,18 @@ exports.main = async (event, context) => {
       [assetsType]: roundToOneDecimal(senderCurrentAmount - totalDeduction),
     });
 		
-		const abtainNum = sendNum + sendNum * 0.03
+		const abtainNum = sendNum * 1.03
     await transaction.collection('assets').doc(recipientAssetsId).update({
       [assetsType]: roundToOneDecimal(recipientCurrentAmount + abtainNum),
     });
+		
+		console.log("记录的资源数量:", abtainNum, sendNum)
 
     await transaction.collection('sendRecord').add({
       userId,
       sendUserId: recipientId,
       assetsType,
-      sendNum: abtainNum,
+      sendNum: roundToOneDecimal(abtainNum),
       sendTime: new Date(),
     });
 
@@ -98,10 +100,10 @@ async function getAssetsByUserId(db, userId) {
 }
 
 /**
- * 四舍五入保留一位小数
+ * 四舍五入保留二位小数
  * @param {number} num - 需要处理的数字
  * @returns {number} - 处理后的数字
  */
 function roundToOneDecimal(num) {
-  return Math.round(num * 10) / 10;
+  return Math.round(num * 100) / 100;
 }
