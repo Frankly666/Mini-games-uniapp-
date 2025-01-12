@@ -104,7 +104,7 @@
 	
 	// 处理加减数量以及设置最大值
 	function handleSellNum(num){
-		const max = gameInfo.assets[props.gemImgName[selectIndex.value]] | 0
+		const max = gameInfo.assets[gemImgName[selectIndex.value]] | 0
 		if(num === true) {
 			inputNumValue.value = max
 			return
@@ -119,7 +119,7 @@
 	
 	// 转赠的逻辑操作
 	async function confirmFun() {
-	  const gemType = props.gemImgName[selectIndex.value];
+	  const gemType = gemImgName[selectIndex.value];
 	
 	  // 检查转赠数量是否合法
 	  if (inputNumValue.value <= 0) {
