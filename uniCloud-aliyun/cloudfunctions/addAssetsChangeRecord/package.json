@@ -1,0 +1,7 @@
+{
+  "name": "addAssetsChangeRecord",
+  "dependencies": {},
+  "extensions": {
+    "uni-cloud-jql": {}
+  }
+}
