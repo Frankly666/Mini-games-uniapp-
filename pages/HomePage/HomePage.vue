@@ -119,10 +119,9 @@ onMounted(() => {
 	bgm.src ='/static/bgm/bgm.mp3'
 	bgm.autoplay = true;
 	bgm.loop = true;
-	bgm.play()
-	bgm.onError((err) => {
-		console.log(err)
-	})
+	if(gameInfo.bgmIsOpen) {
+		bgm.play()
+	}
 })
 </script>
 
