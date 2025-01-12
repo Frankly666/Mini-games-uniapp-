@@ -31,8 +31,7 @@
         <click-into-cloud-city-vue></click-into-cloud-city-vue>
       </view>
       <view class="section" v-if="activeTab === 'promotion'">
-        <text class="section-title">推广</text>
-        <text class="section-description">这里是趣选云城的推广页面。</text>
+        <recommend-vue></recommend-vue>
       </view>
       <view class="section" v-if="activeTab === 'guild'">
         <text class="section-title">公会</text>
@@ -55,7 +54,7 @@
         <text class="tab-text">云城</text>
       </view>
       <!-- 推广 Tab（禁用） -->
-      <view class="tab-item disabled">
+      <view class="tab-item" :class="{ active: activeTab === 'promotion'}" @click="handlePromotion">
         <text class="tab-text">推广</text>
       </view>
       <!-- 公会 Tab（禁用） -->
@@ -70,6 +69,7 @@
 import { onMounted, ref } from 'vue';
 import martVue from '../../components/mart.vue';
 import clickIntoCloudCityVue from '../../components/clickIntoCloudCity.vue';
+import recommendVue from '../../components/recommend.vue';
 import { useGameInfoStore } from '../../stores/gameInfo';
 
 // 当前选中的 Tab
@@ -91,6 +91,11 @@ function handleCloud() {
   console.log('切换到云城页面');
 }
 
+// 推广点击
+function handlePromotion() {
+  activeTab.value = 'promotion';
+  console.log('切换到推广页面');
+}
 // 处理退出登录
 function handleLogout() {
   // 清空本地缓存
