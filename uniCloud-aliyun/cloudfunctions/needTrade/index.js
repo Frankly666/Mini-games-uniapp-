@@ -1,6 +1,6 @@
 'use strict';
-const addAssetsChangeRecord = require('../common/addAssetsChangeRecord');
-const { assetsNameMap } = require('../common/const'); // 引入资源名称映射表
+const addAssetsChangeRecord = require('addAssetsChangeRecord');
+const { assetsNameMap } = require('const'); // 引入资源名称映射表
 
 
 // 这个云函数是求购市场中用户进行出售资源对用户资源进行操作的事务云函数

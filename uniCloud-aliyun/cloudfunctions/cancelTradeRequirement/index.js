@@ -1,9 +1,9 @@
 'use strict';
 
 // 引入公共云函数
-const updateUserResource = require('../common/updateUserResource'); // 引入更新用户资源模块
-const addAssetsChangeRecord = require('../common/addAssetsChangeRecord');
-const { assetsNameMap } = require('../common/const'); // 引入资源名称映射表
+const updateUserResource = require('updateUserResource'); // 引入更新用户资源模块
+const addAssetsChangeRecord = require('addAssetsChangeRecord');
+const { assetsNameMap } = require('const'); // 引入资源名称映射表
 
 exports.main = async (event, context) => {
   const { userId, recordId, resourceType, resourceAmount, price, type } = event;

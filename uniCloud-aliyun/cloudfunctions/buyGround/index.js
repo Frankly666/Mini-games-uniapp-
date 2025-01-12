@@ -1,6 +1,6 @@
 'use strict';
 const db = uniCloud.database();
-const updateUserResource = require('../common/updateUserResource'); // 引入更新用户资源模块
+const updateUserResource = require('updateUserResource'); // 引入更新用户资源模块
 
 // 购买地皮的逻辑
 exports.main = async (event, context) => {

@@ -1,7 +1,7 @@
 'use strict';
+const updateUserResource = require('updateUserResource'); // 引入更新用户资源模块
+const findReferrers = require('findReferrers'); // 引入查找推荐人模块
 const db = uniCloud.database();
-const updateUserResource = require('../common/updateUserResource'); // 引入更新用户资源模块
-const findReferrers = require('../common/findReferrers'); // 引入查找推荐人模块
 
 /**
  * 更新用户土地的 lastClaimTime

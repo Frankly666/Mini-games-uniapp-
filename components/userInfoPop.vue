@@ -8,7 +8,7 @@
           <view class="avatarTip" v-if="showAvatarTip">点击更换头像</view>
         </view>
         <view class="userName">
-          <text>{{ userName }}</text>
+          <text>{{ gameInfo.userName }}</text>
           <text v-if="userInfo.isMerchant" class="merchantTag">(商人)</text>
         </view>
         <view class="desc">

@@ -1,6 +1,11 @@
 {
   "name": "sellPublish",
-  "dependencies": {},
+  "dependencies": {
+    "addAssetsChangeRecord": "file:../../../uni_modules/uni-config-center/uniCloud/cloudfunctions/common/addAssetsChangeRecord",
+    "const": "file:../../../uni_modules/uni-config-center/uniCloud/cloudfunctions/common/const",
+    "findReferrers": "file:../../../uni_modules/uni-config-center/uniCloud/cloudfunctions/common/findReferrers",
+    "updateUserResource": "file:../../../uni_modules/uni-config-center/uniCloud/cloudfunctions/common/updateUserResource"
+  },
   "extensions": {
     "uni-cloud-jql": {}
   }

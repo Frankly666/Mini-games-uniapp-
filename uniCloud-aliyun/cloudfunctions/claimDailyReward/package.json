@@ -1,6 +1,8 @@
 {
   "name": "claimDailyReward",
-  "dependencies": {},
+  "dependencies": {
+    "updateUserResource": "file:../../../uni_modules/uni-config-center/uniCloud/cloudfunctions/common/updateUserResource"
+  },
   "extensions": {
     "uni-cloud-jql": {}
   }

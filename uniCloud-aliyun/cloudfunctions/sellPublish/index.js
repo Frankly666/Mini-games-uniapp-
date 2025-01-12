@@ -1,6 +1,6 @@
 'use strict';
-const addAssetsChangeRecord = require('../common/addAssetsChangeRecord');
-const { assetsNameMap } = require('../common/const'); // 引入资源名称映射表
+const addAssetsChangeRecord = require('addAssetsChangeRecord');
+const { assetsNameMap } = require('const'); // 引入资源名称映射表
 
 exports.main = async (event, context) => {
 	//event为客户端上传的参数

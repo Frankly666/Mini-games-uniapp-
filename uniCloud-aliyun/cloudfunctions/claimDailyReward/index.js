@@ -1,5 +1,5 @@
 'use strict';
-const updateUserResource = require('../common/updateUserResource'); // 引入公共模块
+const updateUserResource = require('updateUserResource'); // 引入公共模块
 
 // 活动签到函数逻辑
 exports.main = async (event, context) => {
