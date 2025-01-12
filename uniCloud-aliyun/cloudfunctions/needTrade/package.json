@@ -1,8 +1,7 @@
 {
   "name": "needPublish",
   "dependencies": {
-    "addAssetsChangeRecord": "file:../../../uni_modules/uni-config-center/uniCloud/cloudfunctions/common/addAssetsChangeRecord",
-    "const": "file:../../../uni_modules/uni-config-center/uniCloud/cloudfunctions/common/const"
+    "updateUserResource": "file:../common/updateUserResource"
   },
   "extensions": {
     "uni-cloud-jql": {}

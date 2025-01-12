@@ -71,7 +71,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import merchantSendPopVue from '../../components/merchantSendPop.vue';
-import { updateAssets } from '../../utils/updateGameInfo';
+import { getUserAssets, updateAssets } from '../../utils/updateGameInfo';
 
 const recordList = ref([]); // 转赠记录列表
 const showMenu = ref(false); // 控制菜单弹窗显示
@@ -176,6 +176,7 @@ function confirmTransferResource() {
   console.log('接收者游戏ID:', receiverGameID.value);
   console.log('资源数量:', resourceAmount.value);
   uni.showToast({ title: '转移成功', icon: 'success' });
+	getUserAssets()
   showTransferPopup.value = false; // 关闭弹窗
 }
 

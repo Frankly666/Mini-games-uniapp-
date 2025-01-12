@@ -41,6 +41,7 @@
 	import {getWorkerEndTime} from "../utils/getWorkerEndTime.js"
 	import {updateOwnGrounds} from "../utils/updateOwnGrounds.js"
 	import { netWorkError, showTips } from '../utils/error';
+import { getUserAssets } from '../utils/updateGameInfo';
 	
 	const props = defineProps(["closePop", "workerType"])
 	const gameInfo = useGameInfoStore()
@@ -107,8 +108,7 @@
 			if(res){
 				props.closePop()
 				updateOwnGrounds()
-				const nowNum = gameInfo.assets[POWERSTONE];
-				gameInfo.assets[POWERSTONE] = roundToOneDecimal(nowNum - workerPrice)
+				getUserAssets()
 				uni.hideLoading()
 			}else {
 				netWorkError()

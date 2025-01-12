@@ -58,6 +58,7 @@
 import { ref, onMounted } from 'vue';
 import { useGameInfoStore } from '../stores/gameInfo';
 import homeSignInPresentationVue from './homeSignInPresentation.vue';
+import { getUserAssets } from '../utils/updateGameInfo';
 
 const gameInfo = useGameInfoStore();
 const props = defineProps(['handleShow']);
@@ -166,7 +167,7 @@ const handleConfirmPurchase = async () => {
 			});
 
 			// 更新本地余额
-			gameInfo.assets.jewel -= selectedActivity.value.price;
+			getUserAssets()
 
 			// 重新查询已购买的活动
 			await fetchPurchasedActivities();

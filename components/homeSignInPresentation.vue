@@ -23,6 +23,7 @@
 import { ref, onMounted } from 'vue';
 import { useGameInfoStore } from '../stores/gameInfo';
 import { roundToOneDecimal } from '../utils/roundToOneDecimal';
+import { getUserAssets } from '../utils/updateGameInfo';
 
 const gameInfo = useGameInfoStore();
 
@@ -105,7 +106,7 @@ const handleClaim = async () => {
 			});
 
 			// 更新本地金刚石数量
-			gameInfo.assets.diamond = roundToOneDecimal(selectedActivity.value.dailyReward + gameInfo.assets.diamond);
+			getUserAssets()
 
 			// 关闭弹窗
 			showRewardModal.value = false;

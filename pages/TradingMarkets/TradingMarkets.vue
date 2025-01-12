@@ -104,6 +104,7 @@
 	import { formatLargeNumber } from '../../utils/formatLargeNumber'
 import { useGameInfoStore } from '../../stores/gameInfo';
 import { roundToOneDecimal } from '../../utils/roundToOneDecimal';
+import { getUserAssets } from '../../utils/updateGameInfo';
 
 	const marketCurrentIndex = ref(0)
 	const itemCurrentIndex = ref(0)
@@ -229,14 +230,7 @@ import { roundToOneDecimal } from '../../utils/roundToOneDecimal';
 								duration: 2000, // 提示显示时长
 							});
 							
-							const num = marketCurrentIndex.value === 0 ? item.sellNum : item.buyNum;
-							if(marketCurrentIndex.value===0) {
-								
-								gameInfo.assets[item.demType] = roundToOneDecimal(gameInfo.assets[item.demType] + item.sellNum);
-							}else {
-								const totalNum = item.buyPrice * item.buyNum
-								gameInfo.assets.jewel = roundToOneDecimal(gameInfo.assets.jewel + totalNum)
-							}
+							getUserAssets()
 
 							// 刷新数据
 							await updateData();

@@ -122,6 +122,7 @@ import { computed, onMounted, ref } from "vue";
 import { JEWEL, POWERSTONE, useGameInfoStore } from "../stores/gameInfo";
 import { roundToOneDecimal } from "../utils/roundToOneDecimal";
 import { netWorkError, showTips } from "../utils/error";
+import { getUserAssets } from "../utils/updateGameInfo";
 
 const props = defineProps([
   "controlShowPop",
@@ -221,18 +222,7 @@ async function confirmSellPublish() {
 				props.updateData();
 				
 				// 实时更新资源数量
-				gameInfo.assets[demType] += inputNumValue.value;
-				
-				// 表示购买者和发布者不是同一个人
-				if(res.result === 1) {
-					gameInfo.assets[JEWEL] = roundToOneDecimal(
-						gameInfo.assets[JEWEL] - totalPrice.value
-					);
-				}else {
-					gameInfo.assets[JEWEL] = roundToOneDecimal(
-						gameInfo.assets[JEWEL] - (totalPrice.value * 0.05)
-					);
-				}
+				getUserAssets()
 				
 				uni.hideLoading();
 			}else {
@@ -286,10 +276,7 @@ async function confirmNeedPublish() {
 				props.updateData();
 				
 				// 实时更新资源数量
-				if(res.result === 1) gameInfo.assets[demType] -= inputNumValue.value;
-				gameInfo.assets[JEWEL] = roundToOneDecimal(
-					gameInfo.assets[JEWEL] + expected.value
-				);
+				getUserAssets()
 				uni.hideLoading()
 			}else {
 				netWorkError()

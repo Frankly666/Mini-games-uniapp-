@@ -1,9 +1,9 @@
 {
   "name": "cancelTradeRequirement",
   "dependencies": {
-    "addAssetsChangeRecord": "file:../../../uni_modules/uni-config-center/uniCloud/cloudfunctions/common/addAssetsChangeRecord",
-    "const": "file:../../../uni_modules/uni-config-center/uniCloud/cloudfunctions/common/const",
-    "updateUserResource": "file:../../../uni_modules/uni-config-center/uniCloud/cloudfunctions/common/updateUserResource"
+    "addAssetsChangeRecord": "file:../common/addAssetsChangeRecord",
+    "const": "file:../common/const",
+    "updateUserResource": "file:../common/updateUserResource"
   },
   "extensions": {
     "uni-cloud-jql": {}

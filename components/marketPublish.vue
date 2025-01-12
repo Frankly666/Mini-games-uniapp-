@@ -83,6 +83,7 @@
 	import { JEWEL, POWERSTONE, useGameInfoStore } from '../stores/gameInfo';
 	import { roundToOneDecimal } from '../utils/roundToOneDecimal';
 	import { netWorkError, showTips } from '../utils/error';
+import { getUserAssets } from '../utils/updateGameInfo';
 	
 	const gameInfo = useGameInfoStore()
 	const props = defineProps(['controlPublish', 'title', 'gemItems', 'gemImgName', 'updateData'])
@@ -172,7 +173,7 @@
 			data:{
 				addData: {
 					sellerId: uni.getStorageSync('id'),
-					demType: gemType,
+					gemType: gemType,
 					sellNum: parseInt(inputNumValue.value),
 					sellPrice: parseFloat(inputPriceValue.value),
 					isFinished: false,
@@ -183,7 +184,7 @@
 			}
 		}).then(res => {
 			if(res) {
-				gameInfo.assets[gemType] -= inputNumValue.value;
+				getUserAssets()
 				props.controlPublish(false)
 				props.updateData()
 				uni.hideLoading()
@@ -229,7 +230,7 @@
 			}
 		}).then(res => {
 			if(res) {
-				gameInfo.assets[JEWEL] =  roundToOneDecimal(gameInfo.assets[JEWEL] - totalPrice ) ;
+				getUserAssets();
 				props.controlPublish(false)
 				props.updateData()
 				uni.hideLoading()

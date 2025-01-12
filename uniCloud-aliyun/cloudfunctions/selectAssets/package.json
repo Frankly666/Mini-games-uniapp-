@@ -1,5 +1,5 @@
 {
-  "name": "groundType",
+  "name": "selectAssets",
   "dependencies": {},
   "extensions": {
     "uni-cloud-jql": {}

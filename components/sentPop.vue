@@ -69,6 +69,7 @@
 	import { JEWEL, POWERSTONE, useGameInfoStore } from '../stores/gameInfo';
 	import { roundToOneDecimal } from '../utils/roundToOneDecimal';
 	import { netWorkError, showSuccus, showTips } from '../utils/error';
+import { getUserAssets } from '../utils/updateGameInfo';
 	
 	const gameInfo = useGameInfoStore()
 	const props = defineProps(['closePop', 'title','updateData'])
@@ -163,9 +164,8 @@
 	    // 处理云函数返回结果
 	    if (res.result.code === 1) {
 	      // 更新本地资产数量
-	      gameInfo.assets[gemType] = roundToOneDecimal(
-	        gameInfo.assets[gemType] - needPowerStoneNum.value
-	      );
+	      getUserAssets()
+				
 	      // 显示转赠成功提示
 	      showSuccus('转赠成功!');
 	      // 关闭弹窗

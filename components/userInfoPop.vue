@@ -106,6 +106,7 @@ import userSendRecordVue from './userSendRecord.vue';
 import userTransactionRecordVue from './userTransactionRecord.vue';
 import referralEarningsRecordVue from './referralEarningsRecord.vue';
 import { roundToOneDecimal } from '../utils/roundToOneDecimal';
+import { getUserAssets } from '../utils/updateGameInfo';
 
 const gameInfo = useGameInfoStore();
 const props = defineProps(['closeInfo']);
@@ -172,7 +173,7 @@ async function handleRealConfirm() {
 
   try {
     if (!isFirstEdit.value) {
-      gameInfo.assets.powerStone = roundToOneDecimal(gameInfo.assets.powerStone - 100);
+      getUserAssets()
       const assetsDB = uniCloud.importObject('assets');
       await assetsDB.update(uni.getStorageSync('id'), POWERSTONE, -100);
     }
@@ -187,7 +188,8 @@ async function handleRealConfirm() {
     gameInfo.userName = newName.value;
     gameInfo.isFirst = 1;
     isFirstEdit.value = false;
-
+		
+		getUserAssets()
     closeEditNamePop();
     uni.showToast({ title: '修改成功', icon: 'success' });
   } catch (err) {

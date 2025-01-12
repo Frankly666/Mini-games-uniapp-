@@ -1,82 +1,85 @@
 'use strict';
-// 这个云函数是出售市场中用户进行购买资源对用户资源进行操作的事务云函数
+const updateUserResource = require('updateUserResource'); // 引入更新用户资源模块
+
 exports.main = async (event, context) => {
-	//event为客户端上传的参数
-	console.log('event : ', event)
-	const {sellNum, id, sellPrice, demType, userId, totalPrice, inputNumValue, sellerId} = event
-	const db = uniCloud.database();
-	const transaction = await db.startTransaction();
-	
-	// 寻找该用户assets的索引id
-	const userAssets = await db.collection('assets').where({userId}).get()
-	const assetsId = userAssets.data[0]._id
-	const nowNum = userAssets.data[0].jewel
-	
-	// 寻找发布者的assets的索引id
-	const publishAssets = await db.collection('assets').where({userId: sellerId}).get()
-	console.log("hhhh",publishAssets.data[0])
-	const publishAssetsId = publishAssets.data[0]._id
-	const publlishNowNum = publishAssets.data[0].jewel
-	
-	// 1表示购买者和发布者不同, 2表示两者相同
-	let code = userId === sellerId ? 2 : 1;
-	
-	function roundToOneDecimal(num) {
-	  return Math.round(num * 100) / 100;
-	}
-	
-	try {
-		// 如果购买者和发布者都一样就直接扣除0.05的手续费就行
-		if(code === 2) {
-			const res5 = await transaction.collection('assets').doc(assetsId).update({
-				jewel: roundToOneDecimal(nowNum - (totalPrice * 0.05))
-			}) 
-		}else {
-			// 加上发布者应获得的宝石, 需要打上折扣0.95
-			const res4 = await transaction.collection('assets').doc(publishAssetsId).update({
-				jewel: roundToOneDecimal(publlishNowNum + (totalPrice * 0.95))
-			}) 
-			// 扣除该用户的宝石
-			const res3 = await transaction.collection('assets').doc(assetsId).update({
-				jewel: roundToOneDecimal(nowNum - totalPrice)	
-			})
-		}
-		  
-		// 加上用户买的相应资源
-		const res5 = await transaction.collection('assets').doc(assetsId).update({
-		  [demType]: db.command.inc(inputNumValue),
-		});
-		
-	  // 增加这一条购买记录, 如果用户刚好购买完就消除这条需求
-	  const res1 = await transaction
-											.collection('transactionRecord')
-											.add({
-														buyerId: userId,
-														sellerId, 
-														transactionType:  1,
-														transactionId: id,
-														transactionNum: inputNumValue,
-														transactionTime: new Date()
-													})
-													
-		// 对这条需求进行操作
-	  if (sellNum === inputNumValue) {
-	    await transaction.collection('sellRequirement').doc(id).update({
-	      isFinished: true
-	    });
-	  } else {
-	    await transaction.collection('sellRequirement').doc(id).update({
-	      sellNum: sellNum - inputNumValue
-	    });
-	  }
-	
-	  await transaction.commit();
-		return code
-	} catch (e) {
-		console.error('transaction error', e.message);
-	  await transaction.rollback();
-	  
-	  // 这里可以处理错误，比如显示错误消息等
-		return -1
-	}	
+  // event 为客户端上传的参数
+  console.log('event : ', event);
+  const { sellNum, id, sellPrice, demType, userId, totalPrice, inputNumValue, sellerId } = event;
+  const db = uniCloud.database();
+  const transaction = await db.startTransaction();
+
+  try {
+    // 1. 获取购买者和发布者的 assets 记录
+    const buyerAssets = await db.collection('assets').where({ userId }).get();
+    const sellerAssets = await db.collection('assets').where({ userId: sellerId }).get();
+
+    if (buyerAssets.data.length === 0 || sellerAssets.data.length === 0) {
+      throw new Error('用户资产记录不存在');
+    }
+
+    const buyerAssetsId = buyerAssets.data[0]._id;
+    const sellerAssetsId = sellerAssets.data[0]._id;
+    const buyerJewel = buyerAssets.data[0].jewel;
+    const sellerJewel = sellerAssets.data[0].jewel;
+
+    // 2. 判断购买者和发布者是否是同一用户
+    const isSameUser = userId === sellerId;
+
+    // 3. 更新购买者和发布者的 jewel 资源
+    if (isSameUser) {
+      // 如果是同一用户，只需扣除手续费
+      await updateUserResource(userId, 'jewel', -(totalPrice * 0.05), transaction);
+    } else {
+      // 如果是不同用户，更新双方的 jewel 资源
+      await updateUserResource(sellerId, 'jewel', totalPrice * 0.95, transaction); // 发布者增加 95%
+      await updateUserResource(userId, 'jewel', -totalPrice, transaction); // 购买者扣除全额
+    }
+
+    // 4. 更新购买者的资源（增加购买的资源）
+    await transaction.collection('assets').doc(buyerAssetsId).update({
+      [demType]: db.command.inc(inputNumValue)
+    });
+
+    // 5. 添加交易记录
+    await transaction.collection('transactionRecord').add({
+      buyerId: userId,
+      sellerId,
+      transactionType: 1,
+      transactionId: id,
+      transactionNum: inputNumValue,
+      transactionTime: new Date()
+    });
+
+    // 6. 更新需求状态
+    if (sellNum === inputNumValue) {
+      // 如果需求全部完成，标记为已完成
+      await transaction.collection('sellRequirement').doc(id).update({
+        isFinished: true
+      });
+    } else {
+      // 如果需求未全部完成，更新剩余数量
+      await transaction.collection('sellRequirement').doc(id).update({
+        sellNum: sellNum - inputNumValue
+      });
+    }
+
+    // 7. 提交事务
+    await transaction.commit();
+
+    // 返回成功信息
+    return {
+      code: 0,
+      message: '交易成功',
+      data: {
+        isSameUser: isSameUser // 返回是否是同一用户
+      }
+    };
+  } catch (e) {
+    console.error('transaction error', e.message);
+    await transaction.rollback(); // 回滚事务
+    return {
+      code: -1,
+      message: e.message
+    };
+  }
 };

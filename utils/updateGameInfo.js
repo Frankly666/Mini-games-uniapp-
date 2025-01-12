@@ -77,3 +77,29 @@ export const updateAssets = async () => {
     console.error('初始化失败:', error);
   }
 };
+
+
+export const getUserAssets = async () => {
+  const userId = uni.getStorageSync('id'); // 获取用户ID
+
+  try {
+    // 调用云函数
+    const res = await uniCloud.callFunction({
+      name: 'selectAssets',
+      data: {
+        userId: userId
+      }
+    });
+
+    if (res.result.code === 0) {
+      const gameInfo = useGameInfoStore();
+      gameInfo.assets = res.result.data[0]; // 更新状态管理中的assets
+      return res.result.data[0]; // 返回查询结果
+    } else {
+      throw new Error(res.result.message);
+    }
+  } catch (error) {
+    console.error('获取用户资源失败:', error);
+    throw error;
+  }
+};

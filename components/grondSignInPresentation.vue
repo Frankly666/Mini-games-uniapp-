@@ -31,6 +31,7 @@
 import { ref, computed, onMounted, watch } from 'vue';
 import { POWERSTONE, useGameInfoStore } from '../stores/gameInfo';
 import { roundToOneDecimal } from '../utils/roundToOneDecimal';
+import { getUserAssets } from '../utils/updateGameInfo';
 
 const gameInfo = useGameInfoStore();
 const userGrounds = ref({}); // 用户的地皮数据
@@ -129,7 +130,7 @@ async function claimEarnings() {
       });
 
       // 更新本地能量石数量
-      gameInfo.assets[POWERSTONE] = roundToOneDecimal(gameInfo.assets[POWERSTONE] + totalEarnings.value)
+      getUserAssets()
 
       // 重新查询地皮数据
       await fetchUserGrounds();

@@ -1,86 +1,76 @@
 'use strict';
-const addAssetsChangeRecord = require('addAssetsChangeRecord');
-const { assetsNameMap } = require('const'); // 引入资源名称映射表
+const updateUserResource = require('updateUserResource'); // 引入更新用户资源模块
 
-
-// 这个云函数是求购市场中用户进行出售资源对用户资源进行操作的事务云函数
 exports.main = async (event, context) => {
-	//event为客户端上传的参数
-	console.log(event)
-	const {buyNum, id, buyPrice, demType, userId, expected, inputNumValue, buyerId} = event
-	const db = uniCloud.database();
-	const dbCmd = db.command
-	const transaction = await db.startTransaction();
-	
-	// 寻找assets的索引id
-	const userAssets = await db.collection('assets').where({userId}).get()
-	const assetsId = userAssets.data[0]._id
-	const nowNum = userAssets.data[0].jewel
-	
-	// 寻找发布者的assets的索引id
-	const publishAssets = await db.collection('assets').where({userId: buyerId}).get()
-	const publishAssetsId = publishAssets.data[0]._id
-	const publlishNowNum = publishAssets.data[0].jewel
-	
-	// 1表示购买者和发布者不同, 2表示两者相同
-	let code = userId === buyerId ? 2 : 1;
-	
-	function roundToOneDecimal(num) {
-	  return Math.round(num * 10) / 10;
-	}
-	
-	try {
-		// 扣除所出售的资源, 只有出售者和发布者id不同时才会进行扣除出售的资源, 要不就是自需自售, 支付出0.05的宝石手续费
-		// 只有不是同一个人的时候才进行扣除用户的资源
-		if(code === 1) {
-			const res3 = await transaction.collection('assets').doc(assetsId).update({
-				[demType]: db.command.inc(-inputNumValue)
-			})
-		}
-		
-		// 加上用户出售所得到的宝石
-		const res4 = await transaction.collection('assets').doc(publishAssetsId).update({
-		  jewel: roundToOneDecimal(nowNum+expected),
-		});
-		
-	  // 增加这一条购买记录, 如果用户刚好购买完就消除这条需求
-	  const res1 = await transaction
-											.collection('transactionRecord')
-											.add({
-														buyerId,
-														sellerId: userId, 
-														transactionType:  2,
-														transactionId: id,
-														transactionNum: inputNumValue,
-														transactionTime: new Date()
-													})
-										
-		// 对这条求购需求进行操作
-	  if (buyNum === inputNumValue) {
-	    await transaction.collection('buyRequirement').doc(id).update({
-	      isFinished: true
-	    });
-	  } else {
-	    await transaction.collection('buyRequirement').doc(id).update({
-	      buyNum: buyNum - inputNumValue
-	    });
-	  }
-		
-		// // 购买者需要减少资源
-		// const description1 = `交易集市中出售${assetsNameMap[demType]}${inputNumValue}个, 单价为${buyPrice}, 共${parseFloat((inputNumValue * buyPrice).toFixed(2))}宝石`;
-		// await addAssetsChangeRecord(buyerId, demType, description1, new Date(), transaction);
+  // event 为客户端上传的参数
+  console.log('event : ', event);
+  const { buyNum, id, buyPrice, demType, userId, expected, inputNumValue, buyerId } = event;
+  const db = uniCloud.database();
+  const transaction = await db.startTransaction();
 
-		// // 出售者需要增加宝石
-		// const description2 = `交易集市中求购成功${assetsNameMap[demType]}${inputNumValue}个, 单价为${buyPrice}, 共得到${parseFloat((inputNumValue * buyPrice).toFixed(2))}宝石`;
-		// await addAssetsChangeRecord(userId, 'jewel', description2, new Date(), transaction);
-	  
-	  await transaction.commit();
-		return code;
-	} catch (e) {
-		console.error('transaction error', e.message);
-	  await transaction.rollback();
-	  
-	  // 这里可以处理错误，比如显示错误消息等
-		return -1;
-	}	
+  try {
+    // 1. 获取出售者和购买者的 assets 记录
+    const sellerAssets = await db.collection('assets').where({ userId }).get();
+    const buyerAssets = await db.collection('assets').where({ userId: buyerId }).get();
+
+    if (sellerAssets.data.length === 0 || buyerAssets.data.length === 0) {
+      throw new Error('用户资产记录不存在');
+    }
+
+    const sellerAssetsId = sellerAssets.data[0]._id;
+    const buyerAssetsId = buyerAssets.data[0]._id;
+
+    // 2. 判断出售者和购买者是否是同一用户
+    const isSameUser = userId === buyerId;
+
+    // 3. 扣除出售者的资源（如果不是同一用户）
+    if (!isSameUser) {
+      await updateUserResource(userId, demType, -inputNumValue, transaction); // 扣除出售的资源
+    }
+
+    // 4. 更新购买者的 jewel 资源（增加出售者应得的宝石）
+    await updateUserResource(buyerId, 'jewel', expected, transaction);
+
+    // 5. 添加交易记录
+    await transaction.collection('transactionRecord').add({
+      buyerId,
+      sellerId: userId,
+      transactionType: 2, // 2 表示出售交易
+      transactionId: id,
+      transactionNum: inputNumValue,
+      transactionTime: new Date()
+    });
+
+    // 6. 更新求购需求状态
+    if (buyNum === inputNumValue) {
+      // 如果需求全部完成，标记为已完成
+      await transaction.collection('buyRequirement').doc(id).update({
+        isFinished: true
+      });
+    } else {
+      // 如果需求未全部完成，更新剩余数量
+      await transaction.collection('buyRequirement').doc(id).update({
+        buyNum: buyNum - inputNumValue
+      });
+    }
+
+    // 7. 提交事务
+    await transaction.commit();
+
+    // 返回成功信息
+    return {
+      code: 0,
+      message: '交易成功',
+      data: {
+        isSameUser: isSameUser // 返回是否是同一用户
+      }
+    };
+  } catch (e) {
+    console.error('transaction error', e.message);
+    await transaction.rollback(); // 回滚事务
+    return {
+      code: -1,
+      message: e.message
+    };
+  }
 };

@@ -29,6 +29,7 @@ import { POWERSTONE, useGameInfoStore } from '../stores/gameInfo';
 import { netWorkError, showTips } from '../utils/error';
 import { getGroundEndTime } from '../utils/getGroundEndTime';
 import { roundToOneDecimal } from '../utils/roundToOneDecimal';
+import { getUserAssets } from '../utils/updateGameInfo';
 
 const props = defineProps(['groundType', 'groundIndex', 'closePop', 'offset', 'updateData']);
 const gameInfo = useGameInfoStore();
@@ -103,7 +104,7 @@ async function confirmUnclock() {
     .then(res => {
       if (res) {
         // 更新本地余额
-        gameInfo.assets[POWERSTONE] = roundToOneDecimal(nowNum - unlockFunds);
+        getUserAssets()
         props.closePop();
         props.updateData(); // 更新地皮数据
         uni.hideLoading();
