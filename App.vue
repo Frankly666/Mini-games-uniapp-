@@ -10,15 +10,17 @@ onLaunch(() => {
 });
 
 onShow(() => {
-
+	if(gameInfo.bgm && gameInfo.bgmIsOpen) {
+		gameInfo.bgm.play()
+	}
 });
 
 onHide(() => {
   console.log('App Hide');
   // 应用进入后台时，停止音乐播放
   if (gameInfo.bgm) {
-    gameInfo.bgm.stop();
-		gameInfo.bgmIsOpen = false;
+    gameInfo.bgm.pause();
+		// gameInfo.bgmIsOpen = false;
   }
 });
 </script>
