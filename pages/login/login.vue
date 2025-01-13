@@ -222,7 +222,13 @@ function handleRegister() {
         title: message || '该账号已注册，请直接登录或修改账号名',
         icon: 'none'
       });
-    } else {
+    } else if(code === 401) {
+			uni.showToast({
+			  title: message || '邀请码填写错误, 请重新输入',
+			  icon: 'none'
+			});
+		}
+		else {
       uni.showToast({
         title: message || '注册失败，请重试',
         icon: 'none'

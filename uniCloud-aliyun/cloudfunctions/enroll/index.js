@@ -115,7 +115,12 @@ exports.main = async (event, context) => {
         if (pusherQuery.data.length > 0) {
           // 如果找到了对应的用户，将其 phone 赋值给 pusherCode
           userData.pusherCode = pusherQuery.data[0].phone;
-        }
+        }else {
+					return {
+					  code: 401,
+					  message: '邀请码错误, 请核对后输入',
+					};
+				}
       }
     }
 
