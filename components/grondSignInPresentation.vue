@@ -117,7 +117,8 @@ async function claimEarnings() {
         userId: uni.getStorageSync('id'),
         earnings: totalEarnings.value,
 				directEarning: roundToOneDecimal(directEarning),
-				indirectEarning: roundToOneDecimal(indirectEarning)
+				indirectEarning: roundToOneDecimal(indirectEarning),
+				gameID: uni.getStorageSync('gameID')
       }
     });
 		

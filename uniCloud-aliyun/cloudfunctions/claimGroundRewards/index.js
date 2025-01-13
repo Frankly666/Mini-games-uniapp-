@@ -1,6 +1,7 @@
 'use strict';
 const updateUserResource = require('updateUserResource'); // 引入更新用户资源模块
 const findReferrers = require('findReferrers'); // 引入查找推荐人模块
+const addAssetsChangeRecord = require('addAssetsChangeRecord') // 明细模块
 const db = uniCloud.database();
 
 /**
@@ -67,7 +68,7 @@ async function updateUserGroundsLastClaimTime(userId) {
  * @param {number} indirectEarning - 间接收益
  * @returns {Promise<{code: number, message: string}>} - 返回操作结果
  */
-async function updateReferrersAssets(userId, referrers, directEarning, indirectEarning) {
+async function updateReferrersAssets(userId, referrers, directEarning, indirectEarning, gameID) {
   const transaction = await db.startTransaction();
 
   try {
@@ -91,6 +92,13 @@ async function updateReferrersAssets(userId, referrers, directEarning, indirectE
         type: isDirect ? 'direct' : 'indirect', // 收益类型（直接或间接）
         createTime: new Date() // 当前时间
       });
+			
+			// 直接收益明细
+			if(isDirect) {
+				await addAssetsChangeRecord(referrerId, 'powerStone', directEarning, `游戏ID为${gameID}的用户地皮收益所得到的直推收益, 增加: `, transaction)
+			}else {
+				await addAssetsChangeRecord(referrerId, 'powerStone', indirectEarning, `游戏ID为${gameID}的用户地皮收益所得到的间推收益, 增加: `, transaction)
+			}
     }
 
     // 提交事务
@@ -120,7 +128,7 @@ async function updateReferrersAssets(userId, referrers, directEarning, indirectE
  */
 exports.main = async (event, context) => {
   console.log("event:", event); // 打印 event 对象
-  const { userId, earnings, directEarning, indirectEarning } = event;
+  const { userId, earnings, directEarning, indirectEarning, gameID } = event;
 
   try {
     const transaction = await db.startTransaction();
@@ -151,7 +159,8 @@ exports.main = async (event, context) => {
         userId,
         referrers,
         parseFloat((directEarning).toFixed(2)),
-        parseFloat((indirectEarning).toFixed(2))
+        parseFloat((indirectEarning).toFixed(2)),
+				gameID
       );
       if (updateReferrersResult.code !== 0) {
         await transaction.rollback();

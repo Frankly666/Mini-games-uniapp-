@@ -1,8 +1,9 @@
 {
   "name": "claimGroundRewards",
   "dependencies": {
-    "updateUserResource": "file:../common/updateUserResource",
-    "findReferrers": "file:../common/findReferrers"
+    "addAssetsChangeRecord": "file:../common/addAssetsChangeRecord",
+    "findReferrers": "file:../common/findReferrers",
+    "updateUserResource": "file:../common/updateUserResource"
   },
   "extensions": {
     "uni-cloud-jql": {}
