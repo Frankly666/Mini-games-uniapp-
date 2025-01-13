@@ -44,7 +44,7 @@
 			</view>
 			<view class="input-group">
 				<text class="label">邀请码</text>
-				<input class="input" type="text" placeholder="请输入邀请码(选填)" v-model="inviteCode" @input="handleInput('inviteCode', $event)" />
+				<input class="input" type="text" placeholder="请输入邀请码(老用户选填, 新用户必填)" v-model="inviteCode" @input="handleInput('inviteCode', $event)" />
 			</view>
 			<button class="btn register-btn" @click="handleRegister">注册</button>
 		</view>
@@ -222,13 +222,17 @@ function handleRegister() {
         title: message || '该账号已注册，请直接登录或修改账号名',
         icon: 'none'
       });
-    } else if(code === 401) {
-			uni.showToast({
-			  title: message || '邀请码填写错误, 请重新输入',
-			  icon: 'none'
-			});
-		}
-		else {
+    } else if (code === 401) {
+      uni.showToast({
+        title: message || '邀请码填写错误, 请重新输入',
+        icon: 'none'
+      });
+    } else if (code === 402) {
+      uni.showToast({
+        title: message || '老用户已有推荐人，无需填写邀请码',
+        icon: 'none'
+      });
+    } else {
       uni.showToast({
         title: message || '注册失败，请重试',
         icon: 'none'

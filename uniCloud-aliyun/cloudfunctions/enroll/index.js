@@ -85,6 +85,15 @@ exports.main = async (event, context) => {
       const oldUserData = oldUserQuery.data[0]; // 获取 oldUser 中的用户数据
       isOldUser = true;
 
+      // 检查 oldUserData.pusherPhone 是否有值
+      if (oldUserData.pusherPhone && inviteCode) {
+        // 如果 oldUserData.pusherPhone 有值且用户填写了邀请码，返回错误
+        return {
+          code: 402,
+          message: '老用户已有推荐人，无需填写邀请码',
+        };
+      }
+
       // 使用 oldUser 中的数据
       userData = {
         phone: oldUserData.phone,
@@ -98,6 +107,14 @@ exports.main = async (event, context) => {
       };
     } else {
       // 如果 oldUser 中不存在该用户，直接使用传入的数据注册
+      if (!inviteCode) {
+        // 新用户必须填写邀请码
+        return {
+          code: 401,
+          message: '新用户必须填写邀请码',
+        };
+      }
+
       userData = {
         phone,
         avatar: defaultAvatar,
@@ -115,12 +132,12 @@ exports.main = async (event, context) => {
         if (pusherQuery.data.length > 0) {
           // 如果找到了对应的用户，将其 phone 赋值给 pusherCode
           userData.pusherCode = pusherQuery.data[0].phone;
-        }else {
-					return {
-					  code: 401,
-					  message: '邀请码错误, 请核对后输入',
-					};
-				}
+        } else {
+          return {
+            code: 401,
+            message: '邀请码错误, 请核对后输入',
+          };
+        }
       }
     }
 
