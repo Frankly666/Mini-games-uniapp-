@@ -458,7 +458,7 @@ async function getTempFileURL(fileID) {
         width: 42vw;
         text-align: center;
         top: 35.4vw;
-        left: 12vw;
+        left: 16vw;
         font-weight: bold;
         font-size: 5vw;
         color: black;
@@ -483,8 +483,8 @@ async function getTempFileURL(fileID) {
 
       .editName {
         position: absolute;
-        top: 35.4vw;
-        right: 16vw;
+        top: 34vw;
+        right: 13vw;
         width: 15vw;
         height: 8vw;
         background: url('../static/home/edit.png') no-repeat center center / contain;
