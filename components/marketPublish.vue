@@ -99,13 +99,13 @@
 	
 	
 	const expectedNum = computed(() => {
-		if(inputPriceValue.value < 0.2 || inputPriceValue.value > 10) return 0
+		if(inputPriceValue.value < minimumPrice[props.gemImgName[selectIndex.value]]) return 0
 		 const product = inputNumValue.value * inputPriceValue.value * 0.95;
 		 return roundToOneDecimal(product)
 	})
 	
 	const needPowerStoneNum = computed(() => {
-		if(inputPriceValue.value < 0.2 || inputPriceValue.value > 10) return 0
+		if(inputPriceValue.value < minimumPrice[props.gemImgName[selectIndex.value]]) return 0
 		return roundToOneDecimal(inputNumValue.value * inputPriceValue.value)
 	})
 	const isShowWran = computed(() => {
