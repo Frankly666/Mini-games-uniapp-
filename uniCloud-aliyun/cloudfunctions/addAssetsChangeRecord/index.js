@@ -3,7 +3,7 @@
 exports.main = async (event, context) => {
   console.log('event : ', event);
 
-  const { userId, resourceType, description } = event;
+  const { userId, resourceType, description, num } = event;
   const db = uniCloud.database();
   const transaction = await db.startTransaction();
 
@@ -16,6 +16,7 @@ exports.main = async (event, context) => {
       userId,
       resourceType,
       description,
+			num,
       time, // 使用当前时间
     });
 
@@ -31,6 +32,7 @@ exports.main = async (event, context) => {
         resourceType,
         description,
         time,
+				num,
         recordId: result.id, // 返回新记录的 _id
       },
     };

@@ -123,6 +123,7 @@ import { JEWEL, POWERSTONE, useGameInfoStore } from "../stores/gameInfo";
 import { roundToOneDecimal } from "../utils/roundToOneDecimal";
 import { netWorkError, showTips } from "../utils/error";
 import { getUserAssets } from "../utils/updateGameInfo";
+import { addAssetsChangeRecord, assetsNameMap } from "../utils/addAssetsChangeRecord ";
 
 const props = defineProps([
   "controlShowPop",
@@ -179,109 +180,133 @@ function handleSellNum(num) {
 
 // 购买操作逻辑
 async function confirmSellPublish() {
-  const sellNum = props.certainItem.sellNum;
-  const id = props.certainItem._id;
-  const sellPrice = props.certainItem.sellPrice;
-  const gemType = props.certainItem.gemType;
+    const sellNum = props.certainItem.sellNum;
+    const id = props.certainItem._id;
+    const sellPrice = props.certainItem.sellPrice;
+    const gemType = props.certainItem.gemType;
 
-  // 如果输入的数值不合理直接跳出
-  if (inputNumValue.value <= 0 || inputNumValue.value > sellNum) {
-		showTips("数量有误")
-		return
-	};
-  // 如果超过自己的余额就直接跳出
-  if (totalPrice.value > gameInfo.assets[JEWEL]) {
-    handleShowWran(true);
-		showTips("余额不足")
-    return;
-  }
+    // 如果输入的数值不合理直接跳出
+    if (inputNumValue.value <= 0 || inputNumValue.value > sellNum) {
+        showTips("数量有误");
+        return;
+    }
+    // 如果超过自己的余额就直接跳出
+    if (totalPrice.value > gameInfo.assets[JEWEL]) {
+        handleShowWran(true);
+        showTips("余额不足");
+        return;
+    }
 
-	uni.showLoading({
-		title: '购买中...',
-		mask: true
-	})
-	
-  // 进行数据库操作
-	uniCloud.callFunction({
-			name: "sellTrade",
-			data: {
-				sellNum: sellNum,
-				id: id,
-				sellPrice: sellPrice,
-				sellerId: props.certainItem.sellerId,
-				gemType: gemType,
-				userId: uni.getStorageSync('id'),
-				totalPrice: totalPrice.value,
-				inputNumValue: inputNumValue.value,
-			}
-		}).then(res => {
-			// console.log("code:",res.result)
-			if(res.result) {
-				// 关闭弹窗
-				props.controlShowPop(false);
-				props.updateData();
-				
-				// 实时更新资源数量
-				getUserAssets()
-				
-				uni.hideLoading();
-			}else {
-				netWorkError()
-			}
-		});
+    uni.showLoading({
+        title: '购买中...',
+        mask: true
+    });
+
+    // 进行数据库操作
+    uniCloud.callFunction({
+        name: "sellTrade",
+        data: {
+            sellNum: sellNum,
+            id: id,
+            sellPrice: sellPrice,
+            sellerId: props.certainItem.sellerId,
+            gemType: gemType,
+            userId: uni.getStorageSync('id'),
+            totalPrice: totalPrice.value,
+            inputNumValue: inputNumValue.value,
+        }
+    }).then(res => {
+        uni.hideLoading(); // 隐藏加载动画
+        if (res.result.code === 0) {
+            showTips("交易成功！");
+						// 实时更新资源数量
+						getUserAssets();
+						
+						// 需要加上用户所购买的石头,再减去用户花费的宝石
+						addAssetsChangeRecord(uni.getStorageSync('id'), gemType, inputNumValue.value, `出售市场中购买${inputNumValue.value}个(单价${sellPrice}), 获得:`)
+						addAssetsChangeRecord(uni.getStorageSync('id'), JEWEL, totalPrice.value, `出售市场中购买${assetsNameMap[gemType]}${inputNumValue.value}个(单价${sellPrice}),扣除:`)
+						
+						// 加上sellerId的宝石
+						addAssetsChangeRecord(props.certainItem.sellerId, JEWEL, roundToOneDecimal(totalPrice.value * 0.95), `所发布的${assetsNameMap[gemType]}(单价${sellPrice})被购买${inputNumValue.value}个,共获得(减去5%手续费):`)
+						
+            // 关闭弹窗
+            props.controlShowPop(false);
+            props.updateData();
+            
+        } else {
+            showTips(`交易失败: ${res.result.message}`);
+        }
+    }).catch(err => {
+        uni.hideLoading(); // 隐藏加载动画
+        showTips("网络错误，请稍后重试");
+        console.error('云函数调用失败:', err);
+    });
 }
 
 // 出售操作逻辑
 async function confirmNeedPublish() {
-  const buyNum = props.certainItem.buyNum; // 这条需求的最大值
-  const id = props.certainItem._id;
-  const buyPrice = props.certainItem.buyPrice;
-  const gemType = props.certainItem.gemType;
+    const buyNum = props.certainItem.buyNum; // 这条需求的最大值
+    const id = props.certainItem._id;
+    const buyPrice = props.certainItem.buyPrice;
+    const gemType = props.certainItem.gemType;
 
-  // 确保输入值为正确范围
-  if (inputNumValue.value <= 0 || inputNumValue.value > buyNum) {
-		showTips("数量有误")
-		return
-	};
-  // 如果自己没那么多的宝石也直接跳出
-  if (inputNumValue.value > gameInfo.assets[gemType]) {
-    handleShowWran(true);
-		showTips("余额不足")
-    return;
-  }
-	
-	uni.showLoading({
-		title: '出售中...',
-		mask: true
-	})
+    // 确保输入值为正确范围
+    if (inputNumValue.value <= 0 || inputNumValue.value > buyNum) {
+        showTips("数量有误");
+        return;
+    }
+    // 如果自己没那么多的宝石也直接跳出
+    if (inputNumValue.value > gameInfo.assets[gemType]) {
+        handleShowWran(true);
+        showTips("余额不足");
+        return;
+    }
 
-  // 进行数据库操作
-	uniCloud.callFunction({
-			name: "needTrade",
-			data: {
-				buyNum: buyNum,
-				id: id,
-				buyPrice: buyPrice,
-				buyerId: props.certainItem.buyerId,
-				gemType: gemType,
-				userId: uni.getStorageSync('id'),
-				expected: expected.value,
-				inputNumValue: inputNumValue.value,
-			},
-		})
-		.then((res) => {
-			if(res.result) {
-				// 关闭弹窗
-				props.controlShowPop(false);
-				props.updateData();
-				
-				// 实时更新资源数量
-				getUserAssets()
-				uni.hideLoading()
-			}else {
-				netWorkError()
-			}
-		});
+    uni.showLoading({
+        title: '出售中...',
+        mask: true
+    });
+
+    // 进行数据库操作
+    uniCloud.callFunction({
+        name: "needTrade",
+        data: {
+            buyNum: buyNum,
+            id: id,
+            buyPrice: buyPrice,
+            buyerId: props.certainItem.buyerId,
+            gemType: gemType,
+            userId: uni.getStorageSync('id'),
+            expected: expected.value,
+            inputNumValue: inputNumValue.value,
+        },
+    })
+    .then((res) => {
+        uni.hideLoading(); // 隐藏加载动画
+        if (res.result.code === 0) {
+            showTips("交易成功！");
+						// 实时更新资源数量
+						getUserAssets();
+						
+						// 出售扣除用户的该类型的石头, 然后加上卖出成功得到的宝石
+						addAssetsChangeRecord(uni.getStorageSync('id'), gemType, inputNumValue.value, `求购市场中出售${assetsNameMap[gemType]}(单价${buyPrice}), 扣除:`)
+						addAssetsChangeRecord(uni.getStorageSync('id'), JEWEL, expected.value, `求购市场中出售${assetsNameMap[gemType]}${inputNumValue.value}个(单价${buyPrice}), 共获得(扣除5%手续费):`)
+						
+						// 需要向buyerId加上他所求购的石头
+						addAssetsChangeRecord(props.certainItem.buyerId, gemType, inputNumValue.value, `所发布求购需求${assetsNameMap[gemType]}(单价${buyPrice}), 成功求购:`)
+						
+            // 关闭弹窗
+            props.controlShowPop(false);
+            props.updateData();
+        } else {
+            showTips(`交易失败: ${res.result.message}`);
+        }
+    })
+    .catch((err) => {
+        uni.hideLoading(); // 隐藏加载动画
+        showTips("网络错误，请稍后重试");
+        console.error('云函数调用失败:', err);
+    });
 }
 </script>
 

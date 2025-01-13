@@ -23,6 +23,7 @@
 			:updateData='updateData'
 			/>
 		
+		<!-- 转赠弹窗 -->
 		<sent-pop-vue
 			v-if="isShowSentPop"
 			:closePop = '() => {setShowSentPop(false)}'
@@ -102,9 +103,10 @@
 	import buyCellPop from '../../components/buyCellPop.vue';
 	import sentPopVue from '../../components/sentPop.vue';
 	import { formatLargeNumber } from '../../utils/formatLargeNumber'
-import { useGameInfoStore } from '../../stores/gameInfo';
-import { roundToOneDecimal } from '../../utils/roundToOneDecimal';
-import { getUserAssets } from '../../utils/updateGameInfo';
+	import { JEWEL, useGameInfoStore } from '../../stores/gameInfo';
+	import { roundToOneDecimal } from '../../utils/roundToOneDecimal';
+	import { getUserAssets } from '../../utils/updateGameInfo';
+import { addAssetsChangeRecord, assetsNameMap } from '../../utils/addAssetsChangeRecord ';
 
 	const marketCurrentIndex = ref(0)
 	const itemCurrentIndex = ref(0)
@@ -231,6 +233,13 @@ import { getUserAssets } from '../../utils/updateGameInfo';
 							});
 							
 							getUserAssets()
+							
+							// 取消出售记录
+							if(marketCurrentIndex.value === 0) {
+								addAssetsChangeRecord(uni.getStorageSync('id'), item.gemTpe, item.sellNum, `出售市场中取消出售${assetsNameMap[item.gemType]}(单价${item.sellPrice}), 退回: `)
+							}else {
+								addAssetsChangeRecord(uni.getStorageSync('id'), JEWEL, roundToOneDecimal(item.buyNum*item.buyPrice), `求购市场中取消求购${assetsNameMap[item.gemType]}(单价${item.buyPrice}), 退回: `)
+							}
 
 							// 刷新数据
 							await updateData();

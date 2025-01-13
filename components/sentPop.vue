@@ -69,7 +69,9 @@
 	import { JEWEL, POWERSTONE, useGameInfoStore } from '../stores/gameInfo';
 	import { roundToOneDecimal } from '../utils/roundToOneDecimal';
 	import { netWorkError, showSuccus, showTips } from '../utils/error';
-import { getUserAssets } from '../utils/updateGameInfo';
+	import { getUserAssets } from '../utils/updateGameInfo';
+	import { addAssetsChangeRecord } from '../utils/addAssetsChangeRecord ';
+	import { getUserIDByGameID } from '../utils/getUserIDByGameID';
 	
 	const gameInfo = useGameInfoStore()
 	const props = defineProps(['closePop', 'title','updateData'])
@@ -154,7 +156,7 @@ import { getUserAssets } from '../utils/updateGameInfo';
 	        gameID: gameIDInputValue.value,
 	        userId: uni.getStorageSync('id'),
 	        assetsType: gemType,
-	        sendNum: inputNumValue.value,
+	        sendNum: roundToOneDecimal(inputNumValue.value),
 	        premium: premium,
 	      },
 	    });
@@ -165,6 +167,20 @@ import { getUserAssets } from '../utils/updateGameInfo';
 	    if (res.result.code === 1) {
 	      // 更新本地资产数量
 	      getUserAssets()
+				
+				// 转赠者需要扣除转赠的数量
+				await addAssetsChangeRecord(uni.getStorageSync('id'), POWERSTONE, needPowerStoneNum.value, `在交易集市中向游戏ID为${gameIDInputValue.value}的转赠能量石, 扣除(含8%手续费):`)
+				// 受赠者需要加上所转赠的数量
+				const result = await getUserIDByGameID(gameIDInputValue.value);
+				if (result.code === 0) {
+						console.log('用户唯一 _id:', result.data._id);
+						const useId = result.data._id;
+						addAssetsChangeRecord(useId, POWERSTONE, roundToOneDecimal(inputNumValue.value), `在交易集市中收到游戏ID为${uni.getStorageSync('gameID')}的转赠能量石, 收到:`)
+				} else {
+						console.error('获取用户 _id 失败:', result.message);
+						// 在这里处理错误逻辑
+				}
+				
 				
 	      // 显示转赠成功提示
 	      showSuccus('转赠成功!');

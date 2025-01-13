@@ -7,7 +7,7 @@
  * @param {string} description - 描述信息
  * @returns {Promise<object>} - 返回云函数的调用结果
  */
-export const addAssetsChangeRecord = async (userId, resourceType, description) => {
+export const addAssetsChangeRecord = async (userId, resourceType,num, description) => {
   try {
     // 调用云函数
     const result = await uniCloud.callFunction({
@@ -15,6 +15,7 @@ export const addAssetsChangeRecord = async (userId, resourceType, description) =
       data: {
         userId,
         resourceType,
+				num,
         description,
       },
     });
@@ -28,4 +29,11 @@ export const addAssetsChangeRecord = async (userId, resourceType, description) =
     console.error('调用云函数失败:', err.message);
     throw err;
   }
+};
+
+export const assetsNameMap = {
+  powerStone: '能量石',
+  diamond: '金刚石',
+  resourceStone: '资源石',
+  jewel: '宝石',
 };

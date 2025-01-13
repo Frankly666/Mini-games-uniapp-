@@ -117,6 +117,7 @@ function handleLogin() {
 			uni.setStorageSync(ID, data.userId);
 			uni.setStorageSync(AVATAR, data.avatar);
 			uni.setStorageSync("wechat", data.wechat || ""); // 存储 wechat 字段，如果不存在则存储空字符串
+			uni.setStorageSync("gameID", data.gameID)
 			
 			gameInfo.id = data.userId;
 			gameInfo.userName = data.userName;

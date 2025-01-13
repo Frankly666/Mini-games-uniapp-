@@ -82,8 +82,9 @@
 	import { computed, onMounted, ref } from 'vue';
 	import { JEWEL, POWERSTONE, useGameInfoStore } from '../stores/gameInfo';
 	import { roundToOneDecimal } from '../utils/roundToOneDecimal';
-	import { netWorkError, showTips } from '../utils/error';
+	import { netWorkError, showSuccus, showTips } from '../utils/error';
 	import { getUserAssets } from '../utils/updateGameInfo';
+import { addAssetsChangeRecord, assetsNameMap } from '../utils/addAssetsChangeRecord ';
 	
 	const gameInfo = useGameInfoStore()
 	const props = defineProps(['controlPublish', 'title', 'gemItems', 'gemImgName', 'updateData'])
@@ -130,10 +131,10 @@
 		isShowNotEnough.value = false
 	}
 	function setPriceValue(price) {
-		inputPriceValue.value = price
+		inputPriceValue.value = parseFloat(price)
 	}
 	function setNumValue(num) {
-		inputNumValue.value = num
+		inputNumValue.value = parseFloat(num)
 	}
 	
 	// 处理加减数量以及设置最大值
@@ -151,94 +152,105 @@
 	
 	// 发布出售逻辑操作
 	async function confirmSellPublish() {
-		
-		if(inputPriceValue.value < minimumPrice[props.gemImgName[selectIndex.value]]) {
-			showTips("单价不满足要求")
-			return
-		};
-		if(inputNumValue.value > gameInfo.assets[props.gemImgName[selectIndex.value]]) {
-			isShowNotEnough.value = true
-			showTips("余额不足")
-			return;
-		}
-		const gemType = props.gemImgName[selectIndex.value]
-		uni.showLoading({
-			title: '发布中',
-			mask:true
-		})
-		
-		// 后端数据操作逻辑
-		uniCloud.callFunction({
-			name:"sellPublish",
-			data:{
-				addData: {
-					sellerId: uni.getStorageSync('id'),
-					gemType: gemType,
-					sellNum: parseInt(inputNumValue.value),
-					sellPrice: parseFloat(inputPriceValue.value),
-					isFinished: false,
-					publishTime: new Date()
-				},
-				inputNumValue: inputNumValue.value,
-				userId: uni.getStorageSync('id')
-			}
-		}).then(res => {
-			if(res) {
-				getUserAssets()
-				props.controlPublish(false)
-				props.updateData()
-				uni.hideLoading()
-			}else {
-				netWorkError()
-			}
-		})
+	    if (inputPriceValue.value < minimumPrice[props.gemImgName[selectIndex.value]]) {
+	        showTips("单价不满足要求");
+	        return;
+	    }
+	    if (inputNumValue.value > gameInfo.assets[props.gemImgName[selectIndex.value]]) {
+	        isShowNotEnough.value = true;
+	        showTips("余额不足");
+	        return;
+	    }
+	    const gemType = props.gemImgName[selectIndex.value];
+	    uni.showLoading({
+	        title: '发布中',
+	        mask: true
+	    });
+	
+	    // 后端数据操作逻辑
+	    uniCloud.callFunction({
+	        name: "sellPublish",
+	        data: {
+	            addData: {
+	                sellerId: uni.getStorageSync('id'),
+	                gemType: gemType,
+	                sellNum: parseInt(inputNumValue.value),
+	                sellPrice: parseFloat(inputPriceValue.value),
+	                isFinished: false,
+	                publishTime: new Date()
+	            },
+	            inputNumValue: inputNumValue.value,
+	            userId: uni.getStorageSync('id')
+	        }
+	    }).then(res => {
+	        uni.hideLoading();
+	        if (res.result.code === 0) {
+	            showSuccus("发布成功!");
+							console.log("res:", res)
+	            getUserAssets();
+							addAssetsChangeRecord(uni.getStorageSync('id'), gemType, inputNumValue.value, `发布出售(单价: ${inputPriceValue.value}), 由平台扣除`)
+	            props.controlPublish(false);
+	            props.updateData();
+	        } else {
+	            showTips(`发布失败: ${res.result.message}`);
+	        }
+	    }).catch(err => {
+	        uni.hideLoading();
+	        showTips("网络错误，请稍后重试");
+	        console.error('云函数调用失败:', err);
+	    });
 	}
 	
 	// 发布求购的逻辑操作
 	async function confirmNeedPublish() {
-		if(inputPriceValue.value < minimumPrice[props.gemImgName[selectIndex.value]]) {
-			showTips("单价不符合要求")
-			return
-		};
-		const gemType = props.gemImgName[selectIndex.value]
-		const totalPrice = roundToOneDecimal(inputNumValue.value * inputPriceValue.value)
-		
-		if(totalPrice > gameInfo.assets[JEWEL]) {
-			isShowNotEnough.value = true;
-			showTips("余额不足")
-			return
-		}
-		uni.showLoading({
-			title: '发布中',
-			mask: true
-		})
-		
-		// 求购后端逻辑操作
-		uniCloud.callFunction({
-			name:"needPublish",
-			data:{
-				addData: {
-					buyerId: uni.getStorageSync('id'),
-					gemType: gemType,
-					buyNum: parseInt(inputNumValue.value),
-					buyPrice: parseFloat(inputPriceValue.value),
-					isFinished: false,
-					publishTime: new Date()
-				},
-				totalPrice: totalPrice,
-				userId: uni.getStorageSync('id')
-			}
-		}).then(res => {
-			if(res) {
-				getUserAssets();
-				props.controlPublish(false)
-				props.updateData()
-				uni.hideLoading()
-			}else {
-				netWorkError()
-			}
-			
-		})
+	    if (inputPriceValue.value < minimumPrice[props.gemImgName[selectIndex.value]]) {
+	        showTips("单价不符合要求");
+	        return;
+	    }
+	    const gemType = props.gemImgName[selectIndex.value];
+	    const totalPrice = roundToOneDecimal(inputNumValue.value * inputPriceValue.value);
+	
+	    if (totalPrice > gameInfo.assets[JEWEL]) {
+	        isShowNotEnough.value = true;
+	        showTips("余额不足");
+	        return;
+	    }
+	    uni.showLoading({
+	        title: '发布中',
+	        mask: true
+	    });
+	
+	    // 求购后端逻辑操作
+	    uniCloud.callFunction({
+	        name: "needPublish",
+	        data: {
+	            addData: {
+	                buyerId: uni.getStorageSync('id'),
+	                gemType: gemType,
+	                buyNum: parseInt(inputNumValue.value),
+	                buyPrice: parseFloat(inputPriceValue.value),
+	                isFinished: false,
+	                publishTime: new Date()
+	            },
+	            totalPrice: totalPrice,
+	            userId: uni.getStorageSync('id')
+	        }
+	    }).then(res => {
+	        uni.hideLoading(); // 隐藏加载动画
+	        if (res.result.code === 0) {
+	            showTips("求购需求发布成功！");
+	            getUserAssets();
+							addAssetsChangeRecord(uni.getStorageSync('id'), JEWEL, roundToOneDecimal(inputNumValue.value*inputPriceValue.value), `发布求购${assetsNameMap[gemType]}${inputNumValue.value}个(单价: ${inputPriceValue.value}), 由平台扣除`)
+	            props.controlPublish(false);
+	            props.updateData();
+	        } else {
+	            showTips(`求购需求发布失败: ${res.result.message}`);
+	        }
+	    }).catch(err => {
+	        uni.hideLoading(); // 隐藏加载动画
+	        showTips("网络错误，请稍后重试");
+	        console.error('云函数调用失败:', err);
+	    });
 	}
 </script>
 

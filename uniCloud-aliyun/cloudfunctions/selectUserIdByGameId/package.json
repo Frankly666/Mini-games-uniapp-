@@ -1,0 +1,7 @@
+{
+  "name": "selectUserIdByGameId",
+  "dependencies": {},
+  "extensions": {
+    "uni-cloud-jql": {}
+  }
+}
