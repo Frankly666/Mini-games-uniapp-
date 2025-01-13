@@ -236,7 +236,7 @@ import { addAssetsChangeRecord, assetsNameMap } from '../../utils/addAssetsChang
 							
 							// 取消出售记录
 							if(marketCurrentIndex.value === 0) {
-								addAssetsChangeRecord(uni.getStorageSync('id'), item.gemTpe, item.sellNum, `出售市场中取消出售${assetsNameMap[item.gemType]}(单价${item.sellPrice}), 退回: `)
+								addAssetsChangeRecord(uni.getStorageSync('id'), item.gemType, item.sellNum, `出售市场中取消出售${assetsNameMap[item.gemType]}(单价${item.sellPrice}), 退回: `)
 							}else {
 								addAssetsChangeRecord(uni.getStorageSync('id'), JEWEL, roundToOneDecimal(item.buyNum*item.buyPrice), `求购市场中取消求购${assetsNameMap[item.gemType]}(单价${item.buyPrice}), 退回: `)
 							}

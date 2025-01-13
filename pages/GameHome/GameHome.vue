@@ -4,7 +4,7 @@
 			
 			<!-- 头像, 资源, 工具栏 -->
 			<avatar @click="() => {handleInfo(true)}"></avatar>
-			<assets-header :judge='1'></assets-header>
+			<assets-header :judge='1' :openRecordPopup="openRecordPopup"/>
 			<tools-bar :handleShow="handleShow"></tools-bar>
 			
 			<!-- 弹出组件 -->
@@ -18,6 +18,11 @@
 			
 			<!-- 签到组件 -->
 			<home-sign-in-presentation-vue/>
+			
+			<!-- 资源明细展示 -->
+			<gem-record-popup-vue v-model:visible="isPopupVisible" :gemType="currentGemType"/>	
+			<button @click="openRecordPopup('diamond')">查看钻石记录</button>
+			
 			
 			<view class="map-container"
 				@touchstart="handleTouchStart"
@@ -51,6 +56,7 @@ import activityPopVue from '../../components/activityPop.vue';
 import announcementPop from '../../components/announcementPop.vue';
 import talentCenterPop from '../../components/talentCenterPop.vue';
 import homeSignInPresentationVue from '../../components/homeSignInPresentation.vue';
+import GemRecordPopupVue from '../../components/GemRecordPopup.vue';
 import bagVue from '../../components/bag.vue';
 import { ASSETS, AVATAR, ID, ISFIRST, PHONE, USERNAME, useGameInfoStore } from '../../stores/gameInfo';
 import Cache from '../../utils/cache';
@@ -80,6 +86,8 @@ const setCache = Cache.setCache; // 这里使用的是实例化函数
 const getCache = Cache.getCache;  // 使用的是静态函数
 const groundsDB = uniCloud.importObject("grounds");
 const isShowLoading = ref(true);
+const isPopupVisible = ref(false);
+const currentGemType = ref('');
 
 translateX.value = gameInfo.translateX
 translateY.value = gameInfo.translateY
@@ -155,6 +163,12 @@ function handleInfo(type){
 function handleShowTanlentPop(type) {
 	isShowTalentPop.value = type
 }
+
+// 打开弹窗
+const openRecordPopup = (gemType) => {
+  currentGemType.value = gemType;
+  isPopupVisible.value = true;
+};
 
 onMounted(async () => {	
 	uni.hideLoading()

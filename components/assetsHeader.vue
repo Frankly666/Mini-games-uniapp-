@@ -1,56 +1,81 @@
 <template>
   <view>
     <view class="assetsBar1" v-if="props.judge === 2">
-      <view class="asset" 
-            v-for="(item, index) in assets" 
-            :key="index" 
-            >
-				<view class="dem" :style="`background: url(${getImageUrl(item)}) no-repeat center center / contain;`"></view>
-        <span>{{formatLargeNumber(gameInfo.assets?.[item])}}</span>
+      <view
+        class="asset"
+        v-for="(item, index) in assets"
+        :key="index"
+        @click="handleAssetClick(item)"
+      >
+        <view
+          class="dem"
+          :style="`background: url(${getImageUrl(item)}) no-repeat center center / contain;`"
+        ></view>
+        <span>{{ formatLargeNumber(gameInfo.assets?.[item]) }}</span>
       </view>
     </view>
-	
-	<view class="assetsBar2" v-if="props.judge === 1">
-	    <view class="asset" 
-	          v-for="(item, index) in assets" 
-	          :key="index" 
-	          >
-				<view class="dem" :style="`background: url(${getImageUrl(item)}) no-repeat center center / contain;`"></view>
-	      <span>{{formatLargeNumber(gameInfo.assets?.[item])}}</span>
-	    </view>
-	</view>
+
+    <view class="assetsBar2" v-if="props.judge === 1">
+      <view
+        class="asset"
+        v-for="(item, index) in assets"
+        :key="index"
+        @click="handleAssetClick(item)"
+      >
+        <view
+          class="dem"
+          :style="`background: url(${getImageUrl(item)}) no-repeat center center / contain;`"
+        ></view>
+        <span>{{ formatLargeNumber(gameInfo.assets?.[item]) }}</span>
+      </view>
+    </view>
   </view>
 </template>
 
 <script setup>
-import { onMounted, reactive, ref, watch } from 'vue';
-import { PHONE, useGameInfoStore, ID } from '../stores/gameInfo';
-import Cache from '../utils/cache';
-import { updateAssets } from '../utils/updateGameInfo';
+import { onMounted } from 'vue';
+import { useGameInfoStore } from '../stores/gameInfo';
 import { formatLargeNumber } from '../utils/formatLargeNumber';
+import { updateAssets } from '../utils/updateGameInfo'; // 确保引入 updateAssets
 
-	
-// 这里是详情页中的资源展示
+// 资源类型
 const assets = ['powerStone', 'diamond', 'resourceStone', 'jewel'];
-const gameInfo = useGameInfoStore()
-const props = defineProps(['judge'])
-const getCache = Cache.getCache;
-const assetsDB = uniCloud.importObject('assets')
-const userDB  = uniCloud.importObject('user')
+const gameInfo = useGameInfoStore();
 
+// 接收 props
+const props = defineProps({
+  judge: {
+    type: Number,
+    required: true,
+  },
+  openRecordPopup: {
+    type: Function,
+    required: true,
+  },
+});
+
+// 获取资源图片 URL
 function getImageUrl(name) {
-	return `../static/market/${name}.png`;
+  return `../static/market/${name}.png`;
+}
+
+// 点击资源项时触发
+function handleAssetClick(assetType) {
+  // 调用传入的 openRecordPopup 方法
+  props.openRecordPopup(assetType);
 }
 
 // 防止刷新丢失数据
 onMounted(async () => {
   try {
-		updateAssets()
+    updateAssets(); // 调用 updateAssets
   } catch (error) {
     console.error('初始化失败:', error);
   }
 });
 </script>
+
+
 
 <style lang="less">
 	// 交易中心所用的
