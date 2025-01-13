@@ -60,7 +60,7 @@ export const useGameInfoStore = defineStore('gameInfo', {
 					"groundName": "一级土地",
 					"unlockFunds": 98,  // 解锁租金 
 					"duration": 30,  // 租用时限
-					"dailyEarnings": 5.9,  // 每日收益
+					"dailyEarnings": 5.6,  // 每日收益
 					"directPushEarnings": 0.1,  // 直推收益
 					"inDepthReturns": 0.01  // 间推收益
 				},
@@ -75,7 +75,7 @@ export const useGameInfoStore = defineStore('gameInfo', {
 				"3": {
 					"groundName": "二级土地",
 					"unlockFunds": 698,
-					"duration": 240,
+					"duration": 118,
 					"dailyEarnings": 10.7,
 					"directPushEarnings": 0.15,
 					"inDepthReturns": 0.03
@@ -83,7 +83,7 @@ export const useGameInfoStore = defineStore('gameInfo', {
 				"4": {
 					"groundName": "三级土地",
 					"unlockFunds": 1690,
-					"duration": 48,
+					"duration": 240,
 					"dailyEarnings": 12.5,
 					"directPushEarnings": 0.20,
 					"inDepthReturns": 0.04
