@@ -24,8 +24,11 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
-import { useGameInfoStore } from '../stores/gameInfo';
+import { POWERSTONE, useGameInfoStore } from '../stores/gameInfo';
 import { updateAssets } from '../utils/updateGameInfo';
+import { addAssetsChangeRecord } from '../utils/addAssetsChangeRecord ';
+import getUserIDByGameID from '../utils/getUserIDByGameID';
+import { roundToOneDecimal } from '../utils/roundToOneDecimal';
 
 const gameInfo = useGameInfoStore();
 
@@ -81,6 +84,19 @@ async function confirmTransferResource() {
     // 处理云函数返回结果
     if (res.result.code === 1) {
       uni.showToast({ title: '资源转移成功', icon: 'success' });
+			
+			// 转赠者需要扣除转赠的数量
+			await addAssetsChangeRecord(uni.getStorageSync('id'), POWERSTONE, roundToOneDecimal(resourceAmount.value), `在商人集市中向游戏ID为${receiverGameID.value}的转赠能量石, 扣除(无手续费):`)
+			// 受赠者需要加上所转赠的数量
+			const result = await getUserIDByGameID(receiverGameID.value);
+			if (result.code === 0) {
+					console.log('用户唯一 _id:', result.data._id);
+					const useId = result.data._id;
+					addAssetsChangeRecord(useId, POWERSTONE, roundToOneDecimal(resourceAmount.value), `在商人集市中收到游戏ID为${uni.getStorageSync('gameID')}的店主转赠能量石, 共获得(无手续费):`)
+			} else {
+					console.error('获取用户 _id 失败:', result.message);
+					// 在这里处理错误逻辑
+			}
       closePopup(); // 关闭弹窗
     } else {
       let errorMessage = '资源转移失败';

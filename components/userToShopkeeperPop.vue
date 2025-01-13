@@ -58,8 +58,11 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
-import { useGameInfoStore } from '../stores/gameInfo';
+import { POWERSTONE, useGameInfoStore } from '../stores/gameInfo';
 import { updateAssets } from '../utils/updateGameInfo';
+import { addAssetsChangeRecord } from '../utils/addAssetsChangeRecord ';
+import { roundToOneDecimal } from '../utils/roundToOneDecimal';
+import getUserIDByGameID from '../utils/getUserIDByGameID';
 
 const gameInfo = useGameInfoStore();
 
@@ -84,7 +87,7 @@ const currentPowerStoneBalance = computed(() => {
 const totalDeduction = computed(() => {
   const amount = parseFloat(resourceAmount.value) || 0; // 获取输入的能量石数量
   const fee = amount * 0.08; // 计算手续费（8%）
-  return amount + fee; // 返回总扣除数量
+  return roundToOneDecimal(amount + fee) ; // 返回总扣除数量
 });
 
 // 关闭弹窗
@@ -137,6 +140,20 @@ const handleSubmit = async () => {
     // 处理云函数返回结果
     if (res.result.code === 1) {
       uni.showToast({ title: '资源转移成功', icon: 'success' });
+			
+			// 转赠者需要扣除转赠的数量(用户向商人转赠的入口)
+			await addAssetsChangeRecord(uni.getStorageSync('id'), POWERSTONE, totalDeduction.value, `在商人集市中向游戏ID为${ownerGameId.value}的店主转赠能量石, 扣除(含8%手续费):`)
+			// 店主需要加上所转赠的数量
+			const result = await getUserIDByGameID(ownerGameId.value);
+			if (result.code === 0) {
+					console.log('用户唯一 _id:', result.data._id);
+					const useId = result.data._id;
+					addAssetsChangeRecord(useId, POWERSTONE, roundToOneDecimal(resourceAmount.value * 1.03), `在商人集市中收到游戏ID为${uni.getStorageSync('gameID')}的玩家转赠的能量石, 共收获(含3%手续费):`)
+			} else {
+					console.error('获取用户 _id 失败:', result.message);
+					// 在这里处理错误逻辑
+			}
+			
       handleClose(); // 关闭弹窗
     } else {
       let errorMessage = '资源转移失败';
