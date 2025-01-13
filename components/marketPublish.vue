@@ -83,7 +83,7 @@
 	import { JEWEL, POWERSTONE, useGameInfoStore } from '../stores/gameInfo';
 	import { roundToOneDecimal } from '../utils/roundToOneDecimal';
 	import { netWorkError, showTips } from '../utils/error';
-import { getUserAssets } from '../utils/updateGameInfo';
+	import { getUserAssets } from '../utils/updateGameInfo';
 	
 	const gameInfo = useGameInfoStore()
 	const props = defineProps(['controlPublish', 'title', 'gemItems', 'gemImgName', 'updateData'])
@@ -219,7 +219,7 @@ import { getUserAssets } from '../utils/updateGameInfo';
 			data:{
 				addData: {
 					buyerId: uni.getStorageSync('id'),
-					demType: gemType,
+					gemType: gemType,
 					buyNum: parseInt(inputNumValue.value),
 					buyPrice: parseFloat(inputPriceValue.value),
 					isFinished: false,

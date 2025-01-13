@@ -4,7 +4,7 @@ const updateUserResource = require('updateUserResource'); // 引入更新用户�
 exports.main = async (event, context) => {
   // event 为客户端上传的参数
   console.log('event : ', event);
-  const { buyNum, id, buyPrice, demType, userId, expected, inputNumValue, buyerId } = event;
+  const { buyNum, id, buyPrice, gemType, userId, expected, inputNumValue, buyerId } = event;
   const db = uniCloud.database();
   const transaction = await db.startTransaction();
 
@@ -25,7 +25,7 @@ exports.main = async (event, context) => {
 
     // 3. 扣除出售者的资源（如果不是同一用户）
     if (!isSameUser) {
-      await updateUserResource(userId, demType, -inputNumValue, transaction); // 扣除出售的资源
+      await updateUserResource(userId, gemType, -inputNumValue, transaction); // 扣除出售的资源
     }
 
     // 4. 更新购买者的 jewel 资源（增加出售者应得的宝石）

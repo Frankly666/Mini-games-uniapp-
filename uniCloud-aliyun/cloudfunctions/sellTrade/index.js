@@ -4,7 +4,7 @@ const updateUserResource = require('updateUserResource'); // 引入更新用户�
 exports.main = async (event, context) => {
   // event 为客户端上传的参数
   console.log('event : ', event);
-  const { sellNum, id, sellPrice, demType, userId, totalPrice, inputNumValue, sellerId } = event;
+  const { sellNum, id, sellPrice, gemType, userId, totalPrice, inputNumValue, sellerId } = event;
   const db = uniCloud.database();
   const transaction = await db.startTransaction();
 
@@ -37,7 +37,7 @@ exports.main = async (event, context) => {
 
     // 4. 更新购买者的资源（增加购买的资源）
     await transaction.collection('assets').doc(buyerAssetsId).update({
-      [demType]: db.command.inc(inputNumValue)
+      [gemType]: db.command.inc(inputNumValue)
     });
 
     // 5. 添加交易记录

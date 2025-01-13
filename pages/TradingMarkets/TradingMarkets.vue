@@ -207,7 +207,7 @@ import { getUserAssets } from '../../utils/updateGameInfo';
 						const params = {
 							userId: uni.getStorageSync('id'), // 当前用户 ID
 							recordId: item._id, // 交易记录 ID
-							resourceType: item.demType, // 资源类型
+							resourceType: item.gemType, // 资源类型
 							resourceAmount: marketCurrentIndex.value === 0 ? item.sellNum : item.buyNum, // 资源数量
 							price: marketCurrentIndex.value === 0 ? item.sellPrice : item.buyPrice, // 资源单价
 							type: marketCurrentIndex.value, // 交易类型（0: 出售, 1: 求购）

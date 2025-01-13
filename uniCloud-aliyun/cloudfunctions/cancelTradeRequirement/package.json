@@ -1,7 +1,6 @@
 {
   "name": "cancelTradeRequirement",
   "dependencies": {
-    "addAssetsChangeRecord": "file:../common/addAssetsChangeRecord",
     "const": "file:../common/const",
     "updateUserResource": "file:../common/updateUserResource"
   },

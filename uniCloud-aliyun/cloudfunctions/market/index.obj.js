@@ -13,16 +13,16 @@ module.exports = {
 	 * @param {Boolean} isFinish 是否完成交易
 	 * @param {Date} publishTime 发表时间
 	 */
-	async publishSellRequirement(sellerId, demType, sellNum, sellPrice) {
+	async publishSellRequirement(sellerId, gemType, sellNum, sellPrice) {
 		const sellRequirement = uniCloud.database().collection('sellRequirement');
-		const res = await sellRequirement.add({sellerId, demType, sellNum: parseInt(sellNum), sellPrice: parseFloat(sellPrice), isFinished: false, publishTime: new Date()})
+		const res = await sellRequirement.add({sellerId, gemType, sellNum: parseInt(sellNum), sellPrice: parseFloat(sellPrice), isFinished: false, publishTime: new Date()})
 		return res;
 	},
 	
 	//  发布求购需求
-	async publishBuyRequirement(buyerId, demType, buyNum, buyPrice) {
+	async publishBuyRequirement(buyerId, gemType, buyNum, buyPrice) {
 		const buyRequirement = uniCloud.database().collection('buyRequirement');
-		const res = await buyRequirement.add({buyerId, demType, buyNum: parseInt(buyNum), buyPrice: parseFloat(buyPrice), isFinished: false, publishTime: new Date()})
+		const res = await buyRequirement.add({buyerId, gemType, buyNum: parseInt(buyNum), buyPrice: parseFloat(buyPrice), isFinished: false, publishTime: new Date()})
 		return res;
 	},
 	
@@ -75,9 +75,9 @@ module.exports = {
 
 	
 	// 检索所有的求购需求
-	async selectBuyRequirement(demType) {
+	async selectBuyRequirement(gemType) {
 		const buyRequirement = uniCloud.database().collection('buyRequirement');
-		const res = await buyRequirement.where({demType, isFinished: false}).orderBy("buyPrice", 'desc').get()
+		const res = await buyRequirement.where({gemType, isFinished: false}).orderBy("buyPrice", 'desc').get()
 		return res;
 	},
 }

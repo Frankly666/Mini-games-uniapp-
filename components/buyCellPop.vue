@@ -182,7 +182,7 @@ async function confirmSellPublish() {
   const sellNum = props.certainItem.sellNum;
   const id = props.certainItem._id;
   const sellPrice = props.certainItem.sellPrice;
-  const demType = props.certainItem.demType;
+  const gemType = props.certainItem.gemType;
 
   // 如果输入的数值不合理直接跳出
   if (inputNumValue.value <= 0 || inputNumValue.value > sellNum) {
@@ -209,7 +209,7 @@ async function confirmSellPublish() {
 				id: id,
 				sellPrice: sellPrice,
 				sellerId: props.certainItem.sellerId,
-				demType: demType,
+				gemType: gemType,
 				userId: uni.getStorageSync('id'),
 				totalPrice: totalPrice.value,
 				inputNumValue: inputNumValue.value,
@@ -236,7 +236,7 @@ async function confirmNeedPublish() {
   const buyNum = props.certainItem.buyNum; // 这条需求的最大值
   const id = props.certainItem._id;
   const buyPrice = props.certainItem.buyPrice;
-  const demType = props.certainItem.demType;
+  const gemType = props.certainItem.gemType;
 
   // 确保输入值为正确范围
   if (inputNumValue.value <= 0 || inputNumValue.value > buyNum) {
@@ -244,7 +244,7 @@ async function confirmNeedPublish() {
 		return
 	};
   // 如果自己没那么多的宝石也直接跳出
-  if (inputNumValue.value > gameInfo.assets[demType]) {
+  if (inputNumValue.value > gameInfo.assets[gemType]) {
     handleShowWran(true);
 		showTips("余额不足")
     return;
@@ -263,7 +263,7 @@ async function confirmNeedPublish() {
 				id: id,
 				buyPrice: buyPrice,
 				buyerId: props.certainItem.buyerId,
-				demType: demType,
+				gemType: gemType,
 				userId: uni.getStorageSync('id'),
 				expected: expected.value,
 				inputNumValue: inputNumValue.value,
