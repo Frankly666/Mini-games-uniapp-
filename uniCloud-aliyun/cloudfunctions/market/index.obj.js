@@ -67,9 +67,9 @@ module.exports = {
 	/** 检索所有的出售需求
 	 * @param {String} demType
 	 */
-	async selectSellRequirement(demType) {
+	async selectSellRequirement(gemType) {
 		const sellRequirement = uniCloud.database().collection('sellRequirement');
-		const res = await sellRequirement.where({demType, isFinished: false}).orderBy("sellPrice", 'asc').get()
+		const res = await sellRequirement.where({gemType, isFinished: false}).orderBy("sellPrice", 'asc').get()
 		return res;
 	},
 
