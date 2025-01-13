@@ -17,7 +17,7 @@
         </view>
       </view>
 
-      <view class="btn" @click="confirmUnclock">
+      <view class="btn" @click="confirmUnlock">
         <text>解锁</text>
       </view>
     </view>
@@ -26,7 +26,8 @@
 
 <script setup>
 import { POWERSTONE, useGameInfoStore } from '../stores/gameInfo';
-import { netWorkError, showTips } from '../utils/error';
+import { addAssetsChangeRecord } from '../utils/addAssetsChangeRecord ';
+import { netWorkError, showSuccus, showTips } from '../utils/error';
 import { getGroundEndTime } from '../utils/getGroundEndTime';
 import { roundToOneDecimal } from '../utils/roundToOneDecimal';
 import { getUserAssets } from '../utils/updateGameInfo';
@@ -60,61 +61,67 @@ async function checkActivity() {
   }
 }
 
-async function confirmUnclock() {
-	const haveActivity = await checkActivity();
-	if(!haveActivity) {
-		showTips('未购买蛇年限定礼包');
-		return;
-	}
-	
-  const unlockFunds = gameInfo.groundsMeta[props.groundType].unlockFunds;
-  const nowNum = gameInfo.assets[POWERSTONE];
-  console.log(unlockFunds, nowNum);
-
-  // 钱不够就直接跳出
-  if (nowNum < unlockFunds) {
-    showTips('余额不足');
-    return;
-  }
-
-  uni.showLoading({
-    mask: true,
-    title: '解锁中'
-  });
-
-  // 数据库操作逻辑
-  uniCloud.callFunction({
-    name: 'buyGround',
-    data: {
-      addUserGroundData: {
-        userId: uni.getStorageSync('id'),
-        groundType: props.groundType,
-        groundIndex: props.groundIndex,
-        rentTime: new Date(), // 租赁时间
-        endTime: getGroundEndTime(props.groundType), // 结束时间
-        lastClaimTime: null, // 初始化领取时间为 null
-        isHaveWorker: false,
-        workerType: null,
-        workerEndTime: null
-      },
-      userId: uni.getStorageSync('id'),
-      unlockFunds: unlockFunds
+// 确认解锁
+async function confirmUnlock() {
+    const haveActivity = await checkActivity();
+    if (!haveActivity) {
+        showTips('未购买蛇年限定礼包');
+        return;
     }
-  })
+
+    const unlockFunds = gameInfo.groundsMeta[props.groundType].unlockFunds;
+    const nowNum = gameInfo.assets[POWERSTONE];
+		const groundName = gameInfo.groundsMeta[props.groundType].groundName;
+
+    // 钱不够就直接跳出
+    if (nowNum < unlockFunds) {
+        showTips('余额不足');
+        return;
+    }
+
+    uni.showLoading({
+        mask: true,
+        title: '解锁中'
+    });
+
+    // 数据库操作逻辑
+    uniCloud.callFunction({
+        name: 'buyGround',
+        data: {
+            addUserGroundData: {
+                userId: uni.getStorageSync('id'),
+                groundType: props.groundType,
+                groundIndex: props.groundIndex,
+                rentTime: new Date(), // 租赁时间
+                endTime: getGroundEndTime(props.groundType), // 结束时间
+                lastClaimTime: null, // 初始化领取时间为 null
+                isHaveWorker: false,
+                workerType: null,
+                workerEndTime: null
+            },
+            userId: uni.getStorageSync('id'),
+            unlockFunds: unlockFunds
+        }
+    })
     .then(res => {
-      if (res) {
-        // 更新本地余额
-        getUserAssets()
-        props.closePop();
-        props.updateData(); // 更新地皮数据
-        uni.hideLoading();
-      } else {
-        netWorkError();
-      }
+        uni.hideLoading(); // 隐藏加载动画
+        if (res.result.code === 0) {
+            showSuccus("解锁成功!");
+            // 更新本地余额
+            getUserAssets();
+						
+						// 明细更新
+						addAssetsChangeRecord(uni.getStorageSync('id'), POWERSTONE, unlockFunds, `解锁${groundName}扣除: `)
+            props.closePop();
+            props.updateData(); // 更新地皮数据
+        } else {
+            showTips(`解锁失败: ${res.result.message}`);
+        }
     })
     .catch(err => {
-      console.error('购买失败:', err);
-      netWorkError();
+        uni.hideLoading(); // 隐藏加载动画
+        showTips('网络错误，请稍后重试');
+        console.error('购买失败:', err);
     });
 }
 </script>

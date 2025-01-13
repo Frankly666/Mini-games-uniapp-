@@ -21,7 +21,6 @@
 			
 			<!-- 资源明细展示 -->
 			<gem-record-popup-vue v-model:visible="isPopupVisible" :gemType="currentGemType"/>	
-			<button @click="openRecordPopup('diamond')">查看钻石记录</button>
 			
 			
 			<view class="map-container"
