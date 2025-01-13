@@ -21,9 +21,10 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import { useGameInfoStore } from '../stores/gameInfo';
+import { DIAMOND, useGameInfoStore } from '../stores/gameInfo';
 import { roundToOneDecimal } from '../utils/roundToOneDecimal';
 import { getUserAssets } from '../utils/updateGameInfo';
+import { addAssetsChangeRecord } from '../utils/addAssetsChangeRecord ';
 
 const gameInfo = useGameInfoStore();
 
@@ -107,6 +108,9 @@ const handleClaim = async () => {
 
 			// 更新本地金刚石数量
 			getUserAssets()
+			
+			// 用户的领取记录
+			addAssetsChangeRecord(userId, DIAMOND, selectedActivity.value.dailyReward, `蛇年限定礼包每日领取: `)
 
 			// 关闭弹窗
 			showRewardModal.value = false;
