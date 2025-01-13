@@ -32,6 +32,7 @@ import { ref, computed, onMounted, watch } from 'vue';
 import { POWERSTONE, useGameInfoStore } from '../stores/gameInfo';
 import { roundToOneDecimal } from '../utils/roundToOneDecimal';
 import { getUserAssets } from '../utils/updateGameInfo';
+import { addAssetsChangeRecord } from '../utils/addAssetsChangeRecord ';
 
 const gameInfo = useGameInfoStore();
 const userGrounds = ref({}); // 用户的地皮数据
@@ -131,6 +132,9 @@ async function claimEarnings() {
 
       // 更新本地能量石数量
       getUserAssets()
+			
+			// 地皮领取明细
+			addAssetsChangeRecord(uni.getStorageSync('id'), POWERSTONE, roundToOneDecimal(totalEarnings.value), '每日所拥有土地收入: ')
 
       // 重新查询地皮数据
       await fetchUserGrounds();
