@@ -107,6 +107,7 @@ import userTransactionRecordVue from './userTransactionRecord.vue';
 import referralEarningsRecordVue from './referralEarningsRecord.vue';
 import { roundToOneDecimal } from '../utils/roundToOneDecimal';
 import { getUserAssets } from '../utils/updateGameInfo';
+import { addAssetsChangeRecord } from '../utils/addAssetsChangeRecord ';
 
 const gameInfo = useGameInfoStore();
 const props = defineProps(['closeInfo']);
@@ -190,6 +191,13 @@ async function handleRealConfirm() {
     isFirstEdit.value = false;
 		
 		getUserAssets()
+		
+		// 用户修改名字明细记录
+		if(!isFirstEdit.value) {
+			addAssetsChangeRecord(uni.getStorageSync('id'), POWERSTONE, 100, `用户修改名字扣除:`)
+		}
+		
+		
     closeEditNamePop();
     uni.showToast({ title: '修改成功', icon: 'success' });
   } catch (err) {
