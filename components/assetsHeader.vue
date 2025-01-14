@@ -5,7 +5,6 @@
         class="asset"
         v-for="(item, index) in assets"
         :key="index"
-        @click="handleAssetClick(item)"
       >
         <view
           class="dem"

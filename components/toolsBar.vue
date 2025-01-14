@@ -22,7 +22,7 @@
 	import { ref } from 'vue';
 	
 	const imgList = ['setting','warehouse', 'activity', 'announcement', 'rule'];
-	const imgMap = ['设置', '仓库', '活动', '公告', '玩法'];
+	const imgMap = ['设置', '背包', '活动', '公告', '玩法'];
 	const needFold = ref(true)
 	const props = defineProps(['handleShow']);
 	

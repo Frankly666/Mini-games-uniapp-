@@ -7,13 +7,13 @@
       </view>
       <view class="contentWrap">
         <view class="price">
-          解锁价格: {{ groundMeta.unlockFunds }}能量石
+          解锁: {{ groundMeta.unlockFunds }}能量石
         </view>
         <view class="duration">
-          解锁时限: {{ groundMeta.duration }}天
+          产出: {{ groundMeta.duration }}天
         </view>
         <view class="desc">
-          描述: 每天收获{{ groundMeta.dailyEarnings }}块能量石
+          描述: 每日收获{{ groundMeta.dailyEarnings }}块能量石
         </view>
       </view>
 

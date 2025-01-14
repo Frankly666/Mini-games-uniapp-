@@ -44,7 +44,7 @@
 		<view class="customModal" v-if="isModalVisible">
 			<view class="modalContent">
 				<text class="modalTitle">确认购买</text>
-				<text class="modalMessage">确定要购买 {{ selectedActivity.name }} 吗？</text>
+				<text class="modalMessage">{{ selectedActivity.name }} 吗？</text>
 				<view class="modalButtons">
 					<button class="modalButton cancel" @click="hideConfirmModal">取消</button>
 					<button class="modalButton confirm" @click="handleConfirmPurchase">确认</button>
