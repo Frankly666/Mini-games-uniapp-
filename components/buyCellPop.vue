@@ -234,7 +234,7 @@ async function confirmSellPublish() {
             props.updateData();
         } else if (res.result.code === -2) {
             // 数据过期，提示用户刷新
-            showTips("数据已过期，请刷新后重试");
+            showTips("请刷新同步数据");
             props.updateData(); // 刷新数据
         } else {
             // 其他错误
@@ -289,20 +289,25 @@ async function confirmNeedPublish() {
         uni.hideLoading(); // 隐藏加载动画
         if (res.result.code === 0) {
             showTips("交易成功！");
-						// 实时更新资源数量
-						getUserAssets();
-						
-						// 出售扣除用户的该类型的石头, 然后加上卖出成功得到的宝石
-						addAssetsChangeRecord(uni.getStorageSync('id'), gemType, inputNumValue.value, `求购市场中出售${assetsNameMap[gemType]}(单价${buyPrice}), 扣除:`)
-						addAssetsChangeRecord(uni.getStorageSync('id'), JEWEL, expected.value, `求购市场中出售${assetsNameMap[gemType]}${inputNumValue.value}个(单价${buyPrice}), 共获得(扣除5%手续费):`)
-						
-						// 需要向buyerId加上他所求购的石头
-						addAssetsChangeRecord(props.certainItem.buyerId, gemType, inputNumValue.value, `所发布求购需求${assetsNameMap[gemType]}(单价${buyPrice}), 成功求购:`)
-						
+            // 实时更新资源数量
+            getUserAssets();
+
+            // 出售扣除用户的该类型的石头, 然后加上卖出成功得到的宝石
+            addAssetsChangeRecord(uni.getStorageSync('id'), gemType, inputNumValue.value, `求购市场中出售${assetsNameMap[gemType]}(单价${buyPrice}), 扣除:`);
+            addAssetsChangeRecord(uni.getStorageSync('id'), JEWEL, expected.value, `求购市场中出售${assetsNameMap[gemType]}${inputNumValue.value}个(单价${buyPrice}), 共获得(扣除5%手续费):`);
+
+            // 需要向buyerId加上他所求购的石头
+            addAssetsChangeRecord(props.certainItem.buyerId, gemType, inputNumValue.value, `所发布求购需求${assetsNameMap[gemType]}(单价${buyPrice}), 成功求购:`);
+
             // 关闭弹窗
             props.controlShowPop(false);
             props.updateData();
+        } else if (res.result.code === -2) {
+            // 数据过期，提示用户刷新
+            showTips("请刷新同步数据");
+            props.updateData(); // 刷新数据
         } else {
+            // 其他错误
             showTips(`交易失败: ${res.result.message}`);
         }
     })

@@ -9,7 +9,23 @@ exports.main = async (event, context) => {
   const transaction = await db.startTransaction();
 
   try {
-    // 1. 获取出售者和购买者的 assets 记录
+    // 1. 查询云端当前的 buyNum
+    const buyRequirementDoc = await db.collection('buyRequirement').doc(id).get();
+    if (!buyRequirementDoc.data) {
+      throw new Error('需求记录不存在');
+    }
+
+    const cloudBuyNum = buyRequirementDoc.data[0].buyNum;
+
+    // 2. 校验传入的 buyNum 是否与云端一致
+    if (buyNum !== cloudBuyNum) {
+      return {
+        code: -2, // 特定状态码，表示数据过期
+        message: '数据已过期，请刷新后重试'
+      };
+    }
+
+    // 3. 获取出售者和购买者的 assets 记录
     const sellerAssets = await db.collection('assets').where({ userId }).get();
     const buyerAssets = await db.collection('assets').where({ userId: buyerId }).get();
 
@@ -20,18 +36,18 @@ exports.main = async (event, context) => {
     const sellerAssetsId = sellerAssets.data[0]._id;
     const buyerAssetsId = buyerAssets.data[0]._id;
 
-    // 2. 判断出售者和购买者是否是同一用户
+    // 4. 判断出售者和购买者是否是同一用户
     const isSameUser = userId === buyerId;
 
-    // 3. 扣除出售者的资源（如果不是同一用户）
+    // 5. 扣除出售者的资源（如果不是同一用户）
     if (!isSameUser) {
       await updateUserResource(userId, gemType, -inputNumValue, transaction); // 扣除出售的资源
     }
 
-    // 4. 更新购买者的 jewel 资源（增加出售者应得的宝石）
+    // 6. 更新购买者的 jewel 资源（增加出售者应得的宝石）
     await updateUserResource(buyerId, 'jewel', expected, transaction);
 
-    // 5. 添加交易记录
+    // 7. 添加交易记录
     await transaction.collection('transactionRecord').add({
       buyerId,
       sellerId: userId,
@@ -41,8 +57,8 @@ exports.main = async (event, context) => {
       transactionTime: new Date()
     });
 
-    // 6. 更新求购需求状态
-    if (buyNum === inputNumValue) {
+    // 8. 更新求购需求状态
+    if (cloudBuyNum === inputNumValue) {
       // 如果需求全部完成，标记为已完成
       await transaction.collection('buyRequirement').doc(id).update({
         isFinished: true
@@ -50,11 +66,11 @@ exports.main = async (event, context) => {
     } else {
       // 如果需求未全部完成，更新剩余数量
       await transaction.collection('buyRequirement').doc(id).update({
-        buyNum: buyNum - inputNumValue
+        buyNum: cloudBuyNum - inputNumValue
       });
     }
 
-    // 7. 提交事务
+    // 9. 提交事务
     await transaction.commit();
 
     // 返回成功信息
