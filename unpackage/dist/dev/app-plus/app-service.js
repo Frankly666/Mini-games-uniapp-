@@ -402,7 +402,7 @@ if (uni.restoreGlobal) {
   function I(e2) {
     return e2 && "string" == typeof e2 ? JSON.parse(e2) : e2;
   }
-  const S = true, b$1 = "app", A = I(define_process_env_UNI_SECURE_NETWORK_CONFIG_default), C$1 = b$1, P = I('{\n    "address": [\n        "127.0.0.1",\n        "2.0.0.1",\n        "169.254.37.199",\n        "192.168.1.4",\n        "192.168.137.1",\n        "192.168.65.1"\n    ],\n    "debugPort": 9001,\n    "initialLaunchType": "remote",\n    "servePort": 7001,\n    "skipFiles": [\n        "<node_internals>/**",\n        "D:/HBuilderX/HBuilderX/plugins/unicloud/**/*.js"\n    ]\n}\n'), T = I('[{"provider":"aliyun","spaceName":"fun-cloud-city-game","spaceId":"mp-4de62d5a-2380-467f-b109-457713276d05","clientSecret":"ZD2WgXn3K1WSmV78nmjvUQ==","endpoint":"https://api.next.bspapp.com"}]') || [];
+  const S = true, b$1 = "app", A = I(define_process_env_UNI_SECURE_NETWORK_CONFIG_default), C$1 = b$1, P = I('{\n    "address": [\n        "127.0.0.1",\n        "2.0.0.1",\n        "169.254.37.199",\n        "192.168.137.1",\n        "192.168.65.1",\n        "172.16.40.200"\n    ],\n    "debugPort": 9001,\n    "initialLaunchType": "remote",\n    "servePort": 7001,\n    "skipFiles": [\n        "<node_internals>/**",\n        "D:/HBuilderX/HBuilderX/plugins/unicloud/**/*.js"\n    ]\n}\n'), T = I('[{"provider":"aliyun","spaceName":"fun-cloud-city-game","spaceId":"mp-4de62d5a-2380-467f-b109-457713276d05","clientSecret":"ZD2WgXn3K1WSmV78nmjvUQ==","endpoint":"https://api.next.bspapp.com"}]') || [];
   let O = "";
   try {
     O = "__UNI__1B67F5F";
@@ -4577,7 +4577,7 @@ This will fail in production if not fixed.`);
             "groundName": "资源地皮",
             "unlockFunds": 298,
             "duration": 48,
-            "dailyEarnings": 9,
+            "dailyEarnings": 10.3,
             "directPushEarnings": 0.12,
             "inDepthReturns": 0.02
           },
@@ -7377,7 +7377,7 @@ This will fail in production if not fixed.`);
         try {
           updateAssets();
         } catch (error) {
-          formatAppLog("error", "at components/assetsHeader.vue:73", "初始化失败:", error);
+          formatAppLog("error", "at components/assetsHeader.vue:72", "初始化失败:", error);
         }
       });
       const __returned__ = { assets, gameInfo, props, getImageUrl, handleAssetClick, onMounted: vue.onMounted, get useGameInfoStore() {
@@ -7404,8 +7404,7 @@ This will fail in production if not fixed.`);
             var _a;
             return vue.createElementVNode("view", {
               class: "asset",
-              key: index,
-              onClick: ($event) => $setup.handleAssetClick(item)
+              key: index
             }, [
               vue.createElementVNode(
                 "view",
@@ -7424,7 +7423,7 @@ This will fail in production if not fixed.`);
                 1
                 /* TEXT */
               )
-            ], 8, ["onClick"]);
+            ]);
           }),
           64
           /* STABLE_FRAGMENT */
@@ -7528,7 +7527,7 @@ This will fail in production if not fixed.`);
     setup(__props, { expose: __expose }) {
       __expose();
       const imgList = ["setting", "warehouse", "activity", "announcement", "rule"];
-      const imgMap = ["设置", "仓库", "活动", "公告", "玩法"];
+      const imgMap = ["设置", "背包", "活动", "公告", "玩法"];
       const needFold = vue.ref(true);
       const props = __props;
       function toggleFold() {
@@ -8301,10 +8300,13 @@ This will fail in production if not fixed.`);
           gameInfo.isFirst = 1;
           isFirstEdit.value = false;
           getUserAssets();
+          if (!isFirstEdit.value) {
+            addAssetsChangeRecord(uni.getStorageSync("id"), POWERSTONE, 100, `用户修改名字扣除:`);
+          }
           closeEditNamePop();
           uni.showToast({ title: "修改成功", icon: "success" });
         } catch (err) {
-          formatAppLog("error", "at components/userInfoPop.vue:196", "修改失败", err);
+          formatAppLog("error", "at components/userInfoPop.vue:204", "修改失败", err);
           uni.showToast({ title: "修改失败", icon: "none" });
         }
       }
@@ -8319,7 +8321,7 @@ This will fail in production if not fixed.`);
           const tempFilePath = res.tempFilePaths[0];
           await uploadAvatarToUniCloud(tempFilePath);
         } catch (err) {
-          formatAppLog("error", "at components/userInfoPop.vue:213", "选择图片失败", err);
+          formatAppLog("error", "at components/userInfoPop.vue:221", "选择图片失败", err);
           uni.showToast({ title: "选择图片失败", icon: "none" });
         }
       }
@@ -8343,10 +8345,10 @@ This will fail in production if not fixed.`);
             uni.showToast({ title: "头像更新成功", icon: "success" });
           } else {
             uni.showToast({ title: "头像更新失败", icon: "none" });
-            formatAppLog("error", "at components/userInfoPop.vue:252", "云函数返回错误:", updateResult.result.message);
+            formatAppLog("error", "at components/userInfoPop.vue:260", "云函数返回错误:", updateResult.result.message);
           }
         } catch (err) {
-          formatAppLog("error", "at components/userInfoPop.vue:256", "上传失败", err);
+          formatAppLog("error", "at components/userInfoPop.vue:264", "上传失败", err);
           uni.showToast({ title: "上传失败", icon: "none" });
         } finally {
           uni.hideLoading();
@@ -8359,7 +8361,7 @@ This will fail in production if not fixed.`);
           const result = await Ys.getTempFileURL({ fileList: [fileID] });
           return result.fileList[0].tempFileURL;
         } catch (err) {
-          formatAppLog("error", "at components/userInfoPop.vue:271", "获取文件 URL 失败", err);
+          formatAppLog("error", "at components/userInfoPop.vue:279", "获取文件 URL 失败", err);
           return "";
         }
       }
@@ -8377,6 +8379,8 @@ This will fail in production if not fixed.`);
         return roundToOneDecimal;
       }, get getUserAssets() {
         return getUserAssets;
+      }, get addAssetsChangeRecord() {
+        return addAssetsChangeRecord;
       } };
       Object.defineProperty(__returned__, "__isScriptSetup", { enumerable: false, value: true });
       return __returned__;
@@ -8677,10 +8681,11 @@ This will fail in production if not fixed.`);
             }
           });
           if (res.result.code === 0 && res.result.data.length > 0) {
+            const serverTime = new Date(res.result.serverTime);
+            const today = new Date(serverTime);
+            today.setHours(0, 0, 0, 0);
             const activity = res.result.data.find((record) => {
               const lastClaimTime = record.lastClaimTime ? new Date(record.lastClaimTime) : null;
-              const today = /* @__PURE__ */ new Date();
-              today.setHours(0, 0, 0, 0);
               return !lastClaimTime || lastClaimTime < today;
             });
             if (activity) {
@@ -8689,7 +8694,7 @@ This will fail in production if not fixed.`);
             }
           }
         } catch (err) {
-          formatAppLog("error", "at components/homeSignInPresentation.vue:66", "查询失败:", err);
+          formatAppLog("error", "at components/homeSignInPresentation.vue:69", "查询失败:", err);
         }
       });
       const handleClaim = async () => {
@@ -8734,7 +8739,7 @@ This will fail in production if not fixed.`);
             });
           }
         } catch (err) {
-          formatAppLog("error", "at components/homeSignInPresentation.vue:125", "领取失败:", err);
+          formatAppLog("error", "at components/homeSignInPresentation.vue:128", "领取失败:", err);
           uni.hideLoading();
           uni.showToast({
             title: "领取失败，请重试！",
@@ -9012,7 +9017,7 @@ This will fail in production if not fixed.`);
           vue.createElementVNode(
             "text",
             { class: "modalMessage" },
-            "确定要购买 " + vue.toDisplayString($setup.selectedActivity.name) + " 吗？",
+            vue.toDisplayString($setup.selectedActivity.name) + " 吗？",
             1
             /* TEXT */
           ),
@@ -9083,9 +9088,6 @@ This will fail in production if not fixed.`);
       duration: 3e3,
       icon: "error"
     });
-    setTimeout(() => {
-      uni.hideToast();
-    }, 600);
   }
   function showTips(string) {
     uni.showToast({
@@ -9093,9 +9095,6 @@ This will fail in production if not fixed.`);
       duration: 3e3,
       icon: "error"
     });
-    setTimeout(() => {
-      uni.hideToast();
-    }, 1e3);
   }
   function showSuccus(string) {
     uni.showToast({
@@ -9103,9 +9102,6 @@ This will fail in production if not fixed.`);
       duration: 3e3,
       icon: "success"
     });
-    setTimeout(() => {
-      uni.hideToast();
-    }, 600);
   }
   const selectImg = "../static/ground/select.png";
   const unselectImg = "../static/ground/unselect.png";
@@ -9553,31 +9549,39 @@ This will fail in production if not fixed.`);
     setup(__props, { expose: __expose }) {
       __expose();
       const props = __props;
+      const endTime = vue.ref("");
       const showHoe = vue.ref(false);
+      function formatEndTime(dateString) {
+        const date = new Date(dateString);
+        return `${date.getFullYear()}/${String(date.getMonth() + 1).padStart(2, "0")}/${String(date.getDate()).padStart(2, "0")}到期`;
+      }
       async function isShowHoe() {
         const userId = uni.getStorageSync("id");
         if (!userId) {
-          formatAppLog("error", "at components/bag.vue:31", "用户 ID 不存在");
+          formatAppLog("error", "at components/bag.vue:40", "用户 ID 不存在");
           return false;
         }
         try {
           const res = await Ys.callFunction({
             name: "selectAllActivitt",
-            // 假设云函数名为 getUserActivities
+            // 假设云函数名为 selectAllActivitt
             data: {
               userId
             }
           });
-          const hasHoeActivity = res.result.data.some((record) => record.activityId === "1");
-          showHoe.value = hasHoeActivity;
-          return hasHoeActivity;
+          const hoeActivity = res.result.data.find((record) => record.activityId === "1");
+          if (hoeActivity) {
+            showHoe.value = true;
+            endTime.value = hoeActivity.endTime;
+          }
+          return !!hoeActivity;
         } catch (err) {
-          formatAppLog("error", "at components/bag.vue:49", "请求活动记录失败:", err);
+          formatAppLog("error", "at components/bag.vue:61", "请求活动记录失败:", err);
           return false;
         }
       }
       isShowHoe();
-      const __returned__ = { props, showHoe, isShowHoe, ref: vue.ref };
+      const __returned__ = { props, endTime, showHoe, formatEndTime, isShowHoe, ref: vue.ref };
       Object.defineProperty(__returned__, "__isScriptSetup", { enumerable: false, value: true });
       return __returned__;
     }
@@ -9593,7 +9597,18 @@ This will fail in production if not fixed.`);
             key: 0,
             class: "item hoe"
           }, [
-            vue.createElementVNode("text", null, "锄头")
+            vue.createElementVNode("text", null, "锄头"),
+            vue.createCommentVNode(" 添加到期时间 "),
+            $setup.endTime ? (vue.openBlock(), vue.createElementBlock(
+              "text",
+              {
+                key: 0,
+                class: "endTime"
+              },
+              vue.toDisplayString($setup.formatEndTime($setup.endTime)),
+              1
+              /* TEXT */
+            )) : vue.createCommentVNode("v-if", true)
           ])) : vue.createCommentVNode("v-if", true)
         ]),
         vue.createElementVNode("view", {
@@ -10364,20 +10379,22 @@ This will fail in production if not fixed.`);
         }).then((res) => {
           uni.hideLoading();
           if (res.result.code === 0) {
-            showTips("交易成功！");
             getUserAssets();
+            showTips("交易成功！");
             addAssetsChangeRecord(uni.getStorageSync("id"), gemType, inputNumValue.value, `出售市场中购买${inputNumValue.value}个(单价${sellPrice}), 获得:`);
             addAssetsChangeRecord(uni.getStorageSync("id"), JEWEL, totalPrice.value, `出售市场中购买${assetsNameMap[gemType]}${inputNumValue.value}个(单价${sellPrice}),扣除:`);
             addAssetsChangeRecord(props.certainItem.sellerId, JEWEL, roundToOneDecimal(totalPrice.value * 0.95), `所发布的${assetsNameMap[gemType]}(单价${sellPrice})被购买${inputNumValue.value}个,共获得(减去5%手续费):`);
             props.controlShowPop(false);
             props.updateData();
+          } else if (res.result.code === -2) {
+            showTips("请刷新同步数据");
           } else {
             showTips(`交易失败: ${res.result.message}`);
           }
         }).catch((err) => {
           uni.hideLoading();
           showTips("网络错误，请稍后重试");
-          formatAppLog("error", "at components/buyCellPop.vue:242", "云函数调用失败:", err);
+          formatAppLog("error", "at components/buyCellPop.vue:245", "云函数调用失败:", err);
         });
       }
       async function confirmNeedPublish() {
@@ -10413,20 +10430,22 @@ This will fail in production if not fixed.`);
         }).then((res) => {
           uni.hideLoading();
           if (res.result.code === 0) {
-            showTips("交易成功！");
             getUserAssets();
+            showTips("交易成功！");
             addAssetsChangeRecord(uni.getStorageSync("id"), gemType, inputNumValue.value, `求购市场中出售${assetsNameMap[gemType]}(单价${buyPrice}), 扣除:`);
             addAssetsChangeRecord(uni.getStorageSync("id"), JEWEL, expected.value, `求购市场中出售${assetsNameMap[gemType]}${inputNumValue.value}个(单价${buyPrice}), 共获得(扣除5%手续费):`);
             addAssetsChangeRecord(props.certainItem.buyerId, gemType, inputNumValue.value, `所发布求购需求${assetsNameMap[gemType]}(单价${buyPrice}), 成功求购:`);
             props.controlShowPop(false);
             props.updateData();
+          } else if (res.result.code === -2) {
+            showTips("请刷新同步数据");
           } else {
             showTips(`交易失败: ${res.result.message}`);
           }
         }).catch((err) => {
           uni.hideLoading();
           showTips("网络错误，请稍后重试");
-          formatAppLog("error", "at components/buyCellPop.vue:308", "云函数调用失败:", err);
+          formatAppLog("error", "at components/buyCellPop.vue:315", "云函数调用失败:", err);
         });
       }
       const __returned__ = { props, inputNumValue, isShowWarn, assetsDB, marketDB, gameInfo, isSellMarket, totalPrice, expected, btnWord, confirmFun, getGemImg, setNumValue, handleShowWran, handleSellNum, confirmSellPublish, confirmNeedPublish, computed: vue.computed, onMounted: vue.onMounted, ref: vue.ref, get JEWEL() {
@@ -11041,14 +11060,28 @@ This will fail in production if not fixed.`);
                   });
                   getUserAssets();
                   if (marketCurrentIndex.value === 0) {
-                    addAssetsChangeRecord(uni.getStorageSync("id"), item.gemType, item.sellNum, `出售市场中取消出售${assetsNameMap[item.gemType]}(单价${item.sellPrice}), 退回: `);
+                    addAssetsChangeRecord(
+                      uni.getStorageSync("id"),
+                      item.gemType,
+                      item.sellNum,
+                      `出售市场中取消出售${assetsNameMap[item.gemType]}(单价${item.sellPrice}), 退回: `
+                    );
                   } else {
-                    addAssetsChangeRecord(uni.getStorageSync("id"), JEWEL, roundToOneDecimal(item.buyNum * item.buyPrice), `求购市场中取消求购${assetsNameMap[item.gemType]}(单价${item.buyPrice}), 退回: `);
+                    addAssetsChangeRecord(
+                      uni.getStorageSync("id"),
+                      JEWEL,
+                      roundToOneDecimal(item.buyNum * item.buyPrice),
+                      `求购市场中取消求购${assetsNameMap[item.gemType]}(单价${item.buyPrice}), 退回: `
+                    );
                   }
                   await updateData();
+                } else if (result.result.code === -2) {
+                  showTips("请刷新同步数据");
+                } else if (result.result.code === -3) {
+                  showTips("该条记录已经被取消请刷新");
                 } else {
                   uni.showToast({
-                    title: "取消失败：" + result.result.message,
+                    title: "取消失败：请刷新",
                     icon: "none",
                     duration: 3e3
                     // 提示显示时长
@@ -11084,6 +11117,8 @@ This will fail in production if not fixed.`);
         return addAssetsChangeRecord;
       }, get assetsNameMap() {
         return assetsNameMap;
+      }, get showTips() {
+        return showTips;
       } };
       Object.defineProperty(__returned__, "__isScriptSetup", { enumerable: false, value: true });
       return __returned__;
@@ -11120,12 +11155,10 @@ This will fail in production if not fixed.`);
         updateData: $setup.updateData
       }, null, 8, ["gemName", "gemChName", "marketName", "certainItem"])) : vue.createCommentVNode("v-if", true),
       vue.createCommentVNode(" 转赠弹窗 "),
-      $setup.isShowSentPop ? (vue.openBlock(), vue.createBlock($setup["sentPopVue"], {
-        key: 2,
-        closePop: () => {
-          $setup.setShowSentPop(false);
-        }
-      }, null, 8, ["closePop"])) : vue.createCommentVNode("v-if", true),
+      vue.createCommentVNode(` <sent-pop-vue\r
+			v-if="isShowSentPop"\r
+			:closePop = '() => {setShowSentPop(false)}'\r
+		/> `),
       vue.createCommentVNode(" 出售求购 "),
       vue.createElementVNode("view", { class: "topWrap" }, [
         vue.createElementVNode("view", { class: "markets" }, [
@@ -11152,17 +11185,10 @@ This will fail in production if not fixed.`);
             /* STABLE_FRAGMENT */
           ))
         ]),
-        vue.createElementVNode("view", {
-          class: "sent",
-          onClick: _cache[0] || (_cache[0] = () => {
-            $setup.setShowSentPop(true);
-          })
-        }, [
-          vue.createElementVNode("text", null, "转赠")
-        ]),
+        vue.createCommentVNode(' <view class="sent" @click="() => {setShowSentPop(true)}">\r\n				<text>转赠</text>\r\n			</view> '),
         vue.createElementVNode("view", {
           class: "publish",
-          onClick: _cache[1] || (_cache[1] = () => {
+          onClick: _cache[0] || (_cache[0] = () => {
             $setup.controlPublish(true);
           })
         }, [
@@ -11748,7 +11774,7 @@ This will fail in production if not fixed.`);
       async function checkActivity() {
         try {
           const res = await Ys.callFunction({
-            name: "selectPurchaseActivity",
+            name: "selectAllActivitt",
             data: {
               userId: uni.getStorageSync("id")
             }
@@ -11866,21 +11892,21 @@ This will fail in production if not fixed.`);
             vue.createElementVNode(
               "view",
               { class: "price" },
-              " 解锁价格: " + vue.toDisplayString($setup.groundMeta.unlockFunds) + "能量石 ",
+              " 解锁: " + vue.toDisplayString($setup.groundMeta.unlockFunds) + "能量石 ",
               1
               /* TEXT */
             ),
             vue.createElementVNode(
               "view",
               { class: "duration" },
-              " 解锁时限: " + vue.toDisplayString($setup.groundMeta.duration) + "天 ",
+              " 产出: " + vue.toDisplayString($setup.groundMeta.duration) + "天 ",
               1
               /* TEXT */
             ),
             vue.createElementVNode(
               "view",
               { class: "desc" },
-              " 描述: 每天收获" + vue.toDisplayString($setup.groundMeta.dailyEarnings) + "块能量石 ",
+              " 描述: 每日收获" + vue.toDisplayString($setup.groundMeta.dailyEarnings) + "块能量石 ",
               1
               /* TEXT */
             )
@@ -11906,9 +11932,9 @@ This will fail in production if not fixed.`);
       const userGrounds = vue.ref({});
       const showClaimModal = vue.ref(false);
       const isClaiming = vue.ref(false);
+      const serverTime = vue.ref(null);
       let directEarning = 0;
       let indirectEarning = 0;
-      formatAppLog("log", "at components/grondSignInPresentation.vue:44", "hhhhh");
       async function fetchUserGrounds() {
         try {
           const res = await Ys.callFunction({
@@ -11919,6 +11945,7 @@ This will fail in production if not fixed.`);
           });
           if (res.result.code === 0) {
             userGrounds.value = res.result.data;
+            serverTime.value = new Date(res.result.serverTime);
           } else {
             formatAppLog("error", "at components/grondSignInPresentation.vue:59", "查询失败:", res.result.message);
           }
@@ -11929,13 +11956,18 @@ This will fail in production if not fixed.`);
       function isTodayClaimed(lastClaimTime) {
         if (!lastClaimTime)
           return false;
-        const today = (/* @__PURE__ */ new Date()).toDateString();
-        const claimDate = new Date(lastClaimTime).toDateString();
-        return today === claimDate;
+        if (!serverTime.value)
+          return false;
+        const today = new Date(serverTime.value);
+        today.setHours(0, 0, 0, 0);
+        const claimDate = new Date(lastClaimTime);
+        claimDate.setHours(0, 0, 0, 0);
+        return today.getTime() === claimDate.getTime();
       }
       function isGroundExpired(endTime) {
-        const now2 = /* @__PURE__ */ new Date();
-        return new Date(endTime) > now2;
+        if (!serverTime.value)
+          return false;
+        return new Date(endTime) > serverTime.value;
       }
       const totalEarnings = vue.computed(() => {
         let total = 0;
@@ -11984,7 +12016,12 @@ This will fail in production if not fixed.`);
               duration: 2e3
             });
             getUserAssets();
-            addAssetsChangeRecord(uni.getStorageSync("id"), POWERSTONE, roundToOneDecimal(totalEarnings.value), "每日所拥有土地收入: ");
+            addAssetsChangeRecord(
+              uni.getStorageSync("id"),
+              POWERSTONE,
+              roundToOneDecimal(totalEarnings.value),
+              "每日所拥有土地收入: "
+            );
             await fetchUserGrounds();
             showClaimModal.value = false;
           } else {
@@ -11996,7 +12033,7 @@ This will fail in production if not fixed.`);
             });
           }
         } catch (err) {
-          formatAppLog("error", "at components/grondSignInPresentation.vue:154", "领取失败:", err);
+          formatAppLog("error", "at components/grondSignInPresentation.vue:164", "领取失败:", err);
           uni.hideLoading();
           uni.showToast({
             title: "领取失败，请重试！",
@@ -12010,7 +12047,7 @@ This will fail in production if not fixed.`);
       vue.onMounted(async () => {
         await fetchUserGrounds();
       });
-      const __returned__ = { gameInfo, userGrounds, showClaimModal, isClaiming, get directEarning() {
+      const __returned__ = { gameInfo, userGrounds, showClaimModal, isClaiming, serverTime, get directEarning() {
         return directEarning;
       }, set directEarning(v2) {
         directEarning = v2;

@@ -17,16 +17,22 @@ exports.main = async (event, context) => {
       // 取消出售记录
       const sellRequirementDoc = await db.collection('sellRequirement').doc(recordId).get();
       if (!sellRequirementDoc.data) {
-        throw new Error('出售记录不存在');
+        return {
+          code: -3, // 特定状态码，表示数据过期
+          message: '该条记录已被取消',
+        };
       }
       cloudResourceAmount = sellRequirementDoc.data[0].sellNum;
     } else if (type === 1) {
       // 取消求购记录
       const buyRequirementDoc = await db.collection('buyRequirement').doc(recordId).get();
       if (!buyRequirementDoc.data) {
-        throw new Error('求购记录不存在');
+        return {
+          code: -3, // 特定状态码，表示数据过期
+          message: '该条记录已被取消',
+        };
       }
-      cloudResourceAmount = buyRequirementDoc.data.buyNum;
+      cloudResourceAmount = buyRequirementDoc.data[0].buyNum;
     } else {
       throw new Error('无效的 type 值');
     }

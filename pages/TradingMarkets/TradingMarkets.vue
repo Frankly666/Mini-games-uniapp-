@@ -107,6 +107,7 @@
 	import { roundToOneDecimal } from '../../utils/roundToOneDecimal';
 	import { getUserAssets } from '../../utils/updateGameInfo';
 	import { addAssetsChangeRecord, assetsNameMap } from '../../utils/addAssetsChangeRecord ';
+import { showTips } from '../../utils/error';
 
 	const marketCurrentIndex = ref(0)
 	const itemCurrentIndex = ref(0)
@@ -255,15 +256,12 @@
 	            await updateData();
 	          } else if (result.result.code === -2) {
 	            // 数据过期，提示用户刷新
+	            showTips("请刷新同步数据");
+	          } else if(result.result.code === -3) {
+							showTips('该条记录已经被取消请刷新')
+						}else {
 	            uni.showToast({
-	              title: '请刷新同步数据',
-	              icon: 'none',
-	              duration: 3000,
-	            });
-	            await updateData(); // 刷新数据
-	          } else {
-	            uni.showToast({
-	              title: '取消失败：' + result.result.message,
+	              title: '取消失败：请刷新',
 	              icon: 'none',
 	              duration: 3000, // 提示显示时长
 	            });
