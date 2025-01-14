@@ -4,9 +4,6 @@ export function netWorkError() {
 		duration: 3000,
 		icon: "error"
 	});
-	setTimeout(() => {
-		uni.hideToast()
-	}, 600)
 }
 
 export function showTips(string) {
@@ -15,9 +12,6 @@ export function showTips(string) {
 		duration: 3000,
 		icon: "error"
 	});
-	setTimeout(() => {
-		uni.hideToast()
-	}, 1000)
 }
 
 export function showSuccus(string) {
@@ -26,7 +20,4 @@ export function showSuccus(string) {
 		duration: 3000,
 		icon: "success"
 	});
-	setTimeout(() => {
-		uni.hideToast()
-	}, 600)
 }
