@@ -38,10 +38,9 @@ const gameInfo = useGameInfoStore();
 const userGrounds = ref({}); // 用户的地皮数据
 const showClaimModal = ref(false); // 是否显示领取弹窗
 const isClaiming = ref(false); // 是否正在领取
+const serverTime = ref(null); // 服务器时间
 let directEarning = 0;
 let indirectEarning = 0;
-
-console.log("hhhhh")
 
 // 查询用户地皮
 async function fetchUserGrounds() {
@@ -55,6 +54,7 @@ async function fetchUserGrounds() {
 
     if (res.result.code === 0) {
       userGrounds.value = res.result.data;
+      serverTime.value = new Date(res.result.serverTime); // 保存服务器时间
     } else {
       console.error('查询失败:', res.result.message);
     }
@@ -66,15 +66,21 @@ async function fetchUserGrounds() {
 // 判断今天是否已经签到
 function isTodayClaimed(lastClaimTime) {
   if (!lastClaimTime) return false; // 如果 lastClaimTime 为 null，表示未签到
-  const today = new Date().toDateString();
-  const claimDate = new Date(lastClaimTime).toDateString();
-  return today === claimDate;
+  if (!serverTime.value) return false; // 如果服务器时间为空，直接返回 false
+
+  const today = new Date(serverTime.value); // 使用服务器时间
+  today.setHours(0, 0, 0, 0); // 今天的开始时间
+
+  const claimDate = new Date(lastClaimTime);
+  claimDate.setHours(0, 0, 0, 0); // 签到日期的开始时间
+
+  return today.getTime() === claimDate.getTime(); // 判断是否为同一天
 }
 
 // 判断地皮是否过期
 function isGroundExpired(endTime) {
-  const now = new Date();
-  return new Date(endTime) > now;
+  if (!serverTime.value) return false; // 如果服务器时间为空，直接返回 false
+  return new Date(endTime) > serverTime.value; // 使用服务器时间判断
 }
 
 // 计算需要领取的地皮收益
@@ -90,7 +96,7 @@ const totalEarnings = computed(() => {
       }
     });
   }
-  return total; // 将 return 移到 forEach 外部
+  return total;
 });
 
 // 监听 totalEarnings 的变化，自动显示弹窗
@@ -116,12 +122,11 @@ async function claimEarnings() {
       data: {
         userId: uni.getStorageSync('id'),
         earnings: totalEarnings.value,
-				directEarning: roundToOneDecimal(directEarning),
-				indirectEarning: roundToOneDecimal(indirectEarning),
-				gameID: uni.getStorageSync('gameID')
+        directEarning: roundToOneDecimal(directEarning),
+        indirectEarning: roundToOneDecimal(indirectEarning),
+        gameID: uni.getStorageSync('gameID')
       }
     });
-		
 
     if (res.result.code === 0) {
       uni.hideLoading();
@@ -132,10 +137,15 @@ async function claimEarnings() {
       });
 
       // 更新本地能量石数量
-      getUserAssets()
-			
-			// 地皮领取明细
-			addAssetsChangeRecord(uni.getStorageSync('id'), POWERSTONE, roundToOneDecimal(totalEarnings.value), '每日所拥有土地收入: ')
+      getUserAssets();
+
+      // 地皮领取明细
+      addAssetsChangeRecord(
+        uni.getStorageSync('id'),
+        POWERSTONE,
+        roundToOneDecimal(totalEarnings.value),
+        '每日所拥有土地收入: '
+      );
 
       // 重新查询地皮数据
       await fetchUserGrounds();
