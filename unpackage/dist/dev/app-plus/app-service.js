@@ -8306,7 +8306,7 @@ This will fail in production if not fixed.`);
           closeEditNamePop();
           uni.showToast({ title: "修改成功", icon: "success" });
         } catch (err) {
-          formatAppLog("error", "at components/userInfoPop.vue:204", "修改失败", err);
+          formatAppLog("error", "at components/userInfoPop.vue:205", "修改失败", err);
           uni.showToast({ title: "修改失败", icon: "none" });
         }
       }
@@ -8321,7 +8321,7 @@ This will fail in production if not fixed.`);
           const tempFilePath = res.tempFilePaths[0];
           await uploadAvatarToUniCloud(tempFilePath);
         } catch (err) {
-          formatAppLog("error", "at components/userInfoPop.vue:221", "选择图片失败", err);
+          formatAppLog("error", "at components/userInfoPop.vue:222", "选择图片失败", err);
           uni.showToast({ title: "选择图片失败", icon: "none" });
         }
       }
@@ -8345,10 +8345,10 @@ This will fail in production if not fixed.`);
             uni.showToast({ title: "头像更新成功", icon: "success" });
           } else {
             uni.showToast({ title: "头像更新失败", icon: "none" });
-            formatAppLog("error", "at components/userInfoPop.vue:260", "云函数返回错误:", updateResult.result.message);
+            formatAppLog("error", "at components/userInfoPop.vue:261", "云函数返回错误:", updateResult.result.message);
           }
         } catch (err) {
-          formatAppLog("error", "at components/userInfoPop.vue:264", "上传失败", err);
+          formatAppLog("error", "at components/userInfoPop.vue:265", "上传失败", err);
           uni.showToast({ title: "上传失败", icon: "none" });
         } finally {
           uni.hideLoading();
@@ -8361,7 +8361,7 @@ This will fail in production if not fixed.`);
           const result = await Ys.getTempFileURL({ fileList: [fileID] });
           return result.fileList[0].tempFileURL;
         } catch (err) {
-          formatAppLog("error", "at components/userInfoPop.vue:279", "获取文件 URL 失败", err);
+          formatAppLog("error", "at components/userInfoPop.vue:280", "获取文件 URL 失败", err);
           return "";
         }
       }
@@ -8469,13 +8469,13 @@ This will fail in production if not fixed.`);
               })
             }, [
               vue.createElementVNode("text", null, "交易记录")
+            ]),
+            vue.createElementVNode("view", {
+              class: "button",
+              onClick: $setup.handlePromoEarnings
+            }, [
+              vue.createElementVNode("text", null, "推广收益")
             ])
-          ]),
-          vue.createElementVNode("view", {
-            class: "button",
-            onClick: $setup.handlePromoEarnings
-          }, [
-            vue.createElementVNode("text", null, "推广收益")
           ])
         ])
       ]),

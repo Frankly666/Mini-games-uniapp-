@@ -35,10 +35,11 @@
           <view class="button" @click="() => {handleTransactionRecord(true)}">
             <text>交易记录</text>
           </view>
+					<view class="button" @click="handlePromoEarnings">
+					  <text>推广收益</text>
+					</view>
         </view>
-        <view class="button" @click="handlePromoEarnings">
-          <text>推广收益</text>
-        </view>
+        
       </view>
     </view>
 
@@ -525,7 +526,7 @@ async function getTempFileURL(fileID) {
       position: absolute;
       top: 75vw;
       left: 11vw;
-      width: 60vw;
+      width: 75vw;
       display: flex;
       flex-direction: column;
       font-weight: bold;
@@ -533,11 +534,12 @@ async function getTempFileURL(fileID) {
       .buttonRow {
         display: flex;
         justify-content: left;
+				flex-wrap: wrap;
         width: 100%;
       }
 
       .button {
-        width: 50%;
+        width: 40%;
         background-color: rgba(255, 255, 255, 0.3);
         border-radius: 2vw;
         text-align: center;
