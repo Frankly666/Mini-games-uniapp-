@@ -9,9 +9,37 @@ exports.main = async (event, context) => {
 
   const db = uniCloud.database();
   const transaction = await db.startTransaction(); // 初始化事务
-  let description = '';
 
   try {
+    // 1. 根据 type 查询云端当前的资源数量
+    let cloudResourceAmount;
+    if (type === 0) {
+      // 取消出售记录
+      const sellRequirementDoc = await db.collection('sellRequirement').doc(recordId).get();
+      if (!sellRequirementDoc.data) {
+        throw new Error('出售记录不存在');
+      }
+      cloudResourceAmount = sellRequirementDoc.data[0].sellNum;
+    } else if (type === 1) {
+      // 取消求购记录
+      const buyRequirementDoc = await db.collection('buyRequirement').doc(recordId).get();
+      if (!buyRequirementDoc.data) {
+        throw new Error('求购记录不存在');
+      }
+      cloudResourceAmount = buyRequirementDoc.data.buyNum;
+    } else {
+      throw new Error('无效的 type 值');
+    }
+
+    // 2. 校验传入的 resourceAmount 是否与云端一致
+    if (resourceAmount !== cloudResourceAmount) {
+      return {
+        code: -2, // 特定状态码，表示数据过期
+        message: '数据已过期，请刷新后重试',
+      };
+    }
+
+    // 3. 根据 type 执行取消操作
     if (type === 0) {
       // 取消出售记录
       // 1. 从 sellRequirement 表中删除记录
@@ -19,8 +47,7 @@ exports.main = async (event, context) => {
 
       // 2. 调用公共云函数，返还资源给用户
       await updateUserResource(userId, resourceType, resourceAmount, transaction);
-			console.log("资源信息记录:", userId, resourceType, resourceAmount)
-
+      console.log('资源信息记录:', userId, resourceType, resourceAmount);
     } else if (type === 1) {
       // 取消求购记录
       // 1. 从 buyRequirement 表中删除记录
@@ -31,9 +58,6 @@ exports.main = async (event, context) => {
 
       // 3. 调用公共云函数，返还 jewel 给用户
       await updateUserResource(userId, 'jewel', totalJewel, transaction);
-
-    } else {
-      throw new Error('无效的 type 值');
     }
 
     // 提交事务

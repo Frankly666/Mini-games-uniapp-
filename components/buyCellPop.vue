@@ -234,7 +234,11 @@ async function confirmSellPublish() {
             props.updateData();
         } else if (res.result.code === -2) {
             // 数据过期，提示用户刷新
-            showTips("请刷新同步数据");
+            uni.showToast({
+              title: '请刷新同步数据',
+              icon: 'none',
+              duration: 3000,
+            });
             props.updateData(); // 刷新数据
         } else {
             // 其他错误
@@ -304,7 +308,11 @@ async function confirmNeedPublish() {
             props.updateData();
         } else if (res.result.code === -2) {
             // 数据过期，提示用户刷新
-            showTips("请刷新同步数据");
+            uni.showToast({
+              title: '请刷新同步数据',
+              icon: 'none',
+              duration: 3000,
+            });
             props.updateData(); // 刷新数据
         } else {
             // 其他错误

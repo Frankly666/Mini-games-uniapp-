@@ -106,7 +106,7 @@
 	import { JEWEL, useGameInfoStore } from '../../stores/gameInfo';
 	import { roundToOneDecimal } from '../../utils/roundToOneDecimal';
 	import { getUserAssets } from '../../utils/updateGameInfo';
-import { addAssetsChangeRecord, assetsNameMap } from '../../utils/addAssetsChangeRecord ';
+	import { addAssetsChangeRecord, assetsNameMap } from '../../utils/addAssetsChangeRecord ';
 
 	const marketCurrentIndex = ref(0)
 	const itemCurrentIndex = ref(0)
@@ -193,77 +193,95 @@ import { addAssetsChangeRecord, assetsNameMap } from '../../utils/addAssetsChang
 	
 	// 取消操作
 	async function handleCancel(item) {
-		uni.showModal({
-			title: '确认取消',
-			content: '您确定要撤销这条记录吗？\n操作后将返还你的资源',
-			success: async (res) => {
-				if (res.confirm) {
-					try {
-						// 显示加载提示
-						uni.showLoading({
-							title: '处理中...',
-							mask: true, // 防止用户点击其他区域
-						});
-
-						// 构造云函数参数
-						const params = {
-							userId: uni.getStorageSync('id'), // 当前用户 ID
-							recordId: item._id, // 交易记录 ID
-							resourceType: item.gemType, // 资源类型
-							resourceAmount: marketCurrentIndex.value === 0 ? item.sellNum : item.buyNum, // 资源数量
-							price: marketCurrentIndex.value === 0 ? item.sellPrice : item.buyPrice, // 资源单价
-							type: marketCurrentIndex.value, // 交易类型（0: 出售, 1: 求购）
-						};
-
-						// 调用云函数
-						const result = await uniCloud.callFunction({
-							name: 'cancelTradeRequirement',
-							data: params,
-						});
-
-						// 隐藏加载提示
-						uni.hideLoading();
-
-						// 处理云函数返回结果
-						if (result.result.code === 0) {
-							uni.showToast({
-								title: '取消成功',
-								icon: 'success',
-								duration: 2000, // 提示显示时长
-							});
-							
-							getUserAssets()
-							
-							// 取消出售记录
-							if(marketCurrentIndex.value === 0) {
-								addAssetsChangeRecord(uni.getStorageSync('id'), item.gemType, item.sellNum, `出售市场中取消出售${assetsNameMap[item.gemType]}(单价${item.sellPrice}), 退回: `)
-							}else {
-								addAssetsChangeRecord(uni.getStorageSync('id'), JEWEL, roundToOneDecimal(item.buyNum*item.buyPrice), `求购市场中取消求购${assetsNameMap[item.gemType]}(单价${item.buyPrice}), 退回: `)
-							}
-
-							// 刷新数据
-							await updateData();
-						} else {
-							uni.showToast({
-								title: '取消失败：' + result.result.message,
-								icon: 'none',
-								duration: 3000, // 提示显示时长
-							});
-						}
-					} catch (err) {
-						// 隐藏加载提示
-						uni.hideLoading();
-
-						// 显示错误提示
-						uni.showToast({
-							title: '取消失败：' + err.message,
-							icon: 'none',
-							duration: 3000, // 提示显示时长
-						});
-					}
-				}
-			},
-		});
+	  uni.showModal({
+	    title: '确认取消',
+	    content: '您确定要撤销这条记录吗？\n操作后将返还你的资源',
+	    success: async (res) => {
+	      if (res.confirm) {
+	        try {
+	          // 显示加载提示
+	          uni.showLoading({
+	            title: '处理中...',
+	            mask: true, // 防止用户点击其他区域
+	          });
+	
+	          // 构造云函数参数
+	          const params = {
+	            userId: uni.getStorageSync('id'), // 当前用户 ID
+	            recordId: item._id, // 交易记录 ID
+	            resourceType: item.gemType, // 资源类型
+	            resourceAmount: marketCurrentIndex.value === 0 ? item.sellNum : item.buyNum, // 资源数量
+	            price: marketCurrentIndex.value === 0 ? item.sellPrice : item.buyPrice, // 资源单价
+	            type: marketCurrentIndex.value, // 交易类型（0: 出售, 1: 求购）
+	          };
+	
+	          // 调用云函数
+	          const result = await uniCloud.callFunction({
+	            name: 'cancelTradeRequirement',
+	            data: params,
+	          });
+	
+	          // 隐藏加载提示
+	          uni.hideLoading();
+	
+	          // 处理云函数返回结果
+	          if (result.result.code === 0) {
+	            uni.showToast({
+	              title: '取消成功',
+	              icon: 'success',
+	              duration: 2000, // 提示显示时长
+	            });
+	
+	            getUserAssets();
+	
+	            // 取消出售记录
+	            if (marketCurrentIndex.value === 0) {
+	              addAssetsChangeRecord(
+	                uni.getStorageSync('id'),
+	                item.gemType,
+	                item.sellNum,
+	                `出售市场中取消出售${assetsNameMap[item.gemType]}(单价${item.sellPrice}), 退回: `
+	              );
+	            } else {
+	              addAssetsChangeRecord(
+	                uni.getStorageSync('id'),
+	                JEWEL,
+	                roundToOneDecimal(item.buyNum * item.buyPrice),
+	                `求购市场中取消求购${assetsNameMap[item.gemType]}(单价${item.buyPrice}), 退回: `
+	              );
+	            }
+	
+	            // 刷新数据
+	            await updateData();
+	          } else if (result.result.code === -2) {
+	            // 数据过期，提示用户刷新
+	            uni.showToast({
+	              title: '请刷新同步数据',
+	              icon: 'none',
+	              duration: 3000,
+	            });
+	            await updateData(); // 刷新数据
+	          } else {
+	            uni.showToast({
+	              title: '取消失败：' + result.result.message,
+	              icon: 'none',
+	              duration: 3000, // 提示显示时长
+	            });
+	          }
+	        } catch (err) {
+	          // 隐藏加载提示
+	          uni.hideLoading();
+	
+	          // 显示错误提示
+	          uni.showToast({
+	            title: '取消失败：' + err.message,
+	            icon: 'none',
+	            duration: 3000, // 提示显示时长
+	          });
+	        }
+	      }
+	    },
+	  });
 	}
 	
 	
