@@ -9,7 +9,24 @@ exports.main = async (event, context) => {
   const transaction = await db.startTransaction();
 
   try {
-    // 1. 获取购买者和发布者的 assets 记录
+    // 1. 查询云端当前的 sellNum
+    const sellRequirementDoc = await db.collection('sellRequirement').doc(id).get();
+    if (!sellRequirementDoc.data) {
+      throw new Error('需求记录不存在');
+    }
+
+    const cloudSellNum = sellRequirementDoc.data[0].sellNum;
+		console.log("cloudSellNumhhhhhhh:", cloudSellNum, sellNum );
+
+    // 2. 校验传入的 sellNum 是否与云端一致
+    if (sellNum !== cloudSellNum) {
+      return {
+        code: -2, // 特定状态码，表示数据过期
+        message: '请刷新同步'
+      };
+    }
+
+    // 3. 获取购买者和发布者的 assets 记录
     const buyerAssets = await db.collection('assets').where({ userId }).get();
     const sellerAssets = await db.collection('assets').where({ userId: sellerId }).get();
 
@@ -19,13 +36,11 @@ exports.main = async (event, context) => {
 
     const buyerAssetsId = buyerAssets.data[0]._id;
     const sellerAssetsId = sellerAssets.data[0]._id;
-    const buyerJewel = buyerAssets.data[0].jewel;
-    const sellerJewel = sellerAssets.data[0].jewel;
 
-    // 2. 判断购买者和发布者是否是同一用户
+    // 4. 判断购买者和发布者是否是同一用户
     const isSameUser = userId === sellerId;
 
-    // 3. 更新购买者和发布者的 jewel 资源
+    // 5. 更新购买者和发布者的 jewel 资源
     if (isSameUser) {
       // 如果是同一用户，只需扣除手续费
       await updateUserResource(userId, 'jewel', -(totalPrice * 0.05), transaction);
@@ -35,12 +50,12 @@ exports.main = async (event, context) => {
       await updateUserResource(userId, 'jewel', -totalPrice, transaction); // 购买者扣除全额
     }
 
-    // 4. 更新购买者的资源（增加购买的资源）
+    // 6. 更新购买者的资源（增加购买的资源）
     await transaction.collection('assets').doc(buyerAssetsId).update({
       [gemType]: db.command.inc(inputNumValue)
     });
 
-    // 5. 添加交易记录
+    // 7. 添加交易记录
     await transaction.collection('transactionRecord').add({
       buyerId: userId,
       sellerId,
@@ -50,8 +65,8 @@ exports.main = async (event, context) => {
       transactionTime: new Date()
     });
 
-    // 6. 更新需求状态
-    if (sellNum === inputNumValue) {
+    // 8. 更新需求状态
+    if (cloudSellNum === inputNumValue) {
       // 如果需求全部完成，标记为已完成
       await transaction.collection('sellRequirement').doc(id).update({
         isFinished: true
@@ -59,11 +74,11 @@ exports.main = async (event, context) => {
     } else {
       // 如果需求未全部完成，更新剩余数量
       await transaction.collection('sellRequirement').doc(id).update({
-        sellNum: sellNum - inputNumValue
+        sellNum: cloudSellNum - inputNumValue
       });
     }
 
-    // 7. 提交事务
+    // 9. 提交事务
     await transaction.commit();
 
     // 返回成功信息
