@@ -42,10 +42,13 @@ exports.main = async (event, context) => {
     // 5. 扣除出售者的资源（如果不是同一用户）
     if (!isSameUser) {
       await updateUserResource(userId, gemType, -inputNumValue, transaction); // 扣除出售的资源
-    }
+			await updateUserResource(userId, 'jewel', expected, transaction);  // 加上得到的宝石
+			await updateUserResource(buyerId, gemType, -inputNumValue, transaction);  // 加上求购得到的资源
+    }else {
+			await updateUserResource(userId, 'jewel', expected, transaction);  // 加上得到的宝石
+		}
 
-    // 6. 更新购买者的 jewel 资源（增加出售者应得的宝石）
-    await updateUserResource(buyerId, 'jewel', expected, transaction);
+    
 
     // 7. 添加交易记录
     await transaction.collection('transactionRecord').add({
