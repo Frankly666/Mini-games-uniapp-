@@ -52,13 +52,15 @@ exports.main = async (event, context) => {
       [assetsType]: roundToOneDecimal(senderCurrentAmount - totalDeduction),
     });
 		
-		const abtainNum = sendNum * 1.03
+		let abtainNum = sendNum * 1.03
+		if(premium === 0) abtainNum = sendNum;
+		
     await transaction.collection('assets').doc(recipientAssetsId).update({
       [assetsType]: roundToOneDecimal(recipientCurrentAmount + abtainNum),
     });
 		
-		console.log("记录的资源数量:", abtainNum, sendNum)
-
+		
+		// 转赠记录表
     await transaction.collection('sendRecord').add({
       userId,
       sendUserId: recipientId,

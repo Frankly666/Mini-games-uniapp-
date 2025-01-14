@@ -73,7 +73,7 @@
 					</view>
 					<view class="typeDesc">
 						<text>二级土地\n</text>
-						<text class="endTime">({{getEndTime(3, item)}}到期)</text>
+						<text class="endTime">{{getEndTime(3, item)}}到期</text>
 					</view>
 					<view class="lockGround" v-show="!judgeOwnThisGround(3, item)" @click="() => {clickLockGround(3, item)}">
 						<view class="title">

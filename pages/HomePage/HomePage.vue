@@ -31,7 +31,8 @@
         <click-into-cloud-city-vue></click-into-cloud-city-vue>
       </view>
       <view class="section" v-if="activeTab === 'promotion'">
-        <recommend-vue></recommend-vue>
+        <!-- 使用 v-if 控制 recommend-vue 的加载和销毁 -->
+        <recommend-vue v-if="activeTab === 'promotion'"></recommend-vue>
       </view>
       <view class="section" v-if="activeTab === 'guild'">
         <text class="section-title">公会</text>
@@ -53,7 +54,7 @@
       <view class="tab-item" :class="{ active: activeTab === 'cloud' }" @click="handleCloud">
         <text class="tab-text">云城</text>
       </view>
-      <!-- 推广 Tab（禁用） -->
+      <!-- 推广 Tab（可点击） -->
       <view class="tab-item" :class="{ active: activeTab === 'promotion'}" @click="handlePromotion">
         <text class="tab-text">推广</text>
       </view>
@@ -66,7 +67,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import martVue from '../../components/mart.vue';
 import clickIntoCloudCityVue from '../../components/clickIntoCloudCity.vue';
 import recommendVue from '../../components/recommend.vue';
@@ -96,6 +97,7 @@ function handlePromotion() {
   activeTab.value = 'promotion';
   console.log('切换到推广页面');
 }
+
 // 处理退出登录
 function handleLogout() {
   // 清空本地缓存
