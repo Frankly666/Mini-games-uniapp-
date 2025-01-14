@@ -48,8 +48,6 @@ exports.main = async (event, context) => {
 			await updateUserResource(userId, 'jewel', expected, transaction);  // 加上得到的宝石
 		}
 
-    
-
     // 7. 添加交易记录
     await transaction.collection('transactionRecord').add({
       buyerId,

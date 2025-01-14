@@ -68,7 +68,7 @@ export const useGameInfoStore = defineStore('gameInfo', {
 					"groundName": "资源地皮",
 					"unlockFunds": 298,
 					"duration": 48,
-					"dailyEarnings": 9,
+					"dailyEarnings": 10.3,
 					"directPushEarnings": 0.12,
 					"inDepthReturns": 0.02
 				},

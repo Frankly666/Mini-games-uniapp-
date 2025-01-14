@@ -37,11 +37,11 @@ const gameInfo = useGameInfoStore();
 const groundMeta = gameInfo.groundsMeta[props.groundType];
 
 
-// 检查用户是否购买了活动礼包
+// 检查用户是否购买了活动礼包(只要购买了, 就可以开发土地)
 async function checkActivity() {
   try {
     const res = await uniCloud.callFunction({
-      name: 'selectPurchaseActivity',
+      name: 'selectAllActivitt',
       data: {
         userId: uni.getStorageSync('id')
       }
