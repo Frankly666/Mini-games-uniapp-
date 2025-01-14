@@ -161,7 +161,7 @@ function getGemImg(item) {
   return `../static/market/${item}.png`;
 }
 function setNumValue(num) {
-  inputNumValue.value = num;
+  inputNumValue.value = parseFloat(num);
 }
 function handleShowWran(type) {
   isShowWarn.value = type;

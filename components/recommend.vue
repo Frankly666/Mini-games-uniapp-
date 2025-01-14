@@ -25,6 +25,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
+import { getLatestApkUrl } from '../utils/getLatestApkUrl';
 
 // 用户信息
 const userInfo = ref({
@@ -44,8 +45,21 @@ const loadUserInfo = () => {
     avatar: cachedUserInfo.avatar || '/static/default-avatar.png',
     inviteCode: cachedUserInfo.inviteCode || '000000'
   };
-  // 设置二维码内容
-  qrCodeContent.value = `https://example.com?invite=${userInfo.value.inviteCode}`;
+};
+
+// 获取最新 APK 下载地址并更新二维码内容
+const loadLatestApkUrl = async () => {
+  try {
+    const apkUrl = await getLatestApkUrl(); // 调用工具函数
+    qrCodeContent.value = apkUrl; // 更新二维码内容
+    console.log('最新 APK 下载地址:', apkUrl);
+  } catch (err) {
+    console.error('获取下载地址失败', err);
+    uni.showToast({
+      title: '获取下载地址失败，请稍后重试',
+      icon: 'none'
+    });
+  }
 };
 
 // 二维码生成完成回调
@@ -57,9 +71,10 @@ const onQRCodeComplete = (res) => {
   }
 };
 
-// 页面加载时获取用户信息
+// 页面加载时获取用户信息和最新 APK 下载地址
 onMounted(() => {
   loadUserInfo();
+  loadLatestApkUrl(); // 调用函数获取最新 APK 下载地址
 });
 </script>
 

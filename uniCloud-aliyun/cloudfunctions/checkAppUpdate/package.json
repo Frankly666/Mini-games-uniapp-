@@ -1,0 +1,7 @@
+{
+  "name": "checkAppUpdate",
+  "dependencies": {},
+  "extensions": {
+    "uni-cloud-jql": {}
+  }
+}

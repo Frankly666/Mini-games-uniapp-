@@ -1,0 +1,7 @@
+{
+  "name": "getLatestApkUrl",
+  "dependencies": {},
+  "extensions": {
+    "uni-cloud-jql": {}
+  }
+}

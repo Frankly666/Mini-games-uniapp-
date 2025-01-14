@@ -107,7 +107,7 @@
 	import { roundToOneDecimal } from '../../utils/roundToOneDecimal';
 	import { getUserAssets } from '../../utils/updateGameInfo';
 	import { addAssetsChangeRecord, assetsNameMap } from '../../utils/addAssetsChangeRecord ';
-import { showTips } from '../../utils/error';
+	import { showTips } from '../../utils/error';
 
 	const marketCurrentIndex = ref(0)
 	const itemCurrentIndex = ref(0)

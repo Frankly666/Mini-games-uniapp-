@@ -7039,6 +7039,20 @@ This will fail in production if not fixed.`);
     );
   }
   const __easycom_0 = /* @__PURE__ */ _export_sfc(_sfc_main$C, [["render", _sfc_render$B], ["__scopeId", "data-v-42fcb7aa"], ["__file", "D:/HBuilderProjects/Game/uni_modules/Sansnn-uQRCode/components/uqrcode/uqrcode.vue"]]);
+  async function getLatestApkUrl() {
+    try {
+      const res = await Ys.callFunction({
+        name: "getLatestApkUrl"
+      });
+      if (res.result.code === 0) {
+        return res.result.data;
+      } else {
+        throw new Error(res.result.message || "未找到最新版本");
+      }
+    } catch (err) {
+      throw new Error("获取下载链接失败：" + err.message);
+    }
+  }
   const _sfc_main$B = {
     __name: "recommend",
     setup(__props, { expose: __expose }) {
@@ -7056,19 +7070,34 @@ This will fail in production if not fixed.`);
           avatar: cachedUserInfo.avatar || "/static/default-avatar.png",
           inviteCode: cachedUserInfo.inviteCode || "000000"
         };
-        qrCodeContent.value = `https://example.com?invite=${userInfo.value.inviteCode}`;
+      };
+      const loadLatestApkUrl = async () => {
+        try {
+          const apkUrl = await getLatestApkUrl();
+          qrCodeContent.value = apkUrl;
+          formatAppLog("log", "at components/recommend.vue:55", "最新 APK 下载地址:", apkUrl);
+        } catch (err) {
+          formatAppLog("error", "at components/recommend.vue:57", "获取下载地址失败", err);
+          uni.showToast({
+            title: "获取下载地址失败，请稍后重试",
+            icon: "none"
+          });
+        }
       };
       const onQRCodeComplete = (res) => {
         if (res.success) {
-          formatAppLog("log", "at components/recommend.vue:54", "二维码生成成功");
+          formatAppLog("log", "at components/recommend.vue:68", "二维码生成成功");
         } else {
-          formatAppLog("error", "at components/recommend.vue:56", "二维码生成失败", res);
+          formatAppLog("error", "at components/recommend.vue:70", "二维码生成失败", res);
         }
       };
       vue.onMounted(() => {
         loadUserInfo();
+        loadLatestApkUrl();
       });
-      const __returned__ = { userInfo, qrCodeContent, loadUserInfo, onQRCodeComplete, ref: vue.ref, onMounted: vue.onMounted };
+      const __returned__ = { userInfo, qrCodeContent, loadUserInfo, loadLatestApkUrl, onQRCodeComplete, ref: vue.ref, onMounted: vue.onMounted, get getLatestApkUrl() {
+        return getLatestApkUrl;
+      } };
       Object.defineProperty(__returned__, "__isScriptSetup", { enumerable: false, value: true });
       return __returned__;
     }
