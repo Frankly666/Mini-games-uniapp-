@@ -195,17 +195,17 @@
 	
 	// 取消操作
 	async function handleCancel(item) {
-		uni.showLoading({
-			title: "数据检查中..."
-		})
+		// uni.showLoading({
+		// 	title: "数据检查中..."
+		// })
 		
 		
-		const res = await checkTradingRequrementAssets(item);
-		uni.hideLoading()
-		if(res.code === -2) {
-			showTips("请刷新后同步数据")
-			return
-		}
+		// const res = await checkTradingRequrementAssets(item);
+		// uni.hideLoading()
+		// if(res.code === -2) {
+		// 	showTips("请刷新后同步数据")
+		// 	return
+		// }
 		
 	  uni.showModal({
 	    title: '确认取消',

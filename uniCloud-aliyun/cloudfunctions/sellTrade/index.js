@@ -84,6 +84,7 @@ exports.main = async (event, context) => {
     if (cloudSellNum === inputNumValue) {
       // 如果需求全部完成，标记为已完成
       await transaction.collection('sellRequirement').doc(id).update({
+				sellNum: 0,
         isFinished: true
       });
     } else {
