@@ -96,7 +96,7 @@ const totalEarnings = computed(() => {
       }
     });
   }
-  return total;
+  return roundToOneDecimal(total);
 });
 
 // 监听 totalEarnings 的变化，自动显示弹窗
