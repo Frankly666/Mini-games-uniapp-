@@ -1,0 +1,7 @@
+{
+  "name": "checkCancelAssets",
+  "dependencies": {},
+  "extensions": {
+    "uni-cloud-jql": {}
+  }
+}

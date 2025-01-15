@@ -1,8 +1,6 @@
 'use strict';
-
-// 引入公共云函数
+const redis = uniCloud.redis();
 const updateUserResource = require('updateUserResource'); // 引入更新用户资源模块
-const { assetsNameMap } = require('const'); // 引入资源名称映射表
 
 exports.main = async (event, context) => {
   const { userId, recordId, resourceType, resourceAmount, price, type } = event;
@@ -11,7 +9,22 @@ exports.main = async (event, context) => {
   const transaction = await db.startTransaction(); // 初始化事务
 
   try {
-    // 1. 根据 type 查询云端当前的资源数量
+    // 1. 获取 Redis 分布式锁
+    const lockKey = `lock:${recordId}`;
+    const lockValue = `lock:${userId}:${Date.now()}`;
+    const lockAcquired = await redis.setnx(lockKey, lockValue);
+
+    if (!lockAcquired) {
+      return {
+        code: -4, // 特定状态码，表示获取锁失败
+        message: '操作过于频繁，请稍后重试',
+      };
+    }
+
+    // 设置锁的过期时间，防止死锁
+    await redis.expire(lockKey, 10); // 10秒后自动释放锁
+
+    // 2. 根据 type 查询云端当前的资源数量
     let cloudResourceAmount;
     if (type === 0) {
       // 取消出售记录
@@ -37,7 +50,7 @@ exports.main = async (event, context) => {
       throw new Error('无效的 type 值');
     }
 
-    // 2. 校验传入的 resourceAmount 是否与云端一致
+    // 3. 校验传入的 resourceAmount 是否与云端一致
     if (resourceAmount !== cloudResourceAmount) {
       return {
         code: -2, // 特定状态码，表示数据过期
@@ -45,7 +58,7 @@ exports.main = async (event, context) => {
       };
     }
 
-    // 3. 根据 type 执行取消操作
+    // 4. 根据 type 执行取消操作
     if (type === 0) {
       // 取消出售记录
       // 1. 从 sellRequirement 表中删除记录
@@ -68,6 +81,10 @@ exports.main = async (event, context) => {
 
     // 提交事务
     await transaction.commit();
+
+    // 释放 Redis 锁
+    await redis.del(lockKey);
+
     return {
       code: 0,
       message: '取消成功',
@@ -75,6 +92,10 @@ exports.main = async (event, context) => {
   } catch (err) {
     // 回滚事务
     await transaction.rollback();
+
+    // 释放 Redis 锁
+    await redis.del(lockKey);
+
     return {
       code: -1,
       message: '取消失败',

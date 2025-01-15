@@ -42,11 +42,11 @@
 				</view>
 			</view>
 			
-			<view class="wran">
+			<!-- <view class="wran">
 				<text v-show="isShowWran">(请输入限制范围内的单价)</text>
 				<text v-show="isShowNotEnough&&isSell">({{gemItems[selectIndex]}}不足)</text>
 				<text v-show="isShowNotEnough&&!isSell">(宝石余额不足)</text>
-			</view>
+			</view> -->
 			
 			<view class="tip" >
 				<view class="own item" v-if="isSell">

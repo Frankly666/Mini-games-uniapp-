@@ -108,6 +108,7 @@
 	import { getUserAssets } from '../../utils/updateGameInfo';
 	import { addAssetsChangeRecord, assetsNameMap } from '../../utils/addAssetsChangeRecord ';
 	import { showTips } from '../../utils/error';
+	import { checkTradingRequrementAssets } from '../../utils/checkTradingRequrementAssets';
 
 	const marketCurrentIndex = ref(0)
 	const itemCurrentIndex = ref(0)
@@ -194,6 +195,18 @@
 	
 	// 取消操作
 	async function handleCancel(item) {
+		uni.showLoading({
+			title: "数据检查中..."
+		})
+		
+		
+		const res = await checkTradingRequrementAssets(item);
+		uni.hideLoading()
+		if(res.code === -2) {
+			showTips("请刷新后同步数据")
+			return
+		}
+		
 	  uni.showModal({
 	    title: '确认取消',
 	    content: '您确定要撤销这条记录吗？\n操作后将返还你的资源',
