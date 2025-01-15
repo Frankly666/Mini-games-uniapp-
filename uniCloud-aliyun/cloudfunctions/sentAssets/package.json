@@ -1,6 +1,8 @@
 {
   "name": "sentAssets",
-  "dependencies": {},
+  "dependencies": {
+    "updateUserResource": "file:../common/updateUserResource"
+  },
   "extensions": {
     "uni-cloud-jql": {}
   }

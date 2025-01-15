@@ -24,7 +24,11 @@ module.exports = function(userId, resourceName, resourceAmount, transaction) {
 
       // 2. 计算新的资源值
       const newResource = parseFloat((currentResource + resourceAmount).toFixed(2)); // 保留两位小数
-
+			
+			if (newResource < 0) {
+				throw new Error('请刷新页面后重试');
+			}
+			
       // 3. 更新资源
       await transaction.collection('assets').doc(assetsId).update({
         [resourceName]: newResource

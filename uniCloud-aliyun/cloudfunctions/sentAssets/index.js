@@ -1,8 +1,10 @@
 'use strict';
+const updateUserResource = require('updateUserResource'); // 引入更新用户资源模块
+
 exports.main = async (event, context) => {
   console.log('event:', event);
-	
-	// type=1是交易市场中的转赠, 所有人都需要付手续费, type=2是商人集市中的转赠,只有商人不付手续费
+
+  // type=1是交易市场中的转赠, 所有人都需要付手续费, type=2是商人集市中的转赠,只有商人不付手续费
   const { gameID, userId, assetsType, sendNum, premium, type } = event;
   const db = uniCloud.database();
   const transaction = await db.startTransaction();
@@ -48,25 +50,31 @@ exports.main = async (event, context) => {
       return { code: -5, message: '赠送者资源不足' };
     }
 
-    // 5. 执行事务
-    await transaction.collection('assets').doc(senderAssetsId).update({
-      [assetsType]: roundToOneDecimal(senderCurrentAmount - totalDeduction),
-    });
-		
-		let abtainNum
-		// 在交易集市中, 只能获得sendNum
-		if(type === 1) {
-			abtainNum = sendNum
-		}else {
-			abtainNum = premium === 0 ? sendNum :sendNum * 1.03
-		}
-		
-    await transaction.collection('assets').doc(recipientAssetsId).update({
-      [assetsType]: roundToOneDecimal(recipientCurrentAmount + abtainNum),
-    });
-		
-		
-		// 转赠记录表
+    // 5. 使用公共模块更新赠送者资源
+    await updateUserResource(
+      userId,
+      assetsType,
+      -totalDeduction, // 扣除资源
+      transaction
+    );
+
+    // 6. 计算受赠者获得的资源
+    let abtainNum;
+    if (type === 1) {
+      abtainNum = sendNum; // 交易市场，只能获得 sendNum
+    } else {
+      abtainNum = premium === 0 ? sendNum : sendNum * 1.03; // 商人集市，根据 premium 计算
+    }
+
+    // 7. 使用公共模块更新受赠者资源
+    await updateUserResource(
+      recipientId,
+      assetsType,
+      abtainNum, // 增加资源
+      transaction
+    );
+
+    // 8. 添加转赠记录
     await transaction.collection('sendRecord').add({
       userId,
       sendUserId: recipientId,
@@ -75,6 +83,7 @@ exports.main = async (event, context) => {
       sendTime: new Date(),
     });
 
+    // 9. 提交事务
     await transaction.commit();
     console.log('资源转移成功');
     return { code: 1, message: '资源转移成功' };
