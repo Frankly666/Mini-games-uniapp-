@@ -75,6 +75,7 @@ async function confirmTransferResource() {
         assetsType: 'powerStone', // 资源类型（假设为能量石）
         sendNum: parseFloat(resourceAmount.value), // 转移数量
         premium: 0, // 手续费比例（0 表示无手续费）
+				type: 2
       },
     });
 

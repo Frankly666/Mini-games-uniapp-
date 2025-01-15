@@ -130,6 +130,7 @@ const handleSubmit = async () => {
         assetsType: 'powerStone', // 资源类型（假设为能量石）
         sendNum: parseFloat(resourceAmount.value), // 转移数量
         premium: 0.08, // 手续费比例
+				type: 2
       },
     });
 

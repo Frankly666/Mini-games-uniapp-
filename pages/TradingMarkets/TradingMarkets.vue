@@ -24,10 +24,10 @@
 			/>
 		
 		<!-- 转赠弹窗 -->
-		<!-- <sent-pop-vue
+		<sent-pop-vue
 			v-if="isShowSentPop"
 			:closePop = '() => {setShowSentPop(false)}'
-		/> -->
+		/>
 		
 		<!-- 出售求购 -->
 		<view class="topWrap">
@@ -41,9 +41,9 @@
 				</view>
 			</view>
 			
-			<!-- <view class="sent" @click="() => {setShowSentPop(true)}">
+			<view class="sent" @click="() => {setShowSentPop(true)}">
 				<text>转赠</text>
-			</view> -->
+			</view>
 			
 			<view class="publish" @click="() => {controlPublish(true)}">
 				<text>发布{{marketItems[marketCurrentIndex]}}</text>

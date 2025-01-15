@@ -158,6 +158,7 @@
 	        assetsType: gemType,
 	        sendNum: roundToOneDecimal(inputNumValue.value),
 	        premium: premium,
+					type: 1
 	      },
 	    });
 	

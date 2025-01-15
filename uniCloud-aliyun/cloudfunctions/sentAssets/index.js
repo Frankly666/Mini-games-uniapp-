@@ -1,8 +1,9 @@
 'use strict';
 exports.main = async (event, context) => {
   console.log('event:', event);
-
-  const { gameID, userId, assetsType, sendNum, premium } = event;
+	
+	// type=1是交易市场中的转赠, 所有人都需要付手续费, type=2是商人集市中的转赠,只有商人不付手续费
+  const { gameID, userId, assetsType, sendNum, premium, type } = event;
   const db = uniCloud.database();
   const transaction = await db.startTransaction();
 
@@ -52,8 +53,13 @@ exports.main = async (event, context) => {
       [assetsType]: roundToOneDecimal(senderCurrentAmount - totalDeduction),
     });
 		
-		let abtainNum = sendNum * 1.03
-		if(premium === 0) abtainNum = sendNum;
+		let abtainNum
+		// 在交易集市中, 只能获得sendNum
+		if(type === 1) {
+			abtainNum = sendNum
+		}else {
+			abtainNum = premium === 0 ? sendNum :sendNum * 1.03
+		}
 		
     await transaction.collection('assets').doc(recipientAssetsId).update({
       [assetsType]: roundToOneDecimal(recipientCurrentAmount + abtainNum),
