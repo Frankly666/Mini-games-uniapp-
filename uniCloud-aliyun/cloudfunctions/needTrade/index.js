@@ -43,7 +43,7 @@ exports.main = async (event, context) => {
     if (!isSameUser) {
       await updateUserResource(userId, gemType, -inputNumValue, transaction); // 扣除出售的资源
 			await updateUserResource(userId, 'jewel', expected, transaction);  // 加上得到的宝石
-			await updateUserResource(buyerId, gemType, -inputNumValue, transaction);  // 加上求购得到的资源
+			await updateUserResource(buyerId, gemType, inputNumValue, transaction);  // 加上求购得到的资源
     }else {
 			await updateUserResource(userId, 'jewel', expected, transaction);  // 加上得到的宝石
 		}
