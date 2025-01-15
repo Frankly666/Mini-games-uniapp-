@@ -78,7 +78,7 @@ exports.main = async (event, context) => {
     if (cloudBuyNum === inputNumValue) {
       // 如果需求全部完成，标记为已完成
       await transaction.collection('buyRequirement').doc(id).update({
-				sellNum: 0,
+				buyNum: 0,
         isFinished: true,
       });
     } else {
