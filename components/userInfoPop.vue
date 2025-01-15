@@ -158,15 +158,23 @@ function handlePromoEarnings() {
 
 // 点击“确认修改”按钮
 function handleConfirm() {
+	// 没有输入名字就返回
   if (!newName.value) return;
-
+	
+	// 如果第一次修改就直接修改
+	if(isFirstEdit.value) {
+			console.log("hhh 我就是第一次修改",isFirstEdit.value )
+			handleRealConfirm()
+	}
+	
+	// 非第一次修改并且能量石不够
   if (!isFirstEdit.value && gameInfo.assets.powerStone < 100) {
     isShowTip.value = true;
     return;
   }
-
-  // 显示二次确认弹窗
-  isShowConfirmPop.value = true;
+	
+	// 非第一次修改需要弹窗
+	if(!isFirstEdit.value)isShowConfirmPop.value = true;  
 }
 
 // 二次确认弹窗的“确定”按钮
@@ -178,6 +186,7 @@ async function handleRealConfirm() {
       getUserAssets()
       const assetsDB = uniCloud.importObject('assets');
       await assetsDB.update(uni.getStorageSync('id'), POWERSTONE, -100);
+			addAssetsChangeRecord(uni.getStorageSync('id'), POWERSTONE, 100, `用户修改名字扣除:`)
     }
 
     const user = uniCloud.importObject('user');
@@ -190,14 +199,7 @@ async function handleRealConfirm() {
     gameInfo.userName = newName.value;
     gameInfo.isFirst = 1;
     isFirstEdit.value = false;
-		
-		getUserAssets()
-		
-		// 用户修改名字明细记录
-		if(!isFirstEdit.value) {
-			addAssetsChangeRecord(uni.getStorageSync('id'), POWERSTONE, 100, `用户修改名字扣除:`)
-		}
-		
+		getUserAssets()		
 		
     closeEditNamePop();
     uni.showToast({ title: '修改成功', icon: 'success' });
