@@ -161,6 +161,12 @@ import { addAssetsChangeRecord, assetsNameMap } from '../utils/addAssetsChangeRe
 	        showTips("余额不足");
 	        return;
 	    }
+			
+			if (!Number.isInteger(inputNumValue.value)) {
+			  showTips("数量只能为整数");
+			  return;
+			}
+			
 	    const gemType = props.gemImgName[selectIndex.value];
 	    uni.showLoading({
 	        title: '发布中',
@@ -209,6 +215,11 @@ import { addAssetsChangeRecord, assetsNameMap } from '../utils/addAssetsChangeRe
 	    }
 	    const gemType = props.gemImgName[selectIndex.value];
 	    const totalPrice = roundToOneDecimal(inputNumValue.value * inputPriceValue.value);
+			
+			if (!Number.isInteger(inputNumValue.value)) {
+			  showTips("数量只能为整数");
+			  return;
+			}
 	
 	    if (totalPrice > gameInfo.assets[JEWEL]) {
 	        isShowNotEnough.value = true;
