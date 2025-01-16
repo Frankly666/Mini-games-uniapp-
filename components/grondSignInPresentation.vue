@@ -10,7 +10,7 @@
         <!-- 能量石图片和数量 -->
         <view class="rewardInfo">
           <image class="gemImage" src="../static/market/powerStone.png" mode="widthFix"></image>
-          <text class="gemAmount">{{ totalEarnings }} 能量石</text>
+          <text class="gemAmount">{{ roundToOneDecimal(totalEarnings) }} 能量石</text>
         </view>
 
         <!-- 领取按钮 -->

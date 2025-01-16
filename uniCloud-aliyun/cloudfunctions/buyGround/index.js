@@ -7,8 +7,16 @@ exports.main = async (event, context) => {
   // event为客户端上传的参数
   console.log('event : ', event);
 
-  const { addUserGroundData, userId, unlockFunds } = event;
+  const { addUserGroundData, userId, unlockFunds, duration } = event;
   const transaction = await db.startTransaction();
+	
+	const now = new Date();
+	const timestamp = now.getTime();
+	const newTimestamp = timestamp + duration * 24 * 3600 * 1000;
+	const newDate = new Date(newTimestamp);
+	addUserGroundData.endTime = newDate.toISOString();
+	addUserGroundData.rentTime = now.toISOString();
+	 
 
   try {
     // 1. 添加地皮记录，初始化 lastSignInTime 为 null

@@ -162,6 +162,14 @@ function handleRegister() {
     });
     return;
   }
+	
+	if(password.value < 6) {
+		uni.showToast({
+		  title: '密码长度不能少于6个字符',
+		  icon: 'none'
+		});
+		return;
+	}
 
   // 校验密码是否一致
   if (password.value !== repeatPassword.value) {

@@ -65,13 +65,16 @@ async function checkActivity() {
 async function confirmUnlock() {
     const haveActivity = await checkActivity();
     if (!haveActivity) {
-        showTips('未购买蛇年限定礼包');
+        showTips('未购买蛇年礼包');
         return;
     }
-
-    const unlockFunds = gameInfo.groundsMeta[props.groundType].unlockFunds;
+		
+		const thisGround = gameInfo.groundsMeta[props.groundType]
+    const unlockFunds = thisGround.unlockFunds;
+		const groundName = thisGround.groundName;
+		const duration  = thisGround.duration;
     const nowNum = gameInfo.assets[POWERSTONE];
-		const groundName = gameInfo.groundsMeta[props.groundType].groundName;
+		
 
     // 钱不够就直接跳出
     if (nowNum < unlockFunds) {
@@ -100,7 +103,8 @@ async function confirmUnlock() {
                 workerEndTime: null
             },
             userId: uni.getStorageSync('id'),
-            unlockFunds: unlockFunds
+            unlockFunds: unlockFunds,
+						duration: duration
         }
     })
     .then(res => {
