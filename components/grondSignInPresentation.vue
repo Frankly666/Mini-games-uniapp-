@@ -90,7 +90,8 @@ const totalEarnings = computed(() => {
     userGrounds.value[groundType].forEach(ground => {
       if (isGroundExpired(ground.endTime) && !isTodayClaimed(ground.lastClaimTime)) {
         const thisGround = gameInfo.groundsMeta[groundType];
-        total += thisGround.dailyEarnings;
+        total = roundToOneDecimal(total + thisGround.dailyEarnings);
+				console.log("地皮收益计算:", total)
         directEarning += thisGround.dailyEarnings * thisGround.directPushEarnings;
         indirectEarning += thisGround.dailyEarnings * thisGround.inDepthReturns;
       }

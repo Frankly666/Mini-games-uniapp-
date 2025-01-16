@@ -10,12 +10,13 @@ exports.main = async (event, context) => {
   const { addUserGroundData, userId, unlockFunds, duration } = event;
   const transaction = await db.startTransaction();
 	
-	const now = new Date();
-	const timestamp = now.getTime();
-	const newTimestamp = timestamp + duration * 24 * 3600 * 1000;
-	const newDate = new Date(newTimestamp);
-	addUserGroundData.endTime = newDate.toISOString();
-	addUserGroundData.rentTime = now.toISOString();
+	const now = new Date(); // 当前时间
+	const endDate = new Date(now);
+	endDate.setDate(now.getDate() + duration);
+	// 将结束时间设置为当天的0点
+	endDate.setHours(0, 0, 0, 0);
+	addUserGroundData.endTime =  endDate.toISOString();
+	addUserGroundData.rentTime =  now.toISOString();
 	 
 
   try {

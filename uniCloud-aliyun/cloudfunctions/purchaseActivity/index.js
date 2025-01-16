@@ -14,7 +14,9 @@ exports.main = async (event, context) => {
 
     // 2. 添加购买记录到 activityPurchaseRecord 表
     const purchaseTime = new Date(); // 购买时间
-    const endTime = new Date(purchaseTime.getTime() + duration * 24 * 60 * 60 * 1000); // 结束时间
+		const startOfDay = new Date(purchaseTime);
+		startOfDay.setHours(0, 0, 0, 0);
+    const endTime = new Date(startOfDay.getTime() + duration * 24 * 60 * 60 * 1000); // 结束时间
 
     await transaction.collection('activityPurchaseRecord').add({
       userId,

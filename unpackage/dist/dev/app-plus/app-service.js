@@ -4741,6 +4741,13 @@ This will fail in production if not fixed.`);
           });
           return;
         }
+        if (password.value < 6) {
+          uni.showToast({
+            title: "密码长度不能少于6个字符",
+            icon: "none"
+          });
+          return;
+        }
         if (password.value !== repeatPassword.value) {
           uni.showToast({
             title: "两次输入的密码不一致",
@@ -4803,7 +4810,7 @@ This will fail in production if not fixed.`);
           }
         }).catch((err) => {
           uni.hideLoading();
-          formatAppLog("error", "at pages/login/login.vue:246", "注册失败:", err);
+          formatAppLog("error", "at pages/login/login.vue:254", "注册失败:", err);
           uni.showToast({
             title: "注册失败，服务器错误",
             icon: "none"
@@ -5184,22 +5191,23 @@ This will fail in production if not fixed.`);
               // 资源类型（假设为能量石）
               sendNum: parseFloat(resourceAmount.value),
               // 转移数量
-              premium: 0.08
+              premium: 0.08,
               // 手续费比例
+              type: 2
             }
           });
           uni.hideLoading();
-          formatAppLog("log", "at components/userToShopkeeperPop.vue:138", "云函数返回结果:", res.result);
+          formatAppLog("log", "at components/userToShopkeeperPop.vue:139", "云函数返回结果:", res.result);
           if (res.result.code === 1) {
             uni.showToast({ title: "资源转移成功", icon: "success" });
             await addAssetsChangeRecord(uni.getStorageSync("id"), POWERSTONE, totalDeduction.value, `在商人集市中向游戏ID为${ownerGameId.value}的店主转赠能量石, 扣除(含8%手续费):`);
             const result = await getUserIDByGameID(ownerGameId.value);
             if (result.code === 0) {
-              formatAppLog("log", "at components/userToShopkeeperPop.vue:149", "用户唯一 _id:", result.data._id);
+              formatAppLog("log", "at components/userToShopkeeperPop.vue:150", "用户唯一 _id:", result.data._id);
               const useId = result.data._id;
               addAssetsChangeRecord(useId, POWERSTONE, roundToOneDecimal(resourceAmount.value * 1.03), `在商人集市中收到游戏ID为${uni.getStorageSync("gameID")}的玩家转赠的能量石, 共收获(含3%手续费):`);
             } else {
-              formatAppLog("error", "at components/userToShopkeeperPop.vue:153", "获取用户 _id 失败:", result.message);
+              formatAppLog("error", "at components/userToShopkeeperPop.vue:154", "获取用户 _id 失败:", result.message);
             }
             handleClose();
           } else {
@@ -5224,7 +5232,7 @@ This will fail in production if not fixed.`);
           }
         } catch (err) {
           uni.hideLoading();
-          formatAppLog("error", "at components/userToShopkeeperPop.vue:181", "调用云函数失败:", err);
+          formatAppLog("error", "at components/userToShopkeeperPop.vue:182", "调用云函数失败:", err);
           uni.showToast({ title: "网络错误，请稍后重试", icon: "none" });
         }
       };
@@ -8306,11 +8314,16 @@ This will fail in production if not fixed.`);
       function handleConfirm() {
         if (!newName.value)
           return;
+        if (isFirstEdit.value) {
+          formatAppLog("log", "at components/userInfoPop.vue:166", "hhh 我就是第一次修改", isFirstEdit.value);
+          handleRealConfirm();
+        }
         if (!isFirstEdit.value && gameInfo.assets.powerStone < 100) {
           isShowTip.value = true;
           return;
         }
-        isShowConfirmPop.value = true;
+        if (!isFirstEdit.value)
+          isShowConfirmPop.value = true;
       }
       async function handleRealConfirm() {
         isShowConfirmPop.value = false;
@@ -8319,6 +8332,7 @@ This will fail in production if not fixed.`);
             getUserAssets();
             const assetsDB = Ys.importObject("assets");
             await assetsDB.update(uni.getStorageSync("id"), POWERSTONE, -100);
+            addAssetsChangeRecord(uni.getStorageSync("id"), POWERSTONE, 100, `用户修改名字扣除:`);
           }
           const user = Ys.importObject("user");
           const id = uni.getStorageSync("id");
@@ -8329,13 +8343,10 @@ This will fail in production if not fixed.`);
           gameInfo.isFirst = 1;
           isFirstEdit.value = false;
           getUserAssets();
-          if (!isFirstEdit.value) {
-            addAssetsChangeRecord(uni.getStorageSync("id"), POWERSTONE, 100, `用户修改名字扣除:`);
-          }
           closeEditNamePop();
           uni.showToast({ title: "修改成功", icon: "success" });
         } catch (err) {
-          formatAppLog("error", "at components/userInfoPop.vue:205", "修改失败", err);
+          formatAppLog("error", "at components/userInfoPop.vue:207", "修改失败", err);
           uni.showToast({ title: "修改失败", icon: "none" });
         }
       }
@@ -8350,7 +8361,7 @@ This will fail in production if not fixed.`);
           const tempFilePath = res.tempFilePaths[0];
           await uploadAvatarToUniCloud(tempFilePath);
         } catch (err) {
-          formatAppLog("error", "at components/userInfoPop.vue:222", "选择图片失败", err);
+          formatAppLog("error", "at components/userInfoPop.vue:224", "选择图片失败", err);
           uni.showToast({ title: "选择图片失败", icon: "none" });
         }
       }
@@ -8374,10 +8385,10 @@ This will fail in production if not fixed.`);
             uni.showToast({ title: "头像更新成功", icon: "success" });
           } else {
             uni.showToast({ title: "头像更新失败", icon: "none" });
-            formatAppLog("error", "at components/userInfoPop.vue:261", "云函数返回错误:", updateResult.result.message);
+            formatAppLog("error", "at components/userInfoPop.vue:263", "云函数返回错误:", updateResult.result.message);
           }
         } catch (err) {
-          formatAppLog("error", "at components/userInfoPop.vue:265", "上传失败", err);
+          formatAppLog("error", "at components/userInfoPop.vue:267", "上传失败", err);
           uni.showToast({ title: "上传失败", icon: "none" });
         } finally {
           uni.hideLoading();
@@ -8390,7 +8401,7 @@ This will fail in production if not fixed.`);
           const result = await Ys.getTempFileURL({ fileList: [fileID] });
           return result.fileList[0].tempFileURL;
         } catch (err) {
-          formatAppLog("error", "at components/userInfoPop.vue:280", "获取文件 URL 失败", err);
+          formatAppLog("error", "at components/userInfoPop.vue:282", "获取文件 URL 失败", err);
           return "";
         }
       }
@@ -9959,6 +9970,10 @@ This will fail in production if not fixed.`);
           showTips("余额不足");
           return;
         }
+        if (!Number.isInteger(inputNumValue.value)) {
+          showTips("数量只能为整数");
+          return;
+        }
         const gemType = props.gemImgName[selectIndex.value];
         uni.showLoading({
           title: "发布中",
@@ -9982,7 +9997,7 @@ This will fail in production if not fixed.`);
           uni.hideLoading();
           if (res.result.code === 0) {
             showSuccus("发布成功!");
-            formatAppLog("log", "at components/marketPublish.vue:189", "res:", res);
+            formatAppLog("log", "at components/marketPublish.vue:195", "res:", res);
             getUserAssets();
             addAssetsChangeRecord(uni.getStorageSync("id"), gemType, inputNumValue.value, `发布出售(单价: ${inputPriceValue.value}), 由平台扣除`);
             props.controlPublish(false);
@@ -9993,7 +10008,7 @@ This will fail in production if not fixed.`);
         }).catch((err) => {
           uni.hideLoading();
           showTips("网络错误，请稍后重试");
-          formatAppLog("error", "at components/marketPublish.vue:200", "云函数调用失败:", err);
+          formatAppLog("error", "at components/marketPublish.vue:206", "云函数调用失败:", err);
         });
       }
       async function confirmNeedPublish() {
@@ -10003,6 +10018,10 @@ This will fail in production if not fixed.`);
         }
         const gemType = props.gemImgName[selectIndex.value];
         const totalPrice = roundToOneDecimal(inputNumValue.value * inputPriceValue.value);
+        if (!Number.isInteger(inputNumValue.value)) {
+          showTips("数量只能为整数");
+          return;
+        }
         if (totalPrice > gameInfo.assets[JEWEL]) {
           isShowNotEnough.value = true;
           showTips("余额不足");
@@ -10040,7 +10059,7 @@ This will fail in production if not fixed.`);
         }).catch((err) => {
           uni.hideLoading();
           showTips("网络错误，请稍后重试");
-          formatAppLog("error", "at components/marketPublish.vue:252", "云函数调用失败:", err);
+          formatAppLog("error", "at components/marketPublish.vue:263", "云函数调用失败:", err);
         });
       }
       const __returned__ = { gameInfo, props, selectIndex, inputNumValue, inputPriceValue, isShowNotEnough, minimumPrice, expectedNum, needPowerStoneNum, isShowWran, isSell: isSell2, confirmFun, getGemImg, handleIndex, setPriceValue, setNumValue, handleSellNum, confirmSellPublish, confirmNeedPublish, computed: vue.computed, onMounted: vue.onMounted, ref: vue.ref, get JEWEL() {
@@ -10191,35 +10210,7 @@ This will fail in production if not fixed.`);
             }, null, 40, ["value"])
           ])
         ]),
-        vue.createElementVNode("view", { class: "wran" }, [
-          vue.withDirectives(vue.createElementVNode(
-            "text",
-            null,
-            "(请输入限制范围内的单价)",
-            512
-            /* NEED_PATCH */
-          ), [
-            [vue.vShow, $setup.isShowWran]
-          ]),
-          vue.withDirectives(vue.createElementVNode(
-            "text",
-            null,
-            "(" + vue.toDisplayString($props.gemItems[$setup.selectIndex]) + "不足)",
-            513
-            /* TEXT, NEED_PATCH */
-          ), [
-            [vue.vShow, $setup.isShowNotEnough && $setup.isSell]
-          ]),
-          vue.withDirectives(vue.createElementVNode(
-            "text",
-            null,
-            "(宝石余额不足)",
-            512
-            /* NEED_PATCH */
-          ), [
-            [vue.vShow, $setup.isShowNotEnough && !$setup.isSell]
-          ])
-        ]),
+        vue.createCommentVNode(' <view class="wran">\r\n				<text v-show="isShowWran">(请输入限制范围内的单价)</text>\r\n				<text v-show="isShowNotEnough&&isSell">({{gemItems[selectIndex]}}不足)</text>\r\n				<text v-show="isShowNotEnough&&!isSell">(宝石余额不足)</text>\r\n			</view> '),
         vue.createElementVNode("view", { class: "tip" }, [
           $setup.isSell ? (vue.openBlock(), vue.createElementBlock("view", {
             key: 0,
@@ -10357,7 +10348,7 @@ This will fail in production if not fixed.`);
         return `../static/market/${item}.png`;
       }
       function setNumValue(num) {
-        inputNumValue.value = num;
+        inputNumValue.value = parseFloat(num);
       }
       function handleShowWran(type) {
         isShowWarn.value = type;
@@ -10767,20 +10758,21 @@ This will fail in production if not fixed.`);
               userId: uni.getStorageSync("id"),
               assetsType: gemType,
               sendNum: roundToOneDecimal(inputNumValue.value),
-              premium
+              premium,
+              type: 1
             }
           });
-          formatAppLog("log", "at components/sentPop.vue:164", "云函数返回结果:", res.result);
+          formatAppLog("log", "at components/sentPop.vue:165", "云函数返回结果:", res.result);
           if (res.result.code === 1) {
             getUserAssets();
             await addAssetsChangeRecord(uni.getStorageSync("id"), POWERSTONE, needPowerStoneNum.value, `在交易集市中向游戏ID为${gameIDInputValue.value}的转赠能量石, 扣除(含8%手续费):`);
             const result = await getUserIDByGameID(gameIDInputValue.value);
             if (result.code === 0) {
-              formatAppLog("log", "at components/sentPop.vue:176", "用户唯一 _id:", result.data._id);
+              formatAppLog("log", "at components/sentPop.vue:177", "用户唯一 _id:", result.data._id);
               const useId = result.data._id;
               addAssetsChangeRecord(useId, POWERSTONE, roundToOneDecimal(inputNumValue.value), `在交易集市中收到游戏ID为${uni.getStorageSync("gameID")}的转赠能量石, 收到:`);
             } else {
-              formatAppLog("error", "at components/sentPop.vue:180", "获取用户 _id 失败:", result.message);
+              formatAppLog("error", "at components/sentPop.vue:181", "获取用户 _id 失败:", result.message);
             }
             showSuccus("转赠成功!");
             props.closePop();
@@ -10805,7 +10797,7 @@ This will fail in production if not fixed.`);
             showTips(errorMessage);
           }
         } catch (err) {
-          formatAppLog("error", "at components/sentPop.vue:210", "转赠失败:", err);
+          formatAppLog("error", "at components/sentPop.vue:211", "转赠失败:", err);
           showTips("转赠失败，请重试");
         } finally {
           uni.hideLoading();
@@ -10980,6 +10972,20 @@ This will fail in production if not fixed.`);
     ]);
   }
   const sentPopVue = /* @__PURE__ */ _export_sfc(_sfc_main$b, [["render", _sfc_render$a], ["__scopeId", "data-v-e13ff159"], ["__file", "D:/HBuilderProjects/Game/components/sentPop.vue"]]);
+  async function checkTradingRequrementAssets(data) {
+    try {
+      const result = await Ys.callFunction({
+        name: "checkTradingRequrementAssets",
+        // 云函数名称
+        data
+        // 传入的数据
+      });
+      return result.result;
+    } catch (error) {
+      formatAppLog("error", "at utils/checkTradingRequrementAssets.js:17", "调用云函数失败:", error);
+      return { code: -5, message: "调用云函数失败" };
+    }
+  }
   const _sfc_main$a = {
     __name: "TradingMarkets",
     setup(__props, { expose: __expose }) {
@@ -11148,6 +11154,8 @@ This will fail in production if not fixed.`);
         return assetsNameMap;
       }, get showTips() {
         return showTips;
+      }, get checkTradingRequrementAssets() {
+        return checkTradingRequrementAssets;
       } };
       Object.defineProperty(__returned__, "__isScriptSetup", { enumerable: false, value: true });
       return __returned__;
@@ -11184,10 +11192,12 @@ This will fail in production if not fixed.`);
         updateData: $setup.updateData
       }, null, 8, ["gemName", "gemChName", "marketName", "certainItem"])) : vue.createCommentVNode("v-if", true),
       vue.createCommentVNode(" 转赠弹窗 "),
-      vue.createCommentVNode(` <sent-pop-vue\r
-			v-if="isShowSentPop"\r
-			:closePop = '() => {setShowSentPop(false)}'\r
-		/> `),
+      $setup.isShowSentPop ? (vue.openBlock(), vue.createBlock($setup["sentPopVue"], {
+        key: 2,
+        closePop: () => {
+          $setup.setShowSentPop(false);
+        }
+      }, null, 8, ["closePop"])) : vue.createCommentVNode("v-if", true),
       vue.createCommentVNode(" 出售求购 "),
       vue.createElementVNode("view", { class: "topWrap" }, [
         vue.createElementVNode("view", { class: "markets" }, [
@@ -11214,10 +11224,17 @@ This will fail in production if not fixed.`);
             /* STABLE_FRAGMENT */
           ))
         ]),
-        vue.createCommentVNode(' <view class="sent" @click="() => {setShowSentPop(true)}">\r\n				<text>转赠</text>\r\n			</view> '),
+        vue.createElementVNode("view", {
+          class: "sent",
+          onClick: _cache[0] || (_cache[0] = () => {
+            $setup.setShowSentPop(true);
+          })
+        }, [
+          vue.createElementVNode("text", null, "转赠")
+        ]),
         vue.createElementVNode("view", {
           class: "publish",
-          onClick: _cache[0] || (_cache[0] = () => {
+          onClick: _cache[1] || (_cache[1] = () => {
             $setup.controlPublish(true);
           })
         }, [
@@ -11823,12 +11840,14 @@ This will fail in production if not fixed.`);
       async function confirmUnlock() {
         const haveActivity = await checkActivity();
         if (!haveActivity) {
-          showTips("未购买蛇年限定礼包");
+          showTips("未购买蛇年礼包");
           return;
         }
-        const unlockFunds = gameInfo.groundsMeta[props.groundType].unlockFunds;
+        const thisGround = gameInfo.groundsMeta[props.groundType];
+        const unlockFunds = thisGround.unlockFunds;
+        const groundName = thisGround.groundName;
+        const duration = thisGround.duration;
         const nowNum = gameInfo.assets[POWERSTONE];
-        const groundName = gameInfo.groundsMeta[props.groundType].groundName;
         if (nowNum < unlockFunds) {
           showTips("余额不足");
           return;
@@ -11855,7 +11874,8 @@ This will fail in production if not fixed.`);
               workerEndTime: null
             },
             userId: uni.getStorageSync("id"),
-            unlockFunds
+            unlockFunds,
+            duration
           }
         }).then((res) => {
           uni.hideLoading();
@@ -11871,7 +11891,7 @@ This will fail in production if not fixed.`);
         }).catch((err) => {
           uni.hideLoading();
           showTips("网络错误，请稍后重试");
-          formatAppLog("error", "at components/buyGroundPop.vue:124", "购买失败:", err);
+          formatAppLog("error", "at components/buyGroundPop.vue:128", "购买失败:", err);
         });
       }
       const __returned__ = { props, gameInfo, groundMeta, checkActivity, confirmUnlock, get POWERSTONE() {
@@ -11991,7 +12011,7 @@ This will fail in production if not fixed.`);
         today.setHours(0, 0, 0, 0);
         const claimDate = new Date(lastClaimTime);
         claimDate.setHours(0, 0, 0, 0);
-        return today.getTime() === claimDate.getTime();
+        return claimDate.getTime() >= today.getTime();
       }
       function isGroundExpired(endTime) {
         if (!serverTime.value)
@@ -12004,13 +12024,14 @@ This will fail in production if not fixed.`);
           userGrounds.value[groundType].forEach((ground) => {
             if (isGroundExpired(ground.endTime) && !isTodayClaimed(ground.lastClaimTime)) {
               const thisGround = gameInfo.groundsMeta[groundType];
-              total += thisGround.dailyEarnings;
+              total = roundToOneDecimal(total + thisGround.dailyEarnings);
+              formatAppLog("log", "at components/grondSignInPresentation.vue:94", "地皮收益计算:", total);
               directEarning += thisGround.dailyEarnings * thisGround.directPushEarnings;
               indirectEarning += thisGround.dailyEarnings * thisGround.inDepthReturns;
             }
           });
         }
-        return total;
+        return roundToOneDecimal(total);
       });
       vue.watch(totalEarnings, (newValue) => {
         if (newValue > 0) {
@@ -12062,7 +12083,7 @@ This will fail in production if not fixed.`);
             });
           }
         } catch (err) {
-          formatAppLog("error", "at components/grondSignInPresentation.vue:164", "领取失败:", err);
+          formatAppLog("error", "at components/grondSignInPresentation.vue:165", "领取失败:", err);
           uni.hideLoading();
           uni.showToast({
             title: "领取失败，请重试！",
@@ -12124,7 +12145,7 @@ This will fail in production if not fixed.`);
                 vue.createElementVNode(
                   "text",
                   { class: "gemAmount" },
-                  vue.toDisplayString($setup.totalEarnings) + " 能量石",
+                  vue.toDisplayString($setup.roundToOneDecimal($setup.totalEarnings)) + " 能量石",
                   1
                   /* TEXT */
                 )
@@ -12856,8 +12877,9 @@ This will fail in production if not fixed.`);
               // 资源类型（假设为能量石）
               sendNum: parseFloat(resourceAmount.value),
               // 转移数量
-              premium: 0
+              premium: 0,
               // 手续费比例（0 表示无手续费）
+              type: 2
             }
           });
           uni.hideLoading();
@@ -12866,11 +12888,11 @@ This will fail in production if not fixed.`);
             await addAssetsChangeRecord(uni.getStorageSync("id"), POWERSTONE, roundToOneDecimal(resourceAmount.value), `在商人集市中向游戏ID为${receiverGameID.value}的转赠能量石, 扣除(无手续费):`);
             const result = await getUserIDByGameID(receiverGameID.value);
             if (result.code === 0) {
-              formatAppLog("log", "at components/merchantSendPop.vue:93", "用户唯一 _id:", result.data._id);
+              formatAppLog("log", "at components/merchantSendPop.vue:94", "用户唯一 _id:", result.data._id);
               const useId = result.data._id;
               addAssetsChangeRecord(useId, POWERSTONE, roundToOneDecimal(resourceAmount.value), `在商人集市中收到游戏ID为${uni.getStorageSync("gameID")}的店主转赠能量石, 共获得(无手续费):`);
             } else {
-              formatAppLog("error", "at components/merchantSendPop.vue:97", "获取用户 _id 失败:", result.message);
+              formatAppLog("error", "at components/merchantSendPop.vue:98", "获取用户 _id 失败:", result.message);
             }
             closePopup();
           } else {
@@ -12893,7 +12915,7 @@ This will fail in production if not fixed.`);
           }
         } catch (err) {
           uni.hideLoading();
-          formatAppLog("error", "at components/merchantSendPop.vue:122", "调用云函数失败:", err);
+          formatAppLog("error", "at components/merchantSendPop.vue:123", "调用云函数失败:", err);
           uni.showToast({ title: "网络错误，请稍后重试", icon: "none" });
         }
       }
