@@ -9979,6 +9979,10 @@ This will fail in production if not fixed.`);
           showTips("余额不足");
           return;
         }
+        if (inputNumValue.value > 9999) {
+          showTips("发布最大数量为1w");
+          return;
+        }
         if (!Number.isInteger(inputNumValue.value)) {
           showTips("数量只能为整数");
           return;
@@ -10006,7 +10010,7 @@ This will fail in production if not fixed.`);
           uni.hideLoading();
           if (res.result.code === 0) {
             showSuccus("发布成功!");
-            formatAppLog("log", "at components/marketPublish.vue:195", "res:", res);
+            formatAppLog("log", "at components/marketPublish.vue:200", "res:", res);
             getUserAssets();
             addAssetsChangeRecord(uni.getStorageSync("id"), gemType, inputNumValue.value, `发布出售(单价: ${inputPriceValue.value}), 由平台扣除`);
             props.controlPublish(false);
@@ -10017,7 +10021,7 @@ This will fail in production if not fixed.`);
         }).catch((err) => {
           uni.hideLoading();
           showTips("网络错误，请稍后重试");
-          formatAppLog("error", "at components/marketPublish.vue:206", "云函数调用失败:", err);
+          formatAppLog("error", "at components/marketPublish.vue:211", "云函数调用失败:", err);
         });
       }
       async function confirmNeedPublish() {
@@ -10027,13 +10031,17 @@ This will fail in production if not fixed.`);
         }
         const gemType = props.gemImgName[selectIndex.value];
         const totalPrice = roundToOneDecimal(inputNumValue.value * inputPriceValue.value);
-        if (!Number.isInteger(inputNumValue.value)) {
-          showTips("数量只能为整数");
-          return;
-        }
         if (totalPrice > gameInfo.assets[JEWEL]) {
           isShowNotEnough.value = true;
           showTips("余额不足");
+          return;
+        }
+        if (inputNumValue.value > 9999) {
+          showTips("发布最大数量为1w");
+          return;
+        }
+        if (!Number.isInteger(inputNumValue.value)) {
+          showTips("数量只能为整数");
           return;
         }
         uni.showLoading({
@@ -10068,7 +10076,7 @@ This will fail in production if not fixed.`);
         }).catch((err) => {
           uni.hideLoading();
           showTips("网络错误，请稍后重试");
-          formatAppLog("error", "at components/marketPublish.vue:263", "云函数调用失败:", err);
+          formatAppLog("error", "at components/marketPublish.vue:274", "云函数调用失败:", err);
         });
       }
       const __returned__ = { gameInfo, props, selectIndex, inputNumValue, inputPriceValue, isShowNotEnough, minimumPrice, expectedNum, needPowerStoneNum, isShowWran, isSell: isSell2, confirmFun, getGemImg, handleIndex, setPriceValue, setNumValue, handleSellNum, confirmSellPublish, confirmNeedPublish, computed: vue.computed, onMounted: vue.onMounted, ref: vue.ref, get JEWEL() {

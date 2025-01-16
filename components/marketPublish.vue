@@ -84,7 +84,7 @@
 	import { roundToOneDecimal } from '../utils/roundToOneDecimal';
 	import { netWorkError, showSuccus, showTips } from '../utils/error';
 	import { getUserAssets } from '../utils/updateGameInfo';
-import { addAssetsChangeRecord, assetsNameMap } from '../utils/addAssetsChangeRecord ';
+	import { addAssetsChangeRecord, assetsNameMap } from '../utils/addAssetsChangeRecord ';
 	
 	const gameInfo = useGameInfoStore()
 	const props = defineProps(['controlPublish', 'title', 'gemItems', 'gemImgName', 'updateData'])
@@ -162,6 +162,11 @@ import { addAssetsChangeRecord, assetsNameMap } from '../utils/addAssetsChangeRe
 	        return;
 	    }
 			
+			if(inputNumValue.value > 9999) {
+				showTips("发布最大数量为1w");
+				return;
+			}
+			
 			if (!Number.isInteger(inputNumValue.value)) {
 			  showTips("数量只能为整数");
 			  return;
@@ -216,16 +221,22 @@ import { addAssetsChangeRecord, assetsNameMap } from '../utils/addAssetsChangeRe
 	    const gemType = props.gemImgName[selectIndex.value];
 	    const totalPrice = roundToOneDecimal(inputNumValue.value * inputPriceValue.value);
 			
+			if (totalPrice > gameInfo.assets[JEWEL]) {
+			    isShowNotEnough.value = true;
+			    showTips("余额不足");
+			    return;
+			}
+			
+			if(inputNumValue.value > 9999) {
+				showTips("发布最大数量为1w");
+				return;
+			}
+			
 			if (!Number.isInteger(inputNumValue.value)) {
 			  showTips("数量只能为整数");
 			  return;
 			}
-	
-	    if (totalPrice > gameInfo.assets[JEWEL]) {
-	        isShowNotEnough.value = true;
-	        showTips("余额不足");
-	        return;
-	    }
+
 	    uni.showLoading({
 	        title: '发布中',
 	        mask: true
