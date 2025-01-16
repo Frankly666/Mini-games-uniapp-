@@ -93,6 +93,7 @@ async function updateReferrersAssets(userId, referrers, directEarning, indirectE
         referrerId, // 推荐人 ID
         amount: earningsRounded, // 收益数量（保留两位小数）
         type: isDirect ? 'direct' : 'indirect', // 收益类型（直接或间接）
+				origin: "土地产出",
         createTime: new Date() // 当前时间
       });
 			

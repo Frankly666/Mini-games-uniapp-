@@ -156,6 +156,12 @@
 	        showTips("单价不满足要求");
 	        return;
 	    }
+			
+			if(inputPriceValue.value > 999) {
+				showTips("单价最高1000");
+				return;
+			}
+			
 	    if (inputNumValue.value > gameInfo.assets[props.gemImgName[selectIndex.value]]) {
 	        isShowNotEnough.value = true;
 	        showTips("余额不足");
@@ -214,12 +220,19 @@
 	
 	// 发布求购的逻辑操作
 	async function confirmNeedPublish() {
+			const gemType = props.gemImgName[selectIndex.value];
+			const totalPrice = roundToOneDecimal(inputNumValue.value * inputPriceValue.value);
+			
 	    if (inputPriceValue.value < minimumPrice[props.gemImgName[selectIndex.value]]) {
 	        showTips("单价不符合要求");
 	        return;
 	    }
-	    const gemType = props.gemImgName[selectIndex.value];
-	    const totalPrice = roundToOneDecimal(inputNumValue.value * inputPriceValue.value);
+			
+			if(inputPriceValue.value > 999) {
+				showTips("单价最高1000");
+				return;
+			}
+	   
 			
 			if (totalPrice > gameInfo.assets[JEWEL]) {
 			    isShowNotEnough.value = true;

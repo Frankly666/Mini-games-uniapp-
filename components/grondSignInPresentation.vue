@@ -91,9 +91,10 @@ const totalEarnings = computed(() => {
       if (isGroundExpired(ground.endTime) && !isTodayClaimed(ground.lastClaimTime)) {
         const thisGround = gameInfo.groundsMeta[groundType];
         total = roundToOneDecimal(total + thisGround.dailyEarnings);
-				console.log("地皮收益计算:", total)
-        directEarning += thisGround.dailyEarnings * thisGround.directPushEarnings;
-        indirectEarning += thisGround.dailyEarnings * thisGround.inDepthReturns;
+				const temDirectEarning = thisGround.dailyEarnings * thisGround.directPushEarnings;
+				const temIndirectEarning = thisGround.dailyEarnings * thisGround.inDepthReturns;
+        directEarning += temDirectEarning;
+        indirectEarning += temIndirectEarning;
       }
     });
   }
@@ -147,7 +148,7 @@ async function claimEarnings() {
         roundToOneDecimal(totalEarnings.value),
         '每日所拥有土地收入: '
       );
-
+			
       // 重新查询地皮数据
       await fetchUserGrounds();
 
