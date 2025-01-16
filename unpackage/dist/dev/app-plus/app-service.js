@@ -7379,13 +7379,22 @@ This will fail in production if not fixed.`);
     if (isNaN(num)) {
       throw new Error("Invalid input: input must be a number or a string representing a number");
     }
-    if (num >= 1e4) {
-      return (num / 1e4).toFixed(2) + "w";
-    } else if (num >= 1e3) {
-      return (num / 1e3).toFixed(2) + "k";
-    } else {
-      return num.toString();
+    const units = [
+      { threshold: 1e12, unit: "万亿" },
+      // 1万亿
+      { threshold: 1e8, unit: "亿" },
+      // 1亿
+      { threshold: 1e4, unit: "w" },
+      // 1万
+      { threshold: 1e3, unit: "k" }
+      // 1千
+    ];
+    for (const unit of units) {
+      if (num >= unit.threshold) {
+        return (num / unit.threshold).toFixed(2) + unit.unit;
+      }
     }
+    return num.toString();
   }
   const _sfc_main$y = {
     __name: "assetsHeader",

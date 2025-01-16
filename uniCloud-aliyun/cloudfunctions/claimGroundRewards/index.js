@@ -23,18 +23,21 @@ async function updateUserGroundsLastClaimTime(userId) {
       };
     }
 
-    const today = new Date().toDateString(); // 获取今天的日期
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // 设置为今天的0点
+    const todayTimestamp = today.getTime(); // 今天的0点时间戳
+    
     let updatedCount = 0; // 记录更新的土地数量
-
+    
     // 遍历用户的土地
     for (const ground of userGrounds.data) {
       const endTime = new Date(ground.endTime).getTime(); // 土地到期时间
-      const lastClaimTime = ground.lastClaimTime ? new Date(ground.lastClaimTime).toDateString() : null; // 上次领取时间
+      const lastClaimTime = ground.lastClaimTime ? new Date(ground.lastClaimTime).getTime() : 0; // 上次领取时间的时间戳
       const isExpired = endTime < Date.now(); // 土地是否已过期
-      const isClaimedToday = lastClaimTime === today; // 土地今天是否已领取
-
+      const dontClaimedToday = lastClaimTime < todayTimestamp; // 上次领取时间是否在今天之前
+    
       // 如果土地未过期且今天未领取，则更新 lastClaimTime
-      if (!isExpired && !isClaimedToday) {
+      if (!isExpired && dontClaimedToday) {
         await transaction.collection('userGrounds').doc(ground._id).update({
           lastClaimTime: new Date() // 更新为当前时间
         });
