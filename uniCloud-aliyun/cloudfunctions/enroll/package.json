@@ -1,6 +1,8 @@
 {
   "name": "enroll",
-  "dependencies": {},
+  "dependencies": {
+    "addAssetsChangeRecord": "file:../common/addAssetsChangeRecord"
+  },
   "extensions": {
     "uni-cloud-jql": {}
   }

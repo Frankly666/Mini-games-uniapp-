@@ -9,7 +9,7 @@
  * @param {Number} num - 数量
  * @returns {Promise<object>} - 返回添加的记录信息
  */
-module.exports = function(userId, resourceType, num,  description, transaction) {
+module.exports = function(userId, resourceType, num, description, transaction) {
   const db = uniCloud.database();
 	const time = new Date().toISOString();
 

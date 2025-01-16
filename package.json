@@ -1,5 +1,9 @@
 {
+  "name": "uni-sms",
   "dependencies": {
     "uqrcodejs": "^4.0.7"
+  },
+  "extensions": {
+    "uni-cloud-sms": {}
   }
 }

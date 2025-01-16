@@ -2,6 +2,7 @@
 const db = uniCloud.database(); // 获取数据库引用
 const crypto = require('crypto'); // 引入加密模块
 const defaultAvatar = 'https://mp-4de62d5a-2380-467f-b109-457713276d05.cdn.bspapp.com/cloudstorage/c9e58edf-ac5f-4890-88bc-aa8a8f3951a5.jpg';
+const addAssetsChangeRecord = require('addAssetsChangeRecord') // 明细模块
 
 // 生成一个随机的 8 位数字
 function generateRandomCode() {
@@ -98,7 +99,7 @@ exports.main = async (event, context) => {
       userData = {
         phone: oldUserData.phone,
         avatar: defaultAvatar,
-        userName: oldUserData.name, // 使用 oldUser 中的用户名
+        userName: oldUserData.name || "趣选云城", // 使用 oldUser 中的用户名
         createTime: new Date().toISOString(), // 当前时间
         isFirst: 0, // 初始化为 0
         pusherCode: oldUserData.pusherPhone || null, // 如果 oldUser 中的 pusherPhone 有值，则将其添加到 pusherCode 字段
@@ -168,9 +169,29 @@ exports.main = async (event, context) => {
       jewel: 0, // 初始化为 0
       meteorite: 0, // 初始化为 0
     };
-
     await assetsCollection.add(assetsData);
-
+		
+		// 启动事务, 因为这里必须要有事务传入, 所以就这样建一个事务
+		const powerNum = Number(oldUserQuery.data[0].power);
+		if(powerNum > 0) {
+			const transaction = await db.startTransaction();
+			try {
+			
+			  await addAssetsChangeRecord(userId, 'powerStone', powerNum, "老用户继承资源: ", transaction)
+			
+			  // 提交事务
+			  await transaction.commit();
+			  console.log('事务提交成功');
+			} catch (err) {
+			  // 回滚事务
+			  await transaction.rollback();
+			  console.error('事务执行失败，已回滚:', err);
+			  throw err; // 抛出错误，供上层处理
+			}
+		}
+		
+		
+		
     // 返回成功信息
     return {
       code: 200,
