@@ -4845,7 +4845,7 @@ This will fail in production if not fixed.`);
   function _sfc_render$H(_ctx, _cache, $props, $setup, $data, $options) {
     return vue.openBlock(), vue.createElementBlock("view", { class: "container" }, [
       vue.createCommentVNode(" 标题 "),
-      vue.createElementVNode("view", { class: "title" }, "趣选云城"),
+      vue.createElementVNode("view", { class: "title" }, "趣选城"),
       vue.createCommentVNode(" Tab 切换 "),
       vue.createElementVNode("view", { class: "tab" }, [
         vue.createElementVNode(
@@ -5135,7 +5135,7 @@ This will fail in production if not fixed.`);
       };
     }
   }
-  const _imports_0$2 = "/static/market/powerStone.png";
+  const _imports_0$3 = "/static/market/powerStone.png";
   const _sfc_main$H = {
     __name: "userToShopkeeperPop",
     props: {
@@ -5341,7 +5341,7 @@ This will fail in production if not fixed.`);
           vue.createElementVNode("view", { class: "balance-info" }, [
             vue.createElementVNode("image", {
               class: "energy-stone-icon",
-              src: _imports_0$2,
+              src: _imports_0$3,
               mode: "aspectFit"
             }),
             vue.createElementVNode(
@@ -5356,7 +5356,7 @@ This will fail in production if not fixed.`);
           vue.createElementVNode("view", { class: "fee-info" }, [
             vue.createElementVNode("image", {
               class: "energy-stone-icon",
-              src: _imports_0$2,
+              src: _imports_0$3,
               mode: "aspectFit"
             }),
             vue.createElementVNode("text", { class: "fee-text" }, "手续费: 8%")
@@ -5365,7 +5365,7 @@ This will fail in production if not fixed.`);
           vue.createElementVNode("view", { class: "total-deduction" }, [
             vue.createElementVNode("image", {
               class: "energy-stone-icon",
-              src: _imports_0$2,
+              src: _imports_0$3,
               mode: "aspectFit"
             }),
             vue.createElementVNode(
@@ -7398,7 +7398,7 @@ This will fail in production if not fixed.`);
           ctx.setFontSize(24);
           ctx.setFillStyle("#333333");
           ctx.setTextAlign("center");
-          ctx.fillText("趣选云城", canvasWidth.value / 2, 50);
+          ctx.fillText("趣选城", canvasWidth.value / 2, 50);
           ctx.setFillStyle("#ffffff");
           ctx.fillRect(20, 60, canvasWidth.value - 40, 100);
           const avatar2 = await new Promise((resolve, reject) => {
@@ -7597,7 +7597,7 @@ This will fail in production if not fixed.`);
         }, [
           vue.createElementVNode("text", { class: "icon" }, "···")
         ]),
-        vue.createElementVNode("text", { class: "header-title" }, "趣选云城")
+        vue.createElementVNode("text", { class: "header-title" }, "趣选城")
       ]),
       vue.createCommentVNode(" 弹窗 "),
       $setup.showMenu ? (vue.openBlock(), vue.createElementBlock("view", {
@@ -7623,7 +7623,7 @@ This will fail in production if not fixed.`);
           class: "section"
         }, [
           vue.createElementVNode("text", { class: "section-title" }, "介绍"),
-          vue.createElementVNode("text", { class: "section-description" }, "这里是趣选云城的介绍页面。")
+          vue.createElementVNode("text", { class: "section-description" }, "这里是趣选城的介绍页面。")
         ])) : vue.createCommentVNode("v-if", true),
         $setup.activeTab === "market" ? (vue.openBlock(), vue.createElementBlock("view", {
           key: 1,
@@ -7649,7 +7649,7 @@ This will fail in production if not fixed.`);
           class: "section"
         }, [
           vue.createElementVNode("text", { class: "section-title" }, "公会"),
-          vue.createElementVNode("text", { class: "section-description" }, "这里是趣选云城的公会页面。")
+          vue.createElementVNode("text", { class: "section-description" }, "这里是趣选城的公会页面。")
         ])) : vue.createCommentVNode("v-if", true)
       ]),
       vue.createCommentVNode(" 底部 Tab 栏 "),
@@ -7956,7 +7956,7 @@ This will fail in production if not fixed.`);
     ]);
   }
   const avatar = /* @__PURE__ */ _export_sfc(_sfc_main$x, [["render", _sfc_render$w], ["__scopeId", "data-v-32a3f906"], ["__file", "D:/HBuilderProjects/Game/components/avatar.vue"]]);
-  const _imports_0$1 = "/static/toolsBar/arrowRight.png";
+  const _imports_0$2 = "/static/toolsBar/arrowRight.png";
   const _imports_1 = "/static/toolsBar/arrowLeft.png";
   const _sfc_main$w = {
     __name: "toolsBar",
@@ -7983,7 +7983,7 @@ This will fail in production if not fixed.`);
       }, [
         $setup.needFold ? (vue.openBlock(), vue.createElementBlock("image", {
           key: 0,
-          src: _imports_0$1,
+          src: _imports_0$2,
           mode: "widthFix",
           class: "arrow"
         })) : (vue.openBlock(), vue.createElementBlock("image", {
@@ -8658,7 +8658,7 @@ This will fail in production if not fixed.`);
                     ),
                     vue.createElementVNode("image", {
                       class: "stoneImg",
-                      src: _imports_0$2,
+                      src: _imports_0$3,
                       mode: "aspectFill"
                     })
                   ])
@@ -9074,28 +9074,46 @@ This will fail in production if not fixed.`);
     ]);
   }
   const settingPop = /* @__PURE__ */ _export_sfc(_sfc_main$o, [["render", _sfc_render$n], ["__scopeId", "data-v-9e95edd8"], ["__file", "D:/HBuilderProjects/Game/components/settingPop.vue"]]);
+  const _imports_0$1 = "/static/rule.jpg";
   const _sfc_main$n = {
     __name: "rulePop",
     props: ["handleShow"],
     setup(__props, { expose: __expose }) {
       __expose();
       const props = __props;
-      const __returned__ = { props };
+      const handleClose = () => {
+        props.handleShow(4, false);
+      };
+      const handleMaskClick = () => {
+        handleClose();
+      };
+      const __returned__ = { props, handleClose, handleMaskClick };
       Object.defineProperty(__returned__, "__isScriptSetup", { enumerable: false, value: true });
       return __returned__;
     }
   };
   function _sfc_render$m(_ctx, _cache, $props, $setup, $data, $options) {
-    return vue.openBlock(), vue.createElementBlock("view", { class: "ruleWrap" }, [
-      vue.createElementVNode("view", { class: "pop" }, [
+    return vue.openBlock(), vue.createElementBlock("view", {
+      class: "ruleWrap",
+      onClick: $setup.handleMaskClick
+    }, [
+      vue.createElementVNode("view", {
+        class: "pop",
+        onClick: _cache[0] || (_cache[0] = vue.withModifiers(() => {
+        }, ["stop"]))
+      }, [
         vue.createElementVNode("view", { class: "title" }, [
           vue.createElementVNode("text", null, "玩法")
         ]),
+        vue.createElementVNode("view", { class: "imgWrap" }, [
+          vue.createElementVNode("image", {
+            src: _imports_0$1,
+            mode: "widthFix"
+          })
+        ]),
         vue.createElementVNode("view", {
           class: "close",
-          onClick: _cache[0] || (_cache[0] = () => {
-            $setup.props.handleShow(4, false);
-          })
+          onClick: $setup.handleClose
         })
       ])
     ]);
@@ -12559,7 +12577,7 @@ This will fail in production if not fixed.`);
               vue.createElementVNode("view", { class: "rewardInfo" }, [
                 vue.createElementVNode("image", {
                   class: "gemImage",
-                  src: _imports_0$2,
+                  src: _imports_0$3,
                   mode: "widthFix"
                 }),
                 vue.createElementVNode(
@@ -12693,7 +12711,7 @@ This will fail in production if not fixed.`);
                       vue.createElementVNode("text", null, "领取能量石"),
                       vue.createElementVNode("image", {
                         class: "stoneImg",
-                        src: _imports_0$2,
+                        src: _imports_0$3,
                         mode: "aspectFill"
                       }),
                       vue.createElementVNode(
@@ -13371,7 +13389,7 @@ This will fail in production if not fixed.`);
         vue.createElementVNode("view", { class: "balance-info" }, [
           vue.createElementVNode("image", {
             class: "energy-stone-icon",
-            src: _imports_0$2,
+            src: _imports_0$3,
             mode: "aspectFit"
           }),
           vue.createElementVNode(

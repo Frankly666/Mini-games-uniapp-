@@ -151,7 +151,7 @@
   color: aliceblue;
   line-height: 14vw;
   font-size: 4.2vw;
-  background: url('../../static/mine/btn_Purple.png') no-repeat center center / contain;
+  background: url('../../static/market/btn_Purple.png') no-repeat center center / contain;
 }
 
 .mineWrap {
@@ -376,7 +376,7 @@
 }
 .mineWrap .scrollArea .mineContent .normalArea .harvest {
   left: 15vw;
-  background-image: url("../../static/mine/btn_Purple.png");
+  background-image: url("../../static/market/btn_Purple.png");
 }
 .mineWrap .scrollArea .mineContent .normalArea .add {
   right: 15vw;
@@ -391,7 +391,7 @@
 }
 .mineWrap .scrollArea .mineContent .bigArea .harvest {
   left: 15vw;
-  background-image: url("../../static/mine/btn_Purple.png");
+  background-image: url("../../static/market/btn_Purple.png");
 }
 .mineWrap .scrollArea .mineContent .bigArea .add {
   right: 15vw;

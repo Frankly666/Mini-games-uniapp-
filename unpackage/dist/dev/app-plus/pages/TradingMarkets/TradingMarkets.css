@@ -265,7 +265,7 @@
   color: aliceblue;
   line-height: 10vw;
   font-size: 3.4vw;
-  background: url('../../static/mine/btn_Purple.png') no-repeat center center / contain;
+  background: url('../../static/market/btn_Purple.png') no-repeat center center / contain;
 }
 
 .buyCellPopWrap[data-v-f77da028] {
@@ -396,7 +396,7 @@
   color: aliceblue;
   line-height: 10vw;
   font-size: 3.4vw;
-  background: url("../../static/mine/btn_Purple.png") no-repeat center center / contain;
+  background: url("../../static/market/btn_Purple.png") no-repeat center center / contain;
 }
 
 .publishWrap[data-v-e13ff159] {
@@ -568,7 +568,7 @@
   color: aliceblue;
   line-height: 10vw;
   font-size: 4vw;
-  background: url('../../static/mine/btn_Purple.png') no-repeat center center / contain;
+  background: url('../../static/market/btn_Purple.png') no-repeat center center / contain;
 }
 
 .tradingMarketWrap {
@@ -746,7 +746,7 @@
   width: 10vw;
   height: 6vw;
   line-height: 5vw;
-  background: url('../../static/mine/btn_Purple.png') no-repeat center center / contain;
+  background: url('../../static/market/btn_Purple.png') no-repeat center center / contain;
   text-align: center;
   color: aliceblue;
   font-size: 2.7vw;
