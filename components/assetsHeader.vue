@@ -60,6 +60,7 @@ function getImageUrl(name) {
 
 // 点击资源项时触发
 function handleAssetClick(assetType) {
+	updateAssets()
   // 调用传入的 openRecordPopup 方法
   props.openRecordPopup(assetType);
 }
