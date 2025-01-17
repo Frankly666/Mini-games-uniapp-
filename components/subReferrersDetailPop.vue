@@ -243,7 +243,7 @@ onMounted(() => {
 /* 用户列表 */
 .user-list {
   width: 100%;
-  min-height: 57vh;
+  max-height: 66vh;
   overflow-y: auto;
   margin-bottom: 5vw;
   display: flex;
