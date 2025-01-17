@@ -1,17 +1,16 @@
 'use strict';
 const updateUserResource = require('updateUserResource'); // 引入更新用户资源模块
 const findReferrers = require('findReferrers'); // 引入查找推荐人模块
-const addAssetsChangeRecord = require('addAssetsChangeRecord') // 明细模块
+const addAssetsChangeRecord = require('addAssetsChangeRecord'); // 明细模块
 const db = uniCloud.database();
 
 /**
  * 更新用户土地的 lastClaimTime
  * @param {string} userId - 用户 ID
+ * @param {Object} transaction - 事务对象
  * @returns {Promise<{code: number, message: string, updatedCount: number}>} - 返回操作结果
  */
-async function updateUserGroundsLastClaimTime(userId) {
-  const transaction = await db.startTransaction();
-
+async function updateUserGroundsLastClaimTime(userId, transaction) {
   try {
     // 获取用户所有土地
     const userGrounds = await db.collection('userGrounds').where({ userId }).get();
@@ -45,8 +44,6 @@ async function updateUserGroundsLastClaimTime(userId) {
       }
     }
 
-    // 提交事务
-    await transaction.commit();
     return {
       code: 0,
       message: '更新成功',
@@ -54,7 +51,6 @@ async function updateUserGroundsLastClaimTime(userId) {
     };
   } catch (e) {
     console.error('更新土地 lastClaimTime 失败:', e.message);
-    await transaction.rollback();
     return {
       code: -1,
       message: '更新失败，请重试',
@@ -69,11 +65,10 @@ async function updateUserGroundsLastClaimTime(userId) {
  * @param {string[]} referrers - 推荐人列表
  * @param {number} directEarning - 直接收益
  * @param {number} indirectEarning - 间接收益
+ * @param {Object} transaction - 事务对象
  * @returns {Promise<{code: number, message: string}>} - 返回操作结果
  */
-async function updateReferrersAssets(userId, referrers, directEarning, indirectEarning,claimGroundList, gameID ) {
-  const transaction = await db.startTransaction();
-
+async function updateReferrersAssets(userId, referrers, directEarning, indirectEarning, claimGroundList, gameID, transaction) {
   try {
     // 遍历推荐人列表
     for (let i = 0; i < referrers.length; i++) {
@@ -93,28 +88,25 @@ async function updateReferrersAssets(userId, referrers, directEarning, indirectE
         referrerId, // 推荐人 ID
         amount: earningsRounded, // 收益数量（保留两位小数）
         type: isDirect ? 'direct' : 'indirect', // 收益类型（直接或间接）
-				originType: 1,
-				claimGroundList: claimGroundList,
+        originType: 1,
+        claimGroundList: claimGroundList,
         createTime: new Date() // 当前时间
       });
-			
-			// 直接收益明细
-			if(isDirect) {
-				await addAssetsChangeRecord(referrerId, 'powerStone', directEarning, `游戏ID为${gameID}的用户地皮收益所得到的直推收益, 增加: `, transaction)
-			}else {
-				await addAssetsChangeRecord(referrerId, 'powerStone', indirectEarning, `游戏ID为${gameID}的用户地皮收益所得到的间推收益, 增加: `, transaction)
-			}
+
+      // 直接收益明细
+      if (isDirect) {
+        await addAssetsChangeRecord(referrerId, 'powerStone', directEarning, `游戏ID为${gameID}的用户地皮收益所得到的直推收益, 增加: `, transaction);
+      } else {
+        await addAssetsChangeRecord(referrerId, 'powerStone', indirectEarning, `游戏ID为${gameID}的用户地皮收益所得到的间推收益, 增加: `, transaction);
+      }
     }
 
-    // 提交事务
-    await transaction.commit();
     return {
       code: 0,
       message: '更新推荐人收益成功'
     };
   } catch (e) {
     console.error('更新推荐人收益失败:', e.message);
-    await transaction.rollback();
     return {
       code: -1,
       message: '更新推荐人收益失败，请重试'
@@ -136,8 +128,10 @@ exports.main = async (event, context) => {
   console.log("event:", event); // 打印 event 对象
   const { userId, earnings, directEarning, indirectEarning, gameID, claimGroundList } = event;
 
+  let transaction;
   try {
-    const transaction = await db.startTransaction();
+    // 开启事务
+    transaction = await db.startTransaction();
 
     // 1. 更新用户资源（能量石）
     await updateUserResource(userId, 'powerStone', parseFloat((earnings).toFixed(2)), transaction);
@@ -150,7 +144,7 @@ exports.main = async (event, context) => {
     });
 
     // 3. 更新用户土地的 lastClaimTime
-    const updateGroundsResult = await updateUserGroundsLastClaimTime(userId);
+    const updateGroundsResult = await updateUserGroundsLastClaimTime(userId, transaction);
     if (updateGroundsResult.code !== 0) {
       await transaction.rollback();
       return updateGroundsResult; // 如果更新失败，直接返回错误信息
@@ -166,8 +160,9 @@ exports.main = async (event, context) => {
         referrers,
         parseFloat((directEarning).toFixed(2)),
         parseFloat((indirectEarning).toFixed(2)),
-				claimGroundList,
-				gameID
+        claimGroundList,
+        gameID,
+        transaction
       );
       if (updateReferrersResult.code !== 0) {
         await transaction.rollback();
@@ -189,6 +184,9 @@ exports.main = async (event, context) => {
     };
   } catch (e) {
     console.error('操作失败:', e.message);
+    if (transaction) {
+      await transaction.rollback(); // 回滚事务
+    }
     return {
       code: -1,
       message: '操作失败，请重试'

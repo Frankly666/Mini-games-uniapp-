@@ -97,9 +97,11 @@ const totalEarnings = computed(() => {
         directEarning += temDirectEarning;
         indirectEarning += temIndirectEarning;
 				claimGroundList.push(groundType)
+				console.log("单个地皮收益:", thisGround.dailyEarnings)
       }
     });
   }
+	console.log("总额:",total)
   return roundToOneDecimal(total);
 });
 

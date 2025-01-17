@@ -9,26 +9,44 @@ exports.main = async (event, context) => {
 
   const { addUserGroundData, userId, unlockFunds, duration } = event;
   const transaction = await db.startTransaction();
-	
-	const now = new Date(); // 当前时间
-	const endDate = new Date(now);
-	endDate.setDate(now.getDate() + duration);
-	// 将结束时间设置为当天的0点
-	endDate.setHours(0, 0, 0, 0);
-	addUserGroundData.endTime =  endDate.toISOString();
-	addUserGroundData.rentTime =  now.toISOString();
-	 
+
+  const now = new Date(); // 当前时间
+  const endDate = new Date(now);
+  endDate.setDate(now.getDate() + duration);
+  // 将结束时间设置为当天的0点
+  endDate.setHours(0, 0, 0, 0);
+  addUserGroundData.endTime = endDate.toISOString();
+  addUserGroundData.rentTime = now.toISOString();
 
   try {
-    // 1. 添加地皮记录，初始化 lastSignInTime 为 null
+    // 1. 查询 userGrounds 表中是否存在相同 userId、groundType 和 groundIndex 的记录
+    const existingGround = await db.collection('userGrounds')
+      .where({
+        userId: userId,
+        groundType: addUserGroundData.groundType,
+        groundIndex: addUserGroundData.groundIndex
+      })
+      .get();
+			
+			console.log("重复的结果:", existingGround.data)
+
+    // 如果存在相同记录，返回错误信息
+    if (existingGround.data.length > 0) {
+      return {
+        code: -1,
+        message: '已解锁该地皮, 请刷新'
+      };
+    }
+
+    // 2. 添加地皮记录，初始化 lastSignInTime 为 null
     const res1 = await transaction.collection('userGrounds').add({
       ...addUserGroundData,
     });
 
-    // 2. 调用公共模块更新用户资产（减少 powerStone）
+    // 3. 调用公共模块更新用户资产（减少 powerStone）
     await updateUserResource(userId, 'powerStone', -unlockFunds, transaction);
 
-    // 3. 提交事务
+    // 4. 提交事务
     await transaction.commit();
     return {
       code: 0,

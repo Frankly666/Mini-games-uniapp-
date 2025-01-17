@@ -17,14 +17,28 @@
         </view>
       </view>
 
-      <view class="btn" @click="confirmUnlock">
+      <!-- 解锁按钮 -->
+      <view class="btn" @click="showConfirmDialog">
         <text>解锁</text>
+      </view>
+    </view>
+
+    <!-- 自定义二次确认弹窗 -->
+    <view v-if="showConfirm" class="confirmDialogWrap">
+      <view class="confirmDialog">
+        <view class="confirmTitle">确认解锁</view>
+        <view class="confirmContent">确定要解锁这块土地吗？</view>
+        <view class="confirmButtons">
+          <view class="confirmButton cancel" @click="hideConfirmDialog">取消</view>
+          <view class="confirmButton confirm" @click="handleConfirmUnlock">确认</view>
+        </view>
       </view>
     </view>
   </view>
 </template>
 
 <script setup>
+import { ref } from 'vue';
 import { POWERSTONE, useGameInfoStore } from '../stores/gameInfo';
 import { addAssetsChangeRecord } from '../utils/addAssetsChangeRecord ';
 import { netWorkError, showSuccus, showTips } from '../utils/error';
@@ -36,8 +50,26 @@ const props = defineProps(['groundType', 'groundIndex', 'closePop', 'offset', 'u
 const gameInfo = useGameInfoStore();
 const groundMeta = gameInfo.groundsMeta[props.groundType];
 
+// 控制二次确认弹窗的显示
+const showConfirm = ref(false);
 
-// 检查用户是否购买了活动礼包(只要购买了, 就可以开发土地)
+// 显示二次确认弹窗
+function showConfirmDialog() {
+  showConfirm.value = true;
+}
+
+// 隐藏二次确认弹窗
+function hideConfirmDialog() {
+  showConfirm.value = false;
+}
+
+// 用户点击确认解锁
+async function handleConfirmUnlock() {
+  hideConfirmDialog(); // 隐藏弹窗
+  await confirmUnlock(); // 调用解锁逻辑
+}
+
+// 检查用户是否购买了活动礼包
 async function checkActivity() {
   try {
     const res = await uniCloud.callFunction({
@@ -63,69 +95,74 @@ async function checkActivity() {
 
 // 确认解锁
 async function confirmUnlock() {
-    const haveActivity = await checkActivity();
-    if (!haveActivity) {
-        showTips('未购买蛇年礼包');
-        return;
+	uni.showLoading({
+	  mask: true,
+	  title: '加载中'
+	});
+	
+  const haveActivity = await checkActivity();
+  if (!haveActivity) {
+    showTips('未购买蛇年礼包');
+		uni.hideLoading()
+    return;
+  }
+
+  const thisGround = gameInfo.groundsMeta[props.groundType];
+  const unlockFunds = thisGround.unlockFunds;
+  const groundName = thisGround.groundName;
+  const duration = thisGround.duration;
+  const nowNum = gameInfo.assets[POWERSTONE];
+
+  // 钱不够就直接跳出
+  if (nowNum < unlockFunds) {
+    showTips('余额不足');
+		uni.hideLoading()
+    return;
+  }
+
+  
+
+  // 数据库操作逻辑
+  uniCloud.callFunction({
+    name: 'buyGround',
+    data: {
+      addUserGroundData: {
+        userId: uni.getStorageSync('id'),
+        groundType: props.groundType,
+        groundIndex: props.groundIndex,
+        rentTime: new Date(), // 租赁时间
+        endTime: getGroundEndTime(props.groundType), // 结束时间
+        lastClaimTime: null, // 初始化领取时间为 null
+        isHaveWorker: false,
+        workerType: null,
+        workerEndTime: null
+      },
+      userId: uni.getStorageSync('id'),
+      unlockFunds: unlockFunds,
+      duration: duration
     }
-		
-		const thisGround = gameInfo.groundsMeta[props.groundType]
-    const unlockFunds = thisGround.unlockFunds;
-		const groundName = thisGround.groundName;
-		const duration  = thisGround.duration;
-    const nowNum = gameInfo.assets[POWERSTONE];
-		
-
-    // 钱不够就直接跳出
-    if (nowNum < unlockFunds) {
-        showTips('余额不足');
-        return;
-    }
-
-    uni.showLoading({
-        mask: true,
-        title: '解锁中'
-    });
-
-    // 数据库操作逻辑
-    uniCloud.callFunction({
-        name: 'buyGround',
-        data: {
-            addUserGroundData: {
-                userId: uni.getStorageSync('id'),
-                groundType: props.groundType,
-                groundIndex: props.groundIndex,
-                rentTime: new Date(), // 租赁时间
-                endTime: getGroundEndTime(props.groundType), // 结束时间
-                lastClaimTime: null, // 初始化领取时间为 null
-                isHaveWorker: false,
-                workerType: null,
-                workerEndTime: null
-            },
-            userId: uni.getStorageSync('id'),
-            unlockFunds: unlockFunds,
-						duration: duration
-        }
-    })
+  })
     .then(res => {
-        uni.hideLoading(); // 隐藏加载动画
-        if (res.result.code === 0) {
-            showSuccus("解锁成功!");
-            // 更新本地余额
-            getUserAssets();
-						
-						// 明细更新
-						addAssetsChangeRecord(uni.getStorageSync('id'), POWERSTONE, unlockFunds, `解锁${groundName}扣除: `)
-            props.closePop();
-            props.updateData(); // 更新地皮数据
-        } else {
-            showTips(`解锁失败: ${res.result.message}`);
-        }
+      uni.hideLoading(); // 隐藏加载动画
+      if (res.result.code === 0) {
+        showSuccus("解锁成功!");
+        // 更新本地余额
+        getUserAssets();
+				
+        // 明细更新
+        addAssetsChangeRecord(uni.getStorageSync('id'), POWERSTONE, unlockFunds, `解锁${groundName}扣除: `);
+        props.closePop();
+        props.updateData(); // 更新地皮数据
+      } else if(res.result.code === -1){
+				showTips('请勿重复解锁!')
+			} else {
+        showTips(`解锁失败: ${res.result.message}`);
+      }
     })
     .catch(err => {
-        uni.hideLoading(); // 隐藏加载动画
-        showTips('网络错误，请稍后重试');
-        console.error('购买失败:', err);
+      uni.hideLoading(); // 隐藏加载动画
+      showTips('网络错误，请稍后重试');
+      console.error('购买失败:', err);
     });
 }
 </script>
@@ -208,6 +245,65 @@ async function confirmUnlock() {
       font-size: 5vw;
       font-weight: bold;
       background: url('../static/ground/btn2.png') no-repeat center center / contain;
+    }
+  }
+
+  /* 自定义二次确认弹窗样式 */
+  .confirmDialogWrap {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+
+    .confirmDialog {
+      width: 70vw;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 10px;
+      text-align: center;
+
+      .confirmTitle {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
+
+      .confirmContent {
+        font-size: 14px;
+        color: #666;
+        margin-bottom: 20px;
+      }
+
+      .confirmButtons {
+        display: flex;
+        justify-content: space-between;
+
+        .confirmButton {
+          flex: 1;
+          padding: 10px;
+          margin: 0 5px;
+          border-radius: 5px;
+          font-size: 14px;
+          text-align: center;
+          cursor: pointer;
+
+          &.cancel {
+            background-color: #eee;
+            color: #333;
+          }
+
+          &.confirm {
+            background-color: #07c160;
+            color: #fff;
+          }
+        }
+      }
     }
   }
 }
