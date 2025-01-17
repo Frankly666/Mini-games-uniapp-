@@ -71,7 +71,7 @@ exports.main = async (event, context) => {
       // 如果 user 表中已存在该手机号，返回错误信息
       return {
         code: 400,
-        message: '手机号已注册，请直接登录',
+        message: '该账号已经注册, 请直接登录',
       };
     }
 
@@ -163,7 +163,7 @@ exports.main = async (event, context) => {
     const assetsData = {
       userId,
       gameID: gameId, // 将生成的 gameId 添加到 assets 表中
-      powerStone: isOldUser ? Number(oldUserQuery.data[0].power) : 0, // 如果是老用户，使用 oldUser 中的 power；否则初始化为 0
+      powerStone: isOldUser ? Number(oldUserQuery.data[0]?.power) : 0, // 如果是老用户，使用 oldUser 中的 power；否则初始化为 0
       diamond: 0, // 初始化为 0
       resourceStone: 0, // 初始化为 0
       jewel: 0, // 初始化为 0
@@ -172,7 +172,7 @@ exports.main = async (event, context) => {
     await assetsCollection.add(assetsData);
 		
 		// 启动事务, 因为这里必须要有事务传入, 所以就这样建一个事务
-		const powerNum = Number(oldUserQuery.data[0].power);
+		const powerNum = Number(oldUserQuery.data[0]?.power);
 		if(powerNum > 0) {
 			const transaction = await db.startTransaction();
 			try {
