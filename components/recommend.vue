@@ -2,9 +2,9 @@
   <view>
     <!-- 用户信息展示 -->
     <view class="user-info">
-      <image :src="userInfo.avatar" class="avatar"></image>
+      <image :src="gameInfo.avatar" class="avatar"></image>
       <view class="details">
-        <text class="username">{{ userInfo.userName }}</text>
+        <text class="username">{{ gameInfo.userName }}</text>
         <text class="invite-code">推荐码: {{ userInfo.inviteCode }}</text>
       </view>
     </view>
@@ -48,6 +48,7 @@
 import { ref, onMounted } from 'vue';
 import { getLatestApkUrl } from '../utils/getLatestApkUrl';
 import subReferrersDetailPopVue from './subReferrersDetailPop.vue';
+import { useGameInfoStore } from '../stores/gameInfo';
 
 // 用户信息
 const userInfo = ref({
@@ -58,6 +59,7 @@ const userInfo = ref({
 
 // 二维码内容
 const qrCodeContent = ref('');
+const gameInfo = useGameInfoStore()
 
 // 弹窗相关状态
 const showPopup = ref(false);
@@ -155,7 +157,7 @@ const handleDownloadImage = async () => {
     // 绘制用户头像
     const avatar = await new Promise((resolve, reject) => {
       uni.getImageInfo({
-        src: userInfo.value.avatar,
+        src: gameInfo.avatar,
         success: (res) => resolve(res.path),
         fail: (err) => reject(err)
       });
@@ -166,7 +168,7 @@ const handleDownloadImage = async () => {
     ctx.setFontSize(16);
     ctx.setFillStyle('#333333'); // 深灰色字体
     ctx.setTextAlign('left');
-    ctx.fillText(`用户名: ${userInfo.value.userName}`, 120, 120);
+    ctx.fillText(`用户名: ${gameInfo.userName}`, 120, 120);
     ctx.fillText(`推荐码: ${userInfo.value.inviteCode}`, 120, 150);
 
     // 绘制二维码模块背景

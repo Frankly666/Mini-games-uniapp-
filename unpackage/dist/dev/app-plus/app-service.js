@@ -7324,6 +7324,7 @@ This will fail in production if not fixed.`);
         inviteCode: ""
       });
       const qrCodeContent = vue.ref("");
+      const gameInfo = useGameInfoStore();
       const showPopup = vue.ref(false);
       const popupType = vue.ref("");
       const canvasWidth = vue.ref(300);
@@ -7340,9 +7341,9 @@ This will fail in production if not fixed.`);
         try {
           const apkUrl = await getLatestApkUrl();
           qrCodeContent.value = apkUrl;
-          formatAppLog("log", "at components/recommend.vue:85", "最新 APK 下载地址:", apkUrl);
+          formatAppLog("log", "at components/recommend.vue:87", "最新 APK 下载地址:", apkUrl);
         } catch (err) {
-          formatAppLog("error", "at components/recommend.vue:87", "获取下载地址失败", err);
+          formatAppLog("error", "at components/recommend.vue:89", "获取下载地址失败", err);
           uni.showToast({
             title: "获取下载地址失败，请稍后重试",
             icon: "none"
@@ -7351,9 +7352,9 @@ This will fail in production if not fixed.`);
       };
       const onQRCodeComplete = (res) => {
         if (res.success) {
-          formatAppLog("log", "at components/recommend.vue:98", "二维码生成成功");
+          formatAppLog("log", "at components/recommend.vue:100", "二维码生成成功");
         } else {
-          formatAppLog("error", "at components/recommend.vue:100", "二维码生成失败", res);
+          formatAppLog("error", "at components/recommend.vue:102", "二维码生成失败", res);
         }
       };
       const handleDirectRecommend = () => {
@@ -7389,7 +7390,7 @@ This will fail in production if not fixed.`);
           ctx.fillRect(20, 60, canvasWidth.value - 40, 100);
           const avatar2 = await new Promise((resolve, reject) => {
             uni.getImageInfo({
-              src: userInfo.value.avatar,
+              src: gameInfo.avatar,
               success: (res) => resolve(res.path),
               fail: (err) => reject(err)
             });
@@ -7398,7 +7399,7 @@ This will fail in production if not fixed.`);
           ctx.setFontSize(16);
           ctx.setFillStyle("#333333");
           ctx.setTextAlign("left");
-          ctx.fillText(`用户名: ${userInfo.value.userName}`, 120, 120);
+          ctx.fillText(`用户名: ${gameInfo.userName}`, 120, 120);
           ctx.fillText(`推荐码: ${userInfo.value.inviteCode}`, 120, 150);
           ctx.setFillStyle("#ffffff");
           ctx.fillRect(20, 180, canvasWidth.value - 40, 220);
@@ -7423,21 +7424,21 @@ This will fail in production if not fixed.`);
                   },
                   fail: (err) => {
                     uni.hideLoading();
-                    formatAppLog("error", "at components/recommend.vue:205", "保存图片失败:", err);
+                    formatAppLog("error", "at components/recommend.vue:207", "保存图片失败:", err);
                     uni.showToast({ title: "保存图片失败，请重试", icon: "none" });
                   }
                 });
               },
               fail: (err) => {
                 uni.hideLoading();
-                formatAppLog("error", "at components/recommend.vue:212", "生成图片失败:", err);
+                formatAppLog("error", "at components/recommend.vue:214", "生成图片失败:", err);
                 uni.showToast({ title: "生成图片失败，请重试", icon: "none" });
               }
             });
           });
         } catch (err) {
           uni.hideLoading();
-          formatAppLog("error", "at components/recommend.vue:219", "生成图片失败:", err);
+          formatAppLog("error", "at components/recommend.vue:221", "生成图片失败:", err);
           uni.showToast({ title: "生成图片失败，请重试", icon: "none" });
         }
       };
@@ -7445,9 +7446,11 @@ This will fail in production if not fixed.`);
         loadUserInfo();
         loadLatestApkUrl();
       });
-      const __returned__ = { userInfo, qrCodeContent, showPopup, popupType, canvasWidth, canvasHeight, loadUserInfo, loadLatestApkUrl, onQRCodeComplete, handleDirectRecommend, handleIndirectRecommend, handleClosePopup, handleDownloadImage, ref: vue.ref, onMounted: vue.onMounted, get getLatestApkUrl() {
+      const __returned__ = { userInfo, qrCodeContent, gameInfo, showPopup, popupType, canvasWidth, canvasHeight, loadUserInfo, loadLatestApkUrl, onQRCodeComplete, handleDirectRecommend, handleIndirectRecommend, handleClosePopup, handleDownloadImage, ref: vue.ref, onMounted: vue.onMounted, get getLatestApkUrl() {
         return getLatestApkUrl;
-      }, subReferrersDetailPopVue };
+      }, subReferrersDetailPopVue, get useGameInfoStore() {
+        return useGameInfoStore;
+      } };
       Object.defineProperty(__returned__, "__isScriptSetup", { enumerable: false, value: true });
       return __returned__;
     }
@@ -7458,14 +7461,14 @@ This will fail in production if not fixed.`);
       vue.createCommentVNode(" 用户信息展示 "),
       vue.createElementVNode("view", { class: "user-info" }, [
         vue.createElementVNode("image", {
-          src: $setup.userInfo.avatar,
+          src: $setup.gameInfo.avatar,
           class: "avatar"
         }, null, 8, ["src"]),
         vue.createElementVNode("view", { class: "details" }, [
           vue.createElementVNode(
             "text",
             { class: "username" },
-            vue.toDisplayString($setup.userInfo.userName),
+            vue.toDisplayString($setup.gameInfo.userName),
             1
             /* TEXT */
           ),
