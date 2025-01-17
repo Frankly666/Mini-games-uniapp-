@@ -1,118 +1,8 @@
 'use strict';
 const updateUserResource = require('updateUserResource'); // 引入更新用户资源模块
 const findReferrers = require('findReferrers'); // 引入查找推荐人模块
-const addAssetsChangeRecord = require('addAssetsChangeRecord'); // 明细模块
+const addAssetsChangeRecord = require('addAssetsChangeRecord'); // 引入明细模块
 const db = uniCloud.database();
-
-/**
- * 更新用户土地的 lastClaimTime
- * @param {string} userId - 用户 ID
- * @param {Object} transaction - 事务对象
- * @returns {Promise<{code: number, message: string, updatedCount: number}>} - 返回操作结果
- */
-async function updateUserGroundsLastClaimTime(userId, transaction) {
-  try {
-    // 获取用户所有土地
-    const userGrounds = await db.collection('userGrounds').where({ userId }).get();
-    if (userGrounds.data.length === 0) {
-      return {
-        code: 0,
-        message: '用户没有土地',
-        updatedCount: 0
-      };
-    }
-
-    const today = new Date();
-    today.setHours(0, 0, 0, 0); // 设置为今天的0点
-    const todayTimestamp = today.getTime(); // 今天的0点时间戳
-    
-    let updatedCount = 0; // 记录更新的土地数量
-    
-    // 遍历用户的土地
-    for (const ground of userGrounds.data) {
-      const endTime = new Date(ground.endTime).getTime(); // 土地到期时间
-      const lastClaimTime = ground.lastClaimTime ? new Date(ground.lastClaimTime).getTime() : 0; // 上次领取时间的时间戳
-      const isExpired = endTime < Date.now(); // 土地是否已过期
-      const dontClaimedToday = lastClaimTime < todayTimestamp; // 上次领取时间是否在今天之前
-    
-      // 如果土地未过期且今天未领取，则更新 lastClaimTime
-      if (!isExpired && dontClaimedToday) {
-        await transaction.collection('userGrounds').doc(ground._id).update({
-          lastClaimTime: new Date() // 更新为当前时间
-        });
-        updatedCount++; // 更新计数
-      }
-    }
-
-    return {
-      code: 0,
-      message: '更新成功',
-      updatedCount // 返回更新的土地数量
-    };
-  } catch (e) {
-    console.error('更新土地 lastClaimTime 失败:', e.message);
-    return {
-      code: -1,
-      message: '更新失败，请重试',
-      updatedCount: 0
-    };
-  }
-}
-
-/**
- * 更新推荐人能量石并添加收益记录
- * @param {string} userId - 当前用户 ID
- * @param {string[]} referrers - 推荐人列表
- * @param {number} directEarning - 直接收益
- * @param {number} indirectEarning - 间接收益
- * @param {Object} transaction - 事务对象
- * @returns {Promise<{code: number, message: string}>} - 返回操作结果
- */
-async function updateReferrersAssets(userId, referrers, directEarning, indirectEarning, claimGroundList, gameID, transaction) {
-  try {
-    // 遍历推荐人列表
-    for (let i = 0; i < referrers.length; i++) {
-      const referrerId = referrers[i];
-      const isDirect = i === 0; // 第一个推荐人是直接推荐人
-      const earnings = isDirect ? directEarning : indirectEarning; // 直接收益或间接收益
-
-      // 保留两位小数
-      const earningsRounded = parseFloat((earnings || 0).toFixed(2));
-
-      // 调用公共模块更新推荐人的能量石
-      await updateUserResource(referrerId, 'powerStone', earningsRounded, transaction);
-
-      // 添加收益记录到 referralEarningsRecord 表
-      await transaction.collection('referralEarningsRecord').add({
-        userId, // 当前用户 ID
-        referrerId, // 推荐人 ID
-        amount: earningsRounded, // 收益数量（保留两位小数）
-        type: isDirect ? 'direct' : 'indirect', // 收益类型（直接或间接）
-        originType: 1,
-        claimGroundList: claimGroundList,
-        createTime: new Date() // 当前时间
-      });
-
-      // 直接收益明细
-      if (isDirect) {
-        await addAssetsChangeRecord(referrerId, 'powerStone', directEarning, `游戏ID为${gameID}的用户地皮收益所得到的直推收益, 增加: `, transaction);
-      } else {
-        await addAssetsChangeRecord(referrerId, 'powerStone', indirectEarning, `游戏ID为${gameID}的用户地皮收益所得到的间推收益, 增加: `, transaction);
-      }
-    }
-
-    return {
-      code: 0,
-      message: '更新推荐人收益成功'
-    };
-  } catch (e) {
-    console.error('更新推荐人收益失败:', e.message);
-    return {
-      code: -1,
-      message: '更新推荐人收益失败，请重试'
-    };
-  }
-}
 
 /**
  * 主函数
@@ -128,11 +18,9 @@ exports.main = async (event, context) => {
   console.log("event:", event); // 打印 event 对象
   const { userId, earnings, directEarning, indirectEarning, gameID, claimGroundList } = event;
 
-  let transaction;
-  try {
-    // 开启事务
-    transaction = await db.startTransaction();
+  const transaction = await db.startTransaction();
 
+  try {
     // 1. 更新用户资源（能量石）
     await updateUserResource(userId, 'powerStone', parseFloat((earnings).toFixed(2)), transaction);
 
@@ -144,10 +32,29 @@ exports.main = async (event, context) => {
     });
 
     // 3. 更新用户土地的 lastClaimTime
-    const updateGroundsResult = await updateUserGroundsLastClaimTime(userId, transaction);
-    if (updateGroundsResult.code !== 0) {
-      await transaction.rollback();
-      return updateGroundsResult; // 如果更新失败，直接返回错误信息
+    const userGrounds = await db.collection('userGrounds').where({ userId }).get();
+    let updatedCount = 0; // 记录更新的土地数量
+
+    if (userGrounds.data.length > 0) {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0); // 设置为今天的0点
+      const todayTimestamp = today.getTime(); // 今天的0点时间戳
+
+      // 遍历用户的土地
+      for (const ground of userGrounds.data) {
+        const endTime = new Date(ground.endTime).getTime(); // 土地到期时间
+        const lastClaimTime = ground.lastClaimTime ? new Date(ground.lastClaimTime).getTime() : 0; // 上次领取时间的时间戳
+        const isExpired = endTime < Date.now(); // 土地是否已过期
+        const dontClaimedToday = lastClaimTime < todayTimestamp; // 上次领取时间是否在今天之前
+
+        // 如果土地未过期且今天未领取，则更新 lastClaimTime
+        if (!isExpired && dontClaimedToday) {
+          await transaction.collection('userGrounds').doc(ground._id).update({
+            lastClaimTime: new Date() // 更新为当前时间
+          });
+          updatedCount++; // 更新计数
+        }
+      }
     }
 
     // 4. 查找推荐人
@@ -155,18 +62,34 @@ exports.main = async (event, context) => {
 
     // 5. 更新推荐人能量石并添加收益记录
     if (referrers.length > 0) {
-      const updateReferrersResult = await updateReferrersAssets(
-        userId,
-        referrers,
-        parseFloat((directEarning).toFixed(2)),
-        parseFloat((indirectEarning).toFixed(2)),
-        claimGroundList,
-        gameID,
-        transaction
-      );
-      if (updateReferrersResult.code !== 0) {
-        await transaction.rollback();
-        return updateReferrersResult; // 如果更新失败，直接返回错误信息
+      for (let i = 0; i < referrers.length; i++) {
+        const referrerId = referrers[i];
+        const isDirect = i === 0; // 第一个推荐人是直接推荐人
+        const earnings = isDirect ? directEarning : indirectEarning; // 直接收益或间接收益
+
+        // 保留两位小数
+        const earningsRounded = parseFloat((earnings || 0).toFixed(2));
+
+        // 调用公共模块更新推荐人的能量石
+        await updateUserResource(referrerId, 'powerStone', earningsRounded, transaction);
+
+        // 添加收益记录到 referralEarningsRecord 表
+        await transaction.collection('referralEarningsRecord').add({
+          userId, // 当前用户 ID
+          referrerId, // 推荐人 ID
+          amount: earningsRounded, // 收益数量（保留两位小数）
+          type: isDirect ? 'direct' : 'indirect', // 收益类型（直接或间接）
+          originType: 1,
+          claimGroundList: claimGroundList,
+          createTime: new Date() // 当前时间
+        });
+
+        // 直接收益明细
+        if (isDirect) {
+          await addAssetsChangeRecord(referrerId, 'powerStone', directEarning, `游戏ID为${gameID}的用户地皮收益所得到的直推收益, 增加: `, transaction);
+        } else {
+          await addAssetsChangeRecord(referrerId, 'powerStone', indirectEarning, `游戏ID为${gameID}的用户地皮收益所得到的间推收益, 增加: `, transaction);
+        }
       }
     }
 
@@ -178,15 +101,13 @@ exports.main = async (event, context) => {
       code: 0,
       message: '操作成功',
       data: {
-        updateGroundsResult,
+        updatedCount, // 返回更新的土地数量
         referrers // 返回推荐人列表
       }
     };
   } catch (e) {
     console.error('操作失败:', e.message);
-    if (transaction) {
-      await transaction.rollback(); // 回滚事务
-    }
+    await transaction.rollback();
     return {
       code: -1,
       message: '操作失败，请重试'
