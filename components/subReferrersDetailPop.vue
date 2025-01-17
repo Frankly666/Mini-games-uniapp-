@@ -29,7 +29,9 @@
           </view>
 
           <!-- 收益记录 -->
-          <view v-if="expandedCardId === user.userInfo._id" class="earnings-list">
+          <view
+            :class="['earnings-list', expandedCardId === user.userInfo._id ? 'expanded' : '']"
+          >
             <view class="earnings-table">
               <!-- 表头 -->
               <view class="table-header">
@@ -325,8 +327,16 @@ onMounted(() => {
   border-bottom: none;
 }
 
+/* 收益记录列表 */
 .earnings-list {
-	margin-top: 4vw;
+  max-height: 0; /* 默认收起 */
+  overflow: hidden; /* 隐藏溢出内容 */
+  transition: max-height 0.5s ease-in-out; /* 添加过渡效果 */
+}
+
+/* 展开时的样式 */
+.earnings-list.expanded {
+  max-height: 1000px; /* 设置一个足够大的值 */
 }
 
 /* 表格项 */

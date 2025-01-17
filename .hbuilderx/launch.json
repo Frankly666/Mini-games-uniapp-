@@ -6,7 +6,7 @@
         {
         	"app-plus" : 
         	{
-        		"launchtype" : "local"
+        		"launchtype" : "remote"
         	},
         	"default" : 
         	{
@@ -14,7 +14,7 @@
         	},
         	"h5" : 
         	{
-        		"launchtype" : "local"
+        		"launchtype" : "remote"
         	},
         	"mp-weixin" : 
         	{

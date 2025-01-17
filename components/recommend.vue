@@ -2,9 +2,9 @@
   <view>
     <!-- 用户信息展示 -->
     <view class="user-info">
-      <image :src="gameInfo.avatar" class="avatar"></image>
+      <image :src="userInfo.avatar" class="avatar"></image>
       <view class="details">
-        <text class="username">{{ gameInfo.userName }}</text>
+        <text class="username">{{ userInfo.userName }}</text>
         <text class="invite-code">推荐码: {{ userInfo.inviteCode }}</text>
       </view>
     </view>
@@ -35,17 +35,18 @@
       canvas-id="shareCanvas"
       :style="{ width: canvasWidth + 'px', height: canvasHeight + 'px', position: 'absolute', top: '-9999px' }"
     ></canvas>
-		
-		<sub-referrers-detail-pop-vue
-				 v-if="showPopup"
-				 :type="popupType"
-				 @close="handleClosePopup"
-		/>
+
+    <!-- 弹窗组件 -->
+    <sub-referrers-detail-pop-vue
+      v-if="showPopup"
+      :type="popupType"
+      @close="handleClosePopup"
+    />
   </view>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed, watch } from 'vue';
 import { getLatestApkUrl } from '../utils/getLatestApkUrl';
 import subReferrersDetailPopVue from './subReferrersDetailPop.vue';
 import { useGameInfoStore } from '../stores/gameInfo';
@@ -59,7 +60,6 @@ const userInfo = ref({
 
 // 二维码内容
 const qrCodeContent = ref('');
-const gameInfo = useGameInfoStore()
 
 // 弹窗相关状态
 const showPopup = ref(false);
@@ -69,15 +69,28 @@ const popupType = ref('');
 const canvasWidth = ref(300); // 画布宽度
 const canvasHeight = ref(400); // 画布高度
 
+// 获取游戏信息
+const gameInfo = useGameInfoStore();
+
 // 从本地缓存获取用户信息
-const loadUserInfo = () => {
+const loadUserInfo = computed(() => {
   const cachedUserInfo = uni.getStorageSync('userInfo') || {};
   userInfo.value = {
-    userName: cachedUserInfo.userName || '默认用户',
-    avatar: cachedUserInfo.avatar || '/static/default-avatar.png',
+    userName: gameInfo.userName || cachedUserInfo.userName,
+    avatar: gameInfo.avatar || cachedUserInfo.avatar,
     inviteCode: cachedUserInfo.inviteCode || '000000'
   };
-};
+});
+
+// 监听 gameInfo 的变化
+watch(
+  () => gameInfo,
+  (newGameInfo) => {
+    userInfo.value.userName = newGameInfo.userName || userInfo.value.userName;
+    userInfo.value.avatar = newGameInfo.avatar || userInfo.value.avatar;
+  },
+  { deep: true }
+);
 
 // 获取最新 APK 下载地址并更新二维码内容
 const loadLatestApkUrl = async () => {
@@ -157,7 +170,7 @@ const handleDownloadImage = async () => {
     // 绘制用户头像
     const avatar = await new Promise((resolve, reject) => {
       uni.getImageInfo({
-        src: gameInfo.avatar,
+        src: userInfo.value.avatar,
         success: (res) => resolve(res.path),
         fail: (err) => reject(err)
       });
@@ -168,7 +181,7 @@ const handleDownloadImage = async () => {
     ctx.setFontSize(16);
     ctx.setFillStyle('#333333'); // 深灰色字体
     ctx.setTextAlign('left');
-    ctx.fillText(`用户名: ${gameInfo.userName}`, 120, 120);
+    ctx.fillText(`用户名: ${userInfo.value.userName}`, 120, 120);
     ctx.fillText(`推荐码: ${userInfo.value.inviteCode}`, 120, 150);
 
     // 绘制二维码模块背景
@@ -225,7 +238,7 @@ const handleDownloadImage = async () => {
 
 // 页面加载时获取用户信息和最新 APK 下载地址
 onMounted(() => {
-  loadUserInfo();
+  loadUserInfo.value; // 触发 computed
   loadLatestApkUrl();
 });
 </script>
@@ -283,8 +296,8 @@ onMounted(() => {
 /* 下载按钮样式 */
 .download-button {
   width: 30vw;
-	height: 10vw;
-	line-height: 6vw;
+  height: 10vw;
+  line-height: 6vw;
   background-color: #007aff;
   color: #fff;
   font-size: 4vw;
