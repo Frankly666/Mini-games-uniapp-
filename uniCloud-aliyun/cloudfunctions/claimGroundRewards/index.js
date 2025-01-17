@@ -71,7 +71,7 @@ async function updateUserGroundsLastClaimTime(userId) {
  * @param {number} indirectEarning - 间接收益
  * @returns {Promise<{code: number, message: string}>} - 返回操作结果
  */
-async function updateReferrersAssets(userId, referrers, directEarning, indirectEarning, gameID) {
+async function updateReferrersAssets(userId, referrers, directEarning, indirectEarning,claimGroundList, gameID ) {
   const transaction = await db.startTransaction();
 
   try {
@@ -93,7 +93,8 @@ async function updateReferrersAssets(userId, referrers, directEarning, indirectE
         referrerId, // 推荐人 ID
         amount: earningsRounded, // 收益数量（保留两位小数）
         type: isDirect ? 'direct' : 'indirect', // 收益类型（直接或间接）
-				origin: "土地产出",
+				originType: 1,
+				claimGroundList: claimGroundList,
         createTime: new Date() // 当前时间
       });
 			
@@ -128,11 +129,12 @@ async function updateReferrersAssets(userId, referrers, directEarning, indirectE
  * @param {number} event.earnings - 要增加的能量石数量
  * @param {number} event.directEarning - 直接收益
  * @param {number} event.indirectEarning - 间接收益
+ * @param {List} event.claimGroundList - 具体的土地收益
  * @returns {Promise<{code: number, message: string, data?: Object}>} - 返回操作结果
  */
 exports.main = async (event, context) => {
   console.log("event:", event); // 打印 event 对象
-  const { userId, earnings, directEarning, indirectEarning, gameID } = event;
+  const { userId, earnings, directEarning, indirectEarning, gameID, claimGroundList } = event;
 
   try {
     const transaction = await db.startTransaction();
@@ -164,6 +166,7 @@ exports.main = async (event, context) => {
         referrers,
         parseFloat((directEarning).toFixed(2)),
         parseFloat((indirectEarning).toFixed(2)),
+				claimGroundList,
 				gameID
       );
       if (updateReferrersResult.code !== 0) {

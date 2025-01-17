@@ -41,6 +41,7 @@ const isClaiming = ref(false); // 是否正在领取
 const serverTime = ref(null); // 服务器时间
 let directEarning = 0;
 let indirectEarning = 0;
+const claimGroundList = [];
 
 // 查询用户地皮
 async function fetchUserGrounds() {
@@ -95,11 +96,13 @@ const totalEarnings = computed(() => {
 				const temIndirectEarning = thisGround.dailyEarnings * thisGround.inDepthReturns;
         directEarning += temDirectEarning;
         indirectEarning += temIndirectEarning;
+				claimGroundList.push(groundType)
       }
     });
   }
   return roundToOneDecimal(total);
 });
+
 
 // 监听 totalEarnings 的变化，自动显示弹窗
 watch(totalEarnings, (newValue) => {
@@ -126,7 +129,8 @@ async function claimEarnings() {
         earnings: totalEarnings.value,
         directEarning: roundToOneDecimal(directEarning),
         indirectEarning: roundToOneDecimal(indirectEarning),
-        gameID: uni.getStorageSync('gameID')
+        gameID: uni.getStorageSync('gameID'),
+				claimGroundList: claimGroundList,
       }
     });
 

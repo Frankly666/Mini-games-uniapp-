@@ -4,20 +4,24 @@
     "version" : "0.0",
     "configurations" : [
         {
-            "app-plus" : {
-                "launchtype" : "remote"
-            },
-            "default" : {
-                "launchtype" : "local"
-            },
-            "h5" : {
-                "launchtype" : "remote"
-            },
-            "mp-weixin" : {
-                "launchtype" : "local"
-            },
-            "provider" : "aliyun",
-            "type" : "uniCloud"
+        	"app-plus" : 
+        	{
+        		"launchtype" : "local"
+        	},
+        	"default" : 
+        	{
+        		"launchtype" : "local"
+        	},
+        	"h5" : 
+        	{
+        		"launchtype" : "local"
+        	},
+        	"mp-weixin" : 
+        	{
+        		"launchtype" : "local"
+        	},
+        	"provider" : "aliyun",
+        	"type" : "uniCloud"
         }
     ]
 }
