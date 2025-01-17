@@ -13,11 +13,13 @@ async function getReferralEarnings(userId, subReferrers) {
 
   // 批量查询推荐收益记录
   const earningsRecords = await db.collection('referralEarningsRecord')
-    .where({
-      referrerId: userId,
-      userId: db.command.in(subReferrerIds) // 使用 in 操作符批量查询
-    })
-    .get();
+      .where({
+        referrerId: userId,
+        userId: db.command.in(subReferrerIds) // 使用 in 操作符批量查询
+      })
+      .orderBy('createTime', 'desc') // 按 createTime 字段降序排列
+      .get();
+		
 
   // 将收益记录按 userId 分组
   const earningsMap = earningsRecords.data.reduce((map, record) => {
