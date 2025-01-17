@@ -161,7 +161,7 @@ const handleDownloadImage = async () => {
     ctx.setFontSize(24);
     ctx.setFillStyle('#333333'); // 深灰色字体
     ctx.setTextAlign('center');
-    ctx.fillText('趣选云城', canvasWidth.value / 2, 50);
+    ctx.fillText('趣选城', canvasWidth.value / 2, 50);
 
     // 绘制用户信息模块背景
     ctx.setFillStyle('#ffffff'); // 白色背景

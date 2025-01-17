@@ -1,7 +1,7 @@
 <template>
 	<view class="container">
 		<!-- 标题 -->
-		<view class="title">趣选云城</view>
+		<view class="title">趣选城</view>
 		
 		<!-- Tab 切换 -->
 		<view class="tab">

@@ -99,7 +99,7 @@ exports.main = async (event, context) => {
       userData = {
         phone: oldUserData.phone,
         avatar: defaultAvatar,
-        userName: oldUserData.name || "趣选云城", // 使用 oldUser 中的用户名
+        userName: oldUserData.name || "趣选城", // 使用 oldUser 中的用户名
         createTime: new Date().toISOString(), // 当前时间
         isFirst: 0, // 初始化为 0
         pusherCode: oldUserData.pusherPhone || null, // 如果 oldUser 中的 pusherPhone 有值，则将其添加到 pusherCode 字段
@@ -119,7 +119,7 @@ exports.main = async (event, context) => {
       userData = {
         phone,
         avatar: defaultAvatar,
-        userName: userName || "趣选云城", // 使用传入的用户名，如果没有则初始化为 "趣选云城"
+        userName: userName || "趣选城", // 使用传入的用户名，如果没有则初始化为 "趣选云城"
         createTime: new Date().toISOString(), // 当前时间
         isFirst: 0, // 初始化为 0
         pusherCode: null, // 初始化为 null，后续会根据 inviteCode 更新

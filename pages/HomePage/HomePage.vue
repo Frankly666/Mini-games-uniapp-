@@ -6,7 +6,7 @@
       <view class="menu-icon" @click="showMenu = true">
         <text class="icon">···</text>
       </view>
-      <text class="header-title">趣选云城</text>
+      <text class="header-title">趣选城</text>
     </view>
 
     <!-- 弹窗 -->
@@ -22,7 +22,7 @@
       <!-- 动态显示页面内容 -->
       <view class="section" v-if="activeTab === 'intro'">
         <text class="section-title">介绍</text>
-        <text class="section-description">这里是趣选云城的介绍页面。</text>
+        <text class="section-description">这里是趣选城的介绍页面。</text>
       </view>
       <view class="section" v-if="activeTab === 'market'">
         <mart-vue></mart-vue>
@@ -36,7 +36,7 @@
       </view>
       <view class="section" v-if="activeTab === 'guild'">
         <text class="section-title">公会</text>
-        <text class="section-description">这里是趣选云城的公会页面。</text>
+        <text class="section-description">这里是趣选城的公会页面。</text>
       </view>
     </view>
 

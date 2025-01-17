@@ -12,7 +12,7 @@ module.exports = {
 		const cloudInfo = this.getCloudInfo()
 		const db = uniCloud.database()
 		const collection = db.collection('user')
-		const res = await collection.add({phone, avatar, userName: '趣选云城', createTime: new Date(), isFirst: 0, pusherId: pusherId | null})
+		const res = await collection.add({phone, avatar, userName: '趣选城', createTime: new Date(), isFirst: 0, pusherId: pusherId | null})
 		
 		// 返回结果
 		return {
