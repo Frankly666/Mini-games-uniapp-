@@ -7142,12 +7142,17 @@ This will fail in production if not fixed.`);
         }
         return "土地收益";
       };
+      const calculateTotalEarnings = (recordList) => {
+        if (!recordList || recordList.length === 0)
+          return 0;
+        return recordList.reduce((total, record) => total + (record.amount || 0), 0).toFixed(2);
+      };
       const fetchReferralUsers = async () => {
         try {
           const result = await getReferralUsersWithEarnings(uni.getStorageSync("id"));
           users.value = result;
         } catch (err) {
-          formatAppLog("error", "at components/subReferrersDetailPop.vue:165", "获取推广用户数据失败:", err);
+          formatAppLog("error", "at components/subReferrersDetailPop.vue:176", "获取推广用户数据失败:", err);
           uni.showToast({
             title: "获取数据失败，请稍后重试",
             icon: "none"
@@ -7159,7 +7164,7 @@ This will fail in production if not fixed.`);
       vue.onMounted(() => {
         fetchReferralUsers();
       });
-      const __returned__ = { props, users, loading, expandedCardId, groundsMeta, groundNameMap, title, filteredUsers, emit, handleClose, toggleCard, formatDate, getEarningsSource, fetchReferralUsers, ref: vue.ref, computed: vue.computed, onMounted: vue.onMounted, get getReferralUsersWithEarnings() {
+      const __returned__ = { props, users, loading, expandedCardId, groundsMeta, groundNameMap, title, filteredUsers, emit, handleClose, toggleCard, formatDate, getEarningsSource, calculateTotalEarnings, fetchReferralUsers, ref: vue.ref, computed: vue.computed, onMounted: vue.onMounted, get getReferralUsersWithEarnings() {
         return getReferralUsersWithEarnings;
       } };
       Object.defineProperty(__returned__, "__isScriptSetup", { enumerable: false, value: true });
@@ -7227,6 +7232,17 @@ This will fail in production if not fixed.`);
                           "text",
                           { class: "game-id" },
                           "游戏ID: " + vue.toDisplayString(user.userInfo.gameID),
+                          1
+                          /* TEXT */
+                        )
+                      ]),
+                      vue.createCommentVNode(" 总收益 "),
+                      vue.createElementVNode("view", { class: "total-earnings" }, [
+                        vue.createElementVNode("text", { class: "total-earnings-label" }, "总收益"),
+                        vue.createElementVNode(
+                          "text",
+                          { class: "total-earnings-value" },
+                          vue.toDisplayString($setup.calculateTotalEarnings(user.recordList)) + "能量石",
                           1
                           /* TEXT */
                         )

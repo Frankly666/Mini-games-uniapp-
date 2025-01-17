@@ -26,6 +26,11 @@
               <text class="user-name">{{ user.userInfo.userName }}</text>
               <text class="game-id">游戏ID: {{ user.userInfo.gameID }}</text>
             </view>
+            <!-- 总收益 -->
+            <view class="total-earnings">
+              <text class="total-earnings-label">总收益</text>
+              <text class="total-earnings-value">{{ calculateTotalEarnings(user.recordList) }}能量石</text>
+            </view>
           </view>
 
           <!-- 收益记录 -->
@@ -154,6 +159,12 @@ const getEarningsSource = (record) => {
       .join('\n'); // 多项用逗号分隔
   }
   return '土地收益'; // 默认值
+};
+
+// 计算总收益
+const calculateTotalEarnings = (recordList) => {
+  if (!recordList || recordList.length === 0) return 0;
+  return recordList.reduce((total, record) => total + (record.amount || 0), 0).toFixed(2);
 };
 
 // 获取推广用户数据
@@ -290,6 +301,24 @@ onMounted(() => {
 .game-id {
   font-size: 3vw;
   color: #666;
+}
+
+/* 总收益 */
+.total-earnings {
+  margin-left: auto; /* 靠右对齐 */
+  text-align: right;
+	font-size: 3vw;
+}
+
+.total-earnings-label {
+  font-size: 3vw;
+  color: #666;
+}
+
+.total-earnings-value {
+  font-size: 3vw;
+  color: #333;
+  font-weight: bold;
 }
 
 /* 收益记录表格 */
