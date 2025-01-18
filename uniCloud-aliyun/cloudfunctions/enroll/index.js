@@ -76,7 +76,7 @@ exports.main = async (event, context) => {
     }
 
     // 2. 查询 oldUser 表，判断用户是否存在
-    const oldUserCollection = db.collection('oldUser');
+    const oldUserCollection = db.collection('oldUserInfo');
     const oldUserQuery = await oldUserCollection.where({ phone }).get();
 
     let userData, isOldUser = false;

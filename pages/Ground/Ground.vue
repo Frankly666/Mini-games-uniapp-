@@ -318,7 +318,7 @@
 	}
 	
 	onMounted(async () => {
-		if(!gameInfo.ownGrounds) await updateData()
+		updateData()
 	})
 </script>
  

@@ -106,6 +106,7 @@ function handleLogout() {
   uni.setStorageSync('phone', ''); // 清空手机号
   uni.setStorageSync('id', ''); // 清空用户 ID
   uni.setStorageSync('token', ''); // 清空 token（如果有）
+	uni.clearStorageSync()
 
   // 关闭弹窗
   showMenu.value = false;
@@ -118,7 +119,9 @@ function handleLogout() {
 }
 
 onMounted(() => {
+	// #ifndef APP
 	checkUpdate()
+	// #endif
 	// bgm播放设置
 	bgm.src ='/static/bgm/bgm.mp3'
 	bgm.autoplay = true;

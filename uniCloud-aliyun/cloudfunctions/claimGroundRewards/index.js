@@ -19,10 +19,12 @@ exports.main = async (event, context) => {
   const { userId, earnings, directEarning, indirectEarning, gameID, claimGroundList } = event;
 
   const transaction = await db.startTransaction();
+  console.log("开始事务执行:");
 
   try {
     // 1. 更新用户资源（能量石）
     await updateUserResource(userId, 'powerStone', parseFloat((earnings).toFixed(2)), transaction);
+    console.log('资源更新完成');
 
     // 2. 添加领取记录到 groundRecieveRecord 表
     await transaction.collection('groundRecieveRecord').add({
@@ -31,9 +33,12 @@ exports.main = async (event, context) => {
       receiveTime: new Date() // 领取时间
     });
 
+    console.log('地皮领取记录完成');
+
     // 3. 更新用户土地的 lastClaimTime
     const userGrounds = await db.collection('userGrounds').where({ userId }).get();
     let updatedCount = 0; // 记录更新的土地数量
+    console.log('用户地皮获取');
 
     if (userGrounds.data.length > 0) {
       const today = new Date();
@@ -58,7 +63,8 @@ exports.main = async (event, context) => {
     }
 
     // 4. 查找推荐人
-    const referrers = await findReferrers(userId);
+    const referrers = await findReferrers(userId); // 直接调用 findReferrers，不传递事务对象
+    console.log("推荐人查找结果:", referrers);
 
     // 5. 更新推荐人能量石并添加收益记录
     if (referrers.length > 0) {
@@ -69,12 +75,13 @@ exports.main = async (event, context) => {
 
         // 保留两位小数
         const earningsRounded = parseFloat((earnings || 0).toFixed(2));
+				console.log("增加的数量:", earningsRounded)
 
         // 调用公共模块更新推荐人的能量石
         await updateUserResource(referrerId, 'powerStone', earningsRounded, transaction);
 
         // 添加收益记录到 referralEarningsRecord 表
-        await transaction.collection('referralEarningsRecord').add({
+        await db.collection('referralEarningsRecord').add({
           userId, // 当前用户 ID
           referrerId, // 推荐人 ID
           amount: earningsRounded, // 收益数量（保留两位小数）

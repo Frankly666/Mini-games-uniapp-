@@ -402,7 +402,7 @@ if (uni.restoreGlobal) {
   function I(e2) {
     return e2 && "string" == typeof e2 ? JSON.parse(e2) : e2;
   }
-  const S = true, b$1 = "app", A = I(define_process_env_UNI_SECURE_NETWORK_CONFIG_default), C$1 = b$1, P = I('{\n    "address": [\n        "127.0.0.1",\n        "2.0.0.1",\n        "169.254.37.199",\n        "192.168.1.3",\n        "192.168.137.1",\n        "192.168.65.1"\n    ],\n    "debugPort": 9001,\n    "initialLaunchType": "remote",\n    "servePort": 7001,\n    "skipFiles": [\n        "<node_internals>/**",\n        "D:/HBuilderX/HBuilderX/plugins/unicloud/**/*.js"\n    ]\n}\n'), T = I('[{"provider":"aliyun","spaceName":"fun-cloud-city-game","spaceId":"mp-4de62d5a-2380-467f-b109-457713276d05","clientSecret":"ZD2WgXn3K1WSmV78nmjvUQ==","endpoint":"https://api.next.bspapp.com"}]') || [];
+  const S = true, b$1 = "app", A = I(define_process_env_UNI_SECURE_NETWORK_CONFIG_default), C$1 = b$1, P = I('{\n    "address": [\n        "127.0.0.1",\n        "2.0.0.1",\n        "192.168.1.3",\n        "192.168.137.1",\n        "192.168.65.1"\n    ],\n    "debugPort": 9000,\n    "initialLaunchType": "local",\n    "servePort": 7000,\n    "skipFiles": [\n        "<node_internals>/**",\n        "D:/HBuilderX/HBuilderX/plugins/unicloud/**/*.js"\n    ]\n}\n'), T = I('[{"provider":"aliyun","spaceName":"fun-cloud-city-game","spaceId":"mp-4de62d5a-2380-467f-b109-457713276d05","clientSecret":"ZD2WgXn3K1WSmV78nmjvUQ==","endpoint":"https://api.next.bspapp.com"}]') || [];
   let O = "";
   try {
     O = "__UNI__1B67F5F";
@@ -7570,17 +7570,28 @@ This will fail in production if not fixed.`);
             title: "发现新版本",
             content: `最新版本：${latestVersion.versionName}
 更新说明：${latestVersion.note}
-是否立即更新？`,
+请更新后继续使用。`,
+            showCancel: false,
+            // 禁用取消按钮
+            confirmText: "立即更新",
+            // 设置确认按钮的文本
             success: (modalRes) => {
               if (modalRes.confirm) {
                 plus.runtime.openURL(latestVersion.url);
               }
             }
           });
+          uni.onBackPress(() => {
+            uni.showToast({
+              title: "请更新后继续使用",
+              icon: "none"
+            });
+            return true;
+          });
         }
       },
       fail: (err) => {
-        formatAppLog("error", "at utils/checkUpdate.js:29", "检查更新失败:", err);
+        formatAppLog("error", "at utils/checkUpdate.js:41", "检查更新失败:", err);
         uni.showToast({
           title: "检查更新失败",
           icon: "none"
@@ -7588,7 +7599,6 @@ This will fail in production if not fixed.`);
       }
     });
   }
-  checkUpdate();
   const _sfc_main$A = {
     __name: "HomePage",
     setup(__props, { expose: __expose }) {
@@ -7613,6 +7623,7 @@ This will fail in production if not fixed.`);
         uni.setStorageSync("phone", "");
         uni.setStorageSync("id", "");
         uni.setStorageSync("token", "");
+        uni.clearStorageSync();
         showMenu.value = false;
         uni.reLaunch({
           url: "/pages/login/login"
@@ -7621,7 +7632,6 @@ This will fail in production if not fixed.`);
         bgm.stop();
       }
       vue.onMounted(() => {
-        checkUpdate();
         bgm.src = "/static/bgm/bgm.mp3";
         bgm.autoplay = true;
         bgm.loop = true;
@@ -10244,7 +10254,6 @@ This will fail in production if not fixed.`);
       vue.onMounted(async () => {
         uni.hideLoading();
         updateOwnGrounds();
-        checkUpdate();
         setTimeout(function() {
           isShowLoading.value = false;
         }, 2e3);
@@ -12934,8 +12943,7 @@ This will fail in production if not fixed.`);
         }
       }
       vue.onMounted(async () => {
-        if (!gameInfo.ownGrounds)
-          await updateData();
+        updateData();
       });
       const __returned__ = { groundType, groundIndex, isShowGroundPop, isShowRecordPop, groundsDB, gameInfo, userGrounds, back, handleIsShowGroundPop, handleIsShowRecordPop, clickLockGround, judgeOwnThisGround, selectWorker, formatDateToDay, getEndTime, updateData, onMounted: vue.onMounted, onUnmounted: vue.onUnmounted, ref: vue.ref, assetsHeader, workerVue, buyGroundPopVue, get useGameInfoStore() {
         return useGameInfoStore;
@@ -13867,7 +13875,7 @@ This will fail in production if not fixed.`);
         }
       });
       onHide(() => {
-        formatAppLog("log", "at App.vue:19", "App Hide");
+        formatAppLog("log", "at App.vue:25", "App Hide");
         if (gameInfo.bgm) {
           gameInfo.bgm.pause();
         }
@@ -13880,6 +13888,8 @@ This will fail in production if not fixed.`);
         return onHide;
       }, get useGameInfoStore() {
         return useGameInfoStore;
+      }, get checkUpdate() {
+        return checkUpdate;
       } };
       Object.defineProperty(__returned__, "__isScriptSetup", { enumerable: false, value: true });
       return __returned__;

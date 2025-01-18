@@ -174,7 +174,10 @@ onMounted(async () => {
 	uni.hideLoading()
 	
 	updateOwnGrounds()
+	
+	// #ifndef APP
 	checkUpdate()
+	// #endif
 	
 	setTimeout(function() {
 		isShowLoading.value = false;

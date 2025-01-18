@@ -1,18 +1,24 @@
 <script setup>
 import { onLaunch, onShow, onHide } from '@dcloudio/uni-app';
 import { useGameInfoStore } from './stores/gameInfo'; // 根据你的路径调整
+import { checkUpdate } from './utils/checkUpdate';
 
 // 获取全局状态
 const gameInfo = useGameInfoStore();
 
 onLaunch(() => {
-
+	// #ifndef APP
+	checkUpdate()
+	// #endif
 });
 
 onShow(() => {
 	if(gameInfo.bgm && gameInfo.bgmIsOpen) {
 		gameInfo.bgm.play()
 	}
+	// #ifndef APP
+	checkUpdate()
+	// #endif
 });
 
 onHide(() => {

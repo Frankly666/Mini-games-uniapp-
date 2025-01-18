@@ -31,7 +31,7 @@ exports.main = async (event, context) => {
       throw new Error('需求记录不存在');
     }
 
-    const cloudBuyNum = buyRequirementDoc.data[0].buyNum;
+    const cloudBuyNum = buyRequirementDoc.data[0]?.buyNum;
 
     // 3. 校验传入的 buyNum 是否与云端一致
     if (buyNum !== cloudBuyNum) {
