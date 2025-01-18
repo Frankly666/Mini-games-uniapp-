@@ -9,6 +9,7 @@ exports.main = async (event, context) => {
 
   const { addUserGroundData, userId, unlockFunds, duration } = event;
   const transaction = await db.startTransaction();
+	console.log("事务对象:", transaction.id)
 
   const now = new Date(); // 当前时间
   const endDate = new Date(now);

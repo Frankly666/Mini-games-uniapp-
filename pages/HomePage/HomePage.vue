@@ -72,6 +72,8 @@ import martVue from '../../components/mart.vue';
 import clickIntoCloudCityVue from '../../components/clickIntoCloudCity.vue';
 import recommendVue from '../../components/recommend.vue';
 import { useGameInfoStore } from '../../stores/gameInfo';
+import { checkUpdate } from '../../utils/checkUpdate';
+
 
 // 当前选中的 Tab
 const activeTab = ref('cloud');
@@ -112,11 +114,11 @@ function handleLogout() {
   uni.reLaunch({
     url: '/pages/login/login', // 替换为你的登录页面路径
   }); 
-	
 	bgm.stop()
 }
 
 onMounted(() => {
+	checkUpdate()
 	// bgm播放设置
 	bgm.src ='/static/bgm/bgm.mp3'
 	bgm.autoplay = true;
@@ -124,6 +126,7 @@ onMounted(() => {
 	if(gameInfo.bgmIsOpen) {
 		bgm.play()
 	}
+	
 })
 </script>
 

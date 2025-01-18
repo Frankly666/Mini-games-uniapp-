@@ -74,6 +74,8 @@ function isTodayClaimed(lastClaimTime) {
 
   const claimDate = new Date(lastClaimTime);
   claimDate.setHours(0, 0, 0, 0); // 签到日期的开始时间
+	
+	console.log("签到时间和今天开始时间:",claimDate.getTime(), today.getTime());
 
   return claimDate.getTime() >= today.getTime(); // 判断签到时间是否小于今天
 }

@@ -62,6 +62,7 @@ import Cache from '../../utils/cache';
 import { updateOwnGrounds } from '../../utils/updateOwnGrounds';
 import loadingVue from '../../components/loading.vue';
 import { updateAssets } from '../../utils/updateGameInfo';
+import { checkUpdate } from '../../utils/checkUpdate';
 
 const keyword = ref('');
 const screenWidth = ref(0);
@@ -173,6 +174,7 @@ onMounted(async () => {
 	uni.hideLoading()
 	
 	updateOwnGrounds()
+	checkUpdate()
 	
 	setTimeout(function() {
 		isShowLoading.value = false;

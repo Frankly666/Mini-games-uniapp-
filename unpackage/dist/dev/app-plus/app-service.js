@@ -402,7 +402,7 @@ if (uni.restoreGlobal) {
   function I(e2) {
     return e2 && "string" == typeof e2 ? JSON.parse(e2) : e2;
   }
-  const S = true, b$1 = "app", A = I(define_process_env_UNI_SECURE_NETWORK_CONFIG_default), C$1 = b$1, P = I('{\n    "address": [\n        "127.0.0.1",\n        "2.0.0.1",\n        "169.254.37.199",\n        "192.168.137.1",\n        "192.168.65.1",\n        "172.16.40.200"\n    ],\n    "debugPort": 9001,\n    "initialLaunchType": "remote",\n    "servePort": 7001,\n    "skipFiles": [\n        "<node_internals>/**",\n        "D:/HBuilderX/HBuilderX/plugins/unicloud/**/*.js"\n    ]\n}\n'), T = I('[{"provider":"aliyun","spaceName":"fun-cloud-city-game","spaceId":"mp-4de62d5a-2380-467f-b109-457713276d05","clientSecret":"ZD2WgXn3K1WSmV78nmjvUQ==","endpoint":"https://api.next.bspapp.com"}]') || [];
+  const S = true, b$1 = "app", A = I(define_process_env_UNI_SECURE_NETWORK_CONFIG_default), C$1 = b$1, P = I('{\n    "address": [\n        "127.0.0.1",\n        "2.0.0.1",\n        "169.254.37.199",\n        "192.168.1.3",\n        "192.168.137.1",\n        "192.168.65.1"\n    ],\n    "debugPort": 9001,\n    "initialLaunchType": "remote",\n    "servePort": 7001,\n    "skipFiles": [\n        "<node_internals>/**",\n        "D:/HBuilderX/HBuilderX/plugins/unicloud/**/*.js"\n    ]\n}\n'), T = I('[{"provider":"aliyun","spaceName":"fun-cloud-city-game","spaceId":"mp-4de62d5a-2380-467f-b109-457713276d05","clientSecret":"ZD2WgXn3K1WSmV78nmjvUQ==","endpoint":"https://api.next.bspapp.com"}]') || [];
   let O = "";
   try {
     O = "__UNI__1B67F5F";
@@ -7556,6 +7556,39 @@ This will fail in production if not fixed.`);
     ]);
   }
   const recommendVue = /* @__PURE__ */ _export_sfc(_sfc_main$B, [["render", _sfc_render$A], ["__scopeId", "data-v-f2aab100"], ["__file", "D:/HBuilderProjects/Game/components/recommend.vue"]]);
+  function checkUpdate() {
+    const appVersionCode = plus.runtime.versionCode;
+    plus.runtime.version;
+    Ys.callFunction({
+      name: "checkAppUpdate",
+      // 云函数名称
+      success: (res) => {
+        const latestVersion = res.result.data;
+        formatAppLog("log", "at utils/checkUpdate.js:9", "版本号:", appVersionCode, latestVersion.versionCode);
+        if (latestVersion.versionCode > appVersionCode) {
+          uni.showModal({
+            title: "发现新版本",
+            content: `最新版本：${latestVersion.versionName}
+更新说明：${latestVersion.note}
+是否立即更新？`,
+            success: (modalRes) => {
+              if (modalRes.confirm) {
+                plus.runtime.openURL(latestVersion.url);
+              }
+            }
+          });
+        }
+      },
+      fail: (err) => {
+        formatAppLog("error", "at utils/checkUpdate.js:29", "检查更新失败:", err);
+        uni.showToast({
+          title: "检查更新失败",
+          icon: "none"
+        });
+      }
+    });
+  }
+  checkUpdate();
   const _sfc_main$A = {
     __name: "HomePage",
     setup(__props, { expose: __expose }) {
@@ -7566,15 +7599,15 @@ This will fail in production if not fixed.`);
       const showMenu = vue.ref(false);
       function handleMarket() {
         activeTab.value = "market";
-        formatAppLog("log", "at pages/HomePage/HomePage.vue:86", "切换到集市页面");
+        formatAppLog("log", "at pages/HomePage/HomePage.vue:88", "切换到集市页面");
       }
       function handleCloud() {
         activeTab.value = "cloud";
-        formatAppLog("log", "at pages/HomePage/HomePage.vue:92", "切换到云城页面");
+        formatAppLog("log", "at pages/HomePage/HomePage.vue:94", "切换到云城页面");
       }
       function handlePromotion() {
         activeTab.value = "promotion";
-        formatAppLog("log", "at pages/HomePage/HomePage.vue:98", "切换到推广页面");
+        formatAppLog("log", "at pages/HomePage/HomePage.vue:100", "切换到推广页面");
       }
       function handleLogout() {
         uni.setStorageSync("phone", "");
@@ -7588,6 +7621,7 @@ This will fail in production if not fixed.`);
         bgm.stop();
       }
       vue.onMounted(() => {
+        checkUpdate();
         bgm.src = "/static/bgm/bgm.mp3";
         bgm.autoplay = true;
         bgm.loop = true;
@@ -7597,6 +7631,8 @@ This will fail in production if not fixed.`);
       });
       const __returned__ = { activeTab, gameInfo, bgm, showMenu, handleMarket, handleCloud, handlePromotion, handleLogout, ref: vue.ref, onMounted: vue.onMounted, martVue, clickIntoCloudCityVue, recommendVue, get useGameInfoStore() {
         return useGameInfoStore;
+      }, get checkUpdate() {
+        return checkUpdate;
       } };
       Object.defineProperty(__returned__, "__isScriptSetup", { enumerable: false, value: true });
       return __returned__;
@@ -7824,13 +7860,14 @@ This will fail in production if not fixed.`);
         return `../static/market/${name}.png`;
       }
       function handleAssetClick(assetType) {
+        updateAssets();
         props.openRecordPopup(assetType);
       }
       vue.onMounted(async () => {
         try {
           updateAssets();
         } catch (error) {
-          formatAppLog("error", "at components/assetsHeader.vue:72", "初始化失败:", error);
+          formatAppLog("error", "at components/assetsHeader.vue:73", "初始化失败:", error);
         }
       });
       const __returned__ = { assets, gameInfo, props, getImageUrl, handleAssetClick, onMounted: vue.onMounted, get useGameInfoStore() {
@@ -10207,6 +10244,7 @@ This will fail in production if not fixed.`);
       vue.onMounted(async () => {
         uni.hideLoading();
         updateOwnGrounds();
+        checkUpdate();
         setTimeout(function() {
           isShowLoading.value = false;
         }, 2e3);
@@ -10231,6 +10269,8 @@ This will fail in production if not fixed.`);
         return updateOwnGrounds;
       }, loadingVue, get updateAssets() {
         return updateAssets;
+      }, get checkUpdate() {
+        return checkUpdate;
       } };
       Object.defineProperty(__returned__, "__isScriptSetup", { enumerable: false, value: true });
       return __returned__;
@@ -12267,6 +12307,17 @@ This will fail in production if not fixed.`);
       const props = __props;
       const gameInfo = useGameInfoStore();
       const groundMeta = gameInfo.groundsMeta[props.groundType];
+      const showConfirm = vue.ref(false);
+      function showConfirmDialog() {
+        showConfirm.value = true;
+      }
+      function hideConfirmDialog() {
+        showConfirm.value = false;
+      }
+      async function handleConfirmUnlock() {
+        hideConfirmDialog();
+        await confirmUnlock();
+      }
       async function checkActivity() {
         try {
           const res = await Ys.callFunction({
@@ -12279,18 +12330,23 @@ This will fail in production if not fixed.`);
             const hasActivity = res.result.data.some((record) => record.activityId === "1");
             return hasActivity;
           } else {
-            formatAppLog("error", "at components/buyGroundPop.vue:55", "查询活动失败:", res.result.message);
+            formatAppLog("error", "at components/buyGroundPop.vue:87", "查询活动失败:", res.result.message);
             return false;
           }
         } catch (err) {
-          formatAppLog("error", "at components/buyGroundPop.vue:59", "调用云函数失败:", err);
+          formatAppLog("error", "at components/buyGroundPop.vue:91", "调用云函数失败:", err);
           return false;
         }
       }
       async function confirmUnlock() {
+        uni.showLoading({
+          mask: true,
+          title: "加载中"
+        });
         const haveActivity = await checkActivity();
         if (!haveActivity) {
           showTips("未购买蛇年礼包");
+          uni.hideLoading();
           return;
         }
         const thisGround = gameInfo.groundsMeta[props.groundType];
@@ -12300,12 +12356,9 @@ This will fail in production if not fixed.`);
         const nowNum = gameInfo.assets[POWERSTONE];
         if (nowNum < unlockFunds) {
           showTips("余额不足");
+          uni.hideLoading();
           return;
         }
-        uni.showLoading({
-          mask: true,
-          title: "解锁中"
-        });
         Ys.callFunction({
           name: "buyGround",
           data: {
@@ -12335,16 +12388,18 @@ This will fail in production if not fixed.`);
             addAssetsChangeRecord(uni.getStorageSync("id"), POWERSTONE, unlockFunds, `解锁${groundName}扣除: `);
             props.closePop();
             props.updateData();
+          } else if (res.result.code === -1) {
+            showTips("请勿重复解锁!");
           } else {
             showTips(`解锁失败: ${res.result.message}`);
           }
         }).catch((err) => {
           uni.hideLoading();
           showTips("网络错误，请稍后重试");
-          formatAppLog("error", "at components/buyGroundPop.vue:128", "购买失败:", err);
+          formatAppLog("error", "at components/buyGroundPop.vue:165", "购买失败:", err);
         });
       }
-      const __returned__ = { props, gameInfo, groundMeta, checkActivity, confirmUnlock, get POWERSTONE() {
+      const __returned__ = { props, gameInfo, groundMeta, showConfirm, showConfirmDialog, hideConfirmDialog, handleConfirmUnlock, checkActivity, confirmUnlock, ref: vue.ref, get POWERSTONE() {
         return POWERSTONE;
       }, get useGameInfoStore() {
         return useGameInfoStore;
@@ -12410,16 +12465,37 @@ This will fail in production if not fixed.`);
               /* TEXT */
             )
           ]),
+          vue.createCommentVNode(" 解锁按钮 "),
           vue.createElementVNode("view", {
             class: "btn",
-            onClick: $setup.confirmUnlock
+            onClick: $setup.showConfirmDialog
           }, [
             vue.createElementVNode("text", null, "解锁")
           ])
         ],
         4
         /* STYLE */
-      )
+      ),
+      vue.createCommentVNode(" 自定义二次确认弹窗 "),
+      $setup.showConfirm ? (vue.openBlock(), vue.createElementBlock("view", {
+        key: 0,
+        class: "confirmDialogWrap"
+      }, [
+        vue.createElementVNode("view", { class: "confirmDialog" }, [
+          vue.createElementVNode("view", { class: "confirmTitle" }, "确认解锁"),
+          vue.createElementVNode("view", { class: "confirmContent" }, "确定要解锁这块土地吗？"),
+          vue.createElementVNode("view", { class: "confirmButtons" }, [
+            vue.createElementVNode("view", {
+              class: "confirmButton cancel",
+              onClick: $setup.hideConfirmDialog
+            }, "取消"),
+            vue.createElementVNode("view", {
+              class: "confirmButton confirm",
+              onClick: $setup.handleConfirmUnlock
+            }, "确认")
+          ])
+        ])
+      ])) : vue.createCommentVNode("v-if", true)
     ]);
   }
   const buyGroundPopVue = /* @__PURE__ */ _export_sfc(_sfc_main$6, [["render", _sfc_render$5], ["__scopeId", "data-v-002acaef"], ["__file", "D:/HBuilderProjects/Game/components/buyGroundPop.vue"]]);
@@ -12462,6 +12538,7 @@ This will fail in production if not fixed.`);
         today.setHours(0, 0, 0, 0);
         const claimDate = new Date(lastClaimTime);
         claimDate.setHours(0, 0, 0, 0);
+        formatAppLog("log", "at components/grondSignInPresentation.vue:78", "签到时间和今天开始时间:", claimDate.getTime(), today.getTime());
         return claimDate.getTime() >= today.getTime();
       }
       function isGroundExpired(endTime) {
@@ -12481,9 +12558,11 @@ This will fail in production if not fixed.`);
               directEarning += temDirectEarning;
               indirectEarning += temIndirectEarning;
               claimGroundList.push(groundType);
+              formatAppLog("log", "at components/grondSignInPresentation.vue:102", "单个地皮收益:", thisGround.dailyEarnings);
             }
           });
         }
+        formatAppLog("log", "at components/grondSignInPresentation.vue:106", "总额:", total);
         return roundToOneDecimal(total);
       });
       vue.watch(totalEarnings, (newValue) => {
@@ -12537,7 +12616,7 @@ This will fail in production if not fixed.`);
             });
           }
         } catch (err) {
-          formatAppLog("error", "at components/grondSignInPresentation.vue:170", "领取失败:", err);
+          formatAppLog("error", "at components/grondSignInPresentation.vue:174", "领取失败:", err);
           uni.hideLoading();
           uni.showToast({
             title: "领取失败，请重试！",

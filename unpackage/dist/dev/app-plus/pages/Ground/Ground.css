@@ -210,6 +210,7 @@
   width: 100vw;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.7);
+  /* 自定义二次确认弹窗样式 */
 }
 .groundPopWrap .board[data-v-002acaef] {
   position: absolute;
@@ -272,6 +273,56 @@
   font-size: 5vw;
   font-weight: bold;
   background: url('../../static/talentCenter/btn2.png') no-repeat center center / contain;
+}
+.groundPopWrap .confirmDialogWrap[data-v-002acaef] {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+.groundPopWrap .confirmDialogWrap .confirmDialog[data-v-002acaef] {
+  width: 70vw;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  text-align: center;
+}
+.groundPopWrap .confirmDialogWrap .confirmDialog .confirmTitle[data-v-002acaef] {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+.groundPopWrap .confirmDialogWrap .confirmDialog .confirmContent[data-v-002acaef] {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 20px;
+}
+.groundPopWrap .confirmDialogWrap .confirmDialog .confirmButtons[data-v-002acaef] {
+  display: flex;
+  justify-content: space-between;
+}
+.groundPopWrap .confirmDialogWrap .confirmDialog .confirmButtons .confirmButton[data-v-002acaef] {
+  flex: 1;
+  padding: 10px;
+  margin: 0 5px;
+  border-radius: 5px;
+  font-size: 14px;
+  text-align: center;
+  cursor: pointer;
+}
+.groundPopWrap .confirmDialogWrap .confirmDialog .confirmButtons .confirmButton.cancel[data-v-002acaef] {
+  background-color: #eee;
+  color: #333;
+}
+.groundPopWrap .confirmDialogWrap .confirmDialog .confirmButtons .confirmButton.confirm[data-v-002acaef] {
+  background-color: #07c160;
+  color: #fff;
 }
 
 .rewardModal[data-v-d5e6e080] {
