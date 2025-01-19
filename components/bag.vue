@@ -35,32 +35,46 @@ function formatEndTime(dateString) {
 
 // 请求活动记录并检查是否需要显示锄头
 async function isShowHoe() {
-  const userId = uni.getStorageSync('id'); // 获取用户 ID
-  if (!userId) {
-    console.error('用户 ID 不存在');
-    return false;
-  }
-
-  try {
-    // 调用云函数获取用户的活动记录
-    const res = await uniCloud.callFunction({
-      name: 'selectAllActivitt', // 假设云函数名为 selectAllActivitt
-      data: {
-        userId: userId,
-      },
-    });
-
-    // 检查是否存在 activityId === '1' 的活动
-    const hoeActivity = res.result.data.find(record => record.activityId === '1');
-    if (hoeActivity) {
-      showHoe.value = true; // 更新显示状态
-      endTime.value = hoeActivity.endTime; // 设置到期时间
+    const userId = uni.getStorageSync('id'); // 获取用户 ID
+    if (!userId) {
+        console.error('用户 ID 不存在');
+        return false;
     }
-    return !!hoeActivity;
-  } catch (err) {
-    console.error('请求活动记录失败:', err);
-    return false;
-  }
+
+    try {
+        // 调用云函数获取用户的活动记录
+        const res = await uniCloud.callFunction({
+            name: 'selectPurchaseActivity', // 假设云函数名为 selectAllActivitt
+            data: {
+                userId: userId,
+            },
+        });
+
+        if (res.result.code === 0 && res.result.data.length > 0) {
+            // 获取服务器时间
+            const serverTime = new Date(res.result.serverTime); // 使用服务器时间
+
+            // 检查是否存在 activityId === '1' 且未过期的活动
+            const hoeActivity = res.result.data.find(record => {
+                const endTime = record.endTime ? new Date(record.endTime) : null;
+                return record.activityId === '1' && (!endTime || endTime > serverTime); // 判断是否未过期
+            });
+
+            if (hoeActivity) {
+                showHoe.value = true; // 更新显示状态
+                endTime.value = hoeActivity.endTime; // 设置到期时间
+            } else {
+                showHoe.value = false; // 如果活动已过期，不显示锄头
+            }
+            return !!hoeActivity;
+        } else {
+            console.error('未找到活动记录或请求失败:', res.result.message);
+            return false;
+        }
+    } catch (err) {
+        console.error('请求活动记录失败:', err);
+        return false;
+    }
 }
 
 // 在组件加载时调用 isShowHoe
