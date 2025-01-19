@@ -9,7 +9,6 @@ exports.main = async (event, context) => {
     const res = await db.collection('activityPurchaseRecord')
       .where({
         userId: userId, // 根据用户 ID 查询
-        endTime: db.command.gt(now) // 结束时间大于当前时间
       })
       .get();
 

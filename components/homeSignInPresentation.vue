@@ -49,21 +49,24 @@ onMounted(async () => {
     });
 
     if (res.result.code === 0 && res.result.data.length > 0) {
-      // 获取服务器时间
-      const serverTime = new Date(res.result.serverTime); // 使用服务器时间
-      const today = new Date(serverTime); // 基于服务器时间计算今天的开始时间
-      today.setHours(0, 0, 0, 0); // 今天的开始时间
-
-      // 找到第一个未签到的活动
-      const activity = res.result.data.find(record => {
-        const lastClaimTime = record.lastClaimTime ? new Date(record.lastClaimTime) : null;
-        return !lastClaimTime || lastClaimTime < today; // 判断是否未领取
-      });
-
-      if (activity) {
-        selectedActivity.value = activity;
-        showRewardModal.value = true; // 显示弹窗
-      }
+        // 获取服务器时间
+        const serverTime = new Date(res.result.serverTime); // 使用服务器时间
+        const today = new Date(serverTime); // 基于服务器时间计算今天的开始时间
+        today.setHours(0, 0, 0, 0); // 今天的开始时间
+    
+        // 找到第一个未签到且未过期的活动
+        const activity = res.result.data.find(record => {
+            const lastClaimTime = record.lastClaimTime ? new Date(record.lastClaimTime) : null;
+            const endTime = record.endTime ? new Date(record.endTime) : null;
+    
+            // 判断是否未领取且未过期
+            return (!lastClaimTime || lastClaimTime < today) && (!endTime || endTime > serverTime);
+        });
+    
+        if (activity) {
+            selectedActivity.value = activity;
+            showRewardModal.value = true; // 显示弹窗
+        }
     }
   } catch (err) {
     console.error('查询失败:', err);

@@ -23,6 +23,9 @@
 					<view class="middle">
 						<text class="itemDescription">{{ activity.description }}</text>
 						<text class="itemPrice">价格: {{ activity.price }} 宝石</text>
+						<text class="itemPrice" v-if="isPurchased(activity.id)">
+							{{ isExpired(activity.id) ? '已过期' : `剩余天数: ${getRemainingDays(activity.id)} 天` }}
+						</text>
 					</view>
 					
 					<!-- 右边：购买按钮 -->
@@ -76,8 +79,8 @@ const activities = ref([
 	}
 ]);
 
-// 已购买的活动 ID 列表
-const purchasedActivityIds = ref([]);
+// 已购买的活动信息
+const purchasedActivities = ref([]);
 
 // 自定义弹窗状态
 const isModalVisible = ref(false);
@@ -97,8 +100,8 @@ const fetchPurchasedActivities = async () => {
 		});
 
 		if (res.result.code === 0) {
-			// 更新已购买的活动 ID 列表
-			purchasedActivityIds.value = res.result.data;
+			// 更新已购买的活动信息
+			purchasedActivities.value = res.result.data;
 		} else {
 			console.error('查询失败:', res.result.message);
 		}
@@ -195,7 +198,36 @@ const handleConfirmPurchase = async () => {
 
 // 判断活动是否已购买
 const isPurchased = (activityId) => {
-	return purchasedActivityIds.value.some(item => item.activityId === activityId);
+	return purchasedActivities.value.some(item => item.activityId === activityId);
+};
+
+// 计算剩余天数
+const calculateRemainingDays = (endTime) => {
+	if (!endTime) return 0;
+	const now = new Date();
+	const end = new Date(endTime);
+	const diffTime = end - now;
+	return Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // 返回剩余天数
+};
+
+// 获取剩余天数
+const getRemainingDays = (activityId) => {
+	const activity = purchasedActivities.value.find(item => item.activityId === activityId);
+	if (activity && activity.endTime) {
+		return calculateRemainingDays(activity.endTime);
+	}
+	return 0;
+};
+
+// 判断活动是否已过期
+const isExpired = (activityId) => {
+	const activity = purchasedActivities.value.find(item => item.activityId === activityId);
+	if (activity && activity.endTime) {
+		const now = new Date();
+		const end = new Date(activity.endTime);
+		return now > end; // 如果当前时间大于结束时间，则已过期
+	}
+	return false; // 如果没有结束时间，默认未过期
 };
 
 // 页面加载时查询用户已购买的活动
@@ -203,7 +235,6 @@ onMounted(async () => {
 	await fetchPurchasedActivities();
 });
 </script>
-
 
 <style lang="less">
 .announcementWrap {

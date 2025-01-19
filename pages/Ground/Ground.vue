@@ -205,7 +205,6 @@
 		})
 	}
 	
-	// if(!gameInfo.ownGrounds) await updateData()
 	
 	// 处理弹窗的函数
 	function handleIsShowGroundPop(flag) {
