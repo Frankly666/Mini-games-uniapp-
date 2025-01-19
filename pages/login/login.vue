@@ -296,14 +296,14 @@ onMounted(() => {
 		right: 0;
 		bottom: 0;
 		background: url('../../static/homePage/bigBg.png') no-repeat center center / cover;
-		filter: blur(7px); /* 添加模糊效果 */
-		z-index: -1; /* 将背景置于内容下方 */
+		filter: blur(7px); 
+		z-index: -1;
 	}
 
 
 	.wrap5 {
 		position: absolute;
-		top: 30vh;
+		top: 25vh;
 		display: flex;
 		flex-direction: column;
 		align-items: center;

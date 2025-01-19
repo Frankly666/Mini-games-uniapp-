@@ -247,8 +247,10 @@ onMounted(() => {
 });
 </script>
 
-<style>
+<style lang="less">
 .wrap3 {
+	display: flex;
+	justify-content: center;
   position: fixed;
   top: 0;
   left: 0;
@@ -261,9 +263,10 @@ onMounted(() => {
 	.wrap2 {	
 		background-color: #fff; /* 白色背景 */
 		border-radius: 20px; /* 圆角 */
-		margin: 20px; /* 外边距 */
 		padding: 20px; /* 内边距 */
 		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* 阴影效果 */
+		width: 89vw;
+		box-sizing: border-box;
 		
 		/* 用户信息样式 */
 		.user-info {

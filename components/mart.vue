@@ -60,7 +60,7 @@ function navigateToSellMarket() {
     font-size: 5vw; /* 20px -> 5vw */
     font-weight: bold;
     position: absolute;
-    top: 0;
+    top: -15vw;
     left: 0;
     right: 0;
 		position: fixed;
@@ -84,7 +84,7 @@ function navigateToSellMarket() {
 	
 	.cardWrap {
 		position: absolute;
-		top: 95vw;
+		top: 85vw;
 		left: -4vw;
 		width: 100vw;
 		height: auto;
