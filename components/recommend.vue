@@ -1,47 +1,51 @@
 <template>
-  <view>
-    <!-- 用户信息展示 -->
-    <view class="user-info">
-      <image :src="userInfo.avatar" class="avatar"></image>
-      <view class="details">
-        <text class="username">{{ userInfo.userName }}</text>
-        <text class="invite-code">推荐码: {{ userInfo.inviteCode }}</text>
-      </view>
-    </view>
-
-    <!-- 二维码组件 -->
-    <uqrcode
-      ref="QRCode"
-      :value="qrCodeContent"
-      :size="200"
-      canvas-id="qrcode"
-      @complete="onQRCodeComplete"
-    ></uqrcode>
-
-    <!-- 提示信息 -->
-    <text class="tip">扫描二维码，加入我们！</text>
-
-    <!-- 下载按钮 -->
-    <button class="download-button" @click="handleDownloadImage">下载分享图</button>
-
-    <!-- 推荐按钮 -->
-    <view class="button-container">
-      <button class="recommend-button direct" @click="handleDirectRecommend">直推用户</button>
-      <button class="recommend-button indirect" @click="handleIndirectRecommend">间推用户</button>
-    </view>
-
-    <!-- 隐藏的画布，用于生成最终图片 -->
-    <canvas
-      canvas-id="shareCanvas"
-      :style="{ width: canvasWidth + 'px', height: canvasHeight + 'px', position: 'absolute', top: '-9999px' }"
-    ></canvas>
-
-    <!-- 弹窗组件 -->
-    <sub-referrers-detail-pop-vue
-      v-if="showPopup"
-      :type="popupType"
-      @close="handleClosePopup"
-    />
+  <view class="wrap3">
+		
+		<view class="wrap2">
+			<!-- 用户信息展示 -->
+			<view class="user-info">
+			  <image :src="userInfo.avatar" class="avatar"></image>
+			  <view class="details">
+			    <text class="username">{{ userInfo.userName }}</text>
+			    <text class="invite-code">推荐码: {{ userInfo.inviteCode }}</text>
+			  </view>
+			</view>
+			
+			<!-- 二维码组件 -->
+			<uqrcode
+			  ref="QRCode"
+			  :value="qrCodeContent"
+			  :size="200"
+			  canvas-id="qrcode"
+			  @complete="onQRCodeComplete"
+			></uqrcode>
+			
+			<!-- 提示信息 -->
+			<text class="tip">扫描二维码，加入我们！</text>
+			
+			<!-- 下载按钮 -->
+			<button class="download-button" @click="handleDownloadImage">下载分享图</button>
+			
+			<!-- 推荐按钮 -->
+			<view class="button-container">
+			  <button class="recommend-button direct" @click="handleDirectRecommend">直推用户</button>
+			  <button class="recommend-button indirect" @click="handleIndirectRecommend">间推用户</button>
+			</view>
+			
+			<!-- 隐藏的画布，用于生成最终图片 -->
+			<canvas
+			  canvas-id="shareCanvas"
+			  :style="{ width: canvasWidth + 'px', height: canvasHeight + 'px', position: 'absolute', top: '-9999px' }"
+			></canvas>
+			
+			<!-- 弹窗组件 -->
+			<sub-referrers-detail-pop-vue
+			  v-if="showPopup"
+			  :type="popupType"
+			  @close="handleClosePopup"
+			/>
+		</view>
+    
   </view>
 </template>
 
@@ -244,94 +248,113 @@ onMounted(() => {
 </script>
 
 <style>
-/* 用户信息样式 */
-.user-info {
-  display: flex;
-  align-items: center;
-  padding: 5vw;
-  background-color: #f9f9f9;
-  border-radius: 2.5vw;
-  margin: 5vw;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.avatar {
-  width: 20vw;
-  height: 20vw;
-  border-radius: 50%;
-  margin-right: 4vw;
-}
-
-.details {
-  display: flex;
-  flex-direction: column;
-}
-
-.username {
-  font-size: 4.5vw;
-  font-weight: bold;
-  color: #333;
-}
-
-.invite-code {
-  font-size: 4vw;
-  color: #666;
-}
-
-/* 二维码样式 */
-.uqrcode {
-  margin: 5vw auto;
-  display: block;
-}
-
-/* 提示信息样式 */
-.tip {
-  display: block;
-  text-align: center;
-  font-size: 4vw;
-  color: #888;
-  margin-top: 5vw;
-}
-
-/* 下载按钮样式 */
-.download-button {
-  width: 30vw;
-  height: 10vw;
-  line-height: 6vw;
-  background-color: #007aff;
-  color: #fff;
-  font-size: 4vw;
-  border-radius: 2.5vw;
-  padding: 2vw 0;
-  margin: 5vw auto;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-/* 按钮容器样式 */
-.button-container {
-  display: flex;
-  justify-content: space-around;
-  margin-top: 5vw;
-}
-
-/* 推荐按钮样式 */
-.recommend-button {
-  width: 35vw; /* 缩小按钮宽度 */
-  font-size: 3.5vw; /* 缩小字体大小 */
-  border-radius: 2.5vw;
-  padding: 1.5vw 0; /* 缩小内边距 */
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-/* 直接推荐按钮样式 */
-.recommend-button.direct {
-  background-color: #007aff; /* 蓝色 */
-  color: #fff;
-}
-
-/* 间接推荐按钮样式 */
-.recommend-button.indirect {
-  background-color: #34c759; /* 绿色 */
-  color: #fff;
+.wrap3 {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100vw;
+  height: 90vh;
+	padding-top: 20vw;
+  background: linear-gradient(135deg, #6ec3f4, #a1dffb); /* 天蓝色渐变背景 */
+	
+	.wrap2 {	
+		background-color: #fff; /* 白色背景 */
+		border-radius: 20px; /* 圆角 */
+		margin: 20px; /* 外边距 */
+		padding: 20px; /* 内边距 */
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* 阴影效果 */
+		
+		/* 用户信息样式 */
+		.user-info {
+		  display: flex;
+		  align-items: center;
+		  padding: 5vw;
+		  background-color: #f9f9f9;
+		  border-radius: 2.5vw;
+		  margin: 5vw;
+		  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+		
+		  .avatar {
+		    width: 20vw;
+		    height: 20vw;
+		    border-radius: 50%;
+		    margin-right: 4vw;
+		  }
+		
+		  .details {
+		    display: flex;
+		    flex-direction: column;
+		
+		    .username {
+		      font-size: 4.5vw;
+		      font-weight: bold;
+		      color: #333;
+		    }
+		
+		    .invite-code {
+		      font-size: 4vw;
+		      color: #666;
+		    }
+		  }
+		}
+		
+		/* 二维码样式 */
+		.uqrcode {
+		  margin: 5vw auto;
+		  display: block;
+		}
+		
+		/* 提示信息样式 */
+		.tip {
+		  display: block;
+		  text-align: center;
+		  font-size: 4vw;
+		  color: #888;
+		  margin-top: 5vw;
+		}
+		
+		/* 下载按钮样式 */
+		.download-button {
+		  width: 30vw;
+		  height: 10vw;
+		  line-height: 6vw;
+		  background-color: #007aff;
+		  color: #fff;
+		  font-size: 4vw;
+		  border-radius: 2.5vw;
+		  padding: 2vw 0;
+		  margin: 5vw auto;
+		  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+		}
+		
+		/* 按钮容器样式 */
+		.button-container {
+		  display: flex;
+		  justify-content: space-around;
+		  margin-top: 5vw;
+		
+		  /* 推荐按钮样式 */
+		  .recommend-button {
+		    width: 35vw; /* 缩小按钮宽度 */
+		    font-size: 3.5vw; /* 缩小字体大小 */
+		    border-radius: 2.5vw;
+		    padding: 1.5vw 0; /* 缩小内边距 */
+		    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+		
+		    /* 直接推荐按钮样式 */
+		    &.direct {
+		      background-color: #007aff; /* 蓝色 */
+		      color: #fff;
+		    }
+		
+		    /* 间接推荐按钮样式 */
+		    &.indirect {
+		      background-color: #34c759; /* 绿色 */
+		      color: #fff;
+		    }
+		  }
+		}
+	}
 }
 </style>

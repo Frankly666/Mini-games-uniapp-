@@ -1,52 +1,58 @@
 <template>
 	<view class="container">
-		<!-- 标题 -->
-		<view class="title">趣选城</view>
 		
-		<!-- Tab 切换 -->
-		<view class="tab">
-			<button class="tab-btn" :class="{ active: isLogin }" @click="switchTab('login')">登录</button>
-			<button class="tab-btn" :class="{ active: !isLogin }" @click="switchTab('register')">注册</button>
-		</view>
-
-		<!-- 提示信息 -->
-		<view class="tip">
-			<text>老用户需要使用原手机号进行重新注册后进行使用\n</text>
-			新用户可随意初始化账户名(建议使用手机号)
-		</view>
-		
-		<!-- 登录表单 -->
-		<view class="form" v-if="isLogin">
-			<view class="input-group">
-				<text class="label">电话/帐号</text>
-				<input class="input" type="text" placeholder="请输入" v-model="phone" @input="handleInput('phone', $event)" />
+		<view class="wrap5">
+			
+			<view class="title">
+				<text>趣选城</text>
 			</view>
-			<view class="input-group">
-				<text class="label">密码</text>
-				<input class="input" type="password" placeholder="请输入密码" v-model="password" @input="handleInput('password', $event)" />
+			
+			
+			<!-- 登录表单 -->
+			<view class="form" v-if="isLogin">
+				<view class="input-group">
+					<text class="label">电话/帐号</text>
+					<input class="input" type="text" placeholder="请输入" v-model="phone" @input="handleInput('phone', $event)" />
+				</view>
+				<view class="input-group">
+					<text class="label">密码</text>
+					<input class="input" type="password" placeholder="请输入密码" v-model="password" @input="handleInput('password', $event)" />
+				</view>
+				<button class="btn login-btn" @click="handleLogin">登录</button>
 			</view>
-			<button class="btn login-btn" @click="handleLogin">登录</button>
-		</view>
-		
-		<!-- 注册表单 -->
-		<view class="form" v-else>
-			<view class="input-group">
-				<text class="label">电话/帐号</text>
-				<input class="input" type="text" placeholder="请输入" v-model="phone" @input="handleInput('phone', $event)" />
+			
+			<!-- 注册表单 -->
+			<view class="form" v-else>
+				<view class="input-group">
+					<text class="label">电话/帐号</text>
+					<input class="input" type="text" placeholder="请输入" v-model="phone" @input="handleInput('phone', $event)" />
+				</view>
+				<view class="input-group">
+					<text class="label">密码</text>
+					<input class="input" type="password" placeholder="请输入密码" v-model="password" @input="handleInput('password', $event)" />
+				</view>
+				<view class="input-group">
+					<text class="label">重复密码</text>
+					<input class="input" type="password" placeholder="请再次输入密码" v-model="repeatPassword" @input="handleInput('repeatPassword', $event)" />
+				</view>
+				<view class="input-group">
+					<text class="label">邀请码</text>
+					<input class="input" type="text" placeholder="请输入邀请码(老用户选填, 新用户必填)" v-model="inviteCode" @input="handleInput('inviteCode', $event)" />
+				</view>
+				<button class="btn register-btn" @click="handleRegister">注册</button>
 			</view>
-			<view class="input-group">
-				<text class="label">密码</text>
-				<input class="input" type="password" placeholder="请输入密码" v-model="password" @input="handleInput('password', $event)" />
+			
+			<!-- Tab 切换 -->
+			<view class="tab">
+				<button class="tab-btn" :class="{ active: isLogin }" @click="switchTab('login')">登录</button>
+				<button class="tab-btn" :class="{ active: !isLogin }" @click="switchTab('register')">注册</button>
 			</view>
-			<view class="input-group">
-				<text class="label">重复密码</text>
-				<input class="input" type="password" placeholder="请再次输入密码" v-model="repeatPassword" @input="handleInput('repeatPassword', $event)" />
+			
+			<!-- 提示信息 -->
+			<view class="tip">
+				<text>老用户需要使用原手机号进行重新注册后进行使用\n</text>
+				新用户可随意初始化账户名(建议使用手机号)
 			</view>
-			<view class="input-group">
-				<text class="label">邀请码</text>
-				<input class="input" type="text" placeholder="请输入邀请码(老用户选填, 新用户必填)" v-model="inviteCode" @input="handleInput('inviteCode', $event)" />
-			</view>
-			<button class="btn register-btn" @click="handleRegister">注册</button>
 		</view>
 	</view>
 </template>
@@ -273,115 +279,146 @@ onMounted(() => {
 
 <style lang="less">
 .container {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	height: 100vh;
-	background: linear-gradient(135deg, #6a11cb, #2575fc); /* 渐变背景 */
-	color: #fff;
-	padding: 5vw; /* 20px -> 5vw */
-	box-sizing: border-box;
-}
+  position: relative;
+	width: 100vw;
+	height: 120vh;
+  color: #fff;
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	/* 背景图片容器 */
+	&::before {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background: url('../../static/homePage/bigBg.png') no-repeat center center / cover;
+		filter: blur(7px); /* 添加模糊效果 */
+		z-index: -1; /* 将背景置于内容下方 */
+	}
 
-.title {
-	font-size: 8vw; /* 6vw -> 8vw */
-	font-weight: bold;
-	color: #fff;
-	margin-top: 10vw;
-	margin-bottom: 8vw;
-	text-shadow: 0.53vw 0.53vw 1.07vw rgba(0, 0, 0, 0.3); /* 2px -> 0.53vw, 4px -> 1.07vw */
-}
 
-.tab {
-	display: flex;
-	justify-content: center;
-	margin-bottom: 5vw;
-}
+	.wrap5 {
+		position: absolute;
+		top: 30vh;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		width: 100%;
+		height: 100%;
+		
+		.title {
+			position: absolute;
+			top: -10vh;
+			font-weight: bold;
+			font-size: 10vw;
+		}
+		
+		.tab {
+		  display: flex;
+		  justify-content: center;
+		  margin-bottom: 5vw;
+		
+		  .tab-btn {
+		    flex: 1;
+		    height: 10vw;
+		    font-size: 4vw;
+		    color: #333;
+		    border: 0.27vw solid #ccc; /* 1px -> 0.27vw */
+		    border-radius: 2vw;
+		    margin: 0 2vw;
+				margin-top: 5vw;
+		    cursor: pointer;
+		    transition: background-color 0.3s ease, color 0.3s ease;
+		
+		    &.active {
+		      background-color: #007aff;
+		      color: #fff;
+		      border-color: #007aff;
+		    }
+		  }
+		}
+		
+		.form {
+		  width: 80vw;
+		  padding: 5vw;
+		  background-color: rgba(255, 255, 255, 0.9);
+		  border-radius: 2vw;
+		  box-shadow: 0 0 2.67vw rgba(0, 0, 0, 0.1); /* 10px -> 2.67vw */
+		
+		  .input-group {
+		    margin-bottom: 4vw;
+		
+		    .label {
+		      display: block;
+		      font-size: 3.5vw;
+		      margin-bottom: 1.5vw;
+		      color: #333;
+		    }
+		
+		    .input {
+		      width: 100%;
+		      height: 8vw;
+		      padding: 2vw;
+		      font-size: 3.5vw;
+		      border: 0.27vw solid #ccc; /* 1px -> 0.27vw */
+		      border-radius: 1.5vw;
+		      box-sizing: border-box;
+		      background-color: rgba(255, 255, 255, 0.8);
+		      color: #333; /* 确保字体颜色可见 */
+		    }
+		  }
+		
+		  .btn {
+		    width: 100%;
+		    height: 10vw;
+		    font-size: 4vw;
+		    color: #fff;
+		    border: none;
+		    border-radius: 2vw;
+		    margin-top: 3vw;
+		    cursor: pointer;
+		    transition: background-color 0.3s ease;
+		
+		    &.login-btn {
+		      background-color: #007aff;
+		
+		      &:active {
+		        background-color: #005bb5;
+		      }
+		    }
+		
+		    &.register-btn {
+		      background-color: #34c759;
+		
+		      &:active {
+		        background-color: #248a3d;
+		      }
+		    }
+		  }
+		}
+		
+		/* 提示信息样式 */
+		.tip {
+			width: 80vw; /* 与表单宽度一致 */
+			padding: 4vw; /* 内边距 */
+			background-color: rgba(255, 255, 255, 0.9); /* 半透明白色背景 */
+			border-radius: 2vw; /* 圆角 */
+			box-shadow: 0 0 2.67vw rgba(0, 0, 0, 0.1); /* 阴影效果 */
+			font-size: 3.5vw;
+			color: black;
+			text-align: left;
+			margin-top: 2vw;
+			margin-bottom: 4vw;
+			font-weight: bold;
+		}
+	}
 
-.tab-btn {
-	flex: 1;
-	height: 10vw;
-	font-size: 4vw;
-	color: #333;
-	background-color: rgba(255, 255, 255, 0.8);
-	border: 0.27vw solid #ccc; /* 1px -> 0.27vw */
-	border-radius: 2vw;
-	margin: 0 2vw;
-	cursor: pointer;
-	transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-.tab-btn.active {
-	background-color: #007aff;
-	color: #fff;
-	border-color: #007aff;
-}
-
-.form {
-	width: 80vw;
-	padding: 5vw;
-	background-color: rgba(255, 255, 255, 0.9);
-	border-radius: 2vw;
-	box-shadow: 0 0 2.67vw rgba(0, 0, 0, 0.1); /* 10px -> 2.67vw */
-}
-
-.input-group {
-	margin-bottom: 4vw;
-}
-
-.label {
-	display: block;
-	font-size: 3.5vw;
-	margin-bottom: 1.5vw;
-	color: #333;
-}
-
-.input {
-	width: 100%;
-	height: 8vw;
-	padding: 2vw;
-	font-size: 3.5vw;
-	border: 0.27vw solid #ccc; /* 1px -> 0.27vw */
-	border-radius: 1.5vw;
-	box-sizing: border-box;
-	background-color: rgba(255, 255, 255, 0.8);
-	color: #333; /* 确保字体颜色可见 */
-}
-
-.btn {
-	width: 100%;
-	height: 10vw;
-	font-size: 4vw;
-	color: #fff;
-	border: none;
-	border-radius: 2vw;
-	margin-top: 3vw;
-	cursor: pointer;
-	transition: background-color 0.3s ease;
-}
-
-.login-btn {
-	background-color: #007aff;
-}
-
-.login-btn:active {
-	background-color: #005bb5;
-}
-
-.register-btn {
-	background-color: #34c759;
-}
-
-.register-btn:active {
-	background-color: #248a3d;
-}
-
-/* 提示信息样式 */
-.tip {
-	font-size: 3.5vw;
-	color: #fff;
-	text-align: center;
-	margin-top: 2vw;
-	margin-bottom: 4vw;
+  
+	
+	
 }
 </style>
