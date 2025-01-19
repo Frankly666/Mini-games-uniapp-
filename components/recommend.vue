@@ -257,15 +257,16 @@ onMounted(() => {
   right: 0;
   width: 100vw;
   height: 90vh;
-	padding-top: 20vw;
+	padding-top: 8vh;
   background: linear-gradient(135deg, #6ec3f4, #a1dffb); /* 天蓝色渐变背景 */
 	
 	.wrap2 {	
 		background-color: #fff; /* 白色背景 */
 		border-radius: 20px; /* 圆角 */
-		padding: 20px; /* 内边距 */
 		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* 阴影效果 */
 		width: 89vw;
+		max-height: 80vh;
+		overflow-y: auto;
 		box-sizing: border-box;
 		
 		/* 用户信息样式 */

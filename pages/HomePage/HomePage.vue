@@ -162,7 +162,7 @@ onMounted(() => {
     .menu-icon {
       position: absolute;
 			position: fixed;
-			top: 4vw;
+			top: 7vw;
 			right: 4vw;
 			width: 7vw;
 			height: 7vw;
@@ -232,7 +232,8 @@ onMounted(() => {
     flex: 1;
     padding: 20vw 4vw 17.5vw; /* 80px -> 20vw, 16px -> 4vw, 70px -> 17.5vw */
     box-sizing: border-box;
-    overflow-y: hidden;
+    overflow-y: auto;
+		max-height: 85vh;
 
     .section {
 			
