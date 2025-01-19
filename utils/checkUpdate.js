@@ -1,4 +1,5 @@
 export function checkUpdate() {
+	// #ifndef APP
   const appVersionCode = plus.runtime.versionCode; // 获取当前 App 的版本号
   const appVersionName = plus.runtime.version; // 获取当前 App 的版本名称
 
@@ -45,4 +46,5 @@ export function checkUpdate() {
       });
     }
   });
+	// #endif
 }

@@ -42,6 +42,7 @@ const serverTime = ref(null); // 服务器时间
 let directEarning = 0;
 let indirectEarning = 0;
 const claimGroundList = [];
+const claimCroundIdList = [];
 
 // 查询用户地皮
 async function fetchUserGrounds() {
@@ -99,6 +100,7 @@ const totalEarnings = computed(() => {
         directEarning += temDirectEarning;
         indirectEarning += temIndirectEarning;
 				claimGroundList.push(groundType)
+				claimCroundIdList.push(ground._id)
 				console.log("单个地皮收益:", thisGround.dailyEarnings)
       }
     });
@@ -135,7 +137,9 @@ async function claimEarnings() {
         indirectEarning: roundToOneDecimal(indirectEarning),
         gameID: uni.getStorageSync('gameID'),
 				claimGroundList: claimGroundList,
-      }
+				claimCroundIdList: claimCroundIdList
+      },
+			
     });
 
     if (res.result.code === 0) {
@@ -163,7 +167,6 @@ async function claimEarnings() {
       // 关闭弹窗
       showClaimModal.value = false;
     } else {
-      uni.hideLoading();
       uni.showToast({
         title: res.result.message || '领取失败，请重试！',
         icon: 'none',
@@ -179,6 +182,7 @@ async function claimEarnings() {
       duration: 2000
     });
   } finally {
+		uni.hideLoading();
     isClaiming.value = false; // 重置领取状态
   }
 }

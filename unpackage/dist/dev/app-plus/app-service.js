@@ -7557,47 +7557,6 @@ This will fail in production if not fixed.`);
   }
   const recommendVue = /* @__PURE__ */ _export_sfc(_sfc_main$B, [["render", _sfc_render$A], ["__scopeId", "data-v-f2aab100"], ["__file", "D:/HBuilderProjects/Game/components/recommend.vue"]]);
   function checkUpdate() {
-    const appVersionCode = plus.runtime.versionCode;
-    plus.runtime.version;
-    Ys.callFunction({
-      name: "checkAppUpdate",
-      // 云函数名称
-      success: (res) => {
-        const latestVersion = res.result.data;
-        formatAppLog("log", "at utils/checkUpdate.js:9", "版本号:", appVersionCode, latestVersion.versionCode);
-        if (latestVersion.versionCode > appVersionCode) {
-          uni.showModal({
-            title: "发现新版本",
-            content: `最新版本：${latestVersion.versionName}
-更新说明：${latestVersion.note}
-请更新后继续使用。`,
-            showCancel: false,
-            // 禁用取消按钮
-            confirmText: "立即更新",
-            // 设置确认按钮的文本
-            success: (modalRes) => {
-              if (modalRes.confirm) {
-                plus.runtime.openURL(latestVersion.url);
-              }
-            }
-          });
-          uni.onBackPress(() => {
-            uni.showToast({
-              title: "请更新后继续使用",
-              icon: "none"
-            });
-            return true;
-          });
-        }
-      },
-      fail: (err) => {
-        formatAppLog("error", "at utils/checkUpdate.js:41", "检查更新失败:", err);
-        uni.showToast({
-          title: "检查更新失败",
-          icon: "none"
-        });
-      }
-    });
   }
   const _sfc_main$A = {
     __name: "HomePage",
@@ -12520,6 +12479,7 @@ This will fail in production if not fixed.`);
       let directEarning = 0;
       let indirectEarning = 0;
       const claimGroundList = [];
+      const claimCroundIdList = [];
       async function fetchUserGrounds() {
         try {
           const res = await Ys.callFunction({
@@ -12532,10 +12492,10 @@ This will fail in production if not fixed.`);
             userGrounds.value = res.result.data;
             serverTime.value = new Date(res.result.serverTime);
           } else {
-            formatAppLog("error", "at components/grondSignInPresentation.vue:60", "查询失败:", res.result.message);
+            formatAppLog("error", "at components/grondSignInPresentation.vue:61", "查询失败:", res.result.message);
           }
         } catch (err) {
-          formatAppLog("error", "at components/grondSignInPresentation.vue:63", "调用云函数失败:", err);
+          formatAppLog("error", "at components/grondSignInPresentation.vue:64", "调用云函数失败:", err);
         }
       }
       function isTodayClaimed(lastClaimTime) {
@@ -12547,7 +12507,7 @@ This will fail in production if not fixed.`);
         today.setHours(0, 0, 0, 0);
         const claimDate = new Date(lastClaimTime);
         claimDate.setHours(0, 0, 0, 0);
-        formatAppLog("log", "at components/grondSignInPresentation.vue:78", "签到时间和今天开始时间:", claimDate.getTime(), today.getTime());
+        formatAppLog("log", "at components/grondSignInPresentation.vue:79", "签到时间和今天开始时间:", claimDate.getTime(), today.getTime());
         return claimDate.getTime() >= today.getTime();
       }
       function isGroundExpired(endTime) {
@@ -12567,11 +12527,12 @@ This will fail in production if not fixed.`);
               directEarning += temDirectEarning;
               indirectEarning += temIndirectEarning;
               claimGroundList.push(groundType);
-              formatAppLog("log", "at components/grondSignInPresentation.vue:102", "单个地皮收益:", thisGround.dailyEarnings);
+              claimCroundIdList.push(ground._id);
+              formatAppLog("log", "at components/grondSignInPresentation.vue:104", "单个地皮收益:", thisGround.dailyEarnings);
             }
           });
         }
-        formatAppLog("log", "at components/grondSignInPresentation.vue:106", "总额:", total);
+        formatAppLog("log", "at components/grondSignInPresentation.vue:108", "总额:", total);
         return roundToOneDecimal(total);
       });
       vue.watch(totalEarnings, (newValue) => {
@@ -12597,7 +12558,8 @@ This will fail in production if not fixed.`);
               directEarning: roundToOneDecimal(directEarning),
               indirectEarning: roundToOneDecimal(indirectEarning),
               gameID: uni.getStorageSync("gameID"),
-              claimGroundList
+              claimGroundList,
+              claimCroundIdList
             }
           });
           if (res.result.code === 0) {
@@ -12617,7 +12579,6 @@ This will fail in production if not fixed.`);
             await fetchUserGrounds();
             showClaimModal.value = false;
           } else {
-            uni.hideLoading();
             uni.showToast({
               title: res.result.message || "领取失败，请重试！",
               icon: "none",
@@ -12625,7 +12586,7 @@ This will fail in production if not fixed.`);
             });
           }
         } catch (err) {
-          formatAppLog("error", "at components/grondSignInPresentation.vue:174", "领取失败:", err);
+          formatAppLog("error", "at components/grondSignInPresentation.vue:177", "领取失败:", err);
           uni.hideLoading();
           uni.showToast({
             title: "领取失败，请重试！",
@@ -12633,6 +12594,7 @@ This will fail in production if not fixed.`);
             duration: 2e3
           });
         } finally {
+          uni.hideLoading();
           isClaiming.value = false;
         }
       }
@@ -12647,7 +12609,7 @@ This will fail in production if not fixed.`);
         return indirectEarning;
       }, set indirectEarning(v2) {
         indirectEarning = v2;
-      }, claimGroundList, fetchUserGrounds, isTodayClaimed, isGroundExpired, totalEarnings, claimEarnings, ref: vue.ref, computed: vue.computed, onMounted: vue.onMounted, watch: vue.watch, get POWERSTONE() {
+      }, claimGroundList, claimCroundIdList, fetchUserGrounds, isTodayClaimed, isGroundExpired, totalEarnings, claimEarnings, ref: vue.ref, computed: vue.computed, onMounted: vue.onMounted, watch: vue.watch, get POWERSTONE() {
         return POWERSTONE;
       }, get useGameInfoStore() {
         return useGameInfoStore;
