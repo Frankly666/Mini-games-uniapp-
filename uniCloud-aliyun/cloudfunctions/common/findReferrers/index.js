@@ -8,7 +8,7 @@ const db = uniCloud.database(); // 初始化数据库实例
  * @returns {Promise<string[]>} - 返回推荐人 ID 列表
  */
 module.exports = async function findReferrers(userId) {
-  const MAX_DEPTH = 10; // 最大查找深度
+  const MAX_DEPTH = 20; // 最大查找深度
   const referrers = []; // 推荐人列表
   const visitedUsers = new Set(); // 用于记录已访问的用户 ID，避免重复和循环
   let currentUserId = userId; // 当前用户 ID

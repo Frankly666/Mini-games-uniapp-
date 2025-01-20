@@ -16,7 +16,12 @@ exports.main = async (event, context) => {
 
     // 2. 查询别人转赠给我的记录（sendUserId === userId）
     const receiveRecords = await db.collection('sendRecord')
-      .where({ sendUserId: userId })
+      .where({
+        $or: [
+          { sendUserId: userId },
+          { userId: userId }
+        ]
+      })
       .get();
 
     if (receiveRecords.data.length === 0) {
