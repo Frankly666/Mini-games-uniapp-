@@ -215,7 +215,9 @@ async function loadTransferRecords() {
           gameID: item.receiverInfo.gameID,
         },
       }));
-    } else {
+    } else if(res.result.code === 0) {
+			uni.showToast({title: '没有转赠记录', icon: 'none' });
+		}else {
       uni.showToast({ title: res.result.message || '加载失败', icon: 'none' });
     }
   } catch (err) {

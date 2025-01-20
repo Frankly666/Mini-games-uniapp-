@@ -19,6 +19,8 @@
 </template>
 
 <script setup>
+import { onMounted } from 'vue';
+import { updateAssets } from '../utils/updateGameInfo';
 // 跳转到求购集市页面
 function navigateToBuyMarket() {
 	console.log('跳转到求购集市页面');
@@ -42,6 +44,10 @@ function navigateToSellMarket() {
 		uni.navigateTo({ url: "/pages/MerchantCenter/MerchantCenter" });
 	}
 }
+
+onMounted(() => {
+	updateAssets()
+})
 </script>
 
 <style lang="less">
