@@ -218,6 +218,9 @@
 	
 	// 点击地皮以及解锁逻辑
 	async function clickLockGround(type, index) {
+		// 限时解锁
+		console.log("type:", type)
+		if(type === 6 || type === 2) return;
 		// 弹窗然后给弹窗的组件确定传入的参数
 		groundType.value = type
 		groundIndex.value = index	
