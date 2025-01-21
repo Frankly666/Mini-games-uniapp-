@@ -7,18 +7,14 @@ import { checkUpdate } from './utils/checkUpdate';
 const gameInfo = useGameInfoStore();
 
 onLaunch(() => {
-	// #ifndef APP
 	checkUpdate()
-	// #endif
 });
 
 onShow(() => {
 	if(gameInfo.bgm && gameInfo.bgmIsOpen) {
 		gameInfo.bgm.play()
 	}
-	// #ifndef APP
 	checkUpdate()
-	// #endif
 });
 
 onHide(() => {

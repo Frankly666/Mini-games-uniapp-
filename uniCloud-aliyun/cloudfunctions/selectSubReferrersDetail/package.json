@@ -1,9 +1,13 @@
 {
   "name": "selectSubReferrersDetail",
   "dependencies": {
-    "findSubReferrers": "file:../common/findSubReferrers"
+    "findIndirectReferrers": "file:../common/findIndirectReferrers",
+    "findDirectReferrers": "file:../common/findDirectReferrers"
   },
   "extensions": {
     "uni-cloud-jql": {}
+  },
+  "cloudfunction-config": {
+    "timeout": 600
   }
 }

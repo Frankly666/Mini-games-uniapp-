@@ -61,11 +61,19 @@
             </view>
           </view>
         </view>
+
+        <!-- 加载更多按钮 -->
+        <view v-if="hasMore" class="load-more" @click="loadMore">
+          <text v-if="!loadingMore">加载更多</text>
+          <view v-else class="loading-spinner">
+            <text>加载中...</text>
+          </view>
+        </view>
       </view>
 
       <!-- 没有推荐用户时的提示 -->
       <view v-else class="no-data-tip">
-        <text>没有推荐用户</text>
+        <text>没有更多推荐用户</text>
       </view>
     </view>
   </view>
@@ -81,10 +89,6 @@ const props = defineProps({
     type: String,
     required: true,
     validator: (value) => ['direct', 'indirect'].includes(value)
-  },
-  userId: {
-    type: String,
-    required: true
   }
 });
 
@@ -94,8 +98,16 @@ const users = ref([]);
 // 加载状态
 const loading = ref(true);
 
+// 加载更多状态
+const loadingMore = ref(false);
+
 // 当前展开的卡片 ID
 const expandedCardId = ref(null);
+
+// 分页相关
+const page = ref(1);
+const limit = ref(5);
+const hasMore = ref(true);
 
 // 地皮类型和名字的映射表
 const groundsMeta = {
@@ -170,8 +182,22 @@ const calculateTotalEarnings = (recordList) => {
 // 获取推广用户数据
 const fetchReferralUsers = async () => {
   try {
-    const result = await getReferralUsersWithEarnings(uni.getStorageSync('id'));
-    users.value = result; // 更新用户列表
+    const result = await getReferralUsersWithEarnings({
+      userId: uni.getStorageSync('id'),
+      type: props.type,
+      page: page.value,
+      limit: limit.value
+    });
+
+    if (result.code === 200) {
+      users.value = [...users.value, ...result.data]; // 追加新数据
+      hasMore.value = result.hasMore; // 更新是否有更多数据
+    } else {
+      uni.showToast({
+        title: '获取数据失败，请稍后重试',
+        icon: 'none'
+      });
+    }
   } catch (err) {
     console.error('获取推广用户数据失败:', err);
     uni.showToast({
@@ -180,7 +206,15 @@ const fetchReferralUsers = async () => {
     });
   } finally {
     loading.value = false; // 无论成功或失败，都关闭加载状态
+    loadingMore.value = false; // 关闭加载更多状态
   }
+};
+
+// 加载更多数据
+const loadMore = () => {
+  loadingMore.value = true; // 显示加载提示
+  page.value += 1;
+  fetchReferralUsers();
 };
 
 // 页面加载时获取数据
@@ -206,9 +240,10 @@ onMounted(() => {
 
 /* 弹窗内容 */
 .popup-content {
-  width: 80vw;
+  position: absolute;
+  top: -7vh;
+  width: 90vw;
   height: 70vh;
-  padding: 5vw;
   background-color: #fff;
   border-radius: 2vw;
   text-align: center;
@@ -307,7 +342,7 @@ onMounted(() => {
 .total-earnings {
   margin-left: auto; /* 靠右对齐 */
   text-align: right;
-	font-size: 3vw;
+  font-size: 3vw;
 }
 
 .total-earnings-label {
@@ -389,5 +424,36 @@ onMounted(() => {
   font-size: 4vw;
   color: #999;
   margin-top: 10vw;
+}
+
+/* 加载更多按钮 */
+.load-more {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  margin: 10px 0;
+  background-color: #007aff;
+  color: #fff;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.load-more:hover {
+  background-color: #005bb5;
+}
+
+/* 加载提示 */
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+  color: #666;
+}
+
+.loading-spinner text {
+  margin-left: 8px;
 }
 </style>
