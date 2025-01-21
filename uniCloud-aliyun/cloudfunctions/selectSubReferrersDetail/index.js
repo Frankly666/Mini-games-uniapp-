@@ -49,12 +49,11 @@ exports.main = async (event, context) => {
 			console.log("直接用户的结果:", subReferrers)
     } else if (type === 'indirect') {
       subReferrers = await findIndirectReferrers(userId, page, limit); // 查询间接推荐用户
-			subReferrers = subReferrers.data
 			console.log("间接用户的结果:", subReferrers)
     } else {
       throw new Error('无效的查询类型');
     }
-		
+		subReferrers = subReferrers.data
 		
 
     // 获取推荐用户的收益记录

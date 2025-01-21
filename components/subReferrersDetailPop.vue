@@ -64,10 +64,11 @@
 
         <!-- 加载更多按钮 -->
         <view v-if="hasMore" class="load-more" @click="loadMore">
-          <text v-if="!loadingMore">加载更多</text>
-          <view v-else class="loading-spinner">
-            <text>加载中...</text>
+          <view v-if="loadingMore" class="loading-spinner">
+            <view class="spinner"></view>
+            <text>正在加载...</text>
           </view>
+          <text v-else>加载更多</text>
         </view>
       </view>
 
@@ -212,6 +213,7 @@ const fetchReferralUsers = async () => {
 
 // 加载更多数据
 const loadMore = () => {
+  if (loadingMore.value) return; // 防止重复点击
   loadingMore.value = true; // 显示加载提示
   page.value += 1;
   fetchReferralUsers();
@@ -223,6 +225,8 @@ onMounted(() => {
 });
 </script>
 
+
+
 <style>
 /* 弹窗遮罩层 */
 .popup-overlay {
@@ -230,7 +234,7 @@ onMounted(() => {
   top: 0;
   left: 0;
   width: 100vw;
-  height: 100vh;
+  height: 90vh;
   background-color: rgba(0, 0, 0, 0.7);
   display: flex;
   justify-content: center;
@@ -241,9 +245,10 @@ onMounted(() => {
 /* 弹窗内容 */
 .popup-content {
   position: absolute;
-  top: -7vh;
-  width: 90vw;
+  width: 84vw;
   height: 70vh;
+	padding: 3vw;
+	box-sizing: border-box;
   background-color: #fff;
   border-radius: 2vw;
   text-align: center;
@@ -289,7 +294,7 @@ onMounted(() => {
 /* 用户列表 */
 .user-list {
   width: 100%;
-  max-height: 66vh;
+  max-height: 93%;
   overflow-y: auto;
   margin-bottom: 5vw;
   display: flex;
@@ -450,10 +455,26 @@ onMounted(() => {
   justify-content: center;
   align-items: center;
   font-size: 14px;
-  color: #666;
+  color: #fff;
 }
 
-.loading-spinner text {
-  margin-left: 8px;
+/* 加载动画 */
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #fff;
+  border-top: 2px solid transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-right: 8px;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 </style>
