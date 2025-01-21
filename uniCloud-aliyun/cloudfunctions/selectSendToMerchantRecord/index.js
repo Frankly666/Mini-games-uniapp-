@@ -37,9 +37,13 @@ exports.main = async (event, context) => {
         const senderInfo = await db.collection('user')
           .doc(record.userId)
           .get();
+					
+				const receiverInfo = await db.collection('user')
+					.doc(record.sendUserId)
+					.get();
 
         const sender = senderInfo.data[0];
-        console.log('转赠者信息:', sender); // 打印转赠者信息
+				const receiver = receiverInfo.data[0];
 
         // 将每条记录的相关信息包裹到一个对象中
         const recordItem = {
@@ -54,9 +58,9 @@ exports.main = async (event, context) => {
             gameID: sender.gameID,
           },
           receiverInfo: { // 接收者信息（当前用户）
-            userName,
-            avatar,
-            gameID,
+            userName: receiver.userName,
+            avatar: receiver.avatar,
+            gameID: receiver.gameID,
           },
         };
 
