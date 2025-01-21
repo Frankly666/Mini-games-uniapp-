@@ -106,9 +106,9 @@
         </view>
       </view>
 
-      <view class="warn" v-if="isShowWarn">
+      <!-- <view class="warn" v-if="isShowWarn">
         <text>{{ isSellMarket ? "(能量石不足)" : `${gemChName}不足` }}</text>
-      </view>
+      </view> -->
 
       <view class="confirmBtn" @click="confirmFun">
         <text>确认{{ btnWord }}</text>

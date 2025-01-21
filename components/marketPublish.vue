@@ -162,6 +162,11 @@
 				return;
 			}
 			
+			if(inputNumValue.value <= 0) {
+				showTips("数量不能为0");
+				return;
+			}
+			
 	    if (inputNumValue.value > gameInfo.assets[props.gemImgName[selectIndex.value]]) {
 	        isShowNotEnough.value = true;
 	        showTips("余额不足");
@@ -230,6 +235,12 @@
 			
 			if(inputPriceValue.value > 999) {
 				showTips("单价最高1000");
+				return;
+			}
+			
+			
+			if(inputNumValue.value <= 0) {
+				showTips("数量不能为0");
 				return;
 			}
 	   

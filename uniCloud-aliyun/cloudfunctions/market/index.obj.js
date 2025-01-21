@@ -65,19 +65,37 @@ module.exports = {
 	},
 	
 	/** 检索所有的出售需求
-	 * @param {String} demType
+	 * @param {String} gemType
 	 */
 	async selectSellRequirement(gemType) {
-		const sellRequirement = uniCloud.database().collection('sellRequirement');
-		const res = await sellRequirement.where({gemType, isFinished: false}).orderBy("sellPrice", 'asc').get()
-		return res;
+			const db = uniCloud.database();
+			const _ = db.command; // 引入数据库操作符
+	    const sellRequirement = uniCloud.database().collection('sellRequirement');
+	    const res = await sellRequirement
+	        .where({
+	            gemType,          // 宝石类型
+	            isFinished: false, // 未完成的出售需求
+	            sellNum: _.gt(0)  // sellNum 大于 0
+	        })
+	        .orderBy("sellPrice", 'asc') // 按照 sellPrice 升序排列
+	        .get();
+	    return res;
 	},
 
 	
 	// 检索所有的求购需求
 	async selectBuyRequirement(gemType) {
-		const buyRequirement = uniCloud.database().collection('buyRequirement');
-		const res = await buyRequirement.where({gemType, isFinished: false}).orderBy("buyPrice", 'desc').get()
-		return res;
+			const db = uniCloud.database();
+			const _ = db.command; // 引入数据库操作符
+	    const buyRequirement = uniCloud.database().collection('buyRequirement');
+	    const res = await buyRequirement
+	        .where({
+	            gemType,          // 宝石类型
+	            isFinished: false, // 未完成的求购
+	            buyNum: _.gt(0)   // buyNum 大于 0
+	        })
+	        .orderBy("buyPrice", 'desc')
+	        .get();
+	    return res;
 	},
 }
