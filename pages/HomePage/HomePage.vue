@@ -123,9 +123,7 @@ function handleLogout() {
 }
 
 onMounted(() => {
-	// #ifndef APP
 	checkUpdate()
-	// #endif
 	// bgm播放设置
 	bgm.src ='/static/bgm/bgm.mp3'
 	bgm.autoplay = true;

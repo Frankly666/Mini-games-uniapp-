@@ -2,8 +2,8 @@
     "name" : "趣选城",
     "appid" : "__UNI__1B67F5F",
     "description" : "",
-    "versionName" : "1.0.0",
-    "versionCode" : "100",
+    "versionName" : "1.0.1",
+    "versionCode" : 100,
     "transformPx" : false,
     /* 5+App特有相关 */
     "app-plus" : {

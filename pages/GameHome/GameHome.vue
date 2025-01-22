@@ -178,9 +178,7 @@ onMounted(async () => {
 		isShowLoading.value = false;
 	}, 2000);
 	
-	// #ifndef APP
 	checkUpdate()
-	// #endif
 	
 	
 	
