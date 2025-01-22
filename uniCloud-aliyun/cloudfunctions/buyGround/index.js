@@ -8,6 +8,12 @@ exports.main = async (event, context) => {
   console.log('event : ', event);
 
   const { addUserGroundData, userId, unlockFunds, duration } = event;
+	if(addUserGroundData.groundType === 2 || addUserGroundData.groundType === 6 ) {
+		return {
+		  code: -1,
+		  message: '操作失败，请重试'
+		};
+	}
   const transaction = await db.startTransaction();
 	console.log("事务对象:", transaction.id)
 
