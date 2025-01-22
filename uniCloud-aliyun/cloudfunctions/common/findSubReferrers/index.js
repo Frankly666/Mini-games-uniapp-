@@ -85,7 +85,7 @@ module.exports = async function findIndirectReferrersWithPagination(userId, page
     // 4. 分页逻辑
     const startIndex = (page - 1) * limit; // 计算起始索引
     const endIndex = startIndex + limit; // 计算结束索引
-    const paginatedResult = allIndirectReferrers.slice(startIndex, endIndex); // 分页
+    const paginatedResult = allReferrers.slice(startIndex, endIndex); // 分页
 
     console.log('所有推荐用户数量:', allReferrers.length);
     console.log('所有间接推荐用户数量:', allIndirectReferrers.length);
@@ -93,7 +93,7 @@ module.exports = async function findIndirectReferrersWithPagination(userId, page
     // 5. 返回分页结果
     return {
       data: paginatedResult,
-      total: allIndirectReferrers.length, // 返回总数量
+      total: allReferrers.length, // 返回总数量
       hasMore: endIndex < allIndirectReferrers.length // 是否还有更多数据
     };
   } catch (err) {

@@ -1,6 +1,5 @@
 'use strict';
-const findDirectReferrers = require('findDirectReferrers'); // 引入直接推荐模块
-const findIndirectReferrers = require('findIndirectReferrers'); // 引入间接推荐模块
+const findSubReferrers = require('findSubReferrers'); // 引入间接推荐模块
 const db = uniCloud.database();
 
 /**
@@ -38,21 +37,13 @@ async function getReferralEarnings(userId, subReferrers) {
 }
 
 exports.main = async (event, context) => {
-  const { userId, type, page = 1, limit = 5 } = event;
+  const { userId, page = 1, limit = 5 } = event;
 
   try {
     let subReferrers;
 
-    // 根据 type 调用不同的模块
-    if (type === 'direct') {
-      subReferrers = await findDirectReferrers(userId, page, limit); // 查询直接推荐用户
-			console.log("直接用户的结果:", subReferrers)
-    } else if (type === 'indirect') {
-      subReferrers = await findIndirectReferrers(userId, page, limit); // 查询间接推荐用户
-			console.log("间接用户的结果:", subReferrers)
-    } else {
-      throw new Error('无效的查询类型');
-    }
+		subReferrers = await findSubReferrers(userId, page, limit); // 查询间接推荐用户
+		console.log("间接用户的结果:", subReferrers)
 		subReferrers = subReferrers.data
 		
 

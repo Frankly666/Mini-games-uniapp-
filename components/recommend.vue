@@ -32,12 +32,7 @@
 		
 		
 		<view class="referralListWrap">
-			<!-- 弹窗组件 -->
-			<sub-referrers-detail-pop-vue
-				v-if="showPopup"
-				:type="popupType"
-				@close="handleClosePopup"
-			/>
+			<sub-referrers-detail-pop-vue/>
 		</view>
 		
 		
@@ -308,9 +303,9 @@ onMounted(() => {
 		box-sizing: border-box;
 		background-color: #f9f9f9;
 		border-radius: 2.5vw;
-		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 		
 		.top {
+			width: 100%;
 			display: flex;
 			.avatar {
 				width: 13vw;
@@ -354,6 +349,7 @@ onMounted(() => {
 		.bottom {
 			display: flex;
 			justify-content: space-between;
+			width: 100%;
 			margin-top: 2vw;
 			
 			.item {
@@ -386,6 +382,13 @@ onMounted(() => {
 			}
 		}
 		
+	}
+	
+	.referralListWrap {
+		position: absolute;
+		width: 90vw;
+		height: 40vh;
+		top: 40vh;
 	}
 	
 	/* 二维码样式 */

@@ -1,8 +1,7 @@
 {
   "name": "selectSubReferrersDetail",
   "dependencies": {
-    "findIndirectReferrers": "file:../common/findIndirectReferrers",
-    "findDirectReferrers": "file:../common/findDirectReferrers"
+    "findSubReferrers": "file:../common/findSubReferrers"
   },
   "extensions": {
     "uni-cloud-jql": {}
