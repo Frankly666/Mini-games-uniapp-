@@ -1,50 +1,75 @@
 <template>
-  <view class="wrap3">
+  <view class="VRBg">
+		<!-- 标题 -->
+		<view class="title">
+			<text>推广</text>
+		</view>
 		
-		<view class="wrap2">
-			<!-- 用户信息展示 -->
-			<view class="user-info">
-			  <image :src="userInfo.avatar" class="avatar"></image>
-			  <view class="details">
-			    <text class="username">{{ userInfo.userName }}</text>
-			    <text class="invite-code">推荐码: {{ userInfo.inviteCode }}</text>
-			  </view>
+		<!-- 用户信息展示 -->
+		<view class="user-info">
+			<view class="top">
+				<image :src="userInfo.avatar" class="avatar"></image>
+				<view class="details">
+					<text class="username">{{ userInfo.userName }}</text>
+					<text class="invite-code">游戏ID: {{ userInfo.gameID }}</text>
+				</view>
+				<view class="condeEntry">
+					<text>推广二维码</text>
+				</view>
 			</view>
-			
-			<!-- 二维码组件 -->
-			<uqrcode
-			  ref="QRCode"
-			  :value="qrCodeContent"
-			  :size="200"
-			  canvas-id="qrcode"
-			  @complete="onQRCodeComplete"
-			></uqrcode>
-			
-			<!-- 提示信息 -->
-			<text class="tip">扫描二维码，加入我们！</text>
-			
-			<!-- 下载按钮 -->
-			<button class="download-button" @click="handleDownloadImage">下载分享图</button>
-			
-			<!-- 推荐按钮 -->
-			<view class="button-container">
-			  <button class="recommend-button direct" @click="handleDirectRecommend">直推用户</button>
-			  <button class="recommend-button indirect" @click="handleIndirectRecommend">间推用户</button>
+			<view class="bottom">
+				<view class="left item">
+					<text class="subTitle">直推用户</text>
+					<text class="num">{{1}}</text>
+				</view>
+				
+				<view class="right item">
+					<text class="subTitle">直推用户</text>
+					<text class="num">{{1}}</text>
+				</view>
 			</view>
-			
-			<!-- 隐藏的画布，用于生成最终图片 -->
-			<canvas
-			  canvas-id="shareCanvas"
-			  :style="{ width: canvasWidth + 'px', height: canvasHeight + 'px', position: 'absolute', top: '-9999px' }"
-			></canvas>
-			
+		</view>
+		
+		
+		<view class="referralListWrap">
 			<!-- 弹窗组件 -->
 			<sub-referrers-detail-pop-vue
-			  v-if="showPopup"
-			  :type="popupType"
-			  @close="handleClosePopup"
+				v-if="showPopup"
+				:type="popupType"
+				@close="handleClosePopup"
 			/>
 		</view>
+		
+		
+		
+		<!-- 二维码组件 -->
+	<!-- 	<uqrcode
+			ref="QRCode"
+			:value="qrCodeContent"
+			:size="200"
+			canvas-id="qrcode"
+			@complete="onQRCodeComplete"
+		></uqrcode> -->
+		
+		<!-- 提示信息 -->
+		<!-- <text class="tip">扫描二维码，加入我们！</text> -->
+		
+		<!-- 下载按钮 -->
+		<!-- <button class="download-button" @click="handleDownloadImage">下载分享图</button> -->
+		
+		<!-- 推荐按钮 -->
+		<!-- <view class="button-container">
+			<button class="recommend-button direct" @click="handleDirectRecommend">直推用户</button>
+			<button class="recommend-button indirect" @click="handleIndirectRecommend">间推用户</button>
+		</view> -->
+		
+		<!-- 隐藏的画布，用于生成最终图片 -->
+		<canvas
+			canvas-id="shareCanvas"
+			:style="{ width: canvasWidth + 'px', height: canvasHeight + 'px', position: 'absolute', top: '-9999px' }"
+		></canvas>
+		
+		
     
   </view>
 </template>
@@ -59,7 +84,8 @@ import { useGameInfoStore } from '../stores/gameInfo';
 const userInfo = ref({
   userName: '',
   avatar: '',
-  inviteCode: ''
+  inviteCode: '',
+	gameID: ''
 });
 
 // 二维码内容
@@ -82,7 +108,8 @@ const loadUserInfo = computed(() => {
   userInfo.value = {
     userName: gameInfo.userName || cachedUserInfo.userName,
     avatar: gameInfo.avatar || cachedUserInfo.avatar,
-    inviteCode: cachedUserInfo.inviteCode || '000000'
+    inviteCode: cachedUserInfo.inviteCode || '000000',
+		gameID: cachedUserInfo.gameID
   };
 });
 
@@ -248,116 +275,173 @@ onMounted(() => {
 </script>
 
 <style lang="less">
-.wrap3 {
+.VRBg {
 	display: flex;
-	justify-content: center;
+	flex-direction: column;
+	align-items: center;
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   width: 100vw;
-  height: 90vh;
+  height: 60vw;
 	padding-top: 8vh;
-  background: linear-gradient(135deg, #6ec3f4, #a1dffb); /* 天蓝色渐变背景 */
+	background: url("../static/invitePage/VRBg.png") no-repeat center center / contain;
 	
-	.wrap2 {	
-		background-color: #fff; /* 白色背景 */
-		border-radius: 20px; /* 圆角 */
-		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* 阴影效果 */
-		width: 89vw;
-		max-height: 80vh;
-		overflow-y: auto;
+	.title {
+		position: absolute;
+		top: 11vh;
+		color: white;
+		font-weight: bold;
+		font-size: 4vw;
+	}
+	
+	/* 用户信息样式 */
+	.user-info {
+		position: absolute;
+		top: 18vh;
+		display: flex;
+		flex-direction: column;
+		width: 90vw;
+		height: 38vw;
+		padding: 5vw;
 		box-sizing: border-box;
+		background-color: #f9f9f9;
+		border-radius: 2.5vw;
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 		
-		/* 用户信息样式 */
-		.user-info {
-		  display: flex;
-		  align-items: center;
-		  padding: 5vw;
-		  background-color: #f9f9f9;
-		  border-radius: 2.5vw;
-		  margin: 5vw;
-		  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-		
-		  .avatar {
-		    width: 20vw;
-		    height: 20vw;
-		    border-radius: 50%;
-		    margin-right: 4vw;
-		  }
-		
-		  .details {
-		    display: flex;
-		    flex-direction: column;
-		
-		    .username {
-		      font-size: 4.5vw;
-		      font-weight: bold;
-		      color: #333;
-		    }
-		
-		    .invite-code {
-		      font-size: 4vw;
-		      color: #666;
-		    }
-		  }
+		.top {
+			display: flex;
+			.avatar {
+				width: 13vw;
+				height: 13vw;
+				border-radius: 50%;
+				margin-right: 4vw;
+			}
+				
+			.details {
+				display: flex;
+				flex-direction: column;
+				
+				.username {
+					font-size: 4vw;
+					font-weight: bold;
+					color: #333;
+				}
+				
+				.invite-code {
+					margin-top: 2vw;
+					font-size: 3vw;
+					color: #666;
+				}
+			}
+			
+			.condeEntry {
+				position: absolute;
+				width: 15vw;
+				height: 7vw;
+				right: 6vw;
+				font-size: 3vw;
+				background: url("../static/invitePage/code.png") no-repeat center center / contain;
+				
+				text {
+					position: absolute;
+					top: 8vw;
+				}
+			}
+		}
+	
+		.bottom {
+			display: flex;
+			justify-content: space-between;
+			margin-top: 2vw;
+			
+			.item {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				width: 48%;
+				height: 15vw;
+				border-radius: 3vw;
+				padding: 2vw 5vw;
+				box-sizing: border-box;
+				font-size: 3.7vw;
+				
+				.num {
+					margin-top: 2vw;
+					font-size: 4.5vw;
+					font-weight: bold;
+					color: black;
+				}
+				
+				&.left {
+					color: #6975a1;
+					background: url("../static/invitePage/directBg.png") no-repeat center center / cover;
+				}
+				
+				&.right {
+					color: #7769a1;
+					background: url("../static/invitePage/indirectBg.png") no-repeat center center / cover;
+				}
+			}
 		}
 		
-		/* 二维码样式 */
-		.uqrcode {
-		  margin: 5vw auto;
-		  display: block;
-		}
-		
-		/* 提示信息样式 */
-		.tip {
-		  display: block;
-		  text-align: center;
-		  font-size: 4vw;
-		  color: #888;
-		  margin-top: 5vw;
-		}
-		
-		/* 下载按钮样式 */
-		.download-button {
-		  width: 30vw;
-		  height: 10vw;
-		  line-height: 6vw;
-		  background-color: #007aff;
-		  color: #fff;
-		  font-size: 4vw;
-		  border-radius: 2.5vw;
-		  padding: 2vw 0;
-		  margin: 5vw auto;
-		  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-		}
-		
-		/* 按钮容器样式 */
-		.button-container {
-		  display: flex;
-		  justify-content: space-around;
-		  margin-top: 5vw;
-		
-		  /* 推荐按钮样式 */
-		  .recommend-button {
-		    width: 35vw; /* 缩小按钮宽度 */
-		    font-size: 3.5vw; /* 缩小字体大小 */
-		    border-radius: 2.5vw;
-		    padding: 1.5vw 0; /* 缩小内边距 */
-		    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-		
-		    /* 直接推荐按钮样式 */
-		    &.direct {
-		      background-color: #007aff; /* 蓝色 */
-		      color: #fff;
-		    }
-		
-		    /* 间接推荐按钮样式 */
-		    &.indirect {
-		      background-color: #34c759; /* 绿色 */
-		      color: #fff;
-		    }
-		  }
+	}
+	
+	/* 二维码样式 */
+	.uqrcode {
+		margin: 5vw auto;
+		display: block;
+	}
+	
+	/* 提示信息样式 */
+	.tip {
+		display: block;
+		text-align: center;
+		font-size: 4vw;
+		color: #888;
+		margin-top: 5vw;
+	}
+	
+	/* 下载按钮样式 */
+	.download-button {
+		width: 30vw;
+		height: 10vw;
+		line-height: 6vw;
+		background-color: #007aff;
+		color: #fff;
+		font-size: 4vw;
+		border-radius: 2.5vw;
+		padding: 2vw 0;
+		margin: 5vw auto;
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+	}
+	
+	/* 按钮容器样式 */
+	.button-container {
+		display: flex;
+		justify-content: space-around;
+		margin-top: 5vw;
+	
+		/* 推荐按钮样式 */
+		.recommend-button {
+			width: 35vw; /* 缩小按钮宽度 */
+			font-size: 3.5vw; /* 缩小字体大小 */
+			border-radius: 2.5vw;
+			padding: 1.5vw 0; /* 缩小内边距 */
+			box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+	
+			/* 直接推荐按钮样式 */
+			&.direct {
+				background-color: #007aff; /* 蓝色 */
+				color: #fff;
+			}
+	
+			/* 间接推荐按钮样式 */
+			&.indirect {
+				background-color: #34c759; /* 绿色 */
+				color: #fff;
+			}
 		}
 	}
 }
