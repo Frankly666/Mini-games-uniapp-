@@ -20,6 +20,9 @@
             <text class="user-name">{{ user.userInfo.userName }}</text>
             <text class="game-id">游戏ID: {{ user.userInfo.gameID }}</text>
           </view>
+					<view class="referType">
+						<text>{{ user.userInfo.pusherCode === phone+'' ? '直推' : '间推' }}</text>
+					</view>
           <!-- 总收益 -->
           <view class="total-earnings">
             <text class="total-earnings-label">总收益</text>
@@ -88,6 +91,9 @@ const loadingMore = ref(false);
 
 // 当前展开的卡片 ID
 const expandedCardId = ref(null);
+
+const phone = uni.getStorageSync('phone');
+console.log(phone)
 
 // 分页相关
 const page = ref(1);
@@ -281,6 +287,17 @@ onMounted(() => {
         }
       }
 
+			// 推荐类型
+			.referType {
+				font-weight: bold;
+				font-size: 3vw;
+				padding: 1vw;
+				box-sizing: border-box;
+				background: bisque;
+				border-radius: 1vw;
+				margin-left: 1vw;
+			}
+			
       /* 收益记录 */
       .earnings-list {
         max-height: 0; /* 默认收起 */

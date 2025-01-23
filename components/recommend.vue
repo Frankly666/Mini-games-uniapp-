@@ -387,7 +387,7 @@ onMounted(() => {
 	.referralListWrap {
 		position: absolute;
 		width: 90vw;
-		height: 40vh;
+		height: 48vh;
 		top: 40vh;
 	}
 	
