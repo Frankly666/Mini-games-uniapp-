@@ -58,6 +58,13 @@
     	{
     		"navigationStyle": "custom"
     	}
+    },
+    {
+    	"path" : "pages/QRCodeAndInviteCode/QRCodeAndInviteCode",
+    	"style" : 
+    	{
+    		"navigationStyle": "custom"
+    	}
     }
   ],
   "globalStyle": {},

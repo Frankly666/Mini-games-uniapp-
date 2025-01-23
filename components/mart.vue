@@ -28,7 +28,8 @@ function navigateToBuyMarket() {
 }
 
 // 跳转到出售集市页面
-function navigateToSellMarket() {
+async function navigateToSellMarket() {
+	await updateAssets()
 	console.log('跳转到出售集市页面');
 	
 	// 从本地缓存中获取用户信息
@@ -46,7 +47,7 @@ function navigateToSellMarket() {
 }
 
 onMounted(() => {
-	updateAssets()
+	// updateAssets()
 })
 </script>
 

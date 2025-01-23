@@ -13,7 +13,7 @@
 					<text class="username">{{ userInfo.userName }}</text>
 					<text class="invite-code">游戏ID: {{ userInfo.gameID }}</text>
 				</view>
-				<view class="condeEntry">
+				<view class="condeEntry" @click="handleClickQRCode">
 					<text>推广二维码</text>
 				</view>
 			</view>
@@ -30,42 +30,11 @@
 			</view>
 		</view>
 		
-		
+		<!-- 推荐用户列表 -->
 		<view class="referralListWrap">
 			<sub-referrers-detail-pop-vue/>
 		</view>
 		
-		
-		
-		<!-- 二维码组件 -->
-	<!-- 	<uqrcode
-			ref="QRCode"
-			:value="qrCodeContent"
-			:size="200"
-			canvas-id="qrcode"
-			@complete="onQRCodeComplete"
-		></uqrcode> -->
-		
-		<!-- 提示信息 -->
-		<!-- <text class="tip">扫描二维码，加入我们！</text> -->
-		
-		<!-- 下载按钮 -->
-		<!-- <button class="download-button" @click="handleDownloadImage">下载分享图</button> -->
-		
-		<!-- 推荐按钮 -->
-		<!-- <view class="button-container">
-			<button class="recommend-button direct" @click="handleDirectRecommend">直推用户</button>
-			<button class="recommend-button indirect" @click="handleIndirectRecommend">间推用户</button>
-		</view> -->
-		
-		<!-- 隐藏的画布，用于生成最终图片 -->
-		<canvas
-			canvas-id="shareCanvas"
-			:style="{ width: canvasWidth + 'px', height: canvasHeight + 'px', position: 'absolute', top: '-9999px' }"
-		></canvas>
-		
-		
-    
   </view>
 </template>
 
@@ -83,16 +52,12 @@ const userInfo = ref({
 	gameID: ''
 });
 
-// 二维码内容
-const qrCodeContent = ref('');
-
-// 弹窗相关状态
-const showPopup = ref(false);
-const popupType = ref('');
-
-// 画布尺寸
-const canvasWidth = ref(300); // 画布宽度
-const canvasHeight = ref(400); // 画布高度
+// 跳到推荐页面
+const handleClickQRCode = () => {
+	uni.navigateTo({
+		url: "/pages/QRCodeAndInviteCode/QRCodeAndInviteCode"
+	})
+}
 
 // 获取游戏信息
 const gameInfo = useGameInfoStore();
@@ -118,154 +83,9 @@ watch(
   { deep: true }
 );
 
-// 获取最新 APK 下载地址并更新二维码内容
-const loadLatestApkUrl = async () => {
-  try {
-    const apkUrl = await getLatestApkUrl();
-    qrCodeContent.value = apkUrl;
-    console.log('最新 APK 下载地址:', apkUrl);
-  } catch (err) {
-    console.error('获取下载地址失败', err);
-    uni.showToast({
-      title: '获取下载地址失败，请稍后重试',
-      icon: 'none'
-    });
-  }
-};
-
-// 二维码生成完成回调
-const onQRCodeComplete = (res) => {
-  if (res.success) {
-    console.log('二维码生成成功');
-  } else {
-    console.error('二维码生成失败', res);
-  }
-};
-
-// 处理直接推荐按钮点击
-const handleDirectRecommend = () => {
-  popupType.value = 'direct';
-  showPopup.value = true;
-};
-
-// 处理间接推荐按钮点击
-const handleIndirectRecommend = () => {
-  popupType.value = 'indirect';
-  showPopup.value = true;
-};
-
-// 关闭弹窗
-const handleClosePopup = () => {
-  showPopup.value = false;
-};
-
-// 生成并下载图片
-const handleDownloadImage = async () => {
-  uni.showLoading({ title: '生成图片中...', mask: true });
-
-  try {
-    // 获取二维码的临时文件路径
-    const qrCodeTempFilePath = await new Promise((resolve, reject) => {
-      uni.canvasToTempFilePath({
-        canvasId: 'qrcode',
-        success: (res) => resolve(res.tempFilePath),
-        fail: (err) => reject(err)
-      });
-    });
-
-    // 创建画布上下文
-    const ctx = uni.createCanvasContext('shareCanvas');
-
-    // 清空画布
-    ctx.clearRect(0, 0, canvasWidth.value, canvasHeight.value);
-
-    // 绘制背景颜色（浅色）
-    ctx.setFillStyle('#f8f9fa'); // 浅灰色背景
-    ctx.fillRect(0, 0, canvasWidth.value, canvasHeight.value);
-
-    // 绘制游戏标题
-    ctx.setFontSize(24);
-    ctx.setFillStyle('#333333'); // 深灰色字体
-    ctx.setTextAlign('center');
-    ctx.fillText('趣选城', canvasWidth.value / 2, 50);
-
-    // 绘制用户信息模块背景
-    ctx.setFillStyle('#ffffff'); // 白色背景
-    ctx.fillRect(20, 60, canvasWidth.value - 40, 100); // 矩形背景
-
-    // 绘制用户头像
-    const avatar = await new Promise((resolve, reject) => {
-      uni.getImageInfo({
-        src: userInfo.value.avatar,
-        success: (res) => resolve(res.path),
-        fail: (err) => reject(err)
-      });
-    });
-    ctx.drawImage(avatar, 40, 100, 60, 60); // 头像尺寸调整为 60x60
-
-    // 绘制用户名和推荐码
-    ctx.setFontSize(16);
-    ctx.setFillStyle('#333333'); // 深灰色字体
-    ctx.setTextAlign('left');
-    ctx.fillText(`用户名: ${userInfo.value.userName}`, 120, 120);
-    ctx.fillText(`推荐码: ${userInfo.value.inviteCode}`, 120, 150);
-
-    // 绘制二维码模块背景
-    ctx.setFillStyle('#ffffff'); // 白色背景
-    ctx.fillRect(20, 180, canvasWidth.value - 40, 220); // 矩形背景
-
-    // 绘制二维码（整体居中）
-    const qrCodeSize = 160; // 二维码尺寸
-    const qrCodeX = (canvasWidth.value - qrCodeSize) / 2; // 水平居中
-    const qrCodeY = 200; // 垂直位置
-    ctx.drawImage(qrCodeTempFilePath, qrCodeX, qrCodeY, qrCodeSize, qrCodeSize);
-
-    // 绘制提示文字（位于二维码下方）
-    ctx.setFontSize(14);
-    ctx.setFillStyle('#666666'); // 灰色字体
-    ctx.setTextAlign('center');
-    ctx.fillText('扫描二维码，加入我们！', canvasWidth.value / 2, qrCodeY + qrCodeSize + 30);
-
-    // 绘制完成
-    ctx.draw(false, () => {
-      // 将画布内容生成图片
-      uni.canvasToTempFilePath({
-        canvasId: 'shareCanvas',
-        success: (res) => {
-          const shareImagePath = res.tempFilePath;
-
-          // 保存图片到相册
-          uni.saveImageToPhotosAlbum({
-            filePath: shareImagePath,
-            success: () => {
-              uni.hideLoading();
-              uni.showToast({ title: '图片已保存', icon: 'success' });
-            },
-            fail: (err) => {
-              uni.hideLoading();
-              console.error('保存图片失败:', err);
-              uni.showToast({ title: '保存图片失败，请重试', icon: 'none' });
-            }
-          });
-        },
-        fail: (err) => {
-          uni.hideLoading();
-          console.error('生成图片失败:', err);
-          uni.showToast({ title: '生成图片失败，请重试', icon: 'none' });
-        }
-      });
-    });
-  } catch (err) {
-    uni.hideLoading();
-    console.error('生成图片失败:', err);
-    uni.showToast({ title: '生成图片失败，请重试', icon: 'none' });
-  }
-};
-
 // 页面加载时获取用户信息和最新 APK 下载地址
 onMounted(() => {
   loadUserInfo.value; // 触发 computed
-  loadLatestApkUrl();
 });
 </script>
 
