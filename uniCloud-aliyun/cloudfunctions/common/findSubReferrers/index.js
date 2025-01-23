@@ -94,7 +94,9 @@ module.exports = async function findIndirectReferrersWithPagination(userId, page
     return {
       data: paginatedResult,
       total: allReferrers.length, // 返回总数量
-      hasMore: endIndex < allIndirectReferrers.length // 是否还有更多数据
+      hasMore: endIndex < allReferrers.length, // 是否还有更多数据
+			directNum: allReferrers.length - allIndirectReferrers.length,
+			indirectNum: allIndirectReferrers.length
     };
   } catch (err) {
     console.error('查找间接推荐用户失败:', err.message);

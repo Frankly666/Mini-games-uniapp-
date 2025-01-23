@@ -80,6 +80,8 @@
 import { ref, computed, onMounted } from 'vue';
 import { getReferralUsersWithEarnings } from '../utils/selectSubReferrersDetail.js';
 
+const props = defineProps(["setNum"]);
+
 // 用户列表
 const users = ref([]);
 
@@ -93,7 +95,7 @@ const loadingMore = ref(false);
 const expandedCardId = ref(null);
 
 const phone = uni.getStorageSync('phone');
-console.log(phone)
+console.log(phone);
 
 // 分页相关
 const page = ref(1);
@@ -162,9 +164,22 @@ const fetchReferralUsers = async () => {
     });
 
     if (result.code === 200) {
-			console.log(result.data)
-      users.value = [...users.value, ...result.data]; // 追加新数据
+      props.setNum(1, result.directNum);
+      props.setNum(2, result.indirectNum);
+
+      // 如果是第一页，直接覆盖数据；否则追加数据
+      if (page.value === 1) {
+        users.value = result.data;
+      } else {
+        users.value = [...users.value, ...result.data];
+      }
+
       hasMore.value = result.hasMore; // 更新是否有更多数据
+
+      // 将当前用户列表和分页状态保存到缓存
+      uni.setStorageSync('cachedUsers', users.value);
+      uni.setStorageSync('cachedPage', page.value);
+      uni.setStorageSync('cachedHasMore', hasMore.value);
     } else {
       uni.showToast({
         title: '获取数据失败，请稍后重试',
@@ -185,18 +200,31 @@ const fetchReferralUsers = async () => {
 
 // 加载更多数据
 const loadMore = () => {
-  if (loadingMore.value) return; // 防止重复点击
+  if (loadingMore.value || !hasMore.value) return; // 防止重复点击或没有更多数据
   loadingMore.value = true; // 显示加载提示
-  page.value += 1;
-  fetchReferralUsers();
+  page.value += 1; // 增加分页页码
+  fetchReferralUsers(); // 加载更多数据
 };
 
 // 页面加载时获取数据
 onMounted(() => {
-  fetchReferralUsers();
+  // 从缓存中读取用户列表和分页状态
+  const cachedUsers = uni.getStorageSync('cachedUsers');
+  const cachedPage = uni.getStorageSync('cachedPage');
+  const cachedHasMore = uni.getStorageSync('cachedHasMore');
+
+  if (cachedUsers && cachedUsers.length > 0) {
+    // 如果缓存中有数据，直接使用缓存数据
+    users.value = cachedUsers;
+    page.value = cachedPage;
+    hasMore.value = cachedHasMore;
+    loading.value = false; // 关闭加载状态
+  } else {
+    // 如果缓存中没有数据，重新请求数据
+    fetchReferralUsers();
+  }
 });
 </script>
-
 <style lang="less">
 /* 内容容器 */
 .content-container {

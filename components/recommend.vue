@@ -20,19 +20,19 @@
 			<view class="bottom">
 				<view class="left item">
 					<text class="subTitle">直推用户</text>
-					<text class="num">{{1}}</text>
+					<text class="num">{{ directNum }}</text>
 				</view>
 				
 				<view class="right item">
-					<text class="subTitle">直推用户</text>
-					<text class="num">{{1}}</text>
+					<text class="subTitle">间推用户</text>
+					<text class="num">{{ indirectNum }}</text>
 				</view>
 			</view>
 		</view>
 		
 		<!-- 推荐用户列表 -->
 		<view class="referralListWrap">
-			<sub-referrers-detail-pop-vue/>
+			<sub-referrers-detail-pop-vue :setNum="setNum"/>
 		</view>
 		
   </view>
@@ -51,6 +51,22 @@ const userInfo = ref({
   inviteCode: '',
 	gameID: ''
 });
+
+const indirectNumTemp = uni.getStorageSync('indirectNum');
+const directNumTemp = uni.getStorageSync('directNum');
+
+const indirectNum = ref(Number.isInteger(indirectNumTemp) ? indirectNumTemp :  "正在加载...");
+const directNum = ref(Number.isInteger(directNumTemp) ? directNumTemp :  "正在加载...");
+
+const setNum = (type, num) => {
+	if(type === 1) {
+		directNum.value = num;
+		uni.setStorageSync('directNum', num);
+	}else {
+		indirectNum.value = num;
+		uni.setStorageSync('indirectNum', num);
+	}
+}
 
 // 跳到推荐页面
 const handleClickQRCode = () => {

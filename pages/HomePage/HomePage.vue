@@ -22,10 +22,14 @@
 				<image src="../../static/rule.jpg" mode="widthFix"></image>
       </view>
       <view class="section" v-if="activeTab === 'mart'">
-        <mart-vue></mart-vue>
+				<keep-alive>
+					<mart-vue></mart-vue>
+				</keep-alive>
       </view>
       <view class="section" v-if="activeTab === 'promotion'">
-        <recommend-vue v-if="activeTab === 'promotion'"></recommend-vue>
+				<keep-alive>
+					<recommend-vue v-if="activeTab === 'promotion'"></recommend-vue>
+				</keep-alive>
       </view>
       <view class="section" v-if="activeTab === 'guild'">
         <text class="section-title">公会</text>

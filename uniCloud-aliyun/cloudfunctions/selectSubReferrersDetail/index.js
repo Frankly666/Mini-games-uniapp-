@@ -44,17 +44,17 @@ exports.main = async (event, context) => {
 
 		subReferrers = await findSubReferrers(userId, page, limit); // 查询间接推荐用户
 		console.log("间接用户的结果:", subReferrers)
-		subReferrers = subReferrers.data
-		
 
     // 获取推荐用户的收益记录
-    const result = await getReferralEarnings(userId, subReferrers);
+    const result = await getReferralEarnings(userId, subReferrers.data);
 
     // 返回结果给客户端
     return {
       code: 200,
       data: result,
-      hasMore: subReferrers.length === limit // 判断是否还有更多数据
+      hasMore: subReferrers.hasMore,// 判断是否还有更多数据
+			directNum: subReferrers.directNum,
+			indirectNum: subReferrers.indirectNum,
     };
   } catch (err) {
     console.error('云函数执行失败:', err.message);
