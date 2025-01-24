@@ -9,54 +9,48 @@
     <view v-else-if="filteredUsers.length > 0" class="user-list">
       <view
         v-for="user in filteredUsers"
-        :key="user.userInfo._id"
+        :key="user._id"
         class="user-card"
-        @click="toggleCard(user.userInfo._id)"
+        @click="toggleCard(user._id)"
       >
         <!-- 用户基本信息 -->
         <view class="user-info">
-          <image :src="user.userInfo.avatar" class="user-avatar"></image>
+          <image :src="user.avatar" class="user-avatar"></image>
           <view class="user-details">
-            <text class="user-name">{{ user.userInfo.userName }}</text>
-            <text class="game-id">游戏ID: {{ user.userInfo.gameID }}</text>
+            <text class="user-name">{{ user.userName }}</text>
+            <text class="game-id">游戏ID: {{ user.gameID }}</text>
           </view>
 					<view class="referType">
-						<text>{{ user.userInfo.pusherCode === phone+'' ? '直推' : '间推' }}</text>
+						<text>{{ user.pusherCode === phone+'' ? '直推' : '间推' }}</text>
 					</view>
-          <!-- 总收益 -->
-          <view class="total-earnings">
-            <text class="total-earnings-label">总收益</text>
-            <text class="total-earnings-value">{{ calculateTotalEarnings(user.recordList) }}能量石</text>
-          </view>
         </view>
 
         <!-- 收益记录 -->
         <view
-          :class="['earnings-list', expandedCardId === user.userInfo._id ? 'expanded' : '']"
+          :class="['earnings-list', expandedCardId === user._id ? 'expanded' : '']"
         >
           <view class="earnings-table">
-            <!-- 表头 -->
             <view class="table-header">
               <text class="header-item">收益来源</text>
               <text class="header-item">收益金额</text>
               <text class="header-item">收益时间</text>
             </view>
 
-            <!-- 表格内容 -->
-            <view v-for="(record, index) in user.recordList" :key="index" class="table-row">
+            <view v-for="(record, index) in recordList" :key="index" class="table-row">
               <text class="table-item">
-                {{ getEarningsSource(record) }} <!-- 动态展示收益来源 -->
+                {{ getEarningsSource(record) }}
               </text>
               <text class="table-item">{{ record.amount }}能量石</text>
               <text class="table-item">{{ formatDate(record.createTime) }}</text>
             </view>
 
-            <!-- 没有收益记录时的提示 -->
-            <view v-if="user.recordList.length === 0" class="no-earnings-tip">
-              <text>暂无收益记录</text>
+            <view v-if="recordList.length === 0" class="no-earnings-tip">
+              <text>{{tips}}</text>
             </view>
           </view>
         </view>
+				
+				
       </view>
 
       <!-- 加载更多按钮 -->
@@ -71,14 +65,15 @@
 
     <!-- 没有推荐用户时的提示 -->
     <view v-else class="no-data-tip">
-      <text>没有推荐用户</text>
+      <text>{{ 暂无推荐用户 }}</text>
     </view>
   </view>
 </template>
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
-import { getReferralUsersWithEarnings } from '../utils/selectSubReferrersDetail.js';
+import { getReferralEarnings } from '../utils/selectSubReferrersDetail.js';
+import { selectReferralUsers } from '../utils/selectReferralUsers.js';
 
 const props = defineProps(["setNum"]);
 
@@ -94,8 +89,13 @@ const loadingMore = ref(false);
 // 当前展开的卡片 ID
 const expandedCardId = ref(null);
 
+// 当前点击展开的收益列表
+const recordList = ref([]);
+
+// 提示字符
+const tips = ref("加载中...")
+
 const phone = uni.getStorageSync('phone');
-console.log(phone);
 
 // 分页相关
 const page = ref(1);
@@ -123,11 +123,19 @@ const filteredUsers = computed(() => {
 });
 
 // 切换卡片展开状态
-const toggleCard = (userId) => {
-  if (expandedCardId.value === userId) {
+const toggleCard = async (subReferrerId) => {
+  if (expandedCardId.value === subReferrerId) {
     expandedCardId.value = null; // 如果已经展开，则收起
   } else {
-    expandedCardId.value = userId; // 否则展开
+    expandedCardId.value = subReferrerId; // 否则展开
+		recordList.value = [];
+		tips.value = '加载中...';
+		const res = await getReferralEarnings({
+			userId: uni.getStorageSync('id'),
+			subReferrerId: subReferrerId
+		});
+		recordList.value = res.data;
+		if(res.data.length === 0) tips.value = '暂无收益记录'
   }
 };
 
@@ -148,16 +156,11 @@ const getEarningsSource = (record) => {
   return '土地收益'; // 默认值
 };
 
-// 计算总收益
-const calculateTotalEarnings = (recordList) => {
-  if (!recordList || recordList.length === 0) return 0;
-  return recordList.reduce((total, record) => total + (record.amount || 0), 0).toFixed(2);
-};
 
 // 获取推广用户数据
 const fetchReferralUsers = async () => {
   try {
-    const result = await getReferralUsersWithEarnings({
+    const result = await selectReferralUsers({
       userId: uni.getStorageSync('id'),
       page: page.value,
       limit: limit.value
@@ -225,6 +228,8 @@ onMounted(() => {
   }
 });
 </script>
+
+
 <style lang="less">
 /* 内容容器 */
 .content-container {
@@ -261,9 +266,9 @@ onMounted(() => {
 			width: 100%;
 			border: 1px solid #eee;
 			border-radius: 2vw;
-			padding: 3vw;
+			padding: 4vw;
 			margin-bottom: 3vw;
-
+			box-sizing: border-box;
       /* 用户基本信息 */
       .user-info {
 				width: 100%;
@@ -295,35 +300,18 @@ onMounted(() => {
             color: #666;
           }
         }
-
-        /* 总收益 */
-        .total-earnings {
-          margin-left: auto; /* 靠右对齐 */
-          text-align: right;
-          font-size: 3vw;
-
-          .total-earnings-label {
-            font-size: 3vw;
-            color: #666;
-          }
-
-          .total-earnings-value {
-            font-size: 3vw;
-            color: #333;
-            font-weight: bold;
-          }
-        }
       }
 
 			// 推荐类型
 			.referType {
+				margin-left: auto;
+				text-align: right;
 				font-weight: bold;
 				font-size: 3vw;
 				padding: 1vw;
 				box-sizing: border-box;
 				background: bisque;
 				border-radius: 1vw;
-				margin-left: 1vw;
 			}
 			
       /* 收益记录 */

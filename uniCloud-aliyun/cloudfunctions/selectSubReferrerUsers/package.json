@@ -1,0 +1,9 @@
+{
+  "name": "selectSubReferrerUsers",
+  "dependencies": {
+    "findSubReferrers": "file:../common/findSubReferrers"
+  },
+  "extensions": {
+    "uni-cloud-jql": {}
+  }
+}
