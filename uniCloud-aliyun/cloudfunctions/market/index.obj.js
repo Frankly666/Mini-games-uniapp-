@@ -77,6 +77,7 @@ module.exports = {
 	            isFinished: false, // 未完成的出售需求
 	            sellNum: _.gt(0)  // sellNum 大于 0
 	        })
+					.limit(50)
 	        .orderBy("sellPrice", 'asc') // 按照 sellPrice 升序排列
 	        .get();
 	    return res;
@@ -94,6 +95,7 @@ module.exports = {
 	            isFinished: false, // 未完成的求购
 	            buyNum: _.gt(0)   // buyNum 大于 0
 	        })
+					.limit(50)
 	        .orderBy("buyPrice", 'desc')
 	        .get();
 	    return res;

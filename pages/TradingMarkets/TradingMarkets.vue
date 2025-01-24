@@ -4,6 +4,15 @@
 		<view class="reload" @click="updateData">
 			<text class="text">刷新</text>
 		</view>
+		<view class="myPublish">
+			<text class="text">我的发布</text>
+		</view>
+		
+		<!-- 我发布的资源 -->
+		<my-publish-list-vue 
+				v-if="isShowMyPublishPop"
+		/>
+		
 		<assets-header1 :judge='2'/>
 		<market-publish 
 			v-if="isShowMarketPublish" 
@@ -90,6 +99,9 @@
 							<text>取消</text>
 						</view>
 					</view>
+					<view class="tips" v-if="showListData.length === 0">
+						<text>暂无记录</text>
+					</view>
 				</view>
 			</view>
 		</view>
@@ -102,6 +114,7 @@
 	import marketPublish from '../../components/marketPublish.vue';
 	import buyCellPop from '../../components/buyCellPop.vue';
 	import sentPopVue from '../../components/sentPop.vue';
+	import myPublishListVue from '../../components/myPublishList.vue';
 	import { formatLargeNumber } from '../../utils/formatLargeNumber'
 	import { JEWEL, useGameInfoStore } from '../../stores/gameInfo';
 	import { roundToOneDecimal } from '../../utils/roundToOneDecimal';
@@ -124,6 +137,7 @@
 	const sellRequirement = ref({})
 	const buyRequirement = ref({})
 	const isShowSentPop = ref(false)
+	const isShowMyPublishPop = ref(false);
 	const userId = uni.getStorageSync('id')
 	const gameInfo = useGameInfoStore()
 	
@@ -149,10 +163,12 @@
 	
 	function setItemIndex(index) {
 		itemCurrentIndex.value = index
+		updateData()
 	}
 	
 	function setMarketIndex(index) {
 		marketCurrentIndex.value = index
+		updateData()
 	}
 	
 	function back() {
@@ -184,29 +200,19 @@
 	}
 	
 	async function updateData() {
-		gemImgName.forEach(async (item) => {
-			const res1 = await marketDB.selectSellRequirement(item);
-			const res2 = await marketDB.selectBuyRequirement(item);
-			sellRequirement.value[item] = res1.data
-			buyRequirement.value[item] = res2.data
-		})
+		const itemName = gemImgName[itemCurrentIndex.value]
+		if(marketCurrentIndex.value === 0) {
+			const res1 = await marketDB.selectSellRequirement(itemName);
+			sellRequirement.value[itemName] = res1.data
+		}else {
+			const res2 = await marketDB.selectBuyRequirement(itemName);
+			buyRequirement.value[itemName] = res2.data
+		}
 	}
 	
 	
 	// 取消操作
 	async function handleCancel(item) {
-		// uni.showLoading({
-		// 	title: "数据检查中..."
-		// })
-		
-		
-		// const res = await checkTradingRequrementAssets(item);
-		// uni.hideLoading()
-		// if(res.code === -2) {
-		// 	showTips("请刷新后同步数据")
-		// 	return
-		// }
-		
 	  uni.showModal({
 	    title: '确认取消',
 	    content: '您确定要撤销这条记录吗？\n操作后将返还你的资源',
@@ -382,6 +388,7 @@
 				border-radius: 4vw;
 				color: aliceblue;
 				font-weight: bold;
+				box-sizing: border-box;
 				
 				.gemItem {
 					.gemImg {
@@ -432,6 +439,7 @@
 				height: 90vw;
 				font-weight: bold;
 				font-size: 3.6vw;
+				box-sizing: border-box;
 				
 				.content {
 					width: 100%;
@@ -449,7 +457,7 @@
 						position: relative;
 						display: flex;
 						box-sizing: border-box;
-						width: 90%;
+						width: 100%;
 						height: 13vw;
 						line-height: 6vw;
 						border-radius: 3vw;
@@ -509,6 +517,13 @@
 					}
 				}
 				
+				.tips {
+					width: 100%;
+					text-align: center;
+					color: aliceblue;
+					font-size: 4vw;
+					margin-top: 4vw;
+				}
 			}
 		}
 		
@@ -530,6 +545,24 @@
 			background: url("../../static/market/reload.png") no-repeat center center / contain;
 			
 			.text {
+				position: absolute;
+				width: 100%;
+				text-align: center;
+				bottom: -4vw;
+				font-size: 3vw;
+				font-weight: bold;
+			}
+		}
+	
+		.myPublish {
+			position: absolute;
+			bottom: 7vw;
+			right: 25vw;
+			width: 15vw;
+			height: 10vw;
+			background: url('../../static/ground/record.png') no-repeat center center / contain;
+			
+			text {
 				position: absolute;
 				width: 100%;
 				text-align: center;
