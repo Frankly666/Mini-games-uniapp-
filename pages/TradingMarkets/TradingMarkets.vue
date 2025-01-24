@@ -4,13 +4,14 @@
 		<view class="reload" @click="updateData">
 			<text class="text">刷新</text>
 		</view>
-		<view class="myPublish">
+		<view class="myPublish" @click="() => { controlMyPublish(true) }">
 			<text class="text">我的发布</text>
 		</view>
 		
 		<!-- 我发布的资源 -->
 		<my-publish-list-vue 
-				v-if="isShowMyPublishPop"
+			v-if="isShowMyPublishPop"
+			:close='() => {controlMyPublish(false)}'
 		/>
 		
 		<assets-header1 :judge='2'/>
@@ -99,8 +100,8 @@
 							<text>取消</text>
 						</view>
 					</view>
-					<view class="tips" v-if="showListData.length === 0">
-						<text>暂无记录</text>
+					<view class="tips" v-if="showListData?.length === 0">
+						<text>{{tips}}</text>
 					</view>
 				</view>
 			</view>
@@ -140,6 +141,7 @@
 	const isShowMyPublishPop = ref(false);
 	const userId = uni.getStorageSync('id')
 	const gameInfo = useGameInfoStore()
+	const tips = ref('加载中...')
 	
 	// 动态得到展示的字段名
 	const showListData = computed(() => {
@@ -186,6 +188,12 @@
 		isShowMarketPublish.value = bool
 	}
 	
+	// 自己发布的弹窗控制
+	function controlMyPublish(bool) {
+		console.log("点击率")
+		isShowMyPublishPop.value = bool
+	}
+	
 	// 购买或者出售的弹窗控制
 	function controlShowPop (bool) {
 		isShowBuySellPop.value = bool;
@@ -200,14 +208,22 @@
 	}
 	
 	async function updateData() {
+		tips.value='加载中'
+		uni.showLoading({
+			title: "加载中..."
+		})
 		const itemName = gemImgName[itemCurrentIndex.value]
 		if(marketCurrentIndex.value === 0) {
 			const res1 = await marketDB.selectSellRequirement(itemName);
 			sellRequirement.value[itemName] = res1.data
+			if(res1.data.length === 0) tips.value = '暂无发布'
 		}else {
 			const res2 = await marketDB.selectBuyRequirement(itemName);
 			buyRequirement.value[itemName] = res2.data
+			if(res1.data.length === 0) tips.value = '暂无发布'
 		}
+		uni.hideLoading()
+		
 	}
 	
 	

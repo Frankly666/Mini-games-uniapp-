@@ -100,4 +100,43 @@ module.exports = {
 	        .get();
 	    return res;
 	},
+	
+	/** 检索所有的我发布的出售需求
+	 * @param {String} gemType
+	 * @param {String} userId
+	 */
+	async selectMySellRequirement(userId, gemType) {
+			const db = uniCloud.database();
+			const _ = db.command; // 引入数据库操作符
+	    const sellRequirement = uniCloud.database().collection('sellRequirement');
+	    const res = await sellRequirement
+	        .where({
+							sellerId: userId,
+	            gemType,          // 宝石类型
+	            isFinished: false, // 未完成的出售需求
+	            sellNum: _.gt(0)  // sellNum 大于 0
+	        })
+	        .orderBy("sellPrice", 'asc') // 按照 sellPrice 升序排列
+	        .get();
+	    return res;
+	},
+	
+	
+	// 检索所有的求购需求
+	async selectMyBuyRequirement(userId, gemType) {
+			const db = uniCloud.database();
+			const _ = db.command; // 引入数据库操作符
+	    const buyRequirement = uniCloud.database().collection('buyRequirement');
+	    const res = await buyRequirement
+	        .where({
+							buyerId: userId,
+							userId: userId,
+	            gemType,          // 宝石类型
+	            isFinished: false, // 未完成的求购
+	            buyNum: _.gt(0)   // buyNum 大于 0
+	        })
+	        .orderBy("buyPrice", 'desc')
+	        .get();
+	    return res;
+	},
 }
