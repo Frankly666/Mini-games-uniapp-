@@ -64,6 +64,7 @@
 	const canvasHeight = ref(400); // 画布高度
 	
 	function handleBack() {
+		console.log("dianji")
 		uni.navigateBack({
 			delta:1
 		})
@@ -197,6 +198,7 @@
 		top: 3vh;
 		width: 8vw;
 		height: 8vw;
+		z-index: 99;
 		background: url('../../static/invitePage/return.png') no-repeat center center/contain;
 	}
 	

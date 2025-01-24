@@ -64,6 +64,11 @@
           </view>
         </view>
       </view>
+			
+			<!-- 如果没有转赠记录就显示为空 -->
+			<view class="tips" v-if="recordList.length === 0">
+				<text>没有转赠记录</text>
+			</view>
     </view>
   </view>
 </template>
