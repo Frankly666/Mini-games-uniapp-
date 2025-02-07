@@ -57,7 +57,7 @@
 	// 二维码内容
 	const qrCodeContent = ref('');
 	const gameInfo = useGameInfoStore();
-	const inviteCode = uni.getStorageSync('gameID');
+	const inviteCode = uni.getStorageSync('userInfo').inviteCode;
 	
 	// 画布尺寸
 	const canvasWidth = ref(300); // 画布宽度
