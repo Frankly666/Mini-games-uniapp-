@@ -16,7 +16,6 @@
 					<text>{{item}}市场</text>
 				</view>
 			</view>
-			
 		</view>
 		
 		<!-- 石头 -->
@@ -63,6 +62,18 @@
 				</view>
 			</view>
 		</view>
+
+		<!-- 确认弹窗 -->
+		<view v-if="showConfirmModal" class="confirmModal">
+			<view class="modalContent">
+				<text class="modalTitle">确认取消</text>
+				<text class="modalText">您确定要撤销这条记录吗？\n操作后将返还你的资源</text>
+				<view class="modalButtons">
+					<view class="modalButton cancel" @click="closeConfirmModal">取消</view>
+					<view class="modalButton confirm" @click="confirmCancel">确定</view>
+				</view>
+			</view>
+		</view>
 	</view>
 </template>
 
@@ -94,9 +105,11 @@
 	const isShowMyPublishPop = ref(false);
 	const userId = uni.getStorageSync('id')
 	const gameInfo = useGameInfoStore()
-	const props = defineProps(["close"])
+	const props = defineProps(["close","updateOutData"])
 	const tips = ref('加载中...')
-	
+	const showConfirmModal = ref(false) // 控制确认弹窗显示
+	const cancelItem = ref(null) // 存储当前要取消的项
+
 	// 动态得到展示的字段名
 	const showListData = computed(() => {
 		const itemName = gemImgName[itemCurrentIndex.value]
@@ -113,7 +126,6 @@
 	const certainRequirement = computed(() => {
 		const itemName = gemImgName[itemCurrentIndex.value];
 		const list = marketCurrentIndex.value === 0 ? sellRequirement.value : buyRequirement.value;
-		
 		return list[itemName][itemCertainIndex.value]
 	})
 	
@@ -153,97 +165,93 @@
 		uni.hideLoading()
 	}
 	
-	
-	// 取消操作
-	async function handleCancel(item) {
-	  uni.showModal({
-	    title: '确认取消',
-	    content: '您确定要撤销这条记录吗？\n操作后将返还你的资源',
-	    success: async (res) => {
-	      if (res.confirm) {
-	        try {
-	          // 显示加载提示
-	          uni.showLoading({
-	            title: '处理中...',
-	            mask: true, // 防止用户点击其他区域
-	          });
-	
-	          // 构造云函数参数
-	          const params = {
-	            userId: uni.getStorageSync('id'), // 当前用户 ID
-	            recordId: item._id, // 交易记录 ID
-	            resourceType: item.gemType, // 资源类型
-	            resourceAmount: marketCurrentIndex.value === 0 ? item.sellNum : item.buyNum, // 资源数量
-	            price: marketCurrentIndex.value === 0 ? item.sellPrice : item.buyPrice, // 资源单价
-	            type: marketCurrentIndex.value, // 交易类型（0: 出售, 1: 求购）
-	          };
-	
-	          // 调用云函数
-	          const result = await uniCloud.callFunction({
-	            name: 'cancelTradeRequirement',
-	            data: params,
-	          });
-	
-	          // 隐藏加载提示
-	          uni.hideLoading();
-	
-	          // 处理云函数返回结果
-	          if (result.result.code === 0) {
-	            uni.showToast({
-	              title: '取消成功',
-	              icon: 'success',
-	              duration: 2000, // 提示显示时长
-	            });
-	
-	            getUserAssets();
-	
-	            // 取消出售记录
-	            if (marketCurrentIndex.value === 0) {
-	              addAssetsChangeRecord(
-	                uni.getStorageSync('id'),
-	                item.gemType,
-	                item.sellNum,
-	                `出售市场中取消出售${assetsNameMap[item.gemType]}(单价${item.sellPrice}), 退回: `
-	              );
-	            } else {
-	              addAssetsChangeRecord(
-	                uni.getStorageSync('id'),
-	                JEWEL,
-	                roundToOneDecimal(item.buyNum * item.buyPrice),
-	                `求购市场中取消求购${assetsNameMap[item.gemType]}(单价${item.buyPrice}), 退回: `
-	              );
-	            }
-	
-	            // 刷新数据
-	            await updateData();
-	          } else if (result.result.code === -2) {
-	            // 数据过期，提示用户刷新
-	            showTips("请刷新同步数据");
-	          } else if(result.result.code === -3) {
-							showTips('该条记录已经被取消请刷新')
-						}else {
-	            uni.showToast({
-	              title: '取消失败：请刷新',
-	              icon: 'none',
-	              duration: 3000, // 提示显示时长
-	            });
-	          }
-	        } catch (err) {
-	          // 隐藏加载提示
-	          uni.hideLoading();
-	
-	          // 显示错误提示
-	          uni.showToast({
-	            title: '取消失败：' + err.message,
-	            icon: 'none',
-	            duration: 3000, // 提示显示时长
-	          });
-	        }
-	      }
-	    },
-	  });
+	// 打开确认弹窗
+	function handleCancel(item) {
+		cancelItem.value = item
+		showConfirmModal.value = true
 	}
 	
+	// 关闭确认弹窗
+	function closeConfirmModal() {
+		showConfirmModal.value = false
+		cancelItem.value = null
+	}
+	
+	// 确认取消操作
+	async function confirmCancel() {
+		if (!cancelItem.value) return
+		
+		try {
+			uni.showLoading({
+				title: '处理中...',
+				mask: true,
+			})
+			
+			const params = {
+				userId: uni.getStorageSync('id'),
+				recordId: cancelItem.value._id,
+				resourceType: cancelItem.value.gemType,
+				resourceAmount: marketCurrentIndex.value === 0 ? cancelItem.value.sellNum : cancelItem.value.buyNum,
+				price: marketCurrentIndex.value === 0 ? cancelItem.value.sellPrice : cancelItem.value.buyPrice,
+				type: marketCurrentIndex.value,
+			}
+			
+			const result = await uniCloud.callFunction({
+				name: 'cancelTradeRequirement',
+				data: params,
+			})
+			
+			uni.hideLoading()
+			
+			if (result.result.code === 0) {
+				uni.showToast({
+					title: '取消成功',
+					icon: 'success',
+					duration: 2000,
+				})
+				
+				getUserAssets()
+				
+				if (marketCurrentIndex.value === 0) {
+					addAssetsChangeRecord(
+						uni.getStorageSync('id'),
+						cancelItem.value.gemType,
+						cancelItem.value.sellNum,
+						`出售市场中取消出售${assetsNameMap[cancelItem.value.gemType]}(单价${cancelItem.value.sellPrice}), 退回: `
+					)
+				} else {
+					addAssetsChangeRecord(
+						uni.getStorageSync('id'),
+						JEWEL,
+						roundToOneDecimal(cancelItem.value.buyNum * cancelItem.value.buyPrice),
+						`求购市场中取消求购${assetsNameMap[cancelItem.value.gemType]}(单价${cancelItem.value.buyPrice}), 退回: `
+					)
+				}
+				
+				await updateData()
+				props.updateOutData()
+			} else if (result.result.code === -2) {
+				showTips("请刷新同步数据")
+			} else if(result.result.code === -3) {
+				showTips('该条记录已经被取消请刷新')
+			} else {
+				uni.showToast({
+					title: '取消失败：请刷新',
+					icon: 'none',
+					duration: 3000,
+				})
+			}
+		} catch (err) {
+			uni.hideLoading()
+			uni.showToast({
+				title: '取消失败：' + err.message,
+				icon: 'none',
+				duration: 3000,
+			})
+		} finally {
+			closeConfirmModal()
+		}
+	}
 	
 	onMounted(async () => {
 		await updateData()
@@ -489,6 +497,65 @@
 				font-size: 3vw;
 				font-weight: bold;
 			}
+		}
+
+		/* 确认弹窗样式 */
+		.confirmModal {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100vw;
+			height: 100vh;
+			background-color: rgba(0, 0, 0, 0.5);
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			z-index: 10000; /* 确保弹窗在最上层 */
+		}
+
+		.modalContent {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			background-color: #fff;
+			padding: 5vw;
+			border-radius: 5vw;
+			width: 80%;
+			text-align: center;
+		}
+
+		.modalTitle {
+			font-size: 4vw;
+			font-weight: bold;
+			margin-bottom: 3vw;
+		}
+
+		.modalText {
+			font-size: 3.6vw;
+			margin-bottom: 5vw;
+		}
+
+		.modalButtons {
+			display: flex;
+			justify-content: space-between;
+			box-sizing: border-box;
+			padding: 0 8vw;
+		}
+
+		.modalButton {
+			padding: 3vw 8vw;
+			border-radius: 2vw;
+			cursor: pointer;
+		}
+
+		.modalButton.cancel {
+			background-color: #ccc;
+			color: #000;
+		}
+
+		.modalButton.confirm {
+			background-color: green;
+			color: #fff;
 		}
 	}
 </style>

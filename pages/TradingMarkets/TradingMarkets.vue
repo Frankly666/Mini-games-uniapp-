@@ -11,6 +11,7 @@
 		<!-- 我发布的资源 -->
 		<my-publish-list-vue 
 			v-if="isShowMyPublishPop"
+			:updateOutData='updateData'
 			:close='() => {controlMyPublish(false)}'
 		/>
 		
@@ -208,7 +209,7 @@
 	}
 	
 	async function updateData() {
-		tips.value='加载中'
+		tips.value='加载中...'
 		uni.showLoading({
 			title: "加载中..."
 		})
@@ -220,7 +221,7 @@
 		}else {
 			const res2 = await marketDB.selectBuyRequirement(itemName);
 			buyRequirement.value[itemName] = res2.data
-			if(res1.data.length === 0) tips.value = '暂无发布'
+			if(res2.data.length === 0) tips.value = '暂无发布'
 		}
 		uni.hideLoading()
 		
