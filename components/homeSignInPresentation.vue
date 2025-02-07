@@ -13,7 +13,9 @@
 				</view>
 				
 				<!-- 签到按钮 -->
-				<button class="claimButton" @click="handleClaim">领取</button>
+				<button class="claimButton" :disabled="isClaiming" @click="handleClaim">
+					{{ isClaiming ? '领取中...' : '领取' }}
+				</button>
 			</view>
 		</view>
 	</view>
@@ -33,6 +35,9 @@ const showRewardModal = ref(false);
 
 // 当前选中的活动
 const selectedActivity = ref(null);
+
+// 是否正在领取中
+const isClaiming = ref(false);
 
 // 页面加载时查询用户未过期的活动
 onMounted(async () => {
@@ -75,7 +80,10 @@ onMounted(async () => {
 
 // 签到逻辑
 const handleClaim = async () => {
-	if (!selectedActivity.value) return;
+	if (!selectedActivity.value || isClaiming.value) return;
+
+	// 设置正在领取中
+	isClaiming.value = true;
 
 	// 显示加载动画
 	uni.showLoading({
@@ -91,6 +99,7 @@ const handleClaim = async () => {
 			title: '用户未登录，请重新登录！',
 			icon: 'none'
 		});
+		isClaiming.value = false; // 重置领取状态
 		return;
 	}
 
@@ -134,6 +143,9 @@ const handleClaim = async () => {
 			title: '领取失败，请重试！',
 			icon: 'none'
 		});
+	} finally {
+		// 无论成功或失败，重置领取状态
+		isClaiming.value = false;
 	}
 };
 </script>
@@ -208,6 +220,11 @@ const handleClaim = async () => {
 			cursor: pointer;
 			line-height: 12.3vw; /* 50px -> 13.3vw */
 			background: url("../static/home/btn_Green.png") no-repeat center center / contain;
+
+			&:disabled {
+				opacity: 0.7;
+				cursor: not-allowed;
+			}
 		}
 	}
 }
