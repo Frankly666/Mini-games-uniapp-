@@ -55,7 +55,7 @@ async function findAllReferrers(userId) {
   }
 
   // 7. 将查询结果缓存到 Redis
-  await redis.set(cacheKey, JSON.stringify(result), 'EX', 86400); // 缓存 24 小时（86400 秒）
+  await redis.set(cacheKey, JSON.stringify(result)); // 缓存 24 小时（86400 秒）
 
   return result;
 }

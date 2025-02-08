@@ -1,0 +1,10 @@
+{
+  "name": "updateReferCacheAfterEnroll",
+  "dependencies": {
+    "findReferrers": "file:../common/findReferrers",
+    "updateReferCacheWhileEnroll": "file:../common/updateReferCacheWhileEnroll"
+  },
+  "extensions": {
+    "uni-cloud-jql": {}
+  }
+}

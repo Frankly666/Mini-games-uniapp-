@@ -61,6 +61,7 @@
 import { ref, onMounted } from 'vue';
 import { AVATAR, ID, PHONE, USERNAME, useGameInfoStore } from '../../stores/gameInfo';
 import { updateOwnGrounds } from '../../utils/updateOwnGrounds';
+import updateReferCacheAfterEnroll from '../../utils/updateReferCacheAfterEnroll';
 
 // 定义绑定变量
 const phone = ref('');
@@ -229,9 +230,9 @@ function handleRegister() {
 
       // 切换到登录 Tab
       isLogin.value = true;
-
-      // 注册成功后的跳转逻辑（可选）
-      // uni.navigateTo({ url: '/pages/home/index' });
+			
+			// 进行推荐人的更新
+			updateReferCacheAfterEnroll(data.userId)
     } else if (code === 400) {
       uni.showToast({
         title: message || '该账号已注册，请直接登录或修改账号名',

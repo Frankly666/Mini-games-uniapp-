@@ -53,45 +53,18 @@ async function findAllReferrers(userId) {
 }
 
 /**
- * 获取 user 表中的所有用户数据
- * @returns {Promise<Array>} - 返回所有用户数据
+ * 更新指定用户 ID 数组的推荐关系缓存
+ * @param {Array<string>} userIds - 用户 ID 数组
+ * @returns {Promise<Object>} - 返回操作结果
  */
-async function getAllUsers() {
-  const MAX_LIMIT = 100; // 每次查询的最大条数
-  let users = [];
-  let offset = 0;
-
-  while (true) {
-    // 分页查询用户数据
-    const userRes = await db.collection('user')
-      .skip(offset)
-      .limit(MAX_LIMIT)
-      .get();
-
-    if (userRes.data.length === 0) {
-      break; // 如果没有数据了，退出循环
+module.exports = async function updateReferCacheWhileEnroll(userIds) {
+  try {
+    if (!Array.isArray(userIds) || userIds.length === 0) {
+      throw new Error('用户 ID 数组不能为空');
     }
 
-    users = users.concat(userRes.data); // 将查询到的数据合并到 users 数组中
-    offset += MAX_LIMIT; // 更新偏移量
-  }
-
-  return users;
-}
-
-/**
- * 更新所有用户的推荐关系缓存
- */
-async function updateAllReferralCache() {
-  try {
-    // 获取所有用户数据
-    const users = await getAllUsers();
-		console.log("users:", users.length);
-
-    // 遍历所有用户的 _id 并更新缓存
-    for (let i = 0; i < users.length; i ++) {
-			if(i < 9 ) continue ;
-      const userId = users[i]._id;
+    // 遍历用户 ID 数组并更新缓存
+    for (const userId of userIds) {
       console.log(`开始更新用户 ${userId} 的推荐关系缓存`);
       await findAllReferrers(userId);
       console.log(`用户 ${userId} 的推荐关系缓存更新完成`);
@@ -109,12 +82,4 @@ async function updateAllReferralCache() {
       error: err.message
     };
   }
-}
-
-// 云函数入口
-exports.main = async (event, context) => {
-  console.log('定时任务触发，开始更新缓存');
-  const result = await updateAllReferralCache();
-  console.log('定时任务执行结果:', result);
-  return result;
 };

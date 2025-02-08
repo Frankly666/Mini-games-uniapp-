@@ -44,6 +44,12 @@ import { getLatestApkUrl } from '../utils/getLatestApkUrl';
 import subReferrersDetailPopVue from './subReferrersDetailPop.vue';
 import { useGameInfoStore } from '../stores/gameInfo';
 
+function test() {
+	uniCloud.callFunction({
+		name:'updateReferrersCache'
+	})
+}
+
 // 用户信息
 const userInfo = ref({
   userName: '',
